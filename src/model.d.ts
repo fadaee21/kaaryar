@@ -1,10 +1,21 @@
+export type RoleType = 9999 | 4444 | 5555 | 3333;
+
 export interface AuthType {
-  username: string;
+  user: string;
   pwd: string;
-  id: number;
+  roles: RoleType[];
+  id?: number;
 }
 
 export interface AuthContextType {
   auth: AuthType;
   setAuth: void;
+}
+
+export interface CustomizedStateLocation {
+  from: { hash: string; key: string; pathname: string; search: string };
+}
+
+export interface AllowedRoles {
+  allowedRoles: RoleType[];
 }

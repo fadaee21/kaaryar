@@ -22,14 +22,24 @@ import backgd from "../assets/backgd.png";
 import { useAuth } from "../context/AuthProvider";
 import axios from "../api/axios";
 import { AxiosError } from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
+import { CustomizedStateLocation, RoleType } from "../model";
+import { Roles } from "../App";
 
-const USERS = "users";
+const usersRequest = "teacher/user/all";
+
 const Login = () => {
   const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const state = location.state as CustomizedStateLocation;
+  const from = state?.from?.pathname;
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  // eslint-disable-next-line
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
@@ -38,13 +48,24 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(USERS, JSON.stringify({ user, pwd }), {
-        headers: { "Content-Type": "application/json" },
+      const response = await axios({
+        method: "get",
+        url: usersRequest,
+        params: {
+          pageNum: 1,
+          pageSize: 10,
+        },
+        // JSON.stringify({ user, pwd }),//for post user,pwd
       });
-      console.log(JSON.stringify(response.data));
-      setAuth(response.data);
+      console.log(response.data);
+
+      const roleResponseServer: RoleType = 3333;
+      console.log(roleResponseServer);
+
+      setAuth({ user, pwd, roles: [roleResponseServer] });
       setUser("");
       setPwd("");
+      navigate(from || `/${Roles[roleResponseServer]}`, { replace: true });
       setSuccess(true);
     } catch (error) {
       const err = error as AxiosError;

@@ -7,6 +7,7 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./styles/theme";
 import { RTL } from "./styles/rtl";
 import { AuthProvider } from "./context/AuthProvider";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,9 +16,11 @@ root.render(
   <React.StrictMode>
     <RTL>
       <ThemeProvider theme={theme}>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </BrowserRouter>
       </ThemeProvider>
     </RTL>
   </React.StrictMode>

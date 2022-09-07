@@ -10,6 +10,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { FooterTheme, GridContainerFooter } from "../styles/footer";
 
 const Footer = () => {
+ 
   return (
     <FooterTheme>
       <Container maxWidth="xl">
