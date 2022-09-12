@@ -1,9 +1,10 @@
 export type RoleType = 9999 | 4444 | 5555 | 3333;
 
 export interface AuthType {
-  user: string;
-  pwd: string;
+  username: string;
+  password: string;
   roles: RoleType[];
+  token: string;
   id?: number;
 }
 
@@ -18,4 +19,24 @@ export interface CustomizedStateLocation {
 
 export interface AllowedRoles {
   allowedRoles: RoleType[];
+}
+
+//types for the learner
+interface RolesInLearner {
+  archeType: string;
+  description: string;
+  id: number;
+  name: string;
+  userRole: string;
+}
+export interface Learner {
+  firstName: string;
+  id: number;
+  lastName: string;
+  roles: RolesInLearner[];
+  username: string;
+}
+
+export interface learnerProp {
+  learner: Learner;
 }

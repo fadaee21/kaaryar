@@ -5,7 +5,7 @@ const Layout = () => {
   return (
     <Box
       component={"main"}
-      sx={{ minHeight: "75vh", display: "flex", flexDirection: "column" }}
+      sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
     >
       <Outlet />
     </Box>

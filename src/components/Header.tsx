@@ -4,18 +4,21 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div>
-      <ul>
+      <ul >
         <li>
-          <Link to={"editor"}>editor</Link>
+          <Link to={"mentor"}>mentor</Link>
         </li>
         <li>
-          <Link to={"login"}>login</Link>
+          <Link to={"ta"}>ta</Link>
         </li>
         <li>
           <Link to={"admin"}>admin</Link>
         </li>
         <li>
-          <Link to={"user"}>user</Link>
+          <Link to={"teacher"}>teacher</Link>
+        </li>
+        <li>
+          <Link to={"login"}>login</Link>
         </li>
       </ul>
     </div>

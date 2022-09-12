@@ -1,12 +1,13 @@
 import axios from "axios";
 
-let headersList = {
-  "Content-Type": "application/json",
-  Authorization: "Basic dXNlcnRlc3RzcHJpbmc6dXNlcnRlc3RzcHJpbmc=",
-};
+axios.defaults.headers.common["Accept"] = "application/json";
+axios.defaults.baseURL = "https://api.pm.kaaryar.ir";
 
-export default axios.create({
-  // baseURL: "https://jsonplaceholder.typicode.com/",
-  baseURL: "https://api.pm.kaaryar.ir",
-  headers: headersList,
+export const userLogin = axios.create({
+  method: "POST",
+  timeout: 2000,
+});
+
+export const getData = axios.create({
+  method: "GET",
 });

@@ -19,70 +19,29 @@ import {
 } from "../styles/login";
 import bg from "../assets/bg.png";
 import backgd from "../assets/backgd.png";
-import { useAuth } from "../context/AuthProvider";
-import axios from "../api/axios";
-import { AxiosError } from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
-import { CustomizedStateLocation, RoleType } from "../model";
-import { Roles } from "../App";
-
-const usersRequest = "teacher/user/all";
+import { useSubmitLogin } from "../hooks/useLogin";
 
 const Login = () => {
-  const { setAuth } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const state = location.state as CustomizedStateLocation;
-  const from = state?.from?.pathname;
-
-  const [user, setUser] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [errMsg, setErrMsg] = useState("");
-  // eslint-disable-next-line
-  const [success, setSuccess] = useState(false);
+  const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, pwd]);
-  const handleSubmit = async (e: React.FormEvent) => {
+    // eslint-disable-next-line
+  }, [username, password]);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await axios({
-        method: "get",
-        url: usersRequest,
-        params: {
-          pageNum: 1,
-          pageSize: 10,
-        },
-        // JSON.stringify({ user, pwd }),//for post user,pwd
-      });
-      console.log(response.data);
-
-      const roleResponseServer: RoleType = 3333;
-      console.log(roleResponseServer);
-
-      setAuth({ user, pwd, roles: [roleResponseServer] });
-      setUser("");
-      setPwd("");
-      navigate(from || `/${Roles[roleResponseServer]}`, { replace: true });
-      setSuccess(true);
-    } catch (error) {
-      const err = error as AxiosError;
-      if (!err?.response) {
-        setErrMsg("پاسخی از سرور دریافت نشد");
-      } else if (err.response?.status === 400) {
-        setErrMsg("نام کاربری یا پسورد را وارد نکرده اید");
-      } else if (err.response?.status === 401) {
-        setErrMsg("برای شما حسابی ایجاد نشده است");
-      } else {
-        setErrMsg("ورود ناموفق");
-      }
-    }
+    handleLogin();
+    setUsername("");
+    setPassword("");
   };
 
   return (
     <BackgroundImage backgd={backgd}>
+      <p>usertestspring</p>
       <Container maxWidth="md" sx={{ py: 9 }}>
         <Grid container>
           <GridGuestLogin item sm={5}>
@@ -132,8 +91,8 @@ const Login = () => {
                   type={"text"}
                   id="username"
                   autoComplete="off"
-                  onChange={(e) => setUser(e.target.value)}
-                  value={user}
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
                   required
                   error={errMsg ? true : false}
                 />
@@ -144,8 +103,8 @@ const Login = () => {
                   sx={{ my: 2 }}
                   type={"password"}
                   id="password"
-                  onChange={(e) => setPwd(e.target.value)}
-                  value={pwd}
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                   required
                   error={errMsg ? true : false}
                 />
