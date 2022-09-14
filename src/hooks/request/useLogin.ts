@@ -1,19 +1,18 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { userLogin } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-import { CustomizedStateLocation, RoleType } from "../../model";
-
+import { RoleType } from "../../model";
 
 export const useSubmitLogin = (username: string, password: string) => {
   const loginURL = "/auth/login";
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
-  const state = location.state as CustomizedStateLocation;
-  const from = state?.from?.pathname;
+  // const state = location.state as CustomizedStateLocation;
+  // const from = state?.from?.pathname;
 
   const [errMsg, setErrMsg] = useState("");
   // eslint-disable-next-line
