@@ -11,3 +11,11 @@ export const userLogin = axios.create({
 export const getData = axios.create({
   method: "GET",
 });
+
+export const postData = axios.create({
+  method: "POST",
+});
+
+export const removeData = axios.create({
+  method: "DELETE",
+});

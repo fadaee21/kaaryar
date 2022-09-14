@@ -1,10 +1,10 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { userLogin } from "../api/axios";
-import { Roles } from "../App";
-import { useAuth } from "../context/AuthProvider";
-import { CustomizedStateLocation, RoleType } from "../model";
+import { userLogin } from "../../api/axios";
+import { useAuth } from "../../context/AuthProvider";
+import { CustomizedStateLocation, RoleType } from "../../model";
+
 
 export const useSubmitLogin = (username: string, password: string) => {
   const loginURL = "/auth/login";
@@ -35,7 +35,8 @@ export const useSubmitLogin = (username: string, password: string) => {
         token: accessToken,
       });
 
-      navigate(from || `/${Roles[roleResponseServer]}`, { replace: true });
+      // navigate(from || `/${Roles[roleResponseServer]}`, { replace: true });
+      navigate("/ta-comments");
     } catch (error) {
       //TODO:handle Error
       console.log(error);

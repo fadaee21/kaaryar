@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useGetLearnerList } from "../hooks/useGetLearnerList";
-import { Box, Container, Pagination } from "@mui/material";
-import { Learner } from "../model";
-import Typography from "@mui/material/Typography";
-import ListLearnerItem from "../components/ListLearnerItem";
-import LoadingProgress from "../components/LoadingProgress";
 
-const Ta = () => {
+import { Box, Container, Pagination } from "@mui/material";
+
+import Typography from "@mui/material/Typography";
+import LoadingProgress from "../components/LoadingProgress";
+import { StudentUser } from "../model";
+import ListStudentItem from "../components/ListStudentItem";
+import { useGetStudentList } from "../hooks/request/useGetStudentList";
+
+const TaUser = () => {
   const [page, setPage] = useState(0);
 
-  const { getListLearner, learners, loading } = useGetLearnerList(page);
+  const { students, getListStudent, loading } = useGetStudentList(page);
 
   useEffect(() => {
-    getListLearner();
+    getListStudent();
     // eslint-disable-next-line
   }, [page]);
 
@@ -28,8 +30,8 @@ const Ta = () => {
           لیست نفرات
         </Typography>
 
-        {learners.map((learner: Learner) => (
-          <ListLearnerItem key={learner.id} learner={learner} />
+        {students.map((student: StudentUser) => (
+          <ListStudentItem key={student.id} student={student} />
         ))}
         <Pagination
           sx={{
@@ -51,4 +53,4 @@ const Ta = () => {
   );
 };
 
-export default Ta;
+export default TaUser;

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { getData } from "../api/axios";
-import { useAuth } from "../context/AuthProvider";
+import { getData } from "../../api/axios";
+import { useAuth } from "../../context/AuthProvider";
 
-export const useGetComments = () => {
-  //TODO:it would be better to have all user in one request and paginate it in front
-  const allCommentLink = `ta/survey/all?pageNum=0&pageSize=2`;
+export const useGetComments = (page: number) => {
+  //TODO:it would be better to have all user in one request and paginate
+  const allCommentLink = `ta/survey/all?pageNum=${page}&pageSize=10`;
   const { auth } = useAuth();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -21,22 +21,56 @@ export interface AllowedRoles {
   allowedRoles: RoleType[];
 }
 
-//types for the learner
-interface RolesInLearner {
+
+interface RolesStudent {
+  id: number;
   archeType: string;
   description: string;
-  id: number;
   name: string;
   userRole: string;
 }
-export interface Learner {
-  firstName: string;
+// export interface Learner {
+//   id: number;
+//   firstName: string;
+//   lastName: string;
+//   username: string;
+//   roles: RolesStudent[];
+// }
+export interface StudentUser {
   id: number;
-  lastName: string;
-  roles: RolesInLearner[];
   username: string;
+  firstName: string;
+  lastName: string;
+  roles: RolesStudent[];
 }
 
-export interface learnerProp {
-  learner: Learner;
+export interface StudentProp {
+  student: StudentUser;
+}
+
+//types for comment
+
+export interface Course {
+  id: number;
+  courseName: string;
+}
+export interface Comment {
+  id: number;
+  checked: boolean;
+  comment: string;
+  studentUser: StudentUser;
+  taUser: {
+    id: number;
+    username: string;
+    firstName: string;
+    lastName: string;
+    roles: [];
+  };
+  course: Course;
+}
+
+
+export interface Course {
+  courseName: string;
+  id: number;
 }
