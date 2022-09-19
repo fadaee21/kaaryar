@@ -9,8 +9,7 @@ interface editProp {
   setRefreshByEdit: React.Dispatch<React.SetStateAction<number>>;
 }
 
-
-//! in this component error and loading not handle
+//! in this component error and loading not
 
 export const EditComment: React.FC<editProp> = ({
   editId,
@@ -18,7 +17,7 @@ export const EditComment: React.FC<editProp> = ({
   setRefreshByEdit,
 }) => {
   const [comment, setComment] = useState("");
-  const { editCommentFunc, errorMsg, loading } = useEditComment(
+  const { editCommentFunc, errorMsg, loading, success } = useEditComment(
     comment,
     editId
   );
@@ -27,7 +26,7 @@ export const EditComment: React.FC<editProp> = ({
     e.preventDefault();
     editCommentFunc();
     setRefreshByEdit((prev) => prev + 1);
-    setOpenEditState(false);
+    setOpenEditState((prev) => !prev);
   };
 
 
