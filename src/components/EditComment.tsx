@@ -42,9 +42,9 @@ export const EditComment: React.FC<editProp> = ({
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();
     editCommentFunc();
+    setRefreshByEdit((prev) => prev + 1);
     setTimeout(() => {
       setOpenEditState((prev) => !prev);
-      setRefreshByEdit((prev) => prev + 1);
     }, 1000);
   };
 
