@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, IconButton, Input } from "@mui/material";
+import { Alert, Box, IconButton, Input, Snackbar } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { useEditComment } from "../hooks/request/useEditComment";
 
@@ -16,8 +16,25 @@ export const EditComment: React.FC<editProp> = ({
   setOpenEditState,
   setRefreshByEdit,
 }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const [comment, setComment] = useState("");
-  const { editCommentFunc, errorMsg, loading, success } = useEditComment(
+  const { editCommentFunc, errorMsg, loading } = useEditComment(
     comment,
     editId
   );
@@ -25,9 +42,19 @@ export const EditComment: React.FC<editProp> = ({
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();
     editCommentFunc();
-    setOpenEditState((prev) => !prev);
-    setRefreshByEdit((prev) => prev + 1);
+    setTimeout(() => {
+      setOpenEditState((prev) => !prev);
+      setRefreshByEdit((prev) => prev + 1);
+    }, 1000);
   };
+
+  if (loading) {
+    return <p>بارگذاری...</p>;
+  }
+
+  if (errorMsg) {
+    return <p>ویرایش انجام نشد</p>;
+  }
 
   return (
     <Box
