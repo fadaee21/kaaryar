@@ -1,7 +1,7 @@
 import axios from "axios";
 
-axios.defaults.headers.common["Accept"] = "application/json";
-axios.defaults.baseURL = "https://api.pm.kaaryar.ir";
+axios.defaults.headers.common["Content-Type"] = "application/json";
+axios.defaults.baseURL = "https://api.pm.kaaryar.ir/";
 
 export const userLogin = axios.create({
   method: "POST",
@@ -18,4 +18,7 @@ export const postData = axios.create({
 
 export const removeData = axios.create({
   method: "DELETE",
+});
+export const editComment = axios.create({
+  method: "PUT",
 });

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LoadingProgress from "../components/LoadingProgress";
-
-
+import CloseIcon from "@mui/icons-material/Close";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -29,11 +28,21 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteComment } from "../hooks/request/useDeleteComment";
 import { useGetComments } from "../hooks/request/useGetComments";
-
+import { dateConverter } from "../utils/dateConverter";
+import { EditComment } from "../components/EditComment";
 
 const TaComments = () => {
   const [page, setPage] = useState(0);
   const [open, setOpen] = React.useState(false);
+
+  const [openEditState, setOpenEditState] = React.useState<boolean>(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [refreshByEdit, setRefreshByEdit] = useState(0);
+
+  const handleClickOpenEdit = (id: number) => {
+    setOpenEditState(!openEditState);
+    setEditId(id);
+  };
 
   const [idComment, setIdComment] = useState<number>();
   const navigate = useNavigate();
@@ -63,7 +72,7 @@ const TaComments = () => {
   useEffect(() => {
     getListLearner();
     // eslint-disable-next-line
-  }, [page, refresh]);
+  }, [page, refresh, refreshByEdit]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -71,10 +80,6 @@ const TaComments = () => {
       setSuccessRemoveMsg("");
     }, 3000);
   }, [errRemoveMsg, setErrRemoveMsg, successRemoveMsg, setSuccessRemoveMsg]);
-
-  const handleEdit = (id: number) => {
-    console.log(id);
-  };
 
   if (loading) {
     return <LoadingProgress />;
@@ -113,7 +118,8 @@ const TaComments = () => {
               </TableHead>
               <TableBody>
                 {comments.map((commentItem: Comment) => {
-                  const { id, course, studentUser, comment } = commentItem;
+                  const { id, course, studentUser, comment, createTime } =
+                    commentItem;
                   return (
                     <StyledTableRow
                       key={id}
@@ -126,7 +132,9 @@ const TaComments = () => {
                         scope="row"
                         sx={{ width: "20%", verticalAlign: "top" }}
                       >
-                        <Typography variant="body2">99/99/99</Typography>
+                        <Typography variant="body2">
+                          {dateConverter(createTime)}
+                        </Typography>
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
@@ -149,7 +157,17 @@ const TaComments = () => {
                         align="left"
                         sx={{ width: "50%", verticalAlign: "top" }}
                       >
-                        <Typography variant="body2">{comment}</Typography>
+                        {!openEditState ? (
+                          <Typography variant="body2">{comment}</Typography>
+                        ) : editId === id ? (
+                          <EditComment
+                            editId={editId}
+                            setOpenEditState={setOpenEditState}
+                            setRefreshByEdit={setRefreshByEdit}
+                          />
+                        ) : (
+                          <Typography variant="body2">{comment}</Typography>
+                        )}
                       </StyledTableCell>
 
                       <StyledTableCell
@@ -157,8 +175,14 @@ const TaComments = () => {
                         sx={{ verticalAlign: "top" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
-                          <IconButton onClick={() => handleEdit(id)}>
-                            <EditIcon color="primary" fontSize="small" />
+                          <IconButton onClick={() => handleClickOpenEdit(id)}>
+                            {!openEditState ? (
+                              <EditIcon color="primary" fontSize="small" />
+                            ) : editId === id ? (
+                              <CloseIcon color="error" fontSize="small" />
+                            ) : (
+                              <EditIcon color="primary" fontSize="small" />
+                            )}
                           </IconButton>
                           <IconButton onClick={() => handleClickOpen(id)}>
                             <DeleteIcon color="error" fontSize="small" />
@@ -168,6 +192,7 @@ const TaComments = () => {
                     </StyledTableRow>
                   );
                 })}
+
                 <Dialog
                   open={open}
                   onClose={handleClose}

@@ -3,7 +3,7 @@ import { getData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 
 export const useGetComments = (page: number) => {
-  //TODO:it would be better to have all user in one request and paginate
+  
   const allCommentLink = `ta/survey/all?pageNum=${page}&pageSize=10`;
   const { auth } = useAuth();
   const [comments, setComments] = useState([]);

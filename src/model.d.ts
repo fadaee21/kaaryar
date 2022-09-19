@@ -21,7 +21,6 @@ export interface AllowedRoles {
   allowedRoles: RoleType[];
 }
 
-
 interface RolesStudent {
   id: number;
   archeType: string;
@@ -58,6 +57,8 @@ export interface Comment {
   id: number;
   checked: boolean;
   comment: string;
+  createTime: string;
+  updateTime?: string;
   studentUser: StudentUser;
   taUser: {
     id: number;
@@ -68,7 +69,6 @@ export interface Comment {
   };
   course: Course;
 }
-
 
 export interface Course {
   courseName: string;
