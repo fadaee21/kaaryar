@@ -74,3 +74,10 @@ export interface Course {
   courseName: string;
   id: number;
 }
+
+export interface editCommentProp {
+  editId: number | null;
+  openEditState: boolean;
+  setOpenEditState: React.Dispatch<React.SetStateAction<boolean>>;
+  setRefreshByEdit: React.Dispatch<React.SetStateAction<number>>;
+}
