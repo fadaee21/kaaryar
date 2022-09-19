@@ -37,10 +37,11 @@ const TaComments = () => {
   const [openEditState, setOpenEditState] = React.useState<boolean>(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [refreshByEdit, setRefreshByEdit] = useState(0);
-
-  const handleClickOpenEdit = (id: number) => {
+  const [shareComment, setShareComment] = useState("");
+  const handleClickOpenEdit = (id: number, comment: string) => {
     setOpenEditState(true);
     setEditId(id);
+    setShareComment(comment);
   };
 
   const [idComment, setIdComment] = useState<number>();
@@ -166,7 +167,9 @@ const TaComments = () => {
                         sx={{ verticalAlign: "top" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
-                          <IconButton onClick={() => handleClickOpenEdit(id)}>
+                          <IconButton
+                            onClick={() => handleClickOpenEdit(id, comment)}
+                          >
                             <EditIcon color="primary" fontSize="small" />
                           </IconButton>
                           <IconButton onClick={() => handleClickOpen(id)}>
@@ -182,7 +185,7 @@ const TaComments = () => {
                   openEditState={openEditState}
                   setOpenEditState={setOpenEditState}
                   setRefreshByEdit={setRefreshByEdit}
-                  // refreshByEdit={refreshByEdit}
+                  shareComment={shareComment}
                 />
                 <Dialog
                   open={open}

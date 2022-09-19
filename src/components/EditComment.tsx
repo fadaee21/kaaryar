@@ -27,6 +27,7 @@ export const EditComment: React.FC<editCommentProp> = ({
   openEditState,
   setOpenEditState,
   setRefreshByEdit,
+  shareComment,
 }) => {
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -58,6 +59,7 @@ export const EditComment: React.FC<editCommentProp> = ({
   const handleClose = () => {
     setOpenEditState(false);
     setErrorMsg("");
+    setComment("")
   };
   const handleEdit = () => {
     editCommentFunc();
@@ -112,7 +114,7 @@ export const EditComment: React.FC<editCommentProp> = ({
             sx={{ width: "100%" }}
             multiline
             onChange={(e) => setComment(e.target.value)}
-            value={comment}
+            value={comment || shareComment}
           />
           {loading && (
             <>

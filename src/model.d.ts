@@ -78,6 +78,7 @@ export interface Course {
 export interface editCommentProp {
   editId: number | null;
   openEditState: boolean;
+  shareComment: string;
   setOpenEditState: React.Dispatch<React.SetStateAction<boolean>>;
   setRefreshByEdit: React.Dispatch<React.SetStateAction<number>>;
 }
