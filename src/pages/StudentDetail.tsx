@@ -1,13 +1,13 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-const DetailLearner = () => {
+const StudentDetail = () => {
 
   const {id} =useParams()
 
   console.log(id)
 
-  return <div>DetailLearner</div>;
+  return <div>StudentDetail</div>;
 };
 
-export default DetailLearner;
+export default StudentDetail;

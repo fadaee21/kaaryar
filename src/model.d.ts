@@ -82,3 +82,16 @@ export interface editCommentProp {
   setOpenEditState: React.Dispatch<React.SetStateAction<boolean>>;
   setRefreshByEdit: React.Dispatch<React.SetStateAction<number>>;
 }
+
+export interface MoodleUser {
+  email: string;
+  firstName: string;
+  id: number;
+  lastName: string;
+  roles: Array;
+  username: string;
+}
+
+export interface MoodleStudent {
+  moodleUser: MoodleUser;
+}

@@ -5,7 +5,7 @@ axios.defaults.baseURL = "https://api.pm.kaaryar.ir/";
 
 export const userLogin = axios.create({
   method: "POST",
-  timeout: 2000,
+  timeout: 3000,
 });
 
 export const getData = axios.create({

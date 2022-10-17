@@ -26,7 +26,7 @@ export const useSubmitLogin = (username: string, password: string) => {
       });
 
       const roleResponseServer: RoleType = 3333;
-      const accessToken = response?.data?.message;
+      const accessToken = response?.data?.authorization;
       setAuth({
         username,
         password,
@@ -34,8 +34,11 @@ export const useSubmitLogin = (username: string, password: string) => {
         token: accessToken,
       });
 
+      //* whenever get role from response then change to line 39
+      //* and define new path in app.tsx
       // navigate(from || `/${Roles[roleResponseServer]}`, { replace: true });
-      navigate("/ta-comments");
+      // navigate("/ta-comments");
+      navigate("/ta-student");
     } catch (error) {
       //TODO:handle Error
       console.log(error);

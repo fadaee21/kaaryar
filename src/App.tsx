@@ -13,6 +13,8 @@ import Mentor from "./pages/Mentor";
 import Admin from "./pages/Admin";
 import AddComment from "./pages/AddComment";
 import { PersistLogin } from "./components/PersistLogin";
+import StudentListMoodle from "./pages/StudentListMoodle";
+
 
 // import DetailLearner from "./pages/DetailLearner";
 
@@ -43,6 +45,7 @@ function App() {
               {/* <Route path="mentor/:id" element={<DetailLearner />} /> */}
             </Route>
             <Route element={<RequireAuth allowedRoles={[Roles.ta]} />}>
+              <Route path="ta-student" element={<StudentListMoodle />} />
               <Route path="ta-comments" element={<TaComments />} />
               {/* <Route path="ta/:id" element={<DetailLearner />} /> */}
             </Route>
