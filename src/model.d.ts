@@ -1,4 +1,4 @@
-export type RoleType = 9999 | 4444 | 5555 | 3333;
+export type RoleType = ADMIN | TEACHER | TA | MENTOR;
 
 export interface AuthType {
   username: string;
@@ -94,4 +94,5 @@ export interface MoodleUser {
 
 export interface MoodleStudent {
   moodleUser: MoodleUser;
+  id:number
 }

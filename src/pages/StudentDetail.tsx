@@ -7,7 +7,10 @@ const StudentDetail = () => {
 
   console.log(id)
 
-  return <div>StudentDetail</div>;
+  return <>
+  <div>StudentDetail</div>
+  <h1>{id}</h1>
+  </>;
 };
 
 export default StudentDetail;

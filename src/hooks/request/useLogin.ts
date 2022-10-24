@@ -1,18 +1,18 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { userLogin } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-import { RoleType } from "../../model";
+import { CustomizedStateLocation, RoleType } from "../../model";
 
 export const useSubmitLogin = (username: string, password: string) => {
   const loginURL = "/auth/login";
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
 
-  // const state = location.state as CustomizedStateLocation;
-  // const from = state?.from?.pathname;
+  const state = location.state as CustomizedStateLocation;
+  const from = state?.from?.pathname;
 
   const [errMsg, setErrMsg] = useState("");
   // eslint-disable-next-line
@@ -25,7 +25,7 @@ export const useSubmitLogin = (username: string, password: string) => {
         },
       });
 
-      const roleResponseServer: RoleType = 3333;
+      const roleResponseServer: RoleType = "admin";
       const accessToken = response?.data?.authorization;
       setAuth({
         username,
@@ -34,11 +34,9 @@ export const useSubmitLogin = (username: string, password: string) => {
         token: accessToken,
       });
 
-      //* whenever get role from response then change to line 39
-      //* and define new path in app.tsx
-      // navigate(from || `/${Roles[roleResponseServer]}`, { replace: true });
-      // navigate("/ta-comments");
-      navigate("/ta-student");
+      navigate(from || `/${roleResponseServer}/dashboard`, {
+        replace: true,
+      });
     } catch (error) {
       //TODO:handle Error
       console.log(error);

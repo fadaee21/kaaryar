@@ -6,6 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { MoodleUser } from "../model";
 import { Button, CardActions } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -38,10 +39,13 @@ function stringAvatar(name: string) {
 
 export default function StudentCard({
   moodleUser,
+  id,
 }: {
   moodleUser: MoodleUser;
+  id: number;
 }) {
   const { email, firstName, lastName, username } = moodleUser;
+  const navigate = useNavigate();
   return (
     <Card sx={{ minWidth: 345, height: 210 }}>
       <CardHeader
@@ -57,7 +61,9 @@ export default function StudentCard({
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">مشاهده </Button>
+        <Button size="small" onClick={() => navigate(`${id}`)}>
+          مشاهده{" "}
+        </Button>
         <Button size="small">ویرایش </Button>
       </CardActions>
     </Card>

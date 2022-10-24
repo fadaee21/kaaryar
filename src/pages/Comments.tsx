@@ -30,7 +30,7 @@ import { useGetComments } from "../hooks/request/useGetComments";
 import { dateConverter } from "../utils/dateConverter";
 import { EditComment } from "../components/EditComment";
 
-const TaComments = () => {
+const Comments = () => {
   const [page, setPage] = useState(0);
   const [open, setOpen] = React.useState(false);
 
@@ -96,14 +96,6 @@ const TaComments = () => {
             sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
           >
             <Typography variant="h3"> لیست نظرات</Typography>
-            <Button
-              variant="contained"
-              color="info"
-              onClick={() => navigate("/add-comment")}
-            >
-              {" "}
-              افزودن نظر جدید
-            </Button>
           </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -242,4 +234,4 @@ const TaComments = () => {
   );
 };
 
-export default TaComments;
+export default Comments;

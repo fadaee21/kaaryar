@@ -1,7 +1,8 @@
-import { Grid } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { getData } from "../api/axios";
+import LoadingProgress from "../components/LoadingProgress";
 import StudentCard from "../components/StudentCard";
 import { useAuth } from "../context/AuthProvider";
 import { MoodleStudent } from "../model";
@@ -9,7 +10,8 @@ import { MoodleStudent } from "../model";
 const StudentListMoodle = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const allStudentMoodle = `/moodle/user/all?pageNum=1&pageSize=12`;
+  const [page, setPage] = useState(0);
+  const allStudentMoodle = `moodle/user/all?pageNum=${page}&pageSize=60`;
   const { auth } = useAuth();
 
   const getListLearner = async () => {
@@ -31,25 +33,43 @@ const StudentListMoodle = () => {
 
   useEffect(() => {
     getListLearner();
-  }, []);
+    window.scrollTo(0, 0);
+  }, [page]);
 
   if (loading) {
-    return <h1>loading...</h1>;
+    return <LoadingProgress />;
   }
 
   return (
-   <Box sx={{m:5}}>
-     <Grid container spacing={4}>
-      {students.map((student: MoodleStudent) => {
-        const { moodleUser } = student;
-        return (
-          <Grid item key={moodleUser.id} xs={12} md={6} lg={4}>
-            <StudentCard moodleUser={moodleUser} />
-          </Grid>
-        );
-      })}
-    </Grid>
-   </Box>
+    <Box sx={{ m: 5 }}>
+      <Grid container spacing={4}>
+
+        {students.map((student: MoodleStudent) => {
+          const { moodleUser,id } = student;
+          // console.log(moodleUser);
+          return (
+            <Grid item key={id} xs={12} md={6} lg={4}>
+              <StudentCard moodleUser={moodleUser} id={id} />
+            </Grid>
+          );
+        })}
+      </Grid>
+      <Pagination
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          my: 4,
+        }}
+        size="large"
+        count={24}
+        variant="outlined"
+        shape="rounded"
+        onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          setPage(value - 1);
+        }}
+      />
+    </Box>
   );
 };
 export default StudentListMoodle;
