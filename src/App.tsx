@@ -6,8 +6,6 @@ import Login from "./pages/Login";
 import RequireAuth from "./components/RequireAuth";
 import Home from "./pages/Home";
 import Layout from "./pages/Layout";
-import Teacher from "./pages/Teacher";
-import Admin from "./pages/Admin";
 import { PersistLogin } from "./components/PersistLogin";
 import ListRoutes from "./ListRoutes";
 

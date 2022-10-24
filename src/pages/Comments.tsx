@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -45,7 +44,6 @@ const Comments = () => {
   };
 
   const [idComment, setIdComment] = useState<number>();
-  const navigate = useNavigate();
   const { getListLearner, comments, loading } = useGetComments(page);
   const {
     removeComment,
