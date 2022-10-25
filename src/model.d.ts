@@ -90,9 +90,18 @@ export interface MoodleUser {
   lastName: string;
   roles: Array;
   username: string;
+  id: 9;
+  idNumber: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  description: string;
 }
 
-export interface MoodleStudent {
-  moodleUser: MoodleUser;
-  id:number
-}

@@ -39,12 +39,11 @@ function stringAvatar(name: string) {
 
 export default function StudentCard({
   moodleUser,
-  id,
 }: {
   moodleUser: MoodleUser;
-  id: number;
 }) {
-  const { email, firstName, lastName, username } = moodleUser;
+  // console.log(moodleUser)
+  const { email, firstName, lastName, username,id } = moodleUser;
   const navigate = useNavigate();
   return (
     <Card sx={{ minWidth: 345, height: 210 }}>

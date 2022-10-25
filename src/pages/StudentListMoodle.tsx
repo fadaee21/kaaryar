@@ -5,7 +5,7 @@ import { getData } from "../api/axios";
 import LoadingProgress from "../components/LoadingProgress";
 import StudentCard from "../components/StudentCard";
 import { useAuth } from "../context/AuthProvider";
-import { MoodleStudent } from "../model";
+import { MoodleUser } from "../model";
 
 const StudentListMoodle = () => {
   const [students, setStudents] = useState([]);
@@ -39,17 +39,15 @@ const StudentListMoodle = () => {
   if (loading) {
     return <LoadingProgress />;
   }
+  console.log(students);
 
   return (
     <Box sx={{ m: 5 }}>
       <Grid container spacing={4}>
-
-        {students.map((student: MoodleStudent) => {
-          const { moodleUser,id } = student;
-          // console.log(moodleUser);
+        {students.map((moodleUser: MoodleUser) => {
           return (
-            <Grid item key={id} xs={12} md={6} lg={4}>
-              <StudentCard moodleUser={moodleUser} id={id} />
+            <Grid item key={moodleUser.id} xs={12} md={6} lg={4}>
+              <StudentCard moodleUser={moodleUser} />
             </Grid>
           );
         })}
