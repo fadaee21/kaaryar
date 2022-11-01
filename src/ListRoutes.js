@@ -1,5 +1,5 @@
 import { Dashboard } from "./pages/Dashboard";
-import StudentDetail from "./pages/StudentDetail";
+import StudentPage from "./pages/StudentPage";
 import StudentListMoodle from "./pages/StudentListMoodle";
 import Comments from "./pages/Comments";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -29,7 +29,7 @@ const ListRoutes = [
   {
     path: "ta/student/:id",
     name: "جزییات مهارت جو ها",
-    component: StudentDetail,
+    component: StudentPage,
     showInNav: false,
     role: "ta",
     key: 2,
@@ -73,7 +73,7 @@ const ListRoutes = [
   {
     path: "mentor/student/:id",
     name: "جزییات مهارت جو ها",
-    component: StudentDetail,
+    component: StudentPage,
     showInNav: false,
     role: "mentor",
     key: 7,
@@ -117,7 +117,7 @@ const ListRoutes = [
   {
     path: "teacher/student/:id",
     name: "جزییات مهارت جو ها",
-    component: StudentDetail,
+    component: StudentPage,
     showInNav: false,
     role: "teacher",
     key: 12,
@@ -161,7 +161,7 @@ const ListRoutes = [
   {
     path: "admin/student/:id",
     name: "جزییات مهارت جو ها",
-    component: StudentDetail,
+    component: StudentPage,
     showInNav: false,
     role: "admin",
     key: 17,
