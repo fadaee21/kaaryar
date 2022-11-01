@@ -20,11 +20,23 @@ import {
 import bg from "../assets/bg.png";
 import backgd from "../assets/backgd.png";
 import { useSubmitLogin } from "../hooks/request/useLogin";
+import { userLogin } from "../api/axios";
+import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CustomizedStateLocation, RoleType } from "../model"
+import { useAuth } from "../context/AuthProvider";
+
 
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const state = location.state as CustomizedStateLocation;
+  const from = state?.from?.pathname;
 
   const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
 
@@ -33,21 +45,56 @@ const Login = () => {
     // eslint-disable-next-line
   }, [username, password]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleLogin();
+  const reset=()=>{
     setUsername("");
-    setPassword("");
+    setPassword("")
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const roleResponseServer = "admin";
+    const user = {username,password}
+    const loginURL = "/auth/login";
+    try {
+      const {status,data} = await userLogin(loginURL, {
+        data: user
+      });
+      if(status===200){
+        toast.success("ورود موفقیت آمیز بود.",{
+          position:"top-right",
+          closeOnClick:true
+        })
+        console.log(data)
+        localStorage.setItem("token",data.authorization)
+        const roleResponseServer: RoleType = "admin";
+        const accessToken = data.authorization;
+        setAuth({
+          username,
+          password,
+          roles: [roleResponseServer],
+          token: accessToken,
+        });
+        navigate(from || `/${roleResponseServer}/dashboard`, {
+          replace: true,
+        });
+        reset()
+      }
+    } catch (ex) {
+      console.log(ex)
+      toast.error("مشکلی پیش آمده...",{
+        position:"top-right",
+        closeOnClick:true
+      })
+    }
   };
 
   return (
     <BackgroundImage backgd={backgd}>
-      <p>usertestspring</p>
       <Container maxWidth="md" sx={{ py: 9 }}>
         <Grid container>
           <GridGuestLogin item sm={5}>
             <Typography component="h5" variant="h5" sx={{ mt: 6, px: 4 }}>
-              به سامانه آموزشی کاریار خوش آمدید!
+              به سامانه مدیریت پروفایل کاریار خوش آمدید!
             </Typography>
             <Typography
               component="p"

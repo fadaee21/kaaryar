@@ -5,8 +5,8 @@ import { useAuth } from "../context/AuthProvider";
 export const PersistLogin = () => {
   const { auth } = useAuth();
   const location = useLocation();
-
-  return auth?.token ? (
+  const token = localStorage.getItem("token")
+  return auth?.token? (
     <Outlet />
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

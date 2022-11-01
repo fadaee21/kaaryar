@@ -8,6 +8,7 @@ export const useGetComments = (page: number) => {
   const { auth } = useAuth();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token")
   const getListLearner = async () => {
     try {
       let response = await getData(allCommentLink, {

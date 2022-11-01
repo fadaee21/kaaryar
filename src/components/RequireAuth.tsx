@@ -6,6 +6,7 @@ const RequireAuth: React.FC<AllowedRoles> = ({ allowedRoles }) => {
   const { auth } = useAuth();
   const location = useLocation();
   console.log(auth);
+  
 
   return auth?.roles?.find((role) => allowedRoles?.includes(role)) ? (
     <Outlet />
