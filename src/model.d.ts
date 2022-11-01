@@ -103,5 +103,7 @@ export interface MoodleUser {
   timezone: string;
   calendarType: string;
   description: string;
+  picture: {
+    address: string;
+  };
 }
-

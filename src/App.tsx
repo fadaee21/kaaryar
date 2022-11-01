@@ -22,13 +22,13 @@ function App() {
       <Routes>
         <Route path="/*" element={<Layout />}>
           {/* //!public routes */}
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
+          {/* <Route index element={<Home />} /> */}
+          <Route index element={<Login />} />
           <Route path="unauthorized" element={<h1>unauthorized</h1>} />
           {/* //!protected routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[Roles.ADMIN]} />}>
-            {ListRoutes.filter((route) => route.role === "admin").map(
+              {ListRoutes.filter((route) => route.role === "admin").map(
                 (route, key) => {
                   return (
                     <Route
@@ -68,7 +68,7 @@ function App() {
               )}
             </Route>
             <Route element={<RequireAuth allowedRoles={[Roles.TEACHER]} />}>
-            {ListRoutes.filter((route) => route.role === "teacher").map(
+              {ListRoutes.filter((route) => route.role === "teacher").map(
                 (route, key) => {
                   return (
                     <Route
