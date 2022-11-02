@@ -2,7 +2,6 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData, postData } from "../../api/axios";
-import { useAuth } from "../../context/AuthProvider";
 import { Course, StudentUser } from "../../model";
 
 const allCourseLink = "/ta/course/all?pageNum=0&pageSize=100";
@@ -17,24 +16,20 @@ export const useAddComment = (
   const [allCourse, setAllCourse] = useState([]);
   const [allStudent, setAllStudent] = useState([]);
   const [errMsg, setErrMsg] = useState("");
-  const { auth } = useAuth();
   const navigate = useNavigate();
 
   const getAllCourse = async () => {
-    const response = await getData(allCourseLink, {
-      headers: {
-        Authorization: auth!.token,
-      },
-    });
-    setAllCourse(response.data);
-    console.log(response.data);
+    try {
+      const response = await getData(allCourseLink);
+      setAllCourse(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      navigate("/");
+    }
   };
   const getAllStudent = async () => {
-    const response = await getData(allStudentLink, {
-      headers: {
-        Authorization: auth!.token,
-      },
-    });
+    const response = await getData(allStudentLink);
     setAllStudent(response.data);
   };
 
@@ -45,9 +40,6 @@ export const useAddComment = (
           comment: comment,
           studentUser: studentName,
           course: courseName,
-        },
-        headers: {
-          Authorization: auth!.token,
         },
       });
 

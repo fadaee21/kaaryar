@@ -1,26 +1,23 @@
 import { Grid, Pagination } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getData } from "../api/axios";
 import LoadingProgress from "../components/LoadingProgress";
 import StudentCard from "../components/StudentCard";
-import { useAuth } from "../context/AuthProvider";
 import { MoodleUser } from "../model";
 
 const StudentListMoodle = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
+  const navigate = useNavigate();
   const allStudentMoodle = `moodle/user/all?pageNum=${page}&pageSize=60`;
-  const { auth } = useAuth();
 
   const getListLearner = async () => {
+    setLoading(true);
     try {
-      let response = await getData(allStudentMoodle, {
-        headers: {
-          Authorization: auth!.token,
-        },
-      });
+      let response = await getData(allStudentMoodle);
       setStudents(response.data);
       setLoading(false);
     } catch (error) {
@@ -28,12 +25,14 @@ const StudentListMoodle = () => {
       console.log("catch block of error");
       console.log(error);
       setLoading(false);
+      navigate("/");
     }
   };
 
   useEffect(() => {
     getListLearner();
     window.scrollTo(0, 0);
+    // eslint-disable-next-line
   }, [page]);
 
   if (loading) {

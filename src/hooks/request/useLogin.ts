@@ -1,18 +1,17 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { userLogin } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-import { CustomizedStateLocation, RoleType } from "../../model";
+import { RoleType } from "../../model";
+import useLocalStorage from "../useLocalStorage";
 
 export const useSubmitLogin = (username: string, password: string) => {
   const loginURL = "/auth/login";
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const state = location.state as CustomizedStateLocation;
-  const from = state?.from?.pathname;
+  // eslint-disable-next-line
+  const [storedValue, setValue] = useLocalStorage("user", null);
 
   const [errMsg, setErrMsg] = useState("");
   // eslint-disable-next-line
@@ -27,14 +26,20 @@ export const useSubmitLogin = (username: string, password: string) => {
 
       const roleResponseServer: RoleType = "admin";
       const accessToken = response?.data?.authorization;
+
       setAuth({
         username,
         password,
         roles: [roleResponseServer],
         token: accessToken,
       });
+      setValue({
+        username,
+        roles: [roleResponseServer],
+        token: accessToken,
+      });
 
-      navigate(from || `/${roleResponseServer}/dashboard`, {
+      navigate(`/${roleResponseServer}/dashboard`, {
         replace: true,
       });
     } catch (error) {

@@ -107,3 +107,11 @@ export interface MoodleUser {
     address: string;
   };
 }
+
+export interface LocalStorage {
+  key: string;
+  value: {
+    roles: string[];
+    token: string;
+  };
+}

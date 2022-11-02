@@ -1,19 +1,19 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { AllowedRoles } from "../model";
 
 const RequireAuth: React.FC<AllowedRoles> = ({ allowedRoles }) => {
-  const { auth } = useAuth();
   const location = useLocation();
-  console.log(auth);
-  
+  const [storedValue, setValue] = useLocalStorage("user", null);
 
-  return auth?.roles?.find((role) => allowedRoles?.includes(role)) ? (
+  return storedValue?.roles?.find((role: any) =>
+    allowedRoles?.includes(role)
+  ) ? (
     <Outlet />
-  ) : auth?.username ? (
+  ) : storedValue?.username ? (
     <Navigate to="/unauthorized" state={{ from: location }} replace />
   ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
+    <Navigate to="/" state={{ from: location }} replace />
   );
 };
 

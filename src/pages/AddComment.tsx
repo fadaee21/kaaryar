@@ -102,7 +102,7 @@ const AddComment = () => {
             ارسال
           </Button>
           <FormHelperText error>
-            <Typography variant="body1">{errMsg ? errMsg : " "}</Typography>
+            <Typography variant="caption">{errMsg ? errMsg : " "}</Typography>
           </FormHelperText>
         </FormBox>
       </FormBoxSection>

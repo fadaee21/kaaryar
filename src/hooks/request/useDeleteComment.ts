@@ -1,22 +1,15 @@
 import { useState } from "react";
-
 import { AxiosError } from "axios";
-import { useAuth } from "../../context/AuthProvider";
 import { removeData } from "../../api/axios";
 export const useDeleteComment = (idComment: number | undefined) => {
   const [refresh, setRefresh] = useState(false);
   const [errRemoveMsg, setErrRemoveMsg] = useState("");
   const [successRemoveMsg, setSuccessRemoveMsg] = useState("");
-  const { auth } = useAuth();
 
   const removeComment = async () => {
     console.log(idComment);
     try {
-      await removeData(`/ta/survey/${idComment}`, {
-        headers: {
-          Authorization: auth!.token,
-        },
-      });
+      await removeData(`/ta/survey/${idComment}`);
       setRefresh(!refresh);
       setSuccessRemoveMsg("نظر با موفقیت حذف شد");
     } catch (error) {

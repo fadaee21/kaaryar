@@ -16,7 +16,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
+import useLocalStorage from "../hooks/useLocalStorage";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 const drawerWidth = 260;
 
@@ -74,14 +75,21 @@ export default function Sidebar({ listRoutes }: any) {
   const [open, setOpen] = React.useState(false);
   const [activeKey, setActiveKey] = React.useState(0);
   const navigate = useNavigate();
-  const { auth } = useAuth();
-  console.log(auth?.roles.toString())
+  // const { auth } = useAuth();
+  // eslint-disable-next-line
+  const [storedValue, setValue] = useLocalStorage("user", null);
+  // console.log(auth?.roles.toString())
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleExit = () => {
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
   return (
@@ -130,7 +138,8 @@ export default function Sidebar({ listRoutes }: any) {
           {listRoutes
             .filter(
               (route: any) =>
-                route.showInNav === true && route.role === auth?.roles.toString()
+                route.showInNav === true &&
+                route.role === storedValue.roles.toString()
             )
             .map((route: any) => {
               return (
@@ -176,6 +185,12 @@ export default function Sidebar({ listRoutes }: any) {
                 </ListItem>
               );
             })}
+          <ListItem>
+            <ListItemButton onClick={handleExit}>
+              <ListItemIcon>{<ExitToAppIcon />}</ListItemIcon>
+              <ListItemText>خروج</ListItemText>
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>

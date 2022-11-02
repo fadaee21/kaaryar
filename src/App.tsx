@@ -3,11 +3,10 @@ import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import Login from "./pages/Login";
-import RequireAuth from "./components/RequireAuth";
-import Home from "./pages/Home";
 import Layout from "./pages/Layout";
-import { PersistLogin } from "./components/PersistLogin";
 import ListRoutes from "./ListRoutes";
+import { PersistLogin } from "./components/PersistLogin";
+import RequireAuth from "./components/RequireAuth";
 
 export enum Roles {
   ADMIN = "admin",
@@ -22,7 +21,6 @@ function App() {
       <Routes>
         <Route path="/*" element={<Layout />}>
           {/* //!public routes */}
-          {/* <Route index element={<Home />} /> */}
           <Route index element={<Login />} />
           <Route path="unauthorized" element={<h1>unauthorized</h1>} />
           {/* //!protected routes */}

@@ -7,7 +7,6 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-import { useAuth } from "../context/AuthProvider";
 import { editComment } from "../api/axios";
 import { editCommentProp } from "../model";
 import React from "react";
@@ -33,7 +32,6 @@ export const EditComment: React.FC<editCommentProp> = ({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const { auth } = useAuth();
 
   const editCommentFunc = async () => {
     setLoading(true);
@@ -43,23 +41,22 @@ export const EditComment: React.FC<editCommentProp> = ({
         data: {
           comment,
         },
-        headers: {
-          Authorization: auth!.token,
-        },
       });
+      console.log(comment);
       setSuccess(true);
       setLoading(false);
     } catch (error) {
       setErrorMsg("ویرایش انجام نشد");
       console.log(error);
       setLoading(false);
+      console.log(comment);
     }
   };
 
   const handleClose = () => {
     setOpenEditState(false);
     setErrorMsg("");
-    setComment("")
+    setComment("");
   };
   const handleEdit = () => {
     editCommentFunc();
