@@ -39,7 +39,7 @@ export const EditComment: React.FC<editCommentProp> = ({
     try {
       await editComment(`ta/survey/${editId}`, {
         data: {
-          comment,
+          "comment":comment,
         },
       });
       console.log(comment);
