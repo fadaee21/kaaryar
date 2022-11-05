@@ -35,17 +35,17 @@ getData.interceptors.request.use(
   }
 );
 
-// postData.interceptors.request.use(
-//   (request) => {
-//     const data = window.localStorage.getItem("user");
-//     const resp = JSON.parse(data);
-//     request.headers.common["Authorization"] = resp.token;
-//     return request;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+postData.interceptors.request.use(
+  (request) => {
+    const data = window.localStorage.getItem("user");
+    const resp = JSON.parse(data);
+    request.headers.common["Authorization"] = resp.token;
+    return request;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 editComment.interceptors.request.use(
   (request) => {
