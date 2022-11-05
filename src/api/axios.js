@@ -23,12 +23,11 @@ export const editComment = axios.create({
   method: "PUT",
 });
 
-let data = window.localStorage.getItem("user");
-let resp = JSON.parse(data).token;
-
 getData.interceptors.request.use(
   (request) => {
-    request.headers.common["Authorization"] = resp;
+    const data = window.localStorage.getItem("user");
+    const resp = JSON.parse(data);
+    request.headers.common["Authorization"] = resp.token;
     return request;
   },
   (error) => {
@@ -36,27 +35,35 @@ getData.interceptors.request.use(
   }
 );
 
-postData.interceptors.request.use(
-  (request) => {
-    request.headers.common["Authorization"] = resp;
-    return request;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// postData.interceptors.request.use(
+//   (request) => {
+//     const data = window.localStorage.getItem("user");
+//     const resp = JSON.parse(data);
+//     request.headers.common["Authorization"] = resp.token;
+//     return request;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
+
 editComment.interceptors.request.use(
   (request) => {
-    request.headers.common["Authorization"] = resp;
+    const data = window.localStorage.getItem("user");
+    const resp = JSON.parse(data);
+    request.headers.common["Authorization"] = resp.token;
     return request;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
+
 removeData.interceptors.request.use(
   (request) => {
-    request.headers.common["Authorization"] = resp;
+    const data = window.localStorage.getItem("user");
+    const resp = JSON.parse(data);
+    request.headers.common["Authorization"] = resp.token;
     return request;
   },
   (error) => {
