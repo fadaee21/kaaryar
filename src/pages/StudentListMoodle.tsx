@@ -1,18 +1,31 @@
-import { Grid, Pagination } from "@mui/material";
-import { Box } from "@mui/system";
+import {
+  Button,
+  ButtonGroup,
+  ListItem,
+  Pagination,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  Typography,
+} from "@mui/material";
+import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../api/axios";
 import LoadingProgress from "../components/LoadingProgress";
-import StudentCard from "../components/StudentCard";
+import TablePic from "../components/TablePic";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { MoodleUser } from "../model";
+import { StyledTableCell, StyledTableRow } from "../styles/table";
 
 const StudentListMoodle = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
-  const allStudentMoodle = `moodle/user/all?pageNum=${page}&pageSize=60`;
+  const allStudentMoodle = `moodle/user/all?pageNum=${page - 1}&pageSize=60`;
 
   const getListLearner = async () => {
     setLoading(true);
@@ -28,6 +41,8 @@ const StudentListMoodle = () => {
       navigate("/");
     }
   };
+  const [storedValue, setValue] = useLocalStorage("user", null);
+  const [roles] = storedValue.roles;
 
   useEffect(() => {
     getListLearner();
@@ -41,16 +56,105 @@ const StudentListMoodle = () => {
   console.log(students);
 
   return (
-    <Box sx={{ m: 5 }}>
-      <Grid container spacing={4}>
-        {students.map((moodleUser: MoodleUser) => {
-          return (
-            <Grid item key={moodleUser.id} xs={12} md={6} lg={4}>
-              <StudentCard moodleUser={moodleUser} />
-            </Grid>
-          );
-        })}
-      </Grid>
+    <Box sx={{ m: 2 }}>
+      <Box component={"article"}>
+        <Container maxWidth="xl">
+          <Box
+            component={"div"}
+            sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+          >
+            <Typography variant="h3"> لیست مهارت جوها</Typography>
+          </Box>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 400 }} aria-label="simple table">
+              <TableHead>
+                <StyledTableRow>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left">
+                    نام و نام خانوادگی
+                  </StyledTableCell>
+                  <StyledTableCell align="left">نام کاربری</StyledTableCell>
+                  <StyledTableCell align="left">ایمیل</StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                {students.map((moodleUser: MoodleUser) => {
+                  const { id, firstName, lastName, username, email, picture } =
+                    moodleUser;
+                  return (
+                    <StyledTableRow
+                      key={id}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                    >
+                      <StyledTableCell
+                        align="left"
+                        sx={{ width: "5%", verticalAlign: "top" }}
+                      >
+                        <TablePic picture={picture} lastName={lastName} />
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="left"
+                        sx={{ width: "25%", verticalAlign: "top" }}
+                      >
+                        <Typography variant="body1">
+                          {firstName + " " + lastName}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="left"
+                        sx={{
+                          width: "10%",
+                          verticalAlign: "top",
+                        }}
+                      >
+                        <Typography variant="body2" textAlign={"left"}>
+                          {username}
+                        </Typography>
+                      </StyledTableCell>
+
+                      <StyledTableCell
+                        align="left"
+                        sx={{
+                          width: "30%",
+                          verticalAlign: "top",
+                        }}
+                      >
+                        <Typography variant="body2">{email}</Typography>
+                      </StyledTableCell>
+
+                      <StyledTableCell
+                        align="left"
+                        sx={{ width: "30%", verticalAlign: "top" }}
+                      >
+                        <ListItem sx={{ pt: 0 }}>
+                          <ButtonGroup
+                            variant="contained"
+                            color="secondary"
+                            size="small"
+                            aria-label="small button group"
+                          >
+                            <Button
+                              onClick={() =>
+                                navigate(`/${roles}/student/${id}`)
+                              }
+                            >
+                              جزییات
+                            </Button>
+                            <Button>ویرایش</Button>
+                          </ButtonGroup>
+                        </ListItem>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Container>
+      </Box>
       <Pagination
         sx={{
           display: "flex",
@@ -62,8 +166,9 @@ const StudentListMoodle = () => {
         count={24}
         variant="outlined"
         shape="rounded"
+        page={page}
         onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-          setPage(value - 1);
+          setPage(value);
         }}
       />
     </Box>

@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.baseURL = "https://api.pm.kaaryar.ir/";
 
@@ -46,7 +47,6 @@ postData.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 editComment.interceptors.request.use(
   (request) => {
     const data = window.localStorage.getItem("user");
@@ -58,7 +58,6 @@ editComment.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 removeData.interceptors.request.use(
   (request) => {
     const data = window.localStorage.getItem("user");

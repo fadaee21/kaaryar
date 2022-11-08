@@ -28,9 +28,10 @@ import { useDeleteComment } from "../hooks/request/useDeleteComment";
 import { useGetComments } from "../hooks/request/useGetComments";
 import { dateConverter } from "../utils/dateConverter";
 import { EditComment } from "../components/EditComment";
+import { counterPagination } from "../utils/counterPagination";
 
 const Comments = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [open, setOpen] = React.useState(false);
 
   const [openEditState, setOpenEditState] = React.useState<boolean>(false);
@@ -44,7 +45,8 @@ const Comments = () => {
   };
 
   const [idComment, setIdComment] = useState<number>();
-  const { getListLearner, comments, loading } = useGetComments(page);
+  const { getListLearner, comments, loading, commentCounter } =
+    useGetComments(page);
   const {
     removeComment,
     refresh,
@@ -88,7 +90,7 @@ const Comments = () => {
   return (
     <>
       <Box component={"article"} sx={{ my: 10 }}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Box
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
@@ -221,11 +223,12 @@ const Comments = () => {
           my: 4,
         }}
         size="large"
-        count={1}
+        count={counterPagination(commentCounter)}
         variant="outlined"
         shape="rounded"
+        page={page}
         onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-          setPage(value - 1);
+          setPage(value);
         }}
       />
     </>

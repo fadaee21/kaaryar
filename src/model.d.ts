@@ -90,7 +90,6 @@ export interface MoodleUser {
   lastName: string;
   roles: Array;
   username: string;
-  id: 9;
   idNumber: string;
   phone: string;
   mobile: string;

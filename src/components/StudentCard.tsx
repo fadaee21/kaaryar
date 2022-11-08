@@ -9,6 +9,7 @@ import { Button, CardActions } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useGetImage from "../hooks/request/useGetImage";
 import { stringAvatar } from "../utils/avatarColor";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function StudentCard({
   moodleUser,
@@ -18,6 +19,10 @@ export default function StudentCard({
   const { email, firstName, lastName, username, id, picture } = moodleUser;
   const navigate = useNavigate();
   const { pic, getPicture } = useGetImage(picture);
+  const [storedValue, setValue] = useLocalStorage("user", null);
+  const roles = storedValue.roles
+
+
   React.useEffect(() => {
     if (picture !== null) {
       getPicture();
@@ -45,7 +50,8 @@ export default function StudentCard({
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => navigate(`${id}`)}>
+        {/*//! after defining the role, admin must change to the variable */}
+        <Button size="small" onClick={() => navigate(`/${roles}/student/${id}`)}>
           مشاهده{" "}
         </Button>
         <Button size="small">ویرایش </Button>

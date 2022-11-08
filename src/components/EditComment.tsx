@@ -11,6 +11,7 @@ import { editComment } from "../api/axios";
 import { editCommentProp } from "../model";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions/transition";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -28,18 +29,19 @@ export const EditComment: React.FC<editCommentProp> = ({
   setRefreshByEdit,
   shareComment,
 }) => {
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState(" ");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  const [storedValue, setValue] = useLocalStorage("user", null);
+  const roles = storedValue.roles;
   const editCommentFunc = async () => {
     setLoading(true);
     setErrorMsg(null);
     try {
-      await editComment(`ta/survey/${editId}`, {
+      await editComment(`${roles}/survey/${editId}`, {
         data: {
-          "comment":comment,
+          comment,
         },
       });
       console.log(comment);
@@ -56,7 +58,7 @@ export const EditComment: React.FC<editCommentProp> = ({
   const handleClose = () => {
     setOpenEditState(false);
     setErrorMsg("");
-    setComment("");
+    setComment(" ");
   };
   const handleEdit = () => {
     editCommentFunc();
@@ -67,7 +69,7 @@ export const EditComment: React.FC<editCommentProp> = ({
       setRefreshByEdit((prev) => prev + 1);
       handleClose();
       setSuccess(false);
-      setComment("");
+      setComment(" ");
     }
     // eslint-disable-next-line
   }, [success]);
@@ -93,7 +95,12 @@ export const EditComment: React.FC<editCommentProp> = ({
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="h6">
               ویرایش دیدگاه
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleEdit}>
+            <Button
+              autoFocus
+              color="inherit"
+              onClick={handleEdit}
+              disabled={!comment ? true : false}
+            >
               ارسال
             </Button>
           </Toolbar>
@@ -111,7 +118,7 @@ export const EditComment: React.FC<editCommentProp> = ({
             sx={{ width: "100%" }}
             multiline
             onChange={(e) => setComment(e.target.value)}
-            value={comment || shareComment}
+            value={comment === " " ? shareComment : comment}
           />
           {loading && (
             <>

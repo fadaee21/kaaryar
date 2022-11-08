@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
+import useLocalStorage from "../useLocalStorage";
 
 export const useGetStudentList = (paginationState: number) => {
-  //TODO:it would be better to have all user in one request and paginate it in front
-  const allStudentsLink = `/ta/user/all?pageNum=${paginationState}&pageSize=20`;
+  const [storedValue, setValue] = useLocalStorage("user", null);
+  const roles = storedValue.roles
+
+  const allStudentsLink = `/${roles}/user/all?pageNum=${paginationState}&pageSize=20`;
 
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);

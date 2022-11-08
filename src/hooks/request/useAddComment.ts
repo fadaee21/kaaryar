@@ -3,20 +3,24 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData, postData } from "../../api/axios";
 import { Course, StudentUser } from "../../model";
+import useLocalStorage from "../useLocalStorage";
 
-const allCourseLink = "/ta/course/all?pageNum=0&pageSize=100";
-const allStudentLink = "/ta/user/all?pageNum=0&pageSize=400";
-const postCommentLink = "/ta/survey/new";
 
 export const useAddComment = (
   courseName: Course | null,
   studentName: StudentUser | null,
   comment: string
-) => {
-  const [allCourse, setAllCourse] = useState([]);
-  const [allStudent, setAllStudent] = useState([]);
-  const [errMsg, setErrMsg] = useState("");
-  const navigate = useNavigate();
+  ) => {
+    const [allCourse, setAllCourse] = useState([]);
+    const [allStudent, setAllStudent] = useState([]);
+    const [errMsg, setErrMsg] = useState("");
+    const navigate = useNavigate();
+    const [storedValue, setValue] = useLocalStorage("user", null);
+    const roles = storedValue.roles
+
+    const allCourseLink = `/${roles}/course/all?pageNum=0&pageSize=100`;
+    const allStudentLink = `/${roles}/user/all?pageNum=0&pageSize=400`;
+    const postCommentLink = `/${roles}/survey/new`;
 
   const getAllCourse = async () => {
     try {

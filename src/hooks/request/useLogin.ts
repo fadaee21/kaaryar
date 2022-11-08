@@ -24,7 +24,7 @@ export const useSubmitLogin = (username: string, password: string) => {
         },
       });
 
-      const roleResponseServer: RoleType = "admin";
+      const roleResponseServer: RoleType = "teacher";
       const accessToken = response?.data?.authorization;
 
       setAuth({
