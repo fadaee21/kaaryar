@@ -114,3 +114,57 @@ export interface LocalStorage {
     token: string;
   };
 }
+
+export interface RegistrationForm {
+  id: number;
+  checked: boolean;
+  registrationCode: string;
+  codeMeli: string;
+  firstName: string;
+  family: string;
+  province: string;
+  city: string;
+  gender: string;
+  birthDate: string;
+  mobile: string;
+  email: string;
+  familiarity: string;
+  education: string;
+  studyField: string;
+  selectedField: string;
+  description: string;
+  token: string;
+}
+
+export interface ExamRegisterUser {
+  id: number;
+  registrationForm: RegistrationForm;
+  instituteType: string;
+  lastInstitute: string;
+  currentInstType: string;
+  currentInstName: string;
+  currentField: string;
+  eduLevel: string;
+  stuSemester: string;
+  stuYear: string;
+  jobStatus: string;
+  jobType: string;
+  jobTitle: string;
+  jobVision: string;
+  avgSalary: string;
+  freeDailyTime: string;
+  workTime: string;
+  noneJobActivation: string;
+  jobStandby: boolean;
+  webDevFamiliarity: boolean;
+  computerFamiliarity: boolean;
+  computerAccess: string;
+  programmingCoursePassed: boolean;
+  courseDescription: string;
+  internetAccess: string;
+  accessTime: string;
+  limitTime: string;
+  motivation: string;
+  familiar: string;
+  charity: string;
+}

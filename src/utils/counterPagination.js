@@ -1,9 +1,9 @@
-export const counterPagination = (num) => {
-  if (num % 10 === 0) {
-    const gg = num / 10;
+export const counterPagination = (total , perPage) => {
+  if (total % perPage === 0) {
+    const gg = total / perPage;
     return gg;
   } else {
-    const tt = Math.floor(num / 10) + 1;
+    const tt = Math.floor(total / perPage) + 1;
     return tt;
   }
 };

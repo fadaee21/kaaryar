@@ -5,8 +5,13 @@ import Comments from "./pages/Comments";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import CommentIcon from "@mui/icons-material/Comment";
+import DynamicFormIcon from "@mui/icons-material/DynamicForm";
 import AddComment from "./pages/AddComment";
-import AddCommentIcon from '@mui/icons-material/AddComment';
+import AddCommentIcon from "@mui/icons-material/AddComment";
+import ExamForm from "./pages/ExamForm";
+import ExamFormDetail from "./pages/ExamFormDetail";
+import ExamFormDetailEdit from "./pages/ExamFormDetailEdit";
+
 const ListRoutes = [
   {
     path: "ta/dashboard",
@@ -183,6 +188,31 @@ const ListRoutes = [
     showInNav: true,
     role: "admin",
     key: 19,
+  },
+  {
+    path: "teacher/exam-form",
+    name: "لیست فرم های آزمون",
+    icon: <DynamicFormIcon />,
+    component: ExamForm,
+    showInNav: true,
+    role: "teacher",
+    key: 20,
+  },
+  {
+    path: "teacher/exam-form/:id",
+    name: "جزییات آزمون دهنده",
+    component: ExamFormDetail,
+    showInNav: false,
+    role: "teacher",
+    key: 21,
+  },
+  {
+    path: "teacher/exam-form-edit/:id",
+    name: "جزییات آزمون دهنده",
+    component: ExamFormDetailEdit,
+    showInNav: false,
+    role: "teacher",
+    key: 21,
   },
 ];
 

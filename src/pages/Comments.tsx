@@ -223,7 +223,7 @@ const Comments = () => {
           my: 4,
         }}
         size="large"
-        count={counterPagination(commentCounter)}
+        count={counterPagination(commentCounter,10)}
         variant="outlined"
         shape="rounded"
         page={page}
