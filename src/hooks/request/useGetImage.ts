@@ -1,21 +1,14 @@
 import React from "react";
 import { getData } from "../../api/axios";
 
+const useGetImage = () => {
+  const [pic, setPic] = React.useState<string | undefined>();
 
-interface Picture {
-  address: string;
-}
-
-const useGetImage = (picture: Picture) => {
-  const [pic, setPic] = React.useState<string | null>(null);
-
-  const getPicture = async () => {
+  const getPicture = async (pictureURL: string) => {
     try {
-      let response = await getData(picture.address, {
+      let response = await getData(pictureURL, {
         responseType: "arraybuffer", //so important!!
-
       });
-
       const url = window.URL.createObjectURL(new Blob([response.data]));
       setPic(url);
     } catch (error) {

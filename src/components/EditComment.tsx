@@ -7,7 +7,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-import { editComment } from "../api/axios";
+import { editAxios } from "../api/axios";
 import { editCommentProp } from "../model";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions/transition";
@@ -39,7 +39,7 @@ export const EditComment: React.FC<editCommentProp> = ({
     setLoading(true);
     setErrorMsg(null);
     try {
-      await editComment(`${roles}/survey/${editId}`, {
+      await editAxios(`${roles}/survey/${editId}`, {
         data: {
           comment,
         },

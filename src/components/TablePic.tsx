@@ -4,16 +4,16 @@ import useGetImage from "../hooks/request/useGetImage";
 import { stringAvatar } from "../utils/avatarColor";
 
 const TablePic = ({ picture, lastName }: any) => {
-  const { pic, getPicture } = useGetImage(picture);
+  const { pic, getPicture } = useGetImage();
   React.useEffect(() => {
     if (picture !== null) {
-      getPicture();
+      getPicture(picture?.address);
     }
   }, []);
 
   return (
     <>
-      {pic !== null ? (
+      {pic !== undefined ? (
         <Avatar src={pic} />
       ) : (
         <Avatar {...stringAvatar(lastName)} />

@@ -18,14 +18,14 @@ export default function StudentCard({
 }) {
   const { email, firstName, lastName, username, id, picture } = moodleUser;
   const navigate = useNavigate();
-  const { pic, getPicture } = useGetImage(picture);
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const roles = storedValue.roles
-
+  const { pic, getPicture } = useGetImage();
+  const [storedValue, setValue] = useLocalStorage("user", undefined);
+  const roles = storedValue.roles;
 
   React.useEffect(() => {
+    console.log(pic);
     if (picture !== null) {
-      getPicture();
+      getPicture(picture?.address);
     }
   }, []);
 
@@ -33,7 +33,7 @@ export default function StudentCard({
     <Card sx={{ minWidth: 345, height: 210 }}>
       <CardHeader
         avatar={
-          pic !== null ? (
+          pic !== undefined ? (
             <Avatar src={pic} />
           ) : (
             <Avatar {...stringAvatar(lastName)} />
@@ -51,7 +51,10 @@ export default function StudentCard({
       </CardContent>
       <CardActions>
         {/*//! after defining the role, admin must change to the variable */}
-        <Button size="small" onClick={() => navigate(`/${roles}/student/${id}`)}>
+        <Button
+          size="small"
+          onClick={() => navigate(`/${roles}/student/${id}`)}
+        >
           مشاهده{" "}
         </Button>
         <Button size="small">ویرایش </Button>

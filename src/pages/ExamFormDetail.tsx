@@ -8,21 +8,20 @@ import {
   Button,
   Container,
   Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
+  useMediaQuery,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ExamFormDetailComp from "../components/ExamFormDetailComp";
-import ExamFormDetailShowComp from "../components/ExamFormDetailShowComp";
+import ExamFormDetailComp from "../components/ExamFormDetail/ExamFormDetailComp";
+import ExamFormDetailShowComp1 from "../components/ExamFormDetail/ExamFormDetailShowComp1";
+import ExamFormDetailShowComp2 from "../components/ExamFormDetail/ExamFormDetailShowComp2";
+
 
 const ExamFormDetail = () => {
   const [student, setStudent] = useState<ExamRegisterUser | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
+  
   const studentId = `/exam/form/${id}`;
 
   const getStudent = async () => {
@@ -40,11 +39,14 @@ const ExamFormDetail = () => {
     }
   };
 
+
+
   useEffect(() => {
     getStudent();
     window.scrollTo(0, 0);
     // eslint-disable-next-line
   }, []);
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
   if (loading) {
     return <LoadingProgress />;
@@ -73,7 +75,9 @@ const ExamFormDetail = () => {
       <Container maxWidth="lg">
         <ExamFormDetailComp student={student} />
         <Divider />
-        <ExamFormDetailShowComp student={student} />
+        <ExamFormDetailShowComp1 student={student} matches={matches} id={id} />
+        <Divider />
+        <ExamFormDetailShowComp2 student={student} matches={matches} id={id} />
       </Container>
     </>
   );

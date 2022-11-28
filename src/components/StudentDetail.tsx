@@ -13,11 +13,11 @@ interface Student {
 }
 
 const StudentDetail = ({ student }: Student) => {
-  const { pic, getPicture } = useGetImage(student!.picture);
+  const { pic, getPicture } = useGetImage();
   const navigate = useNavigate();
   React.useEffect(() => {
     if (student!.picture !== null) {
-      getPicture();
+      getPicture(student!.picture?.address);
     }
   }, []);
 
@@ -53,7 +53,7 @@ const StudentDetail = ({ student }: Student) => {
               alignItems: "flex-start",
             }}
           >
-            {pic !== null ? (
+            {pic !== undefined ? (
               <Avatar
                 sx={{
                   width: "8rem",

@@ -20,7 +20,7 @@ export const postData = axios.create({
 export const removeData = axios.create({
   method: "DELETE",
 });
-export const editComment = axios.create({
+export const editAxios = axios.create({
   method: "PUT",
 });
 
@@ -47,7 +47,7 @@ postData.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-editComment.interceptors.request.use(
+editAxios.interceptors.request.use(
   (request) => {
     const data = window.localStorage.getItem("user");
     const resp = JSON.parse(data);
