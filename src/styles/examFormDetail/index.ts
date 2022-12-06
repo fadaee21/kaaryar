@@ -11,6 +11,7 @@ export const BoxExamDetail = styled(Box,{
   display: "flex",
   justifyContent: "center",
   width: "100%",
+  marginBottom:theme.spacing(5),
   [theme.breakpoints.up("sm")]: {
     alignItem: "flex-start",
     flexDirection: "row",

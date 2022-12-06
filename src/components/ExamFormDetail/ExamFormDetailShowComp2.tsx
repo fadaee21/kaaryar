@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonGroup,
   Divider,
   Grid,
   List,
@@ -9,24 +10,31 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import useApprove from "../../hooks/request/useApprove";
+import { useNavigate } from "react-router-dom";
+import { useApprove } from "../../hooks/request/useApprove";
+import useLocalStorage from "../../hooks/useLocalStorage";
 import { ExamRegisterUser } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
-import UploadImage from "../UploadImage";
+// import UploadImage from "../UploadImage";
 
 interface ExamStudent {
   student: ExamRegisterUser | null;
   matches: boolean;
   id: string | undefined;
+  typeComp: "exam" | "admission";
 }
 
 const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
   student,
   matches,
   id,
+  typeComp,
 }) => {
   const { setApproveObject, successObject } = useApprove(id as string);
+  const navigate = useNavigate();
+  const [storedValue, setValue] = useLocalStorage("user", null);
+  const [roles] = storedValue.roles;
   return (
     <>
       <Box
@@ -37,94 +45,35 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
         }}
       >
         <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
-          ارزیابی قبل از پذیرش
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setApproveObject({ beforeAcceptChecked: true });
-          }}
-          disabled={
-            student?.beforeAcceptChecked ||
-            successObject === "beforeAcceptChecked"
-              ? true
-              : false
-          }
-        >
-          بررسی شد
-        </Button>
-      </Box>
-      <BoxExamDetail
-        colorActive={
-          student?.beforeAcceptChecked ||
-          successObject === "beforeAcceptChecked"
-        }
-      >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
-
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
-        <Grid container>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="وضعیت تحصیلی"
-                  secondary={student?.eduStatus}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="آمادگی به کار بعد از اتمام دوره"
-                  // secondary={student?.}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="توضیحات"
-                  // secondary={student?.}
-                />
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="هدف از شرکت در دوره"
-                  secondary={student?.contCourseApproach}
-                />
-              </ListItem>
-            </List>
-          </Grid>
-        </Grid>
-      </BoxExamDetail>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
           فرم ثبت نام هفته پذیرش
         </Typography>
-        <Button
+
+        <ButtonGroup
           variant="contained"
-          onClick={() => {
-            setApproveObject({ acceptWeekChecked: true });
-          }}
+          color="secondary"
+          size="large"
+          aria-label="small button group"
           disabled={
             student?.acceptWeekChecked || successObject === "acceptWeekChecked"
               ? true
               : false
           }
+          // sx={{ ...(typeComp === "admission" && { display: "none" }) }}
         >
-          بررسی شد
-        </Button>
+          <Button
+            onClick={() => navigate(`/${roles}/admission-form-edit/${id}`)}
+          >
+            ویرایش
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ acceptWeekChecked: true });
+            }}
+          >
+            تایید
+          </Button>
+        </ButtonGroup>
       </Box>
       <BoxExamDetail
         colorActive={
@@ -180,7 +129,7 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
                   secondary={student?.algoLevelResult}
                 />
               </ListItem>
-              <ListItem>
+              {/* <ListItem>
                 <UploadImage
                   id={id}
                   disableProp={
@@ -188,7 +137,7 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
                     successObject === "acceptWeekChecked"
                   }
                 />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Grid>
         </Grid>
@@ -203,19 +152,33 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
         <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
           نتیجه هفته پذیرش
         </Typography>
-        <Button
+
+        <ButtonGroup
           variant="contained"
-          onClick={() => {
-            setApproveObject({ weekResultChecked: true });
-          }}
+          color="secondary"
+          size="large"
+          aria-label="small button group"
+          // sx={{ ...(typeComp === "admission" && { display: "none" }) }}
           disabled={
             student?.weekResultChecked || successObject === "weekResultChecked"
               ? true
               : false
           }
         >
-          بررسی شد
-        </Button>
+          <Button
+            onClick={() => navigate(`/${roles}/admission-form-edit/${id}`)}
+          >
+            ویرایش
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ weekResultChecked: true });
+            }}
+          >
+            تایید{" "}
+          </Button>
+        </ButtonGroup>
       </Box>
       <BoxExamDetail
         colorActive={
@@ -420,11 +383,13 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
         <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
           ثبت نام نهایی
         </Typography>
-        <Button
+
+        <ButtonGroup
           variant="contained"
-          onClick={() => {
-            setApproveObject({ finalResultChecked: true });
-          }}
+          color="secondary"
+          size="large"
+          aria-label="small button group"
+          // sx={{ ...(typeComp === "admission" && { display: "none" }) }}
           disabled={
             student?.finalResultChecked ||
             successObject === "finalResultChecked"
@@ -432,8 +397,20 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
               : false
           }
         >
-          بررسی شد
-        </Button>
+          <Button
+            onClick={() => navigate(`/${roles}/admission-form-edit/${id}`)}
+          >
+            ویرایش
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ finalResultChecked: true });
+            }}
+          >
+            تایید{" "}
+          </Button>
+        </ButtonGroup>
       </Box>
       <BoxExamDetail
         colorActive={

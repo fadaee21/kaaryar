@@ -1,6 +1,5 @@
 import {
   Button,
-  ButtonGroup,
   ListItem,
   Pagination,
   Paper,
@@ -13,15 +12,16 @@ import {
 import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../api/axios";
-import LoadingProgress from "../components/LoadingProgress";
-import useCountPagination from "../hooks/request/useCountPagination";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { ExamRegisterUser } from "../model";
-import { StyledTableCell, StyledTableRow } from "../styles/table";
-import { counterPagination } from "../utils/counterPagination";
+import { getData } from "../../api/axios";
+import LoadingProgress from "../../components/LoadingProgress";
+import useCountPagination from "../../hooks/request/useCountPagination";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { ExamRegisterUser } from "../../model";
+import { StyledTableCell, StyledTableRow } from "../../styles/table";
+import { counterPagination } from "../../utils/counterPagination";
 
-const ExamForm = () => {
+const AdmissionForm
+ = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -66,7 +66,7 @@ const ExamForm = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
           >
-            <Typography variant="h3"> لیست فرم های آزمون</Typography>
+            <Typography variant="h3"> لیست هفته پذیرش</Typography>
           </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
@@ -127,27 +127,16 @@ const ExamForm = () => {
                         sx={{ width: "30%", verticalAlign: "top" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
-                          <ButtonGroup
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            aria-label="small button group"
+                          <Button
+                           variant="contained"
+                           color="secondary"
+                            onClick={() =>
+                              navigate(`/${roles}/admission-form/${id}`)
+                            }
+                            sx={{ ml: "auto", mr: "auto" }}
                           >
-                            <Button
-                              onClick={() =>
-                                navigate(`/${roles}/exam-form/${id}`)
-                              }
-                            >
-                              جزییات
-                            </Button>
-                            <Button
-                              onClick={() =>
-                                navigate(`/${roles}/exam-form-edit/${id}`)
-                              }
-                            >
-                              ویرایش
-                            </Button>
-                          </ButtonGroup>
+                            جزییات
+                          </Button>
                         </ListItem>
                       </StyledTableCell>
                     </StyledTableRow>
@@ -178,4 +167,5 @@ const ExamForm = () => {
   );
 };
 
-export default ExamForm;
+export default AdmissionForm
+;

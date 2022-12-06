@@ -134,6 +134,8 @@ export interface RegistrationForm {
   selectedField: string;
   description: string;
   token: string;
+
+  
 }
 
 export interface ExamRegisterUser {

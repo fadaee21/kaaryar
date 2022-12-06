@@ -2,17 +2,28 @@ import { Dashboard } from "./pages/Dashboard";
 import StudentPage from "./pages/StudentPage";
 import StudentListMoodle from "./pages/StudentListMoodle";
 import Comments from "./pages/Comments";
+import AddComment from "./pages/AddComment";
+import ExamForm from "./pages/exam/ExamForm";
+import ExamFormDetail from "./pages/exam/ExamFormDetail";
+import ExamFormDetailEdit from "./pages/exam/ExamFormDetailEdit";
+import AdmissionListWeek from "./pages/admission/AdmissionForm";
+import Register from "./pages/reg/registerForm";
+import RegisterDetail from "./pages/reg/registerFormDetail";
+import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
+
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import CommentIcon from "@mui/icons-material/Comment";
-import DynamicFormIcon from "@mui/icons-material/DynamicForm";
-import AddComment from "./pages/AddComment";
 import AddCommentIcon from "@mui/icons-material/AddComment";
-import ExamForm from "./pages/ExamForm";
-import ExamFormDetail from "./pages/ExamFormDetail";
-import ExamFormDetailEdit from "./pages/ExamFormDetailEdit";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import PortraitIcon from "@mui/icons-material/Portrait";
+import AdmissionFormDetail from "./pages/admission/AdmissionFormDetail";
+import AdmissionFormDetailEdit from "./pages/admission/AdmissionFormDetailEdit";
+import justTest from "./pages/justTest";
 
 const ListRoutes = [
+  // ta________________________________
   {
     path: "ta/dashboard",
     name: "داشبورد",
@@ -57,6 +68,8 @@ const ListRoutes = [
     role: "ta",
     key: 4,
   },
+
+  // mentor______________________________
   {
     path: "mentor/dashboard",
     name: "داشبورد",
@@ -101,6 +114,8 @@ const ListRoutes = [
     role: "mentor",
     key: 9,
   },
+
+  // teacher____________________________________________
   {
     path: "teacher/dashboard",
     name: "داشبورد",
@@ -108,8 +123,36 @@ const ListRoutes = [
     component: Dashboard,
     showInNav: true,
     role: "teacher",
-    key: 10,
+    key: "teacher2",
   },
+  {
+    path: "teacher/register-form",
+    name: "لیست فرم های ثبت نام ",
+    icon: <AppRegistrationIcon />,
+    component: Register,
+    showInNav: true,
+    role: "teacher",
+    key: "teacher9",
+  },
+  {
+    path: "teacher/exam-form",
+    name: "لیست فرم های آزمون",
+    icon: <PortraitIcon />,
+    component: ExamForm,
+    showInNav: true,
+    role: "teacher",
+    key: "teacher6",
+  },
+  {
+    path: "teacher/admission-week",
+    name: "لیست هفته پذیرش",
+    icon: <HowToRegIcon />,
+    component: AdmissionListWeek,
+    showInNav: true,
+    role: "teacher",
+    key: "teacher16",
+  },
+
   {
     path: "teacher/student",
     name: "لیست مهارت جو ها",
@@ -117,15 +160,15 @@ const ListRoutes = [
     component: StudentListMoodle,
     showInNav: true,
     role: "teacher",
-    key: 11,
+    key: "teacher1",
   },
   {
     path: "teacher/student/:id",
-    name: "جزییات مهارت جو ها",
+    name: " ",
     component: StudentPage,
     showInNav: false,
     role: "teacher",
-    key: 12,
+    key: "teacher3",
   },
   {
     path: "teacher/comments",
@@ -134,7 +177,7 @@ const ListRoutes = [
     component: Comments,
     showInNav: true,
     role: "teacher",
-    key: 13,
+    key: "teacher4",
   },
   {
     path: "teacher/add-comment",
@@ -143,8 +186,60 @@ const ListRoutes = [
     component: AddComment,
     showInNav: true,
     role: "teacher",
-    key: 14,
+    key: "teacher5",
   },
+
+  {
+    path: "teacher/exam-form/:id",
+    name: " ",
+    component: ExamFormDetail,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher7",
+  },
+  {
+    path: "teacher/exam-form-edit/:id",
+    name: " ",
+    component: ExamFormDetailEdit,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher8",
+  },
+
+  {
+    path: "teacher/register-form/:id",
+    name: " ",
+    component: RegisterDetail,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher10",
+  },
+  {
+    path: "teacher/register-form-edit/:id",
+    name: " ",
+    component: RegisterFormDetailEdit,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher11",
+  },
+  {
+    path: "teacher/admission-form/:id",
+    name: " ",
+    component: AdmissionFormDetail,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher12",
+  },
+  {
+    path: "teacher/admission-form-edit/:id",
+    name: " ",
+    component: AdmissionFormDetailEdit,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher13",
+  },
+
+  // admin__________________________________________
   {
     path: "admin/dashboard",
     name: "داشبورد",
@@ -190,29 +285,13 @@ const ListRoutes = [
     key: 19,
   },
   {
-    path: "teacher/exam-form",
-    name: "لیست فرم های آزمون",
-    icon: <DynamicFormIcon />,
-    component: ExamForm,
-    showInNav: true,
-    role: "teacher",
-    key: 20,
-  },
-  {
-    path: "teacher/exam-form/:id",
-    name: "جزییات آزمون دهنده",
-    component: ExamFormDetail,
+    path: "test",
+    name: "",
+    icon: <AddCommentIcon />,
+    component: justTest,
     showInNav: false,
     role: "teacher",
-    key: 21,
-  },
-  {
-    path: "teacher/exam-form-edit/:id",
-    name: "جزییات آزمون دهنده",
-    component: ExamFormDetailEdit,
-    showInNav: false,
-    role: "teacher",
-    key: 21,
+    key: "test11111111111",
   },
 ];
 

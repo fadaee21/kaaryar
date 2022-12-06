@@ -9,7 +9,7 @@ export const BackgroundImage = styled(Box, {
   shouldForwardProp: (prop) => prop !== "backgd",
 })<MyBackgroundImage>(({ backgd }) => ({
   background: `url(${backgd})`,
-  minHeight: " 100%",
+  minHeight: " 100vh",
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center center",

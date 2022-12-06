@@ -1,5 +1,6 @@
 import {
   Button,
+  ButtonGroup,
   Divider,
   Grid,
   List,
@@ -9,7 +10,9 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import useApprove from "../../hooks/request/useApprove";
+import { useNavigate } from "react-router-dom";
+import { useApprove } from "../../hooks/request/useApprove";
+import useLocalStorage from "../../hooks/useLocalStorage";
 import { ExamRegisterUser } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
@@ -18,16 +21,19 @@ interface ExamStudent {
   student: ExamRegisterUser | null;
   matches: boolean;
   id: string | undefined;
+  typeComp: "exam" | "admission";
 }
 
 const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
   student,
   matches,
   id,
+  typeComp,
 }) => {
   const { setApproveObject, successObject } = useApprove(id as string);
-
-  console.log(student?.acceptWeekChecked);
+  const navigate = useNavigate();
+  const [storedValue, setValue] = useLocalStorage("user", null);
+  const [roles] = storedValue.roles;
 
   return (
     <>
@@ -42,19 +48,37 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
           فرم آزمون (فرم درخواست ثبت نام دردوره های آموزشی مطعوف به اشتغال
           کاریار)
         </Typography>
-        <Button
+        <ButtonGroup
           variant="contained"
-          onClick={() => {
-            setApproveObject({ examFormChecked: true });
-          }}
-          disabled={
-            student?.examFormChecked || successObject === "examFormChecked"
-              ? true
-              : false
-          }
+          color="secondary"
+          size="large"
+          aria-label="small button group"
+          sx={{ ...(typeComp === "admission" && { display: "none" }) }}
         >
-          بررسی شد
-        </Button>
+          <Button
+            onClick={() => navigate(`/${roles}/exam-form-edit/${id}`)}
+            disabled={
+              student?.examFormChecked || successObject === "examFormChecked"
+                ? true
+                : false
+            }
+          >
+            ویرایش
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ examFormChecked: true });
+            }}
+            disabled={
+              student?.examFormChecked || successObject === "examFormChecked"
+                ? true
+                : false
+            }
+          >
+            تایید
+          </Button>
+        </ButtonGroup>
       </Box>
       <BoxExamDetail
         colorActive={
@@ -319,6 +343,99 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
                 <ListItemText
                   primary="نام معرف/موسسه نیکوکاری"
                   secondary={student?.charity}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+        </Grid>
+      </BoxExamDetail>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+          ارزیابی قبل از پذیرش
+        </Typography>
+        <ButtonGroup
+          variant="contained"
+          color="secondary"
+          size="large"
+          aria-label="small button group"
+          sx={{ ...(typeComp === "admission" && { display: "none" }) }}
+        >
+          <Button
+            onClick={() => navigate(`/${roles}/exam-form-edit/${id}`)}
+            disabled={
+              student?.examFormChecked || successObject === "examFormChecked"
+                ? true
+                : false
+            }
+          >
+            ویرایش
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ beforeAcceptChecked: true });
+            }}
+            disabled={
+              student?.beforeAcceptChecked ||
+              successObject === "beforeAcceptChecked"
+                ? true
+                : false
+            }
+          >
+            تایید
+          </Button>
+        </ButtonGroup>
+      </Box>
+      <BoxExamDetail
+        colorActive={
+          student?.beforeAcceptChecked ||
+          successObject === "beforeAcceptChecked"
+        }
+      >
+        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
+
+        <Divider
+          variant="middle"
+          flexItem
+          orientation={matches ? "vertical" : "horizontal"}
+        />
+
+        <Grid container>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="وضعیت تحصیلی"
+                  secondary={student?.eduStatus}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="آمادگی به کار بعد از اتمام دوره"
+                  // secondary={student?.}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="توضیحات"
+                  // secondary={student?.}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="هدف از شرکت در دوره"
+                  secondary={student?.contCourseApproach}
                 />
               </ListItem>
             </List>

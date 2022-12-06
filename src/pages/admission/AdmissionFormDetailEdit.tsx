@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { editAxios, getData } from "../api/axios";
+import { editAxios, getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
-import LoadingProgress from "../components/LoadingProgress";
-import { ExamRegisterUser } from "../model";
+import LoadingProgress from "../../components/LoadingProgress";
+import { ExamRegisterUser } from "../../model";
 import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ExamFormDetailComp from "../components/ExamFormDetail/ExamFormDetailComp";
-import ExamFormDetailEditComp1 from "../components/ExamFormDetail/ExamFormDetailEditComp1";
-import ExamFormDetailEditComp2 from "../components/ExamFormDetail/ExamFormDetailEditComp2";
+import ExamFormDetailComp from "../../components/ExamFormDetail/ExamFormDetailComp";
+// import ExamFormDetailEditComp1 from "../../components/ExamFormDetail/ExamFormDetailEditComp1";
+import ExamFormDetailEditComp2 from "../../components/ExamFormDetail/ExamFormDetailEditComp2";
 
-const ExamFormDetailEdit = () => {
+const AdmissionFormDetailEdit = () => {
   const [student, setStudent] = useState<ExamRegisterUser | null>(null);
   const [loadingGet, setLoadingGet] = useState(true);
   const [loadingPut, setLoadingPut] = useState(false);
@@ -41,7 +41,7 @@ const ExamFormDetailEdit = () => {
         data: student,
       });
       if (response.status === 200) {
-        // navigate(-1);
+        navigate(-1);
         console.log(response.data);
       } else {
         console.log(response.data);
@@ -58,22 +58,6 @@ const ExamFormDetailEdit = () => {
     const { name, value } = e.target;
     setStudent((prev: any) => ({ ...prev, [name]: value }));
   };
-
-  //   const editStudent = async () => {
-  //     setLoading(true);
-  //     try {
-  //       let response = await postData(studentId);
-  // ! you need new state for posting data
-  //       setStudent(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       //TODO:handle Error
-  //       console.log("catch block of error");
-  //       console.log(error);
-  //       setLoading(false);
-  //       navigate("/");
-  //     }
-  //   };
 
   useEffect(() => {
     getStudent();
@@ -132,10 +116,10 @@ const ExamFormDetailEdit = () => {
               ذخیره اطلاعات
             </Button>
           </Box>
-          <ExamFormDetailEditComp1
+          {/* <ExamFormDetailEditComp1
             student={student}
             handleChange={handleChange}
-          />
+          /> */}
           <ExamFormDetailEditComp2
             student={student}
             handleChange={handleChange}
@@ -146,4 +130,4 @@ const ExamFormDetailEdit = () => {
   );
 };
 
-export default ExamFormDetailEdit;
+export default AdmissionFormDetailEdit;

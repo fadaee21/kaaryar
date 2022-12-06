@@ -20,30 +20,19 @@ import {
 import bg from "../assets/bg.png";
 import backgd from "../assets/backgd.png";
 import { useSubmitLogin } from "../hooks/request/useLogin";
-// import { userLogin } from "../api/axios";
-// import { toast } from "react-toastify";
-import {
-  Navigate,
-  useLocation,
-  // useNavigate
-} from "react-router-dom";
-// import { CustomizedStateLocation, RoleType } from "../model";
-// import { useAuth } from "../context/AuthProvider";
+
+import { Navigate, useLocation } from "react-router-dom";
+
 import useGetValidationToken from "../hooks/request/useGetValidationToken";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const { setAuth } = useAuth();
-  // const navigate = useNavigate();
   const location = useLocation();
-
-  // const state = location.state as CustomizedStateLocation;
-  // const from = state?.from?.pathname;
   const [storedValue, setValue] = useLocalStorage("user", null);
-
   const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
+  const [tokenValidation, loadingVal] = useGetValidationToken();
 
   useEffect(() => {
     setErrMsg("");
@@ -57,54 +46,9 @@ const Login = () => {
     setPassword("");
   };
 
-  const [tokenValidation, loadingVal] = useGetValidationToken();
-
   if (!loadingVal) {
     return <></>;
   }
-
-  // const reset=()=>{
-  //   setUsername("");
-  //   setPassword("")
-  // }
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const roleResponseServer = "admin";
-  //   const user = {username,password}
-  //   const loginURL = "/auth/login";
-  //   try {
-  //     const {status,data} = await userLogin(loginURL, {
-  //       data: user
-  //     });
-  //     if(status===200){
-  //       toast.success("ورود موفقیت آمیز بود.",{
-  //         position:"top-right",
-  //         closeOnClick:true
-  //       })
-  //       console.log(data)
-  //       localStorage.setItem("token",data.authorization)
-  //       const roleResponseServer: RoleType = "admin";
-  //       const accessToken = data.authorization;
-  //       setAuth({
-  //         username,
-  //         password,
-  //         roles: [roleResponseServer],
-  //         token: accessToken,
-  //       });
-  //       navigate(from || `/${roleResponseServer}/dashboard`, {
-  //         replace: true,
-  //       });
-  //       reset()
-  //     }
-  //   } catch (ex) {
-  //     console.log(ex)
-  //     toast.error("مشکلی پیش آمده...",{
-  //       position:"top-right",
-  //       closeOnClick:true
-  //     })
-  //   }
-  // };
 
   return (
     <>
@@ -132,17 +76,17 @@ const Login = () => {
                   آموزشی برابر در ایران، به علاقه‌مندان در حوزه ی کدنویسی آموزش
                   می‌دهد.
                 </Typography>
-                <Typography
+                {/* <Typography
                   component="p"
                   variant="body1"
                   color="textPrimary"
                   sx={{ mt: 6.75 }}
                 >
                   اگر عضو سامانه آموزشی کاریار نیستید با دسترسی مهمان وارد شوید:
-                </Typography>
-                <Button variant="contained" color="secondary" sx={{ mt: 3 }}>
+                </Typography> */}
+                {/* <Button variant="contained" color="secondary" sx={{ mt: 3 }}>
                   ورود به عنوان مهمان
-                </Button>
+                </Button> */}
                 <Box
                   component={"img"}
                   src={bg}
@@ -208,7 +152,11 @@ const Login = () => {
                     </Button>
                   </FormControl>
                 </Box>
-                <Typography variant="body2" color="textSecondary">
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  sx={{ mb: 2 }}
+                >
                   توجه کنید که کوکی‌ها باید در مرورگر شما فعال باشند.
                 </Typography>
               </GridUserLogin>

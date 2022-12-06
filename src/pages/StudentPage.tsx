@@ -5,7 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../components/LoadingProgress";
 import { MoodleUser } from "../model";
 
-const StudentPage = () => {
+const StudentPage
+ = () => {
   const [student, setStudent] = useState<MoodleUser | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -42,4 +43,5 @@ const StudentPage = () => {
   return <StudentDetail student={student} />;
 };
 
-export default StudentPage;
+export default StudentPage
+;

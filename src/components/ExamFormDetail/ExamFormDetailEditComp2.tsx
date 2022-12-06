@@ -25,62 +25,6 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
           <List>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="eduStatus">وضعیت تحصیلی</InputLabel>
-                <Input
-                  id="eduStatus"
-                  value={student?.eduStatus || " "}
-                  onChange={handleChange}
-                  name="eduStatus"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="lastInstitute">
-                  آمادگی به کار بعد از اتمام دوره
-                </InputLabel>
-                <Input
-                  // id="lastInstitute"
-                  value={"not defined"}
-                  // onChange={handleChange}
-                  // name="lastInstitute"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="eduLevel">توضیحات</InputLabel>
-                <Input
-                  // id="eduLevel"
-                  value={"not defined"}
-                  // onChange={handleChange}
-                  // name="eduLevel"
-                />
-              </FormControl>
-            </ListItem>
-          </List>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <ListItem>
-            <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-              <InputLabel htmlFor="contCourseApproach">
-                هدف از شرکت در دوره
-              </InputLabel>
-              <Input
-                id="contCourseApproach"
-                value={student?.contCourseApproach || " "}
-                onChange={handleChange}
-                name="contCourseApproach"
-              />
-            </FormControl>
-          </ListItem>
-        </Grid>
-      </Grid>
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="workshopCont">
                   وضعیت شرکت در کارگاه معارفه
                 </InputLabel>

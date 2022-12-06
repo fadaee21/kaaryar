@@ -8,7 +8,7 @@ import { StudentUser } from "../model";
 import ListStudentItem from "../components/ListStudentItem";
 import { useGetStudentList } from "../hooks/request/useGetStudentList";
 
-const TaUser = () => {
+const TaUser123123 = () => {
   const [page, setPage] = useState(0);
 
   const { students, getListStudent, loading } = useGetStudentList(page);
@@ -24,6 +24,7 @@ const TaUser = () => {
 
   return (
     <Box component={"section"}>
+      <h1>unusable component</h1>
       <Container maxWidth="lg">
         {/* //Todo: change the text */}
         <Typography variant="h3" color={"textPrimary"} sx={{ my: 5 }}>
@@ -53,4 +54,4 @@ const TaUser = () => {
   );
 };
 
-export default TaUser;
+export default TaUser123123;
