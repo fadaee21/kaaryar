@@ -14,6 +14,7 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../api/axios";
+import { ExcelExport } from "../components/ExcelExport";
 import LoadingProgress from "../components/LoadingProgress";
 import TablePic from "../components/TablePic";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -65,6 +66,9 @@ const StudentListMoodle = () => {
           >
             <Typography variant="h3"> لیست مهارت جوها</Typography>
           </Box>
+          {/* //! export excel */}
+          <ExcelExport fileName={"excel export"} apiData={students} />
+          {/* //! export excel */}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHead>

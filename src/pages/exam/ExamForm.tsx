@@ -13,8 +13,9 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
+import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import {SearchExam} from "../../components/Searching";
+import { SearchExam } from "../../components/Searching";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { ExamRegisterUser } from "../../model";
@@ -74,7 +75,15 @@ const ExamForm = () => {
           <Box sx={{ width: "50%", my: 3, boxShadow: "2px 2px 5px 2px #eee" }}>
             <SearchExam setSearchingStudentExam={setSearchingStudentExam} />
           </Box>
-          
+          {/* //! export excel */}
+          <ExcelExport
+            fileName={"excel export"}
+            apiData={
+              searchingStudentExam === null ? students : [searchingStudentExam.registrationForm]
+            }
+          />
+          {/* //! export excel */}
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHead>

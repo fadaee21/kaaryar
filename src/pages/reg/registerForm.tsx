@@ -13,11 +13,12 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
+import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import { SearchRegister } from "../../components/Searching";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import {  RegistrationForm } from "../../model";
+import { RegistrationForm } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { counterPagination } from "../../utils/counterPagination";
 
@@ -26,7 +27,7 @@ const RegisterForm = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [searchingStudentRegister, setSearchingStudentRegister] =
-  useState<RegistrationForm | null>(null);
+    useState<RegistrationForm | null>(null);
   const navigate = useNavigate();
   const allStudentMoodle = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
   const examFormCount = "/reg/form/count";
@@ -69,11 +70,22 @@ const RegisterForm = () => {
           >
             <Typography variant="h3"> لیست فرم های پذیرش</Typography>
           </Box>
-           {/* //!component for searching student */}
-           <Box sx={{ width: "50%", my: 3, boxShadow: "2px 2px 5px 2px #eee" }}>
-            <SearchRegister setSearchingStudentRegister={setSearchingStudentRegister} />
-          </Box>
           {/* //!component for searching student */}
+          <Box sx={{ width: "50%", my: 3, boxShadow: "2px 2px 5px 2px #eee" }}>
+            <SearchRegister
+              setSearchingStudentRegister={setSearchingStudentRegister}
+            />
+          </Box>
+          {/* //! export excel */}
+          <ExcelExport
+            fileName={"excel export"}
+            apiData={
+              searchingStudentRegister === null
+                ? students
+                : [searchingStudentRegister]
+            }
+          />
+          {/* //! export excel */}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHead>
@@ -86,6 +98,8 @@ const RegisterForm = () => {
                   <StyledTableCell align="left"></StyledTableCell>
                 </StyledTableRow>
               </TableHead>
+              {/*//! while searching show the search content */}
+              {searchingStudentRegister === null ? (
               <TableBody>
                 {students.map((RegisterUser: RegistrationForm) => {
                   const { id } = RegisterUser;
@@ -149,6 +163,68 @@ const RegisterForm = () => {
                   );
                 })}
               </TableBody>
+              ) : (
+                <StyledTableRow
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
+                >
+                  <StyledTableCell
+                    align="left"
+                    sx={{ width: "25%", verticalAlign: "top" }}
+                  >
+                    <Typography variant="body1">
+                      {searchingStudentRegister.firstName +
+                        " " +
+                        searchingStudentRegister.familiarity}
+                    </Typography>
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                    sx={{
+                      width: "10%",
+                      verticalAlign: "top",
+                    }}
+                  >
+                    <Typography variant="body2" textAlign={"left"}>
+                      {searchingStudentRegister.birthDate}
+                    </Typography>
+                  </StyledTableCell>
+
+                  <StyledTableCell
+                    align="left"
+                    sx={{
+                      width: "30%",
+                      verticalAlign: "top",
+                    }}
+                  >
+                    <Typography variant="body2">
+                      {searchingStudentRegister.studyField}
+                    </Typography>
+                  </StyledTableCell>
+
+                  <StyledTableCell
+                    align="left"
+                    sx={{ width: "30%", verticalAlign: "top" }}
+                  >
+                    <ListItem sx={{ pt: 0 }}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() =>
+                          navigate(
+                            `/${roles}/exam-form/${searchingStudentRegister.id}`
+                          )
+                        }
+                        sx={{ ml: "auto", mr: "auto" }}
+                      >
+                        جزییات
+                      </Button>
+                    </ListItem>
+                  </StyledTableCell>
+                </StyledTableRow>
+              )}
+              {/*//! while searching show the search content */}
             </Table>
           </TableContainer>
         </Container>
