@@ -2,26 +2,25 @@ import React, { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { ExamRegisterUser } from "../../model";
+import { AfterWeekType, BeforeWeekType } from "../../model";
 import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ExamFormDetailComp from "../../components/ExamFormDetail/ExamFormDetailComp";
-import ExamFormDetailEditComp1 from "../../components/ExamFormDetail/ExamFormDetailEditComp1";
-// import ExamFormDetailEditComp2 from "../../components/ExamFormDetail/ExamFormDetailEditComp2";
+import InitialDataRegistered from "../../components/beforeWeek/InitialDataRegistered";
+import AfterWeekDetailEditComp from "../../components/afterWeek/AfterWeekDetailEditComp";
 
-const ExamFormDetailEdit = () => {
-  const [student, setStudent] = useState<ExamRegisterUser | null>(null);
+const AfterWeekDetailEdit = () => {
+  const [student, setStudent] = useState<AfterWeekType | null>(null);
   const [loadingGet, setLoadingGet] = useState(true);
   const [loadingPut, setLoadingPut] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const studentId = `/exam/form/${id}`;
+  const studentIdAfterWeek = `/exam/after/week/form/${id}`;
 
   const getStudent = async () => {
     setLoadingGet(true);
     try {
-      let response = await getData(studentId);
+      let response = await getData(studentIdAfterWeek);
       setStudent(response.data);
       setLoadingGet(false);
     } catch (error) {
@@ -32,12 +31,13 @@ const ExamFormDetailEdit = () => {
       navigate("/");
     }
   };
+  // console.log(student)
 
   const handleClick = async (e: React.FormEvent) => {
     setLoadingPut(true);
     e.preventDefault();
     try {
-      const response = await editAxios(`/exam/form/${id}`, {
+      const response = await editAxios(studentIdAfterWeek, {
         data: student,
       });
       if (response.status === 200) {
@@ -54,9 +54,16 @@ const ExamFormDetailEdit = () => {
   };
 
   const handleChange = (e: any) => {
-    // console.log(student)
     const { name, value } = e.target;
     setStudent((prev: any) => ({ ...prev, [name]: value }));
+  };
+  
+  const handleChangeBefore = (e: any) => {
+    const { name, value } = e.target;
+    setStudent((prev: any) => ({
+      ...prev,
+      beforeWeekForm: { ...prev.beforeWeekForm, [name]: value },
+    }));
   };
 
   useEffect(() => {
@@ -90,7 +97,9 @@ const ExamFormDetailEdit = () => {
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <ExamFormDetailComp student={student} />
+        <InitialDataRegistered
+          student={student?.beforeWeekForm as BeforeWeekType | null}
+        />
         <Divider />
         <Box
           component="form"
@@ -116,18 +125,15 @@ const ExamFormDetailEdit = () => {
               ذخیره اطلاعات
             </Button>
           </Box>
-          <ExamFormDetailEditComp1
+          <AfterWeekDetailEditComp
             student={student}
             handleChange={handleChange}
+            handleChangeBefore={handleChangeBefore}
           />
-          {/* <ExamFormDetailEditComp2
-            student={student}
-            handleChange={handleChange}
-          /> */}
         </Box>
       </Container>
     </>
   );
 };
 
-export default ExamFormDetailEdit;
+export default AfterWeekDetailEdit;

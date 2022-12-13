@@ -7,15 +7,15 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
-import { ExamRegisterUser } from "../../model";
+import { BeforeWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 
 interface ExamStudent {
-  student: ExamRegisterUser | null;
+  student: BeforeWeekType | null;
 }
 
-const ExamFormDetailComp: React.FC<ExamStudent> = ({ student }) => {
+const InitialDataRegistered: React.FC<ExamStudent> = ({ student }) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
   return (
     <BoxExamDetail>
@@ -137,4 +137,4 @@ const ExamFormDetailComp: React.FC<ExamStudent> = ({ student }) => {
   );
 };
 
-export default ExamFormDetailComp;
+export default InitialDataRegistered;

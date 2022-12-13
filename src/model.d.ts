@@ -28,13 +28,7 @@ interface RolesStudent {
   name: string;
   userRole: string;
 }
-// export interface Learner {
-//   id: number;
-//   firstName: string;
-//   lastName: string;
-//   username: string;
-//   roles: RolesStudent[];
-// }
+
 export interface StudentUser {
   id: number;
   username: string;
@@ -134,74 +128,78 @@ export interface RegistrationForm {
   selectedField: string;
   description: string;
   token: string;
-
-  
 }
 
-export interface ExamRegisterUser {
+export interface BeforeWeekType {
   registrationForm: RegistrationForm;
   id: number;
-  acceptWeekChecked: true;
+  acceptWeekChecked: boolean;
   accessTime: string;
   algoLevelResult: string;
-  algoScore: number;
   avgSalary: string;
-  beforeAcceptChecked: true;
   beforeAcceptDesc: string;
   charity: string;
-  comAccess: string;
-  comAccessStatus: string;
   comLevelResult: string;
-  comScore: number;
   computerAccess: string;
-  computerFamiliarity: true;
-  consistCompleteTime: string;
-  consistTime: string;
+  computerFamiliarity: boolean;
   contCourseApproach: string;
   courseDescription: string;
+  createTime: string;
   currentField: string;
   currentInstName: string;
   currentInstType: string;
+  deleteTime: string;
+  deleted: boolean;
   eduLevel: string;
   eduStatus: string;
-  etcDesc: string;
-  ethics: string;
-  examFormChecked: true;
   familiar: string;
-  finalField: string;
-  finalResult: string;
-  finalResultChecked: true;
   firstSelectJobRoad: string;
   freeDailyTime: string;
   instituteType: string;
   internetAccess: string;
-  jobCommit: string;
-  jobReady: true;
-  jobStandby: true;
+  jobReady: boolean;
+  jobStandby: boolean;
   jobStatus: string;
   jobTitle: string;
   jobType: string;
   jobVision: string;
-  langScore: number;
   lastInstitute: string;
-  limitAndRisk: string;
   limitTime: string;
   mbtiTest: string;
   motivation: string;
   noneJobActivation: string;
   notifyAcceptWeek: string;
   paymentImageAddress: string;
-  predict: string;
-  presentStatus: string;
-  programmingCoursePassed: true;
-  recommendField: string;
-  scholar: true;
-  scholarPercentage: number;
+  programmingCoursePassed: boolean;
   stuSemester: string;
   stuYear: string;
-  webDevFamiliarity: true;
-  weekResultChecked: true;
-  workCommit: string;
+  updateTime: string;
+  webDevFamiliarity: boolean;
   workTime: string;
   workshopCont: string;
+}
+
+interface AfterWeekType {
+  beforeWeekForm: BeforeWeek;
+  id: number;
+  afterWeekChecked: boolean;
+  algoScore: number;
+  comAccess: string;
+  comAccessStatus: string;
+  comScore: number;
+  consistCompleteTime: string;
+  consistTime: string;
+  etcDesc: string;
+  ethics: string;
+  finalField: string;
+  finalResult: string;
+  jobCommit: string;
+  langScore: number;
+  limitAndRisk: string;
+  predict: string;
+  presentStatus: string;
+  recommendField: string;
+  scholar: boolean;
+  scholarPercentage: number;
+  workCommit: string;
 }

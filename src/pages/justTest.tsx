@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import AsyncSelect from "react-select/async";
 import { getData } from "../api/axios";
-import { ExamRegisterUser } from "../model";
+import { BeforeWeekType } from "../model";
+
 
 const JustTest = () => {
-  const [selectedValue, setSelectedValue] = useState<ExamRegisterUser | null>(
+  const [selectedValue, setSelectedValue] = useState<BeforeWeekType | null>(
     null
   );
   const [inputValue, setValue] = useState("");

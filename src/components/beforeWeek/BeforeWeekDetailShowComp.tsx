@@ -13,18 +13,20 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useApprove } from "../../hooks/request/useApprove";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { ExamRegisterUser } from "../../model";
+import { BeforeWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 
 interface ExamStudent {
-  student: ExamRegisterUser | null;
+  student: BeforeWeekType | null;
   matches: boolean;
   id: string | undefined;
+  //typeComp:help to check which page use and show or not show button group
   typeComp: "exam" | "admission";
 }
 
-const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
+
+const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   student,
   matches,
   id,
@@ -56,9 +58,9 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
           sx={{ ...(typeComp === "admission" && { display: "none" }) }}
         >
           <Button
-            onClick={() => navigate(`/${roles}/exam-form-edit/${id}`)}
+            onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}
             disabled={
-              student?.examFormChecked || successObject === "examFormChecked"
+              student?.acceptWeekChecked || successObject === "acceptWeekChecked"
                 ? true
                 : false
             }
@@ -68,10 +70,10 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ examFormChecked: true });
+              setApproveObject({ acceptWeekChecked: true });
             }}
             disabled={
-              student?.examFormChecked || successObject === "examFormChecked"
+              student?.acceptWeekChecked || successObject === "acceptWeekChecked"
                 ? true
                 : false
             }
@@ -82,7 +84,7 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
       </Box>
       <BoxExamDetail
         colorActive={
-          student?.examFormChecked || successObject === "examFormChecked"
+          student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -152,7 +154,9 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.examFormChecked}>
+      <BoxExamDetail 
+      colorActive={student?.acceptWeekChecked}
+      >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت اشتغال
         </DetailTypography>
@@ -233,7 +237,9 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.examFormChecked}>
+      <BoxExamDetail 
+      colorActive={student?.acceptWeekChecked}
+      >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت اشتغال
         </DetailTypography>
@@ -289,7 +295,9 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.examFormChecked}>
+      <BoxExamDetail 
+      colorActive={student?.acceptWeekChecked}
+      >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           مدیریت زمان
         </DetailTypography>
@@ -321,7 +329,9 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.examFormChecked}>
+      <BoxExamDetail 
+      colorActive={student?.acceptWeekChecked}
+      >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت بورسیه
         </DetailTypography>
@@ -360,43 +370,11 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
         <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
           ارزیابی قبل از پذیرش
         </Typography>
-        <ButtonGroup
-          variant="contained"
-          color="secondary"
-          size="large"
-          aria-label="small button group"
-          sx={{ ...(typeComp === "admission" && { display: "none" }) }}
-        >
-          <Button
-            onClick={() => navigate(`/${roles}/exam-form-edit/${id}`)}
-            disabled={
-              student?.examFormChecked || successObject === "examFormChecked"
-                ? true
-                : false
-            }
-          >
-            ویرایش
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setApproveObject({ beforeAcceptChecked: true });
-            }}
-            disabled={
-              student?.beforeAcceptChecked ||
-              successObject === "beforeAcceptChecked"
-                ? true
-                : false
-            }
-          >
-            تایید
-          </Button>
-        </ButtonGroup>
       </Box>
       <BoxExamDetail
         colorActive={
-          student?.beforeAcceptChecked ||
-          successObject === "beforeAcceptChecked"
+          student?.acceptWeekChecked ||
+          successObject === "acceptWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
@@ -425,7 +403,7 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="توضیحات"
-                  // secondary={student?.}
+                  secondary={student?.beforeAcceptDesc}
                 />
               </ListItem>
             </List>
@@ -446,4 +424,4 @@ const ExamFormDetailShowComp1: React.FC<ExamStudent> = ({
   );
 };
 
-export default ExamFormDetailShowComp1;
+export default BeforeWeekDetailShow;

@@ -8,7 +8,7 @@ export const SearchExam = ({ setSearchingStudentExam }: any) => {
 
   const fetchData = async (inputValue: string) => {
     try {
-      const response = await getData("/exam/search", {
+      const response = await getData("/exam/before/week/search", {
         params: {
           keyword: inputValue,
         },

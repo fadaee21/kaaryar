@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -6,26 +7,28 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useApprove } from "../../hooks/request/useApprove";
+import useGetImage from "../../hooks/request/useGetImage";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { ExamRegisterUser } from "../../model";
+import { AfterWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 // import UploadImage from "../UploadImage";
 
-interface ExamStudent {
-  student: ExamRegisterUser | null;
+interface AfterWeekStudentShow {
+  student: AfterWeekType | null;
   matches: boolean;
   id: string | undefined;
   typeComp: "exam" | "admission";
 }
 
-const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
+const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   student,
   matches,
   id,
@@ -33,8 +36,16 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
 }) => {
   const { setApproveObject, successObject } = useApprove(id as string);
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
+
+  const { pic, getPicture } = useGetImage();
+
+  React.useEffect(() => {
+    getPicture(student?.beforeWeekForm.paymentImageAddress);
+  }, []);
+
   return (
     <>
       <Box
@@ -54,21 +65,19 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
           size="large"
           aria-label="small button group"
           disabled={
-            student?.acceptWeekChecked || successObject === "acceptWeekChecked"
+            student?.afterWeekChecked || successObject === "afterWeekChecked"
               ? true
               : false
           }
-          // sx={{ ...(typeComp === "admission" && { display: "none" }) }}
+          sx={{ ...(typeComp === "admission" && { display: "show" }) }}
         >
-          <Button
-            onClick={() => navigate(`/${roles}/admission-form-edit/${id}`)}
-          >
+          <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
             ویرایش
           </Button>
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ acceptWeekChecked: true });
+              setApproveObject({ afterWeekChecked: true });
             }}
           >
             تایید
@@ -77,7 +86,7 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
       </Box>
       <BoxExamDetail
         colorActive={
-          student?.acceptWeekChecked || successObject === "acceptWeekChecked"
+          student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
@@ -92,25 +101,25 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="وضعیت شرکت در کارگاه معارفه"
-                  secondary={student?.workshopCont}
+                  secondary={student?.beforeWeekForm.workshopCont}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
-                  secondary={student?.notifyAcceptWeek}
+                  secondary={student?.beforeWeekForm.notifyAcceptWeek}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نتیجه تست MBTI"
-                  secondary={student?.mbtiTest}
+                  secondary={student?.beforeWeekForm.mbtiTest}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نتیجه تعیین سطح کامپیوتر"
-                  secondary={student?.comLevelResult}
+                  secondary={student?.beforeWeekForm.comLevelResult}
                 />
               </ListItem>
             </List>
@@ -120,69 +129,48 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="انتخاب اولیه مسیر شغلی"
-                  secondary={student?.firstSelectJobRoad}
+                  secondary={student?.beforeWeekForm.firstSelectJobRoad}
                 />
               </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="نتیجه تعیین سطح الگوریتم"
-                  secondary={student?.algoLevelResult}
-                />
+              <ListItem
+                sx={{ flexDirection: "column", alignItems: "flex-start" }}
+              >
+                <ListItemText primary="فیش واریزی" />
+                <ListItemAvatar>
+                  <Box
+                    component={"img"}
+                    alt="avatar"
+                    src={pic}
+                    sx={{ width: 150, height: "100%",borderRadius:2 }}
+                  />
+                </ListItemAvatar>
               </ListItem>
               {/* <ListItem>
                 <UploadImage
                   id={id}
                   disableProp={
-                    student?.acceptWeekChecked ||
-                    successObject === "acceptWeekChecked"
+                    student?.afterWeekChecked ||
+                    successObject === "afterWeekChecked"
                   }
                 />
               </ListItem> */}
+              <ListItem>
+                <ListItemText
+                  primary="نتیجه تعیین سطح الگوریتم"
+                  secondary={student?.beforeWeekForm.algoLevelResult}
+                />
+              </ListItem>
             </List>
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
-          نتیجه هفته پذیرش
-        </Typography>
 
-        <ButtonGroup
-          variant="contained"
-          color="secondary"
-          size="large"
-          aria-label="small button group"
-          // sx={{ ...(typeComp === "admission" && { display: "none" }) }}
-          disabled={
-            student?.weekResultChecked || successObject === "weekResultChecked"
-              ? true
-              : false
-          }
-        >
-          <Button
-            onClick={() => navigate(`/${roles}/admission-form-edit/${id}`)}
-          >
-            ویرایش
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setApproveObject({ weekResultChecked: true });
-            }}
-          >
-            تایید{" "}
-          </Button>
-        </ButtonGroup>
-      </Box>
+      <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+        نتیجه هفته پذیرش
+      </Typography>
       <BoxExamDetail
         colorActive={
-          student?.weekResultChecked || successObject === "weekResultChecked"
+          student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
@@ -197,19 +185,19 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="نمره تعیین سطح زیان"
-                  // secondary={student?.workshopCont}
+                  secondary={student?.langScore}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نمره آزمون الگوریتم"
-                  // secondary={student?.notifyAcceptWeek}
+                  secondary={student?.algoScore}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نمره آزمون کامپیوتر"
-                  // secondary={student?.mbtiTest}
+                  secondary={student?.comScore}
                 />
               </ListItem>
               <ListItem>
@@ -240,7 +228,7 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
       </BoxExamDetail>
       <BoxExamDetail
         colorActive={
-          student?.weekResultChecked || successObject === "weekResultChecked"
+          student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -272,7 +260,7 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
       </BoxExamDetail>
       <BoxExamDetail
         colorActive={
-          student?.weekResultChecked || successObject === "weekResultChecked"
+          student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -310,7 +298,7 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
       </BoxExamDetail>
       <BoxExamDetail
         colorActive={
-          student?.weekResultChecked || successObject === "weekResultChecked"
+          student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -373,48 +361,13 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
-          ثبت نام نهایی
-        </Typography>
 
-        <ButtonGroup
-          variant="contained"
-          color="secondary"
-          size="large"
-          aria-label="small button group"
-          // sx={{ ...(typeComp === "admission" && { display: "none" }) }}
-          disabled={
-            student?.finalResultChecked ||
-            successObject === "finalResultChecked"
-              ? true
-              : false
-          }
-        >
-          <Button
-            onClick={() => navigate(`/${roles}/admission-form-edit/${id}`)}
-          >
-            ویرایش
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setApproveObject({ finalResultChecked: true });
-            }}
-          >
-            تایید{" "}
-          </Button>
-        </ButtonGroup>
-      </Box>
+      <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+        ثبت نام نهایی
+      </Typography>
       <BoxExamDetail
         colorActive={
-          student?.finalResultChecked || successObject === "finalResultChecked"
+          student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
@@ -430,13 +383,13 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="بورسیه دارد؟"
-                  // secondary={student?.}
+                  secondary={student?.scholar ? "بله" : "خیر"}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="درصد بورسیه"
-                  // secondary={student?.}
+                  secondary={student?.scholarPercentage}
                 />
               </ListItem>
             </List>
@@ -457,4 +410,4 @@ const ExamFormDetailShowComp2: React.FC<ExamStudent> = ({
   );
 };
 
-export default ExamFormDetailShowComp2;
+export default AfterWeekDetailShowComp;

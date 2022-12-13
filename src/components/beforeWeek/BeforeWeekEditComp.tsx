@@ -9,14 +9,14 @@ import {
   MenuItem,
 } from "@mui/material";
 import Select from "@mui/material/Select";
-import { ExamRegisterUser } from "../../model";
+import { BeforeWeekType } from "../../model";
 
 interface ExamStudent {
-  student: ExamRegisterUser | null;
+  student: BeforeWeekType | null;
   handleChange: (e: any) => void;
 }
 
-const ExamFormDetailEditComp1: React.FC<ExamStudent> = ({
+const BeforeWeekEditComp: React.FC<ExamStudent> = ({
   student,
   handleChange,
 }) => {
@@ -474,12 +474,12 @@ const ExamFormDetailEditComp1: React.FC<ExamStudent> = ({
                   sx={{ width: "40ch" }}
                   variant="standard"
                 >
-                  <InputLabel htmlFor="eduLevel">توضیحات</InputLabel>
+                  <InputLabel htmlFor="beforeAcceptDesc">توضیحات</InputLabel>
                   <Input
-                    // id="eduLevel"
-                    value={"not defined"}
-                    // onChange={handleChange}
-                    // name="eduLevel"
+                    id="beforeAcceptDesc"
+                    value={student?.beforeAcceptDesc || " "}
+                    onChange={handleChange}
+                    name="beforeAcceptDesc"
                   />
                 </FormControl>
               </ListItem>
@@ -506,4 +506,4 @@ const ExamFormDetailEditComp1: React.FC<ExamStudent> = ({
   );
 };
 
-export default ExamFormDetailEditComp1;
+export default BeforeWeekEditComp;

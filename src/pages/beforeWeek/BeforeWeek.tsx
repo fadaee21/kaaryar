@@ -18,25 +18,28 @@ import LoadingProgress from "../../components/LoadingProgress";
 import { SearchExam } from "../../components/Searching";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { ExamRegisterUser } from "../../model";
+import { BeforeWeekType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { counterPagination } from "../../utils/counterPagination";
 
-const ExamForm = () => {
-  const [students, setStudents] = useState<ExamRegisterUser[]>();
+const BeforeWeek = () => {
+  const [students, setStudents] = useState<BeforeWeekType[]>();
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [searchingStudentExam, setSearchingStudentExam] =
-    useState<ExamRegisterUser | null>(null);
+    useState<BeforeWeekType | null>(null);
   const navigate = useNavigate();
-  const allStudentMoodle = `/exam/form/all?pageNum=${page - 1}&pageSize=20`;
-  const examFormCount = "/exam/form/count";
+  
+  const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${page - 1}&pageSize=20`;
+  const examFormCount = "/exam/before/week/form/count";
+  
+
   const [counterPage] = useCountPagination(examFormCount);
 
   const getListLearner = async () => {
     setLoading(true);
     try {
-      let response = await getData(allStudentMoodle);
+      let response = await getData(studentBeforeWeek);
       setStudents(response.data);
       setLoading(false);
     } catch (error) {
@@ -99,7 +102,7 @@ const ExamForm = () => {
               {/*//! while searching show the search content */}
               {searchingStudentExam === null ? (
                 <TableBody>
-                  {students?.map((examRegisterUser: ExamRegisterUser) => {
+                  {students?.map((examRegisterUser: BeforeWeekType) => {
                     const { id, registrationForm } = examRegisterUser;
                     const { birthDate, family, firstName, studyField } =
                       registrationForm;
@@ -149,7 +152,7 @@ const ExamForm = () => {
                               variant="contained"
                               color="secondary"
                               onClick={() =>
-                                navigate(`/${roles}/exam-form/${id}`)
+                                navigate(`/${roles}/before-week/${id}`)
                               }
                               sx={{ ml: "auto", mr: "auto" }}
                             >
@@ -174,7 +177,7 @@ const ExamForm = () => {
                     <Typography variant="body1">
                       {searchingStudentExam.registrationForm.firstName +
                         " " +
-                        searchingStudentExam.registrationForm.familiarity}
+                        searchingStudentExam.registrationForm.family}
                     </Typography>
                   </StyledTableCell>
                   <StyledTableCell
@@ -211,7 +214,7 @@ const ExamForm = () => {
                         color="secondary"
                         onClick={() =>
                           navigate(
-                            `/${roles}/exam-form/${searchingStudentExam.registrationForm.id}`
+                            `/${roles}/before-week/${searchingStudentExam.registrationForm.id}`
                           )
                         }
                         sx={{ ml: "auto", mr: "auto" }}
@@ -247,4 +250,4 @@ const ExamForm = () => {
   );
 };
 
-export default ExamForm;
+export default BeforeWeek;

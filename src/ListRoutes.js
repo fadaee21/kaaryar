@@ -3,10 +3,10 @@ import StudentPage from "./pages/StudentPage";
 import StudentListMoodle from "./pages/StudentListMoodle";
 import Comments from "./pages/Comments";
 import AddComment from "./pages/AddComment";
-import ExamForm from "./pages/exam/ExamForm";
-import ExamFormDetail from "./pages/exam/ExamFormDetail";
-import ExamFormDetailEdit from "./pages/exam/ExamFormDetailEdit";
-import AdmissionListWeek from "./pages/admission/AdmissionForm";
+import BeforeWeek from "./pages/beforeWeek/BeforeWeek";
+import BeforeWeekDetail from "./pages/beforeWeek/BeforeWeekDetail";
+import BeforeWeekDetailEdit from "./pages/beforeWeek/BeforeWeekEdit";
+import AfterWeek from "./pages/afterWeek/AfterWeek";
 import Register from "./pages/reg/registerForm";
 import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
@@ -18,8 +18,8 @@ import AddCommentIcon from "@mui/icons-material/AddComment";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import PortraitIcon from "@mui/icons-material/Portrait";
-import AdmissionFormDetail from "./pages/admission/AdmissionFormDetail";
-import AdmissionFormDetailEdit from "./pages/admission/AdmissionFormDetailEdit";
+import AdmissionFormDetail from "./pages/afterWeek/AfterWeekDetail";
+import AdmissionFormDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import justTest from "./pages/justTest";
 
 const ListRoutes = [
@@ -135,19 +135,19 @@ const ListRoutes = [
     key: "teacher9",
   },
   {
-    path: "teacher/exam-form",
+    path: "teacher/before-week",
     name: "لیست فرم های آزمون",
     icon: <PortraitIcon />,
-    component: ExamForm,
+    component: BeforeWeek,
     showInNav: true,
     role: "teacher",
     key: "teacher6",
   },
   {
-    path: "teacher/admission-week",
+    path: "teacher/after-week",
     name: "لیست هفته پذیرش",
     icon: <HowToRegIcon />,
-    component: AdmissionListWeek,
+    component: AfterWeek,
     showInNav: true,
     role: "teacher",
     key: "teacher16",
@@ -190,17 +190,17 @@ const ListRoutes = [
   },
 
   {
-    path: "teacher/exam-form/:id",
+    path: "teacher/before-week/:id",
     name: " ",
-    component: ExamFormDetail,
+    component: BeforeWeekDetail,
     showInNav: false,
     role: "teacher",
     key: "teacher7",
   },
   {
-    path: "teacher/exam-form-edit/:id",
+    path: "teacher/before-week-edit/:id",
     name: " ",
-    component: ExamFormDetailEdit,
+    component: BeforeWeekDetailEdit,
     showInNav: false,
     role: "teacher",
     key: "teacher8",
@@ -223,7 +223,7 @@ const ListRoutes = [
     key: "teacher11",
   },
   {
-    path: "teacher/admission-form/:id",
+    path: "teacher/after-week/:id",
     name: " ",
     component: AdmissionFormDetail,
     showInNav: false,
@@ -231,7 +231,7 @@ const ListRoutes = [
     key: "teacher12",
   },
   {
-    path: "teacher/admission-form-edit/:id",
+    path: "teacher/after-week-edit/:id",
     name: " ",
     component: AdmissionFormDetailEdit,
     showInNav: false,

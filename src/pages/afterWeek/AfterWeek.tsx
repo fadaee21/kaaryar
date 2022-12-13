@@ -16,24 +16,25 @@ import { getData } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { ExamRegisterUser } from "../../model";
+import { AfterWeekType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { counterPagination } from "../../utils/counterPagination";
 
-const AdmissionForm
- = () => {
-  const [students, setStudents] = useState([]);
+const AfterWeek = () => {
+  const [afterWeekStudents, setAfterWeekStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
-  const allStudentMoodle = `/exam/form/all?pageNum=${page - 1}&pageSize=20`;
-  const examFormCount = "/exam/form/count";
+  const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${
+    page - 1
+  }&pageSize=20`;
+  const examFormCount = "/exam/after/week/form/count";
   const [counterPage] = useCountPagination(examFormCount);
   const getListLearner = async () => {
     setLoading(true);
     try {
-      let response = await getData(allStudentMoodle);
-      setStudents(response.data);
+      let response = await getData(allStudentAfterWeek);
+      setAfterWeekStudents(response.data);
       setLoading(false);
     } catch (error) {
       //TODO:handle Error
@@ -43,7 +44,7 @@ const AdmissionForm
       navigate("/");
     }
   };
-
+// eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
@@ -56,7 +57,7 @@ const AdmissionForm
   if (loading) {
     return <LoadingProgress />;
   }
-  console.log(students);
+  console.log(afterWeekStudents);
 
   return (
     <Box sx={{ m: 2 }}>
@@ -81,8 +82,11 @@ const AdmissionForm
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {students.map((examRegisterUser: ExamRegisterUser) => {
-                  const { id, registrationForm } = examRegisterUser;
+                {afterWeekStudents.map((afterWeekStudent: AfterWeekType) => {
+                  const {
+                    id,
+                    beforeWeekForm: { registrationForm },
+                  } = afterWeekStudent;
                   const { birthDate, family, firstName, studyField } =
                     registrationForm;
                   return (
@@ -128,10 +132,10 @@ const AdmissionForm
                       >
                         <ListItem sx={{ pt: 0 }}>
                           <Button
-                           variant="contained"
-                           color="secondary"
+                            variant="contained"
+                            color="secondary"
                             onClick={() =>
-                              navigate(`/${roles}/admission-form/${id}`)
+                              navigate(`/${roles}/after-week/${id}`)
                             }
                             sx={{ ml: "auto", mr: "auto" }}
                           >
@@ -167,5 +171,4 @@ const AdmissionForm
   );
 };
 
-export default AdmissionForm
-;
+export default AfterWeek;

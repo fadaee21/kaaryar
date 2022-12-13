@@ -7,16 +7,18 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import { ExamRegisterUser } from "../../model";
+import { AfterWeekType } from "../../model";
 
-interface ExamStudent {
-  student: ExamRegisterUser | null;
+interface AfterWeekStudentEdit {
+  student: AfterWeekType | null;
   handleChange: (e: any) => void;
+  handleChangeBefore: (e: any) => void;
 }
 
-const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
+const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
   student,
   handleChange,
+  handleChangeBefore,
 }) => {
   return (
     <>
@@ -30,8 +32,8 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="workshopCont"
-                  value={student?.workshopCont || " "}
-                  onChange={handleChange}
+                  value={student?.beforeWeekForm.workshopCont || ""}
+                  onChange={handleChangeBefore}
                   name="workshopCont"
                 />
               </FormControl>
@@ -44,8 +46,8 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="notifyAcceptWeek"
-                  value={student?.notifyAcceptWeek || " "}
-                  onChange={handleChange}
+                  value={student?.beforeWeekForm.notifyAcceptWeek || ""}
+                  onChange={handleChangeBefore}
                   name="notifyAcceptWeek"
                 />
               </FormControl>
@@ -56,8 +58,8 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="mbtiTest">نتیجه تست MBTI</InputLabel>
                 <Input
                   id="mbtiTest"
-                  value={student?.mbtiTest || " "}
-                  onChange={handleChange}
+                  value={student?.beforeWeekForm.mbtiTest || ""}
+                  onChange={handleChangeBefore}
                   name="mbtiTest"
                 />
               </FormControl>
@@ -70,8 +72,8 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="comLevelResult"
-                  value={student?.comLevelResult || " "}
-                  onChange={handleChange}
+                  value={student?.beforeWeekForm.comLevelResult || ""}
+                  onChange={handleChangeBefore}
                   name="comLevelResult"
                 />
               </FormControl>
@@ -87,8 +89,8 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="firstSelectJobRoad"
-                  value={student?.firstSelectJobRoad || " "}
-                  onChange={handleChange}
+                  value={student?.beforeWeekForm.firstSelectJobRoad || ""}
+                  onChange={handleChangeBefore}
                   name="firstSelectJobRoad"
                 />
               </FormControl>
@@ -101,8 +103,8 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="algoLevelResult"
-                  value={student?.algoLevelResult || " "}
-                  onChange={handleChange}
+                  value={student?.beforeWeekForm.algoLevelResult || ""}
+                  onChange={handleChangeBefore}
                   name="algoLevelResult"
                 />
               </FormControl>
@@ -115,34 +117,34 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
           <List>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="jobStatus">نمره تعیین سطح زیان</InputLabel>
+                <InputLabel htmlFor="langScore">نمره تعیین سطح زیان</InputLabel>
                 <Input
-                  // id="jobStatus"
-                  value={"not defined"}
-                  // onChange={handleChange}
-                  // name="jobStatus"
+                  id="langScore"
+                  value={student?.langScore}
+                  onChange={handleChange}
+                  name="langScore"
                 />
               </FormControl>
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="jobStatus">نمره آزمون الگوریتم</InputLabel>
+                <InputLabel htmlFor="algoScore">نمره آزمون الگوریتم</InputLabel>
                 <Input
-                  // id="jobStatus"
-                  value={"not defined"}
-                  // onChange={handleChange}
-                  // name="jobStatus"
+                  id="algoScore"
+                  value={student?.algoScore}
+                  onChange={handleChange}
+                  name="algoScore"
                 />
               </FormControl>
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="jobStatus">نمره آزمون کامپیوتر</InputLabel>
+                <InputLabel htmlFor="comScore">نمره آزمون کامپیوتر</InputLabel>
                 <Input
-                  // id="jobStatus"
-                  value={"not defined"}
-                  // onChange={handleChange}
-                  // name="jobStatus"
+                  id="comScore"
+                  value={student?.comScore}
+                  onChange={handleChange}
+                  name="comScore"
                 />
               </FormControl>
             </ListItem>
@@ -153,7 +155,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="presentStatus"
-                  value={student?.presentStatus || " "}
+                  value={student?.presentStatus || ""}
                   onChange={handleChange}
                   name="presentStatus"
                 />
@@ -170,7 +172,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="comAccessStatus"
-                  value={student?.comAccessStatus || " "}
+                  value={student?.comAccessStatus || ""}
                   onChange={handleChange}
                   name="comAccessStatus"
                 />
@@ -181,7 +183,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="predict">پیش بینی ریزش</InputLabel>
                 <Input
                   id="predict"
-                  value={student?.predict || " "}
+                  value={student?.predict || ""}
                   onChange={handleChange}
                   name="predict"
                 />
@@ -200,7 +202,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="recommendField"
-                  value={student?.recommendField || " "}
+                  value={student?.recommendField || ""}
                   onChange={handleChange}
                   name="recommendField"
                 />
@@ -213,7 +215,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="limitAndRisk"
-                  value={student?.limitAndRisk || " "}
+                  value={student?.limitAndRisk || ""}
                   onChange={handleChange}
                   name="limitAndRisk"
                 />
@@ -233,7 +235,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="consistCompleteTime"
-                  value={student?.consistCompleteTime || " "}
+                  value={student?.consistCompleteTime || ""}
                   onChange={handleChange}
                   name="consistCompleteTime"
                 />
@@ -244,7 +246,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="jobCommit">تعهد به اشتغال</InputLabel>
                 <Input
                   id="jobCommit"
-                  value={student?.jobCommit || " "}
+                  value={student?.jobCommit || ""}
                   onChange={handleChange}
                   name="jobCommit"
                 />
@@ -255,7 +257,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="etcDesc">سایر ملاحظات</InputLabel>
                 <Input
                   id="etcDesc"
-                  value={student?.etcDesc || " "}
+                  value={student?.etcDesc || ""}
                   onChange={handleChange}
                   name="etcDesc"
                 />
@@ -273,7 +275,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="workCommit">تعهد به کار</InputLabel>
                 <Input
                   id="workCommit"
-                  value={student?.workCommit || " "}
+                  value={student?.workCommit || ""}
                   onChange={handleChange}
                   name="workCommit"
                 />
@@ -284,7 +286,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="consistTime">اختصاص زمان کافی</InputLabel>
                 <Input
                   id="consistTime"
-                  value={student?.consistTime || " "}
+                  value={student?.consistTime || ""}
                   onChange={handleChange}
                   name="consistTime"
                 />
@@ -297,7 +299,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="comAccessStatus"
-                  value={student?.comAccessStatus || " "}
+                  value={student?.comAccessStatus || ""}
                   onChange={handleChange}
                   name="comAccessStatus"
                 />
@@ -308,7 +310,7 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="ethics">اخلاق فردی و حرفه ای</InputLabel>
                 <Input
                   id="ethics"
-                  value={student?.ethics || " "}
+                  value={student?.ethics || ""}
                   onChange={handleChange}
                   name="ethics"
                 />
@@ -321,4 +323,4 @@ const ExamFormDetailEditComp2: React.FC<ExamStudent> = ({
   );
 };
 
-export default ExamFormDetailEditComp2;
+export default AfterWeekDetailEditComp;

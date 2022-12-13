@@ -2,21 +2,21 @@ import React, { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { ExamRegisterUser } from "../../model";
+import { BeforeWeekType } from "../../model";
 import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ExamFormDetailComp from "../../components/ExamFormDetail/ExamFormDetailComp";
-// import ExamFormDetailEditComp1 from "../../components/ExamFormDetail/ExamFormDetailEditComp1";
-import ExamFormDetailEditComp2 from "../../components/ExamFormDetail/ExamFormDetailEditComp2";
+import InitialDataRegistered from "../../components/beforeWeek/InitialDataRegistered";
+import BeforeWeekEditComp from "../../components/beforeWeek/BeforeWeekEditComp";
+// import ExamFormDetailEditComp2 from "../../components/ExamFormDetail/ExamFormDetailEditComp2";
 
-const AdmissionFormDetailEdit = () => {
-  const [student, setStudent] = useState<ExamRegisterUser | null>(null);
+const BeforeWeekDetailEdit = () => {
+  const [student, setStudent] = useState<BeforeWeekType | null>(null);
   const [loadingGet, setLoadingGet] = useState(true);
   const [loadingPut, setLoadingPut] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const studentId = `/exam/form/${id}`;
+  const studentId = `/exam/before/week/form/${id}`;
 
   const getStudent = async () => {
     setLoadingGet(true);
@@ -37,7 +37,7 @@ const AdmissionFormDetailEdit = () => {
     setLoadingPut(true);
     e.preventDefault();
     try {
-      const response = await editAxios(`/exam/form/${id}`, {
+      const response = await editAxios(studentId, {
         data: student,
       });
       if (response.status === 200) {
@@ -90,7 +90,7 @@ const AdmissionFormDetailEdit = () => {
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <ExamFormDetailComp student={student} />
+        <InitialDataRegistered student={student} />
         <Divider />
         <Box
           component="form"
@@ -116,18 +116,11 @@ const AdmissionFormDetailEdit = () => {
               ذخیره اطلاعات
             </Button>
           </Box>
-          {/* <ExamFormDetailEditComp1
-            student={student}
-            handleChange={handleChange}
-          /> */}
-          <ExamFormDetailEditComp2
-            student={student}
-            handleChange={handleChange}
-          />
+          <BeforeWeekEditComp student={student} handleChange={handleChange} />
         </Box>
       </Container>
     </>
   );
 };
 
-export default AdmissionFormDetailEdit;
+export default BeforeWeekDetailEdit;
