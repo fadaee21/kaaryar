@@ -30,6 +30,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const location = useLocation();
+  // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
   const [tokenValidation, loadingVal] = useGetValidationToken();
@@ -76,17 +77,6 @@ const Login = () => {
                   آموزشی برابر در ایران، به علاقه‌مندان در حوزه ی کدنویسی آموزش
                   می‌دهد.
                 </Typography>
-                {/* <Typography
-                  component="p"
-                  variant="body1"
-                  color="textPrimary"
-                  sx={{ mt: 6.75 }}
-                >
-                  اگر عضو سامانه آموزشی کاریار نیستید با دسترسی مهمان وارد شوید:
-                </Typography> */}
-                {/* <Button variant="contained" color="secondary" sx={{ mt: 3 }}>
-                  ورود به عنوان مهمان
-                </Button> */}
                 <Box
                   component={"img"}
                   src={bg}
@@ -95,7 +85,7 @@ const Login = () => {
               </GridGuestLogin>
               <GridUserLogin item sm={7}>
                 <Typography component="h3" variant="h5" sx={{ mt: 6 }}>
-                  ورود به سامانه آموزشی کاریار
+                  ورود به سامانه مدیریت پروفایل کاریار
                 </Typography>
                 <Box
                   component={"form"}
