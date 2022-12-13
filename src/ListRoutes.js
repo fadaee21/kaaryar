@@ -1,13 +1,13 @@
 import { Dashboard } from "./pages/Dashboard";
-import StudentPage from "./pages/StudentPage";
-import StudentListMoodle from "./pages/StudentListMoodle";
+import StudentPage from "./pages/studentMoodle/StudentPage";
+import StudentListMoodleTable from "./pages/studentMoodle/StudentListMoodleTable";
 import Comments from "./pages/Comments";
 import AddComment from "./pages/AddComment";
-import BeforeWeek from "./pages/beforeWeek/BeforeWeek";
+import BeforeWeekTable from "./pages/beforeWeek/BeforeWeekTable";
 import BeforeWeekDetail from "./pages/beforeWeek/BeforeWeekDetail";
 import BeforeWeekDetailEdit from "./pages/beforeWeek/BeforeWeekEdit";
-import AfterWeek from "./pages/afterWeek/AfterWeek";
-import Register from "./pages/reg/registerForm";
+import AfterWeekTable from "./pages/afterWeek/AfterWeekTable";
+import RegisterFormTable from "./pages/reg/registerFormTable";
 import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 
@@ -37,7 +37,7 @@ const ListRoutes = [
     path: "ta/student",
     name: "لیست مهارت جو ها",
     icon: <PeopleIcon />,
-    component: StudentListMoodle,
+    component: StudentListMoodleTable,
     showInNav: true,
     role: "ta",
     key: 1,
@@ -83,7 +83,7 @@ const ListRoutes = [
     path: "mentor/student",
     name: "لیست مهارت جو ها",
     icon: <PeopleIcon />,
-    component: StudentListMoodle,
+    component: StudentListMoodleTable,
     showInNav: true,
     role: "mentor",
     key: 6,
@@ -129,7 +129,7 @@ const ListRoutes = [
     path: "teacher/register-form",
     name: "لیست فرم های ثبت نام ",
     icon: <AppRegistrationIcon />,
-    component: Register,
+    component: RegisterFormTable,
     showInNav: true,
     role: "teacher",
     key: "teacher9",
@@ -138,7 +138,7 @@ const ListRoutes = [
     path: "teacher/before-week",
     name: "لیست فرم های آزمون",
     icon: <PortraitIcon />,
-    component: BeforeWeek,
+    component: BeforeWeekTable,
     showInNav: true,
     role: "teacher",
     key: "teacher6",
@@ -147,7 +147,7 @@ const ListRoutes = [
     path: "teacher/after-week",
     name: "لیست هفته پذیرش",
     icon: <HowToRegIcon />,
-    component: AfterWeek,
+    component: AfterWeekTable,
     showInNav: true,
     role: "teacher",
     key: "teacher16",
@@ -157,7 +157,7 @@ const ListRoutes = [
     path: "teacher/student",
     name: "لیست مهارت جو ها",
     icon: <PeopleIcon />,
-    component: StudentListMoodle,
+    component: StudentListMoodleTable,
     showInNav: true,
     role: "teacher",
     key: "teacher1",
@@ -253,7 +253,7 @@ const ListRoutes = [
     path: "admin/student",
     name: "لیست مهارت جو ها",
     icon: <PeopleIcon />,
-    component: StudentListMoodle,
+    component: StudentListMoodleTable,
     showInNav: true,
     role: "admin",
     key: 16,

@@ -1,12 +1,9 @@
 import {
-  Button,
-  ListItem,
   Pagination,
   Paper,
   Table,
   TableBody,
   TableContainer,
-  TableHead,
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -14,13 +11,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
+import TableBodyAll from "../../components/table/TableBodyAll";
+import TableHeader from "../../components/table/TableHeader";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { AfterWeekType } from "../../model";
-import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { counterPagination } from "../../utils/counterPagination";
 
-const AfterWeek = () => {
+const AfterWeekTable = () => {
   const [afterWeekStudents, setAfterWeekStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -44,7 +42,7 @@ const AfterWeek = () => {
       navigate("/");
     }
   };
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
@@ -71,79 +69,36 @@ const AfterWeek = () => {
           </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell align="left">
-                    نام و نام خانوادگی
-                  </StyledTableCell>
-                  <StyledTableCell align="left">سال تولد</StyledTableCell>
-                  <StyledTableCell align="left">رشته تحصیلی</StyledTableCell>
-                  <StyledTableCell align="left"></StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
+              <TableHeader />
               <TableBody>
                 {afterWeekStudents.map((afterWeekStudent: AfterWeekType) => {
                   const {
                     id,
                     beforeWeekForm: { registrationForm },
                   } = afterWeekStudent;
-                  const { birthDate, family, firstName, studyField } =
-                    registrationForm;
+                  const {
+                    birthDate,
+                    family,
+                    firstName,
+                    registrationCode,
+                    codeMeli,
+                    mobile,
+                    email,
+                  } = registrationForm;
                   return (
-                    <StyledTableRow
+                    <TableBodyAll
                       key={id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
-                    >
-                      <StyledTableCell
-                        align="left"
-                        sx={{ width: "25%", verticalAlign: "top" }}
-                      >
-                        <Typography variant="body1">
-                          {firstName + " " + family}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="left"
-                        sx={{
-                          width: "10%",
-                          verticalAlign: "top",
-                        }}
-                      >
-                        <Typography variant="body2" textAlign={"left"}>
-                          {birthDate}
-                        </Typography>
-                      </StyledTableCell>
-
-                      <StyledTableCell
-                        align="left"
-                        sx={{
-                          width: "30%",
-                          verticalAlign: "top",
-                        }}
-                      >
-                        <Typography variant="body2">{studyField}</Typography>
-                      </StyledTableCell>
-
-                      <StyledTableCell
-                        align="left"
-                        sx={{ width: "30%", verticalAlign: "top" }}
-                      >
-                        <ListItem sx={{ pt: 0 }}>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={() =>
-                              navigate(`/${roles}/after-week/${id}`)
-                            }
-                            sx={{ ml: "auto", mr: "auto" }}
-                          >
-                            جزییات
-                          </Button>
-                        </ListItem>
-                      </StyledTableCell>
-                    </StyledTableRow>
+                      id={id}
+                      roles={roles}
+                      birthDate={birthDate}
+                      family={family}
+                      firstName={firstName}
+                      registrationCode={registrationCode}
+                      codeMeli={codeMeli}
+                      mobile={mobile}
+                      email={email}
+                      directNav="after-week"
+                    />
                   );
                 })}
               </TableBody>
@@ -171,4 +126,4 @@ const AfterWeek = () => {
   );
 };
 
-export default AfterWeek;
+export default AfterWeekTable;

@@ -201,8 +201,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel id="webDevFamiliarity">
-                  {" "}
-                  آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب{" "}
+                  آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب
                 </InputLabel>
                 <Select
                   labelId="webDevFamiliarity"
@@ -275,7 +274,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel id="computerFamiliarityLabel">
-                  وضعیت کار با کامپیوتر
+                  آشنایی کار با کامپیوتر
                 </InputLabel>
                 <Select
                   labelId="computerFamiliarityLabel"
@@ -399,7 +398,6 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              {" "}
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="familiar">
                   نحوه آشنایی با کاریار
@@ -457,15 +455,19 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   sx={{ width: "40ch" }}
                   variant="standard"
                 >
-                  <InputLabel htmlFor="lastInstitute">
+                  <InputLabel htmlFor="jobReady">
                     آمادگی به کار بعد از اتمام دوره
                   </InputLabel>
-                  <Input
-                    // id="lastInstitute"
-                    value={"not defined"}
-                    // onChange={handleChange}
-                    // name="lastInstitute"
-                  />
+                  <Select
+                    labelId="jobReadyLabel"
+                    id="jobReady"
+                    onChange={handleChange}
+                    name="labelId"
+                    defaultValue={student?.jobReady}
+                  >
+                    <MenuItem value={true as any}>بله</MenuItem>
+                    <MenuItem value={false as any}>خیر</MenuItem>
+                  </Select>
                 </FormControl>
               </ListItem>
               <ListItem>

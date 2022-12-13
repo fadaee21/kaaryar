@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getData } from "../api/axios";
-import StudentDetail from "../components/StudentDetail";
+import { getData } from "../../api/axios";
+import StudentDetail from "../../components/StudentDetail";
 import { useNavigate, useParams } from "react-router-dom";
-import LoadingProgress from "../components/LoadingProgress";
-import { MoodleUser } from "../model";
+import LoadingProgress from "../../components/LoadingProgress";
+import { MoodleUser } from "../../model";
 
 const StudentPage
  = () => {

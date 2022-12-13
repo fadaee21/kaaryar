@@ -203,3 +203,16 @@ interface AfterWeekType {
   scholarPercentage: number;
   workCommit: string;
 }
+
+export interface TableBodyAllType {
+  id: number;
+  birthDate: string;
+  family: string;
+  firstName: string;
+  registrationCode: string;
+  codeMeli: string;
+  mobile: string;
+  email: string;
+  roles: string;
+  directNav: string;
+}

@@ -13,15 +13,15 @@ import {
 import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../api/axios";
-import { ExcelExport } from "../components/ExcelExport";
-import LoadingProgress from "../components/LoadingProgress";
-import TablePic from "../components/TablePic";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { MoodleUser } from "../model";
-import { StyledTableCell, StyledTableRow } from "../styles/table";
+import { getData } from "../../api/axios";
+import { ExcelExport } from "../../components/ExcelExport";
+import LoadingProgress from "../../components/LoadingProgress";
+import TablePic from "../../components/TablePic";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { MoodleUser } from "../../model";
+import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
-const StudentListMoodle = () => {
+const StudentListMoodleTable = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -42,6 +42,7 @@ const StudentListMoodle = () => {
       navigate("/");
     }
   };
+// eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
@@ -178,4 +179,4 @@ const StudentListMoodle = () => {
     </Box>
   );
 };
-export default StudentListMoodle;
+export default StudentListMoodleTable;

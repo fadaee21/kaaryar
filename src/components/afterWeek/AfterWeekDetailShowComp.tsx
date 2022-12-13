@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -44,6 +43,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
 
   React.useEffect(() => {
     getPicture(student?.beforeWeekForm.paymentImageAddress);
+    // eslint-disable-next-line
   }, []);
 
   return (

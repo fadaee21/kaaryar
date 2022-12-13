@@ -25,7 +25,6 @@ interface ExamStudent {
   typeComp: "exam" | "admission";
 }
 
-
 const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   student,
   matches,
@@ -34,6 +33,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
 }) => {
   const { setApproveObject, successObject } = useApprove(id as string);
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
@@ -60,7 +60,8 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}
             disabled={
-              student?.acceptWeekChecked || successObject === "acceptWeekChecked"
+              student?.acceptWeekChecked ||
+              successObject === "acceptWeekChecked"
                 ? true
                 : false
             }
@@ -73,7 +74,8 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               setApproveObject({ acceptWeekChecked: true });
             }}
             disabled={
-              student?.acceptWeekChecked || successObject === "acceptWeekChecked"
+              student?.acceptWeekChecked ||
+              successObject === "acceptWeekChecked"
                 ? true
                 : false
             }
@@ -154,9 +156,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail 
-      colorActive={student?.acceptWeekChecked}
-      >
+      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت اشتغال
         </DetailTypography>
@@ -237,9 +237,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail 
-      colorActive={student?.acceptWeekChecked}
-      >
+      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت اشتغال
         </DetailTypography>
@@ -253,8 +251,8 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="وضعیت کار با کامپیوتر"
-                  // secondary={student?.}
+                  primary="آشنایی کار با کامپیوتر"
+                  secondary={student?.computerFamiliarity ? "بله" : "خیر"}
                 />
               </ListItem>
               <ListItem>
@@ -295,9 +293,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail 
-      colorActive={student?.acceptWeekChecked}
-      >
+      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           مدیریت زمان
         </DetailTypography>
@@ -329,9 +325,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      <BoxExamDetail 
-      colorActive={student?.acceptWeekChecked}
-      >
+      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت بورسیه
         </DetailTypography>
@@ -373,8 +367,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
       </Box>
       <BoxExamDetail
         colorActive={
-          student?.acceptWeekChecked ||
-          successObject === "acceptWeekChecked"
+          student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
@@ -397,7 +390,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="آمادگی به کار بعد از اتمام دوره"
-                  // secondary={student?.}
+                  secondary={student?.jobReady ? "بله" : "خیر"}
                 />
               </ListItem>
               <ListItem>
