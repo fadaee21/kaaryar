@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const TableBodySearch = ({
   id,
@@ -14,6 +15,8 @@ const TableBodySearch = ({
   roles,
   email,
   directNav,
+  gender,
+  checked,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
   return (
@@ -27,7 +30,15 @@ const TableBodySearch = ({
     >
       <StyledTableCell
         align="left"
-        sx={{ width: "25%", verticalAlign: "center" }}
+        sx={{ width: "3%", verticalAlign: "center" }}
+      >
+        <Typography variant="body1">
+          {checked && <CheckCircleIcon color="disabled" fontSize="small" />}
+        </Typography>
+      </StyledTableCell>
+      <StyledTableCell
+        align="left"
+        sx={{ width: "22%", verticalAlign: "center" }}
       >
         <Typography variant="body1">{firstName + " " + family}</Typography>
       </StyledTableCell>
@@ -39,6 +50,15 @@ const TableBodySearch = ({
         }}
       >
         <Typography variant="body2">{birthDate}</Typography>
+      </StyledTableCell>
+      <StyledTableCell
+        align="center"
+        sx={{
+          width: "5%",
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">{gender}</Typography>
       </StyledTableCell>
 
       <StyledTableCell
@@ -72,7 +92,7 @@ const TableBodySearch = ({
       <StyledTableCell
         align="right"
         sx={{
-          width: "20%",
+          width: "15%",
           verticalAlign: "center",
         }}
       >

@@ -9,7 +9,6 @@ const useGetImage = () => {
         responseType: "arraybuffer", //so important!!
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      console.log(response.data);
       setPic(url);
     } catch (error) {
       console.log(error);

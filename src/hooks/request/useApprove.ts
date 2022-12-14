@@ -33,10 +33,14 @@ export const useApprove = (id: string) => {
 
 export const useApproveReg = () => {
   const [success, setSuccess] = useState(false);
+  
 
-  const getApprove = async (id: string) => {
+  const getApprove = async (id: string,admission:boolean) => {
     try {
-      const response = await editAxios(`/reg/form/approve/${id}`);
+      const response = await editAxios(`/reg/form/approve/${id}`, {
+        // i dont know nam of object
+        data: {aaaa:admission},
+      });
       console.log(response);
       if (response.status === 200) {
         return setSuccess(true);

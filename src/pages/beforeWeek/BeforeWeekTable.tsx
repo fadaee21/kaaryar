@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import { SearchExam } from "../../components/Searching";
+import { SearchBefore } from "../../components/Searching";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableBodySearch from "../../components/table/TableBodySearch";
 import TableHeader from "../../components/table/TableHeader";
@@ -26,7 +26,7 @@ const BeforeWeekTable = () => {
   const [students, setStudents] = useState<BeforeWeekType[]>();
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [searchingStudentExam, setSearchingStudentExam] =
+  const [searchingStudentBefore, setSearchingStudentBefore] =
     useState<BeforeWeekType | null>(null);
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ const BeforeWeekTable = () => {
       navigate("/");
     }
   };
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
@@ -76,16 +76,24 @@ const BeforeWeekTable = () => {
             <Typography variant="h3"> لیست فرم های آزمون</Typography>
           </Box>
           {/* //!component for searching student */}
-          <Box sx={{ width: "50%", my: 3, boxShadow: "2px 2px 5px 2px #eee" }}>
-            <SearchExam setSearchingStudentExam={setSearchingStudentExam} />
+          <Box
+            sx={{
+              width: { xs: "100%", md: "50%" },
+              my: 3,
+              boxShadow: "2px 2px 5px 2px #eee",
+            }}
+          >
+            <SearchBefore
+              setSearchingStudentBefore={setSearchingStudentBefore}
+            />
           </Box>
           {/* //! export excel */}
           <ExcelExport
             fileName={"excel export"}
             apiData={
-              searchingStudentExam === null
+              searchingStudentBefore === null
                 ? students
-                : [searchingStudentExam.registrationForm]
+                : [searchingStudentBefore.registrationForm]
             }
           />
           {/* //! export excel */}
@@ -94,10 +102,11 @@ const BeforeWeekTable = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader />
               {/*//! while searching show the search content */}
-              {searchingStudentExam === null ? (
+              {searchingStudentBefore === null ? (
                 <TableBody>
                   {students?.map((examRegisterUser: BeforeWeekType) => {
-                    const { id, registrationForm } = examRegisterUser;
+                    const { id, registrationForm, acceptWeekChecked } =
+                      examRegisterUser;
                     const {
                       birthDate,
                       family,
@@ -106,6 +115,7 @@ const BeforeWeekTable = () => {
                       codeMeli,
                       mobile,
                       email,
+                      gender,
                     } = registrationForm;
                     return (
                       <TableBodyAll
@@ -119,7 +129,9 @@ const BeforeWeekTable = () => {
                         codeMeli={codeMeli}
                         mobile={mobile}
                         email={email}
+                        gender={gender}
                         directNav="before-week"
+                        checked={acceptWeekChecked}
                       />
                     );
                   })}
@@ -128,16 +140,22 @@ const BeforeWeekTable = () => {
                 <TableBody>
                   <TableBodySearch
                     roles={roles}
-                    id={searchingStudentExam.registrationForm.id}
-                    birthDate={searchingStudentExam.registrationForm.birthDate}
-                    family={searchingStudentExam.registrationForm.family}
-                    firstName={searchingStudentExam.registrationForm.firstName}
-                    registrationCode={
-                      searchingStudentExam.registrationForm.registrationCode
+                    id={searchingStudentBefore.registrationForm.id}
+                    birthDate={
+                      searchingStudentBefore.registrationForm.birthDate
                     }
-                    codeMeli={searchingStudentExam.registrationForm.codeMeli}
-                    mobile={searchingStudentExam.registrationForm.mobile}
-                    email={searchingStudentExam.registrationForm.email}
+                    family={searchingStudentBefore.registrationForm.family}
+                    firstName={
+                      searchingStudentBefore.registrationForm.firstName
+                    }
+                    registrationCode={
+                      searchingStudentBefore.registrationForm.registrationCode
+                    }
+                    codeMeli={searchingStudentBefore.registrationForm.codeMeli}
+                    mobile={searchingStudentBefore.registrationForm.mobile}
+                    email={searchingStudentBefore.registrationForm.email}
+                    gender={searchingStudentBefore.registrationForm.gender}
+                    checked={searchingStudentBefore.acceptWeekChecked}
                     directNav="before-week"
                   />
                 </TableBody>

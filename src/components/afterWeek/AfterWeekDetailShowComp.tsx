@@ -82,6 +82,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           >
             تایید
           </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ afterWeekChecked: false });
+            }}
+          >
+            عدم تایید
+          </Button>
         </ButtonGroup>
       </Box>
       <BoxExamDetail
@@ -141,7 +149,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                     component={"img"}
                     alt="avatar"
                     src={pic}
-                    sx={{ width: 150, height: "100%",borderRadius:2 }}
+                    sx={{ width: 150, height: "100%", borderRadius: 2 }}
                   />
                 </ListItemAvatar>
               </ListItem>
@@ -406,6 +414,47 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          mb: 5,
+        }}
+      >
+        <ButtonGroup
+          variant="contained"
+          color="secondary"
+          size="large"
+          aria-label="small button group"
+          disabled={
+            student?.afterWeekChecked || successObject === "afterWeekChecked"
+              ? true
+              : false
+          }
+          sx={{ ...(typeComp === "admission" && { display: "show" }) }}
+        >
+          <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
+            ویرایش
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ afterWeekChecked: true });
+            }}
+          >
+            تایید
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ afterWeekChecked: false });
+            }}
+          >
+            عدم تایید
+          </Button>
+        </ButtonGroup>
+      </Box>
     </>
   );
 };

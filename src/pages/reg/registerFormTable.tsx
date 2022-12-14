@@ -27,6 +27,7 @@ const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
   const [searchingStudentRegister, setSearchingStudentRegister] =
     useState<RegistrationForm | null>(null);
+
   const navigate = useNavigate();
   const allStudentMoodle = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
   const examFormCount = "/reg/form/count";
@@ -45,7 +46,7 @@ const RegisterFormTable = () => {
       navigate("/");
     }
   };
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
@@ -70,7 +71,13 @@ const RegisterFormTable = () => {
             <Typography variant="h3"> لیست فرم های پذیرش</Typography>
           </Box>
           {/* //!component for searching student */}
-          <Box sx={{ width: "50%", my: 3, boxShadow: "2px 2px 5px 2px #eee" }}>
+          <Box
+            sx={{
+              width: { xs: "100%", md: "50%" },
+              my: 3,
+              boxShadow: "2px 2px 5px 2px #eee",
+            }}
+          >
             <SearchRegister
               setSearchingStudentRegister={setSearchingStudentRegister}
             />
@@ -102,6 +109,8 @@ const RegisterFormTable = () => {
                       mobile,
                       email,
                       id,
+                      gender,
+                      checked
                     } = RegisterUser;
                     return (
                       <TableBodyAll
@@ -116,6 +125,8 @@ const RegisterFormTable = () => {
                         mobile={mobile}
                         email={email}
                         directNav="register-form"
+                        gender={gender}
+                        checked={checked}
                       />
                     );
                   })}
@@ -133,6 +144,8 @@ const RegisterFormTable = () => {
                     mobile={searchingStudentRegister.mobile}
                     email={searchingStudentRegister.email}
                     directNav="register-form"
+                    gender={searchingStudentRegister.gender}
+                    checked={searchingStudentRegister.checked}
                   />
                 </TableBody>
               )}

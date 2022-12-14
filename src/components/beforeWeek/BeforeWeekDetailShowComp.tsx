@@ -82,6 +82,20 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           >
             تایید
           </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ acceptWeekChecked: false });
+            }}
+            disabled={
+              student?.acceptWeekChecked ||
+              successObject === "acceptWeekChecked"
+                ? true
+                : false
+            }
+          >
+            عدم تایید
+          </Button>
         </ButtonGroup>
       </Box>
       <BoxExamDetail
@@ -413,6 +427,62 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          mb: 5,
+        }}
+      >
+        <ButtonGroup
+          variant="contained"
+          color="secondary"
+          size="large"
+          aria-label="small button group"
+          sx={{ ...(typeComp === "admission" && { display: "none" }) }}
+        >
+          <Button
+            onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}
+            disabled={
+              student?.acceptWeekChecked ||
+              successObject === "acceptWeekChecked"
+                ? true
+                : false
+            }
+          >
+            ویرایش
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ acceptWeekChecked: true });
+            }}
+            disabled={
+              student?.acceptWeekChecked ||
+              successObject === "acceptWeekChecked"
+                ? true
+                : false
+            }
+          >
+            تایید
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setApproveObject({ acceptWeekChecked: false });
+            }}
+            disabled={
+              student?.acceptWeekChecked ||
+              successObject === "acceptWeekChecked"
+                ? true
+                : false
+            }
+          >
+            عدم تایید
+          </Button>
+        </ButtonGroup>
+      </Box>
     </>
   );
 };

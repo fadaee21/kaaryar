@@ -215,4 +215,6 @@ export interface TableBodyAllType {
   email: string;
   roles: string;
   directNav: string;
+  gender: string;
+  checked: boolean;
 }

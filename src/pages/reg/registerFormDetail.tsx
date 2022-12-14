@@ -71,16 +71,23 @@ const RegisterFormDetail = () => {
           <Button
             onClick={() => navigate(`/${roles}/register-form-edit/${id}`)}
             // disabled={student?.checked || success ? true : false}
-            >
+          >
             {/* //! چون همچنان قابل ویرایش است آیا نیاز به غیرفعال شدن دارد؟؟؟ */}
             ویرایش
           </Button>
           <Button
             variant="contained"
-            onClick={() => getApprove(id as string)}
+            onClick={() => getApprove(id as string, true)}
             disabled={student?.checked || success ? true : false}
           >
             تایید
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => getApprove(id as string, false)}
+            disabled={student?.checked || success ? true : false}
+          >
+            عدم تایید
           </Button>
           <Button endIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>
             بازگشت
@@ -91,6 +98,7 @@ const RegisterFormDetail = () => {
         <RegisterFormDetailComp student={student} />
         <Divider />
       </Container>
+      
     </>
   );
 };
