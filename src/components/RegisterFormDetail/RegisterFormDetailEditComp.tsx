@@ -9,6 +9,8 @@ import {
   Divider,
   useMediaQuery,
   Box,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
@@ -22,10 +24,9 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   student,
   handleChange,
 }) => {
-
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
   return (
-    <BoxExamDetail >
+    <BoxExamDetail>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
         فرم ثبت اطلاعات اولیه
       </DetailTypography>
@@ -120,13 +121,18 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                   sx={{ width: "40ch" }}
                   variant="standard"
                 >
-                  <InputLabel htmlFor="gender">جنسیت : </InputLabel>
-                  <Input
-                    id="stuYear"
-                    value={student?.gender || " "}
-                    onChange={handleChange}
+                  <InputLabel id="idGenderLabel">جنسیت : </InputLabel>
+                  <Select
+                    labelId="idGenderLabel"
+                    id="idGender"
                     name="gender"
-                  />
+                    onChange={handleChange}
+                    label="gender"
+                    value={student?.gender}
+                  >
+                    <MenuItem value={"مرد"}>مرد</MenuItem>
+                    <MenuItem value={"زن"}>زن</MenuItem>
+                  </Select>
                 </FormControl>
               </ListItem>
               <ListItem>

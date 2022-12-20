@@ -190,8 +190,8 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   labelId="jobStandbyLabel"
                   id="jobStandby"
                   onChange={handleChange}
-                  name="labelId"
-                  defaultValue={student?.jobStandby}
+                  name="jobStandby"
+                  value={student?.jobStandby ?? ""}
                 >
                   <MenuItem value={true as any}>بله</MenuItem>
                   <MenuItem value={false as any}>خیر</MenuItem>
@@ -207,8 +207,8 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   labelId="webDevFamiliarity"
                   id="webDevFamiliarity"
                   onChange={handleChange}
-                  name="labelId"
-                  defaultValue={student?.webDevFamiliarity}
+                  name="webDevFamiliarity"
+                  value={student?.webDevFamiliarity ?? ""}
                 >
                   <MenuItem value={true as any}>بله</MenuItem>
                   <MenuItem value={false as any}>خیر</MenuItem>
@@ -280,8 +280,8 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   labelId="computerFamiliarityLabel"
                   id="computerFamiliarity"
                   onChange={handleChange}
-                  name="labelId"
-                  defaultValue={student?.computerFamiliarity}
+                  name="computerFamiliarity"
+                  value={student?.computerFamiliarity ?? ""}
                 >
                   <MenuItem value={true as any}>بله</MenuItem>
                   <MenuItem value={false as any}>خیر</MenuItem>
@@ -314,8 +314,8 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   labelId="programmingCoursePassedLabel"
                   id="programmingCoursePassed"
                   onChange={handleChange}
-                  name="labelId"
-                  defaultValue={student?.programmingCoursePassed}
+                  name="programmingCoursePassed"
+                  value={student?.programmingCoursePassed ?? ""}
                 >
                   <MenuItem value={true as any}>بله</MenuItem>
                   <MenuItem value={false as any}>خیر</MenuItem>
@@ -462,8 +462,8 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                     labelId="jobReadyLabel"
                     id="jobReady"
                     onChange={handleChange}
-                    name="labelId"
-                    defaultValue={student?.jobReady}
+                    name="jobReady"
+                    value={student?.jobReady ?? ""}
                   >
                     <MenuItem value={true as any}>بله</MenuItem>
                     <MenuItem value={false as any}>خیر</MenuItem>

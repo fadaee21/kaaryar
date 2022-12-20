@@ -54,7 +54,6 @@ const BeforeWeekDetailEdit = () => {
   };
 
   const handleChange = (e: any) => {
-    // console.log(student)
     const { name, value } = e.target;
     setStudent((prev: any) => ({ ...prev, [name]: value }));
   };
