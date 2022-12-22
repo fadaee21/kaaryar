@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
-import { useApproveReg } from "../../hooks/request/useApprove";
+// import { useApproveReg } from "../../hooks/request/useApprove";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { RegistrationForm } from "../../model";
+import { useApprove } from "../../hooks/request/useApprove";
 
 const RegisterFormDetail = () => {
   const [student, setStudent] = useState<RegistrationForm | null>(null);
@@ -23,10 +24,10 @@ const RegisterFormDetail = () => {
   const { id } = useParams();
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
-  const { success, getApprove } = useApproveReg();
-
+  // const { success, getApprove } = useApproveReg();
+  const { getApprove, successObject, success } = useApprove();
   const studentId = `/reg/form/${id}`;
-
+  const approveLink = "/reg/form/approve";
   const getStudent = async () => {
     setLoading(true);
     try {
@@ -70,22 +71,32 @@ const RegisterFormDetail = () => {
         >
           <Button
             onClick={() => navigate(`/${roles}/register-form-edit/${id}`)}
-            // disabled={student?.checked || success ? true : false}
           >
-            {/* //! چون همچنان قابل ویرایش است آیا نیاز به غیرفعال شدن دارد؟؟؟ */}
             ویرایش
           </Button>
           <Button
             variant="contained"
-            onClick={() => getApprove(id as string, true)}
-            disabled={student?.checked || success ? true : false}
+            onClick={() => getApprove(id, { checked: true }, approveLink)}
+            disabled={
+              student?.checked ||
+              // successObject === "checked"
+              success
+                ? true
+                : false
+            }
           >
             تایید
           </Button>
           <Button
             variant="contained"
-            onClick={() => getApprove(id as string, false)}
-            disabled={student?.checked || success ? true : false}
+            onClick={() => getApprove(id, { checked: false }, approveLink)}
+            disabled={
+              student?.checked ||
+              // successObject === "checked"
+              success
+                ? true
+                : false
+            }
           >
             عدم تایید
           </Button>
@@ -98,7 +109,6 @@ const RegisterFormDetail = () => {
         <RegisterFormDetailComp student={student} />
         <Divider />
       </Container>
-      
     </>
   );
 };

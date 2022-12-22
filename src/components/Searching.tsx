@@ -33,7 +33,7 @@ export const SearchBefore = ({ setSearchingStudentBefore }: any) => {
     <>
       <AsyncSelect
         value={inputValue}
-        defaultOptions
+        defaultOptions={false}
         getOptionLabel={(e: any) =>
           e.registrationForm.firstName + " " + e.registrationForm.family
         }
@@ -85,7 +85,7 @@ export const SearchAfter = ({ setSearchingStudentAfter }: any) => {
     <>
       <AsyncSelect
         value={inputValue}
-        defaultOptions
+        defaultOptions={false}
         getOptionLabel={(e: any) =>
           e.beforeWeekForm.registrationForm.firstName +
           " " +
@@ -109,7 +109,7 @@ export const SearchAfter = ({ setSearchingStudentAfter }: any) => {
 };
 
 export const SearchRegister = ({ setSearchingStudentRegister }: any) => {
-  const [inputValue, setValue] = useState("");
+  const [inputValue, setValue] = useState<string | null>(null);
 
   const fetchData = async (inputValue: string) => {
     try {
@@ -119,7 +119,8 @@ export const SearchRegister = ({ setSearchingStudentRegister }: any) => {
         },
       });
       if (response.status === 200) {
-        // console.log(response)
+        console.log(response.data);
+        // setSelectedOption(response.data);
         return response.data;
       } else {
         console.log(response);
@@ -137,20 +138,18 @@ export const SearchRegister = ({ setSearchingStudentRegister }: any) => {
     });
 
   return (
-    <>
-      <AsyncSelect
-        value={inputValue}
-        defaultOptions
-        getOptionLabel={(e: any) => e.firstName + " " + e.family}
-        getOptionValue={(e: any) => e.firstName + e.family + e.codeMeli}
-        onInputChange={(e) => setValue(e)}
-        onChange={(e: any) => setSearchingStudentRegister(e)}
-        cacheOptions
-        loadOptions={promiseOptions}
-        placeholder="جستجو..."
-        noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
-        loadingMessage={() => "لطفا کمی صبر کنید"}
-      />
-    </>
+    <AsyncSelect
+      value={inputValue}
+      defaultOptions={false}
+      getOptionLabel={(e: any) => e.firstName + " " + e.family}
+      getOptionValue={(e: any) => e.firstName + e.family + e.codeMeli}
+      onInputChange={(e) => setValue(e)}
+      onChange={(e: any) => setSearchingStudentRegister(e)}
+      cacheOptions
+      loadOptions={promiseOptions}
+      placeholder="جستجو..."
+      noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+      loadingMessage={() => "لطفا کمی صبر کنید"}
+    />
   );
 };

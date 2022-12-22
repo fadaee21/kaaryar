@@ -26,14 +26,14 @@ interface AfterWeekStudentShow {
   id: string | undefined;
   typeComp: "exam" | "admission";
 }
-
+const approveLink = "/exam/after/week/form/approve";
 const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   student,
   matches,
   id,
   typeComp,
 }) => {
-  const { setApproveObject, successObject } = useApprove(id as string);
+  const { getApprove, successObject } = useApprove();
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
@@ -77,7 +77,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ afterWeekChecked: true });
+              getApprove(id, { afterWeekChecked: true }, approveLink);
             }}
           >
             تایید
@@ -85,7 +85,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ afterWeekChecked: false });
+              getApprove(id, { afterWeekChecked: false }, approveLink);
             }}
           >
             عدم تایید
@@ -440,7 +440,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ afterWeekChecked: true });
+              getApprove(id, { afterWeekChecked: true }, approveLink);
             }}
           >
             تایید
@@ -448,7 +448,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ afterWeekChecked: false });
+              getApprove(id, { afterWeekChecked: false }, approveLink);
             }}
           >
             عدم تایید

@@ -1,9 +1,6 @@
-import React from 'react'
-import FileSaver from "file-saver"
+import FileSaver from "file-saver";
 import * as XLSX from "sheetjs-style";
-import { Button } from '@mui/material';
-import { Box } from '@mui/system';
-
+import { ListItemText } from "@mui/material";
 
 export const ExcelExport = ({ apiData, fileName }) => {
   const fileType =
@@ -19,8 +16,9 @@ export const ExcelExport = ({ apiData, fileName }) => {
   };
 
   return (
-    <Box sx={{my:3}}>
-      <Button variant='contained' color="info"  onClick={(e) => exportToCSV(apiData, fileName)}>گرفتن خروجی اکسل</Button>
-    </Box>
+    <ListItemText
+      onClick={(e) => exportToCSV(apiData, fileName)}
+      primary="گرفتن خروجی اکسل"
+    />
   );
 };

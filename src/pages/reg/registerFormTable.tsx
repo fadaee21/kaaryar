@@ -10,9 +10,9 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
-import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import { SearchRegister } from "../../components/Searching";
+// import SearchingGender from "../../components/SearchingGender";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableBodySearch from "../../components/table/TableBodySearch";
 import TableHeader from "../../components/table/TableHeader";
@@ -27,7 +27,7 @@ const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
   const [searchingStudentRegister, setSearchingStudentRegister] =
     useState<RegistrationForm | null>(null);
-
+  const [filterGender, setFilterGender] = useState<RegistrationForm[] | null>();
   const navigate = useNavigate();
   const allStudentMoodle = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
   const examFormCount = "/reg/form/count";
@@ -59,6 +59,7 @@ const RegisterFormTable = () => {
   if (loading) {
     return <LoadingProgress />;
   }
+  console.log(searchingStudentRegister);
 
   return (
     <Box sx={{ m: 2 }}>
@@ -71,6 +72,7 @@ const RegisterFormTable = () => {
             <Typography variant="h3"> لیست فرم های پذیرش</Typography>
           </Box>
           {/* //!component for searching student */}
+
           <Box
             sx={{
               width: { xs: "100%", md: "50%" },
@@ -82,71 +84,83 @@ const RegisterFormTable = () => {
               setSearchingStudentRegister={setSearchingStudentRegister}
             />
           </Box>
-          {/* //! export excel */}
-          <ExcelExport
-            fileName={"excel export"}
-            apiData={
-              searchingStudentRegister === null
-                ? students
-                : [searchingStudentRegister]
-            }
-          />
-          {/* //! export excel */}
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              <TableHeader
+                students={students}
+                searchingStudent={searchingStudentRegister}
+                setFilterGender={setFilterGender}
+                filterGender={filterGender}
+              />
 
               {/*//! while searching show the search content */}
-              {searchingStudentRegister === null ? (
+              {!searchingStudentRegister && !filterGender && (
                 <TableBody>
                   {students.map((RegisterUser: RegistrationForm) => {
-                    const {
-                      birthDate,
-                      family,
-                      firstName,
-                      registrationCode,
-                      codeMeli,
-                      mobile,
-                      email,
-                      id,
-                      gender,
-                      checked
-                    } = RegisterUser;
                     return (
                       <TableBodyAll
-                        key={id}
-                        id={id}
+                        key={RegisterUser.id}
+                        id={RegisterUser.id}
                         roles={roles}
-                        birthDate={birthDate}
-                        family={family}
-                        firstName={firstName}
-                        registrationCode={registrationCode}
-                        codeMeli={codeMeli}
-                        mobile={mobile}
-                        email={email}
+                        birthDate={RegisterUser.birthDate}
+                        family={RegisterUser.family}
+                        firstName={RegisterUser.firstName}
+                        registrationCode={RegisterUser.registrationCode}
+                        codeMeli={RegisterUser.codeMeli}
+                        mobile={RegisterUser.mobile}
+                        email={RegisterUser.email}
                         directNav="register-form"
-                        gender={gender}
-                        checked={checked}
+                        gender={RegisterUser.gender}
+                        checked={RegisterUser.checked}
                       />
                     );
                   })}
                 </TableBody>
-              ) : (
+              )}
+              {/* show content if searching in the box */}
+              {searchingStudentRegister && (
                 <TableBody>
                   <TableBodySearch
                     roles={roles}
-                    id={searchingStudentRegister.id}
-                    birthDate={searchingStudentRegister.birthDate}
-                    family={searchingStudentRegister.family}
-                    firstName={searchingStudentRegister.firstName}
-                    registrationCode={searchingStudentRegister.registrationCode}
-                    codeMeli={searchingStudentRegister.codeMeli}
-                    mobile={searchingStudentRegister.mobile}
-                    email={searchingStudentRegister.email}
+                    id={searchingStudentRegister?.id}
+                    birthDate={searchingStudentRegister?.birthDate}
+                    family={searchingStudentRegister?.family}
+                    firstName={searchingStudentRegister?.firstName}
+                    registrationCode={
+                      searchingStudentRegister?.registrationCode
+                    }
+                    codeMeli={searchingStudentRegister?.codeMeli}
+                    mobile={searchingStudentRegister?.mobile}
+                    email={searchingStudentRegister?.email}
                     directNav="register-form"
-                    gender={searchingStudentRegister.gender}
-                    checked={searchingStudentRegister.checked}
+                    gender={searchingStudentRegister?.gender}
+                    checked={searchingStudentRegister?.checked}
                   />
+                </TableBody>
+              )}
+              {/* show content if defining the gender */}
+              {filterGender && !searchingStudentRegister && (
+                <TableBody>
+                  {filterGender?.map((item) => {
+                    return (
+                      <TableBodySearch
+                        roles={roles}
+                        key={item.id}
+                        id={item.id}
+                        birthDate={item.birthDate}
+                        family={item.family}
+                        firstName={item.firstName}
+                        registrationCode={item.registrationCode}
+                        codeMeli={item.codeMeli}
+                        mobile={item.mobile}
+                        email={item.email}
+                        directNav="register-form"
+                        gender={item.gender}
+                        checked={item.checked}
+                      />
+                    );
+                  })}
                 </TableBody>
               )}
             </Table>

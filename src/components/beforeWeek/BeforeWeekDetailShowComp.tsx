@@ -24,14 +24,14 @@ interface ExamStudent {
   //typeComp:help to check which page use and show or not show button group
   typeComp: "exam" | "admission";
 }
-
+const approveLink = "/exam/before/week/form/approve";
 const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   student,
   matches,
   id,
   typeComp,
 }) => {
-  const { setApproveObject, successObject } = useApprove(id as string);
+  const {  successObject, getApprove } = useApprove();
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
@@ -71,7 +71,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ acceptWeekChecked: true });
+              getApprove(id, { acceptWeekChecked: true }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||
@@ -85,7 +85,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ acceptWeekChecked: false });
+              getApprove(id, { acceptWeekChecked: false }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||
@@ -456,7 +456,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ acceptWeekChecked: true });
+              getApprove(id, { acceptWeekChecked: true }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||
@@ -470,7 +470,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              setApproveObject({ acceptWeekChecked: false });
+              getApprove(id, { acceptWeekChecked: false }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||

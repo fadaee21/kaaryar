@@ -10,7 +10,6 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
-import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import { SearchBefore } from "../../components/Searching";
 import TableBodyAll from "../../components/table/TableBodyAll";
@@ -23,7 +22,10 @@ import { BeforeWeekType } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
 
 const BeforeWeekTable = () => {
-  const [students, setStudents] = useState<BeforeWeekType[]>();
+  const [students, setStudents] = useState<BeforeWeekType[]>([]);
+  const [filterGender, setFilterGender] = useState<BeforeWeekType[] | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [searchingStudentBefore, setSearchingStudentBefore] =
@@ -87,36 +89,34 @@ const BeforeWeekTable = () => {
               setSearchingStudentBefore={setSearchingStudentBefore}
             />
           </Box>
-          {/* //! export excel */}
-          <ExcelExport
-            fileName={"excel export"}
-            apiData={
-              searchingStudentBefore === null
-                ? students
-                : [searchingStudentBefore.registrationForm]
-            }
-          />
-          {/* //! export excel */}
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              <TableHeader
+                students={students.map((i: any) => i.registrationForm)}
+                searchingStudent={searchingStudentBefore?.registrationForm}
+                setFilterGender={setFilterGender}
+                filterGender={filterGender}
+              />
               {/*//! while searching show the search content */}
-              {searchingStudentBefore === null ? (
+              {searchingStudentBefore === null && !filterGender && (
                 <TableBody>
                   {students?.map((examRegisterUser: BeforeWeekType) => {
-                    const { id, registrationForm, acceptWeekChecked } =
-                      examRegisterUser;
                     const {
-                      birthDate,
-                      family,
-                      firstName,
-                      registrationCode,
-                      codeMeli,
-                      mobile,
-                      email,
-                      gender,
-                    } = registrationForm;
+                      id,
+                      registrationForm: {
+                        birthDate,
+                        family,
+                        firstName,
+                        registrationCode,
+                        codeMeli,
+                        mobile,
+                        email,
+                        gender,
+                      },
+                      acceptWeekChecked,
+                    } = examRegisterUser;
+
                     return (
                       <TableBodyAll
                         key={id}
@@ -136,7 +136,8 @@ const BeforeWeekTable = () => {
                     );
                   })}
                 </TableBody>
-              ) : (
+              )}
+              {searchingStudentBefore && (
                 <TableBody>
                   <TableBodySearch
                     roles={roles}
@@ -158,6 +159,31 @@ const BeforeWeekTable = () => {
                     checked={searchingStudentBefore.acceptWeekChecked}
                     directNav="before-week"
                   />
+                </TableBody>
+              )}
+              {!searchingStudentBefore && filterGender && (
+                <TableBody>
+                  {filterGender?.map((item) => {
+                    return (
+                      <TableBodySearch
+                        roles={roles}
+                        key={item.id}
+                        id={item.id}
+                        birthDate={item.registrationForm.birthDate}
+                        family={item.registrationForm.family}
+                        firstName={item.registrationForm.firstName}
+                        registrationCode={
+                          item.registrationForm.registrationCode
+                        }
+                        codeMeli={item.registrationForm.codeMeli}
+                        mobile={item.registrationForm.mobile}
+                        email={item.registrationForm.email}
+                        gender={item.registrationForm.gender}
+                        checked={item.acceptWeekChecked}
+                        directNav="register-form"
+                      />
+                    );
+                  })}
                 </TableBody>
               )}
             </Table>
