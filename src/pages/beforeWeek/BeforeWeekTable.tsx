@@ -13,7 +13,6 @@ import { getData } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
 import { SearchBefore } from "../../components/Searching";
 import TableBodyAll from "../../components/table/TableBodyAll";
-import TableBodySearch from "../../components/table/TableBodySearch";
 import TableHeader from "../../components/table/TableHeader";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -139,7 +138,7 @@ const BeforeWeekTable = () => {
               )}
               {searchingStudentBefore && (
                 <TableBody>
-                  <TableBodySearch
+                  <TableBodyAll
                     roles={roles}
                     id={searchingStudentBefore.registrationForm.id}
                     birthDate={
@@ -165,7 +164,7 @@ const BeforeWeekTable = () => {
                 <TableBody>
                   {filterGender?.map((item) => {
                     return (
-                      <TableBodySearch
+                      <TableBodyAll
                         roles={roles}
                         key={item.id}
                         id={item.id}
