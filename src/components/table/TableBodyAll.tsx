@@ -1,8 +1,12 @@
-import { Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Checkbox, Typography } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+interface TBodyType extends TableBodyAllType {
+  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+}
 
 const TableBodyAll = ({
   id,
@@ -17,16 +21,28 @@ const TableBodyAll = ({
   directNav,
   gender,
   checked,
-}: TableBodyAllType) => {
+  handleCheckBox,
+}: TBodyType) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   return (
     <StyledTableRow
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
-        cursor: "pointer",
       }}
-      onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
     >
+      {pathname.endsWith("register-form") && handleCheckBox && (
+        <StyledTableCell
+          align="left"
+          sx={{ width: "2%", verticalAlign: "center" }}
+        >
+          <Checkbox
+            size="small"
+            onChange={(e) => handleCheckBox(e, id.toString())}
+          />
+        </StyledTableCell>
+      )}
+
       <StyledTableCell
         align="left"
         sx={{ width: "2%", verticalAlign: "center" }}
@@ -37,7 +53,8 @@ const TableBodyAll = ({
       </StyledTableCell>
       <StyledTableCell
         align="left"
-        sx={{ width: "23%", verticalAlign: "center" }}
+        sx={{ width: "23%", verticalAlign: "center", cursor: "pointer" }}
+        onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
       >
         <Typography variant="body1">{firstName + " " + family}</Typography>
       </StyledTableCell>

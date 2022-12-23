@@ -13,7 +13,6 @@ import { getData } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
 import { SearchAfter } from "../../components/Searching";
 import TableBodyAll from "../../components/table/TableBodyAll";
-import TableBodySearch from "../../components/table/TableBodySearch";
 import TableHeader from "../../components/table/TableHeader";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -74,7 +73,6 @@ const AfterWeekTable = () => {
           >
             <Typography variant="h3"> لیست هفته پذیرش</Typography>
           </Box>
-
           {/* //!component for searching student */}
           <Box
             sx={{
@@ -99,7 +97,6 @@ const AfterWeekTable = () => {
                 filterGender={filterGender}
               />
               {/*//! while searching show the search content */}
-
               {searchingStudentAfter === null && !filterGender && (
                 <TableBody>
                   {afterWeekStudents.map((afterWeekStudent: AfterWeekType) => {
@@ -142,7 +139,7 @@ const AfterWeekTable = () => {
               )}
               {searchingStudentAfter && (
                 <TableBody>
-                  <TableBodySearch
+                  <TableBodyAll
                     roles={roles}
                     id={
                       searchingStudentAfter.beforeWeekForm.registrationForm.id
@@ -204,7 +201,7 @@ const AfterWeekTable = () => {
                       afterWeekChecked,
                     } = item;
                     return (
-                      <TableBodySearch
+                      <TableBodyAll
                         roles={roles}
                         key={id}
                         id={id}

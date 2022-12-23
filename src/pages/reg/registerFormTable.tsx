@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
@@ -16,6 +16,7 @@ import { SearchRegister } from "../../components/Searching";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableBodySearch from "../../components/table/TableBodySearch";
 import TableHeader from "../../components/table/TableHeader";
+import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { RegistrationForm } from "../../model";
@@ -24,18 +25,22 @@ import { counterPagination } from "../../utils/counterPagination";
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [checkStateIds, setCheckStateIds] = useState("");
+  const [ids] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [searchingStudentRegister, setSearchingStudentRegister] =
     useState<RegistrationForm | null>(null);
   const [filterGender, setFilterGender] = useState<RegistrationForm[] | null>();
   const navigate = useNavigate();
-  const allStudentMoodle = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
+  const allStudentReg = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
   const examFormCount = "/reg/form/count";
   const [counterPage] = useCountPagination(examFormCount);
+  const { getApproveMulti, successMulti } = useApproveMulti();
+
   const getListLearner = async () => {
     setLoading(true);
     try {
-      let response = await getData(allStudentMoodle);
+      let response = await getData(allStudentReg);
       setStudents(response.data);
       setLoading(false);
     } catch (error) {
@@ -50,11 +55,28 @@ const RegisterFormTable = () => {
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
+  //handle multi selected checkbox
+  const handleCheckBox = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+      if (e.target.checked) {
+        ids.push(id);
+      }
+      if (!e.target.checked) {
+        const findNum = (num: string) => num === id;
+        const idsIndex = ids.findIndex(findNum);
+        ids.splice(idsIndex, 1);
+      }
+      const result = ids.toString();
+      setCheckStateIds(result);
+    },
+    []
+  );
+
   useEffect(() => {
     getListLearner();
     window.scrollTo(0, 0);
     // eslint-disable-next-line
-  }, [page]);
+  }, [page,successMulti]);
 
   if (loading) {
     return <LoadingProgress />;
@@ -92,6 +114,8 @@ const RegisterFormTable = () => {
                 searchingStudent={searchingStudentRegister}
                 setFilterGender={setFilterGender}
                 filterGender={filterGender}
+                checkStateIds={checkStateIds}
+                getApproveMulti={getApproveMulti}
               />
 
               {/*//! while searching show the search content */}
@@ -113,6 +137,7 @@ const RegisterFormTable = () => {
                         directNav="register-form"
                         gender={RegisterUser.gender}
                         checked={RegisterUser.checked}
+                        handleCheckBox={handleCheckBox}
                       />
                     );
                   })}
@@ -121,7 +146,7 @@ const RegisterFormTable = () => {
               {/* show content if searching in the box */}
               {searchingStudentRegister && (
                 <TableBody>
-                  <TableBodySearch
+                  <TableBodyAll
                     roles={roles}
                     id={searchingStudentRegister?.id}
                     birthDate={searchingStudentRegister?.birthDate}
@@ -136,6 +161,7 @@ const RegisterFormTable = () => {
                     directNav="register-form"
                     gender={searchingStudentRegister?.gender}
                     checked={searchingStudentRegister?.checked}
+                    handleCheckBox={handleCheckBox}
                   />
                 </TableBody>
               )}
@@ -144,7 +170,7 @@ const RegisterFormTable = () => {
                 <TableBody>
                   {filterGender?.map((item) => {
                     return (
-                      <TableBodySearch
+                      <TableBodyAll
                         roles={roles}
                         key={item.id}
                         id={item.id}
@@ -158,6 +184,7 @@ const RegisterFormTable = () => {
                         directNav="register-form"
                         gender={item.gender}
                         checked={item.checked}
+                        handleCheckBox={handleCheckBox}
                       />
                     );
                   })}

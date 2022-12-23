@@ -19,17 +19,25 @@ interface HeaderProp {
   searchingStudent: any;
   setFilterGender: any;
   filterGender: any;
+  checkStateIds?: string;
+  getApproveMulti?: (
+    id: string | undefined,
+    approveLink: string
+  ) => Promise<void>;
 }
 
 const regSearch = "/reg/search";
 const afterSearch = "/exam/after/week/search";
 const beforeSearch = "/exam/before/week/search";
+const regSearchMulti = "/reg/form/multiple/approve/";
 
 const TableHeader = ({
   students,
   searchingStudent,
   setFilterGender,
   filterGender,
+  checkStateIds,
+  getApproveMulti,
 }: HeaderProp) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -63,6 +71,7 @@ const TableHeader = ({
   return (
     <TableHead>
       <StyledTableRow>
+        {pathname.endsWith("register-form") && <StyledTableCell />}
         <StyledTableCell align="left">
           <IconButton color="default" onClick={handleClick}>
             <MoreVertIcon />
@@ -104,6 +113,18 @@ const TableHeader = ({
                   />
                 </ListItemButton>
               </ListItem>
+              {/* multiple select just for register-form page*/}
+              {pathname.endsWith("register-form") && getApproveMulti && (
+                <ListItem disablePadding>
+                  <ListItemButton
+                    onClick={() =>
+                      getApproveMulti(checkStateIds, regSearchMulti)
+                    }
+                  >
+                    تایید گروهی
+                  </ListItemButton>
+                </ListItem>
+              )}
             </List>
           </Popover>
         </StyledTableCell>
