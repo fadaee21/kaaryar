@@ -8,6 +8,7 @@ const useApproveMulti = () => {
     id: string | undefined,
     approveLink: string
   ) => {
+    setSuccessMulti(false);
     try {
       const response = await editAxios(`${approveLink}/${id}`);
       console.log(response.data.state, id);
