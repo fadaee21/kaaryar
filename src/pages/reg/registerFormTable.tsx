@@ -14,7 +14,6 @@ import LoadingProgress from "../../components/LoadingProgress";
 import { SearchRegister } from "../../components/Searching";
 // import SearchingGender from "../../components/SearchingGender";
 import TableBodyAll from "../../components/table/TableBodyAll";
-import TableBodySearch from "../../components/table/TableBodySearch";
 import TableHeader from "../../components/table/TableHeader";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
@@ -25,8 +24,8 @@ import { counterPagination } from "../../utils/counterPagination";
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [checkStateIds, setCheckStateIds] = useState("");
-  const [ids] = useState<string[]>([]);
+  // const [checkStateIds, setCheckStateIds] = useState<string>("");
+  const [ids, setIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [searchingStudentRegister, setSearchingStudentRegister] =
     useState<RegistrationForm | null>(null);
@@ -43,12 +42,15 @@ const RegisterFormTable = () => {
       let response = await getData(allStudentReg);
       setStudents(response.data);
       setLoading(false);
+      //empty checkBox state if you have
+      setIds([]);
     } catch (error) {
       //TODO:handle Error
       console.log("catch block of error");
       console.log(error);
       setLoading(false);
       navigate("/");
+      setIds([]);
     }
   };
   // eslint-disable-next-line
@@ -59,15 +61,13 @@ const RegisterFormTable = () => {
   const handleCheckBox = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
       if (e.target.checked) {
-        ids.push(id);
+        setIds((old) => [...old, id]);
       }
       if (!e.target.checked) {
-        const findNum = (num: string) => num === id;
-        const idsIndex = ids.findIndex(findNum);
-        ids.splice(idsIndex, 1);
+        setIds((current) => {
+          return current.filter((item) => item !== id);
+        });
       }
-      const result = ids.toString();
-      setCheckStateIds(result);
     },
     []
   );
@@ -76,12 +76,11 @@ const RegisterFormTable = () => {
     getListLearner();
     window.scrollTo(0, 0);
     // eslint-disable-next-line
-  }, [page,successMulti]);
+  }, [page, successMulti]);
 
   if (loading) {
     return <LoadingProgress />;
   }
-  console.log(searchingStudentRegister);
 
   return (
     <Box sx={{ m: 2 }}>
@@ -114,7 +113,7 @@ const RegisterFormTable = () => {
                 searchingStudent={searchingStudentRegister}
                 setFilterGender={setFilterGender}
                 filterGender={filterGender}
-                checkStateIds={checkStateIds}
+                checkStateIds={ids.toString()}
                 getApproveMulti={getApproveMulti}
               />
 

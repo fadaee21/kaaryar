@@ -1,13 +1,18 @@
 import {
+  Divider,
   IconButton,
   List,
   ListItem,
   ListItemButton,
+  ListItemIcon,
   Popover,
   TableHead,
 } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import WcIcon from "@mui/icons-material/Wc";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import React from "react";
 import { AfterWeekType, BeforeWeekType, RegistrationForm } from "../../model";
 import { ExcelExport } from "../ExcelExport";
@@ -71,6 +76,7 @@ const TableHeader = ({
   return (
     <TableHead>
       <StyledTableRow>
+        {/* temporary... later  i should remove line 75 and create conditional between checked icon and select */}
         {pathname.endsWith("register-form") && <StyledTableCell />}
         <StyledTableCell align="left">
           <IconButton color="default" onClick={handleClick}>
@@ -82,31 +88,34 @@ const TableHeader = ({
             anchorEl={anchorEl}
             onClose={handleClose}
             anchorOrigin={{
-              vertical: "bottom",
+              vertical: "top",
               horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
             }}
           >
             <List>
               <ListItem disablePadding>
-                <ListItemButton onClick={handleClose}>
-                  <ExcelExport
-                    fileName={"Applicant Info"}
-                    apiData={
-                      (searchingStudent === null ||
-                        searchingStudent === undefined) &&
-                      filterGender === null
-                        ? students
-                        : (searchingStudent === null ||
-                            searchingStudent === undefined) &&
-                          filterGender
-                        ? filterGender
-                        : [searchingStudent]
-                    }
-                  />
-                </ListItemButton>
+                <ExcelExport
+                  fileName={"Applicant Info"}
+                  apiData={
+                    !searchingStudent && !filterGender
+                      ? students
+                      : !searchingStudent && filterGender
+                      ? filterGender
+                      : [searchingStudent]
+                  }
+                  handleClose={handleClose}
+                />
               </ListItem>
+              <Divider />
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={handleClose}>
+                  <ListItemIcon>
+                    <WcIcon />
+                  </ListItemIcon>
                   <SearchingGender
                     setFilterGender={setFilterGender}
                     apiSearch={apiSearch}
@@ -115,15 +124,23 @@ const TableHeader = ({
               </ListItem>
               {/* multiple select just for register-form page*/}
               {pathname.endsWith("register-form") && getApproveMulti && (
-                <ListItem disablePadding>
-                  <ListItemButton
-                    onClick={() =>
-                      getApproveMulti(checkStateIds, regSearchMulti)
-                    }
-                  >
-                    تایید گروهی
-                  </ListItemButton>
-                </ListItem>
+                <>
+                  <Divider />
+                  <ListItem disablePadding>
+                    <ListItemButton
+                      onClick={() => {
+                        getApproveMulti(checkStateIds, regSearchMulti);
+                        handleClose();
+                      }}
+                      disabled={checkStateIds === ""}
+                    >
+                      <ListItemIcon>
+                        <GroupAddIcon />
+                      </ListItemIcon>
+                      تایید گروهی
+                    </ListItemButton>
+                  </ListItem>
+                </>
               )}
             </List>
           </Popover>

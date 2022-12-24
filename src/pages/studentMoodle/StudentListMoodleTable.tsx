@@ -42,7 +42,7 @@ const StudentListMoodleTable = () => {
       navigate("/");
     }
   };
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [roles] = storedValue.roles;
 
@@ -68,7 +68,11 @@ const StudentListMoodleTable = () => {
             <Typography variant="h3"> لیست مهارت جوها</Typography>
           </Box>
           {/* //! export excel */}
-          <ExcelExport fileName={"excel export"} apiData={students} />
+          <ExcelExport
+            fileName={"excel export"}
+            apiData={students}
+            handleClose={console.log("first")}
+          />
           {/* //! export excel */}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
