@@ -2,7 +2,7 @@ import { Dashboard } from "./pages/Dashboard";
 import StudentPage from "./pages/studentMoodle/StudentPage";
 import StudentListMoodleTable from "./pages/studentMoodle/StudentListMoodleTable";
 import Comments from "./pages/Comments";
-import AddComment from "./pages/AddComment";
+import AddComment from "./pages/comment/AddComment";
 import BeforeWeekTable from "./pages/beforeWeek/BeforeWeekTable";
 import BeforeWeekDetail from "./pages/beforeWeek/BeforeWeekDetail";
 import BeforeWeekDetailEdit from "./pages/beforeWeek/BeforeWeekEdit";
@@ -180,11 +180,11 @@ const ListRoutes = [
     key: "teacher4",
   },
   {
-    path: "teacher/add-comment",
+    path: "teacher/student/:id/add-comment",
     name: "افزودن نظر جدید",
     icon: <AddCommentIcon />,
     component: AddComment,
-    showInNav: true,
+    showInNav: false,
     role: "teacher",
     key: "teacher5",
   },

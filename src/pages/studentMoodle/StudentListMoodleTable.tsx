@@ -106,7 +106,12 @@ const StudentListMoodleTable = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "25%", verticalAlign: "top" }}
+                        sx={{
+                          width: "25%",
+                          verticalAlign: "top",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => navigate(`/${roles}/student/${id}`)}
                       >
                         <Typography variant="body1">
                           {firstName + " " + lastName}
@@ -139,7 +144,7 @@ const StudentListMoodleTable = () => {
                         sx={{ width: "30%", verticalAlign: "top" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
-                          <ButtonGroup
+                          {/* <ButtonGroup
                             variant="contained"
                             color="secondary"
                             size="small"
@@ -153,7 +158,7 @@ const StudentListMoodleTable = () => {
                               جزییات
                             </Button>
                             <Button>ویرایش</Button>
-                          </ButtonGroup>
+                          </ButtonGroup> */}
                         </ListItem>
                       </StyledTableCell>
                     </StyledTableRow>

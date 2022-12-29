@@ -1,4 +1,4 @@
-import { Avatar, Button, Container, Grid } from "@mui/material";
+import { Avatar, Button, ButtonGroup, Container, Grid } from "@mui/material";
 import React from "react";
 import useGetImage from "../hooks/request/useGetImage";
 import { MoodleUser } from "../model";
@@ -15,6 +15,7 @@ interface Student {
 const StudentDetail = ({ student }: Student) => {
   const { pic, getPicture } = useGetImage();
   const navigate = useNavigate();
+
   React.useEffect(() => {
     if (student!.picture !== null) {
       getPicture(student!.picture?.address);
@@ -31,15 +32,27 @@ const StudentDetail = ({ student }: Student) => {
           marginRight: 5,
         }}
       >
-        <Button
+        <ButtonGroup
           variant="contained"
-          endIcon={<ArrowBackIcon />}
           color="secondary"
           size="small"
-          onClick={() => navigate(-1)}
+          aria-label="small button group"
         >
-          بازگشت
-        </Button>
+          <Button
+            onClick={() =>
+              navigate("add-comment", {
+                state: {
+                  student: student,
+                },
+              })
+            }
+          >
+            ثبت نظر
+          </Button>
+          <Button endIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>
+            بازگشت
+          </Button>
+        </ButtonGroup>
       </Box>
       <Container maxWidth="lg">
         <Grid container>

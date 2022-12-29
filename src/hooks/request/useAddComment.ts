@@ -19,23 +19,19 @@ export const useAddComment = (
     const roles = storedValue.roles
 
     const allCourseLink = `/${roles}/course/all?pageNum=0&pageSize=100`;
-    const allStudentLink = `/${roles}/user/all?pageNum=0&pageSize=400`;
     const postCommentLink = `/${roles}/survey/new`;
 
   const getAllCourse = async () => {
     try {
       const response = await getData(allCourseLink);
       setAllCourse(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
       navigate("/");
     }
   };
-  const getAllStudent = async () => {
-    const response = await getData(allStudentLink);
-    setAllStudent(response.data);
-  };
+
 
   const postComment = async () => {
     try {
@@ -69,7 +65,7 @@ export const useAddComment = (
     allCourse,
     getAllCourse,
     allStudent,
-    getAllStudent,
+
     postComment,
     errMsg,
   };
