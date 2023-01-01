@@ -15,9 +15,9 @@ import { SearchRegister } from "../../components/Searching";
 // import SearchingGender from "../../components/SearchingGender";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
+import { useAuth } from "../../context/AuthProvider";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import { RegistrationForm } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
 
@@ -53,9 +53,9 @@ const RegisterFormTable = () => {
       setIds([]);
     }
   };
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
+  
+  const {auth} = useAuth()
+  const roles = auth.roles.toString();
 
   //handle multi selected checkbox
   const handleCheckBox = useCallback(

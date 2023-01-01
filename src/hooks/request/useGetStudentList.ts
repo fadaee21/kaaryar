@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
-import useLocalStorage from "../useLocalStorage";
+import { useAuth } from "../../context/AuthProvider";
 
 export const useGetStudentList = (paginationState: number) => {
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const roles = storedValue.roles
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   const allStudentsLink = `/${roles}/user/all?pageNum=${paginationState}&pageSize=20`;
 

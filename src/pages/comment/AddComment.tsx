@@ -12,9 +12,14 @@ import { Navigate, useLocation } from "react-router-dom";
 import Commenting from "../../components/comment/Commenting";
 import { useAddComment } from "../../hooks/request/useAddComment";
 import dayjs, { Dayjs } from "dayjs";
-import { Course, StudentUser } from "../../model";
+import { Course, StudentId } from "../../model";
 import { FormBox, SelectBox } from "../../styles/addComment/formBox";
 import DatePicker from "./DatePicker";
+
+// interface LocationType {
+//   state: MoodleUser;
+//   pathname: string;
+// }
 
 const allParticipation = [
   {
@@ -55,32 +60,29 @@ const allHomework = [
 ];
 
 const AddComment = () => {
-  const [courseName, setCourseName] = useState<Course | null>(null);
-  const [participation, setParticipation] = useState("");
-  const [presence, setPresence] = useState("");
-  const [homework, setHomework] = useState("");
-  const [significantProblem, setSignificantProblem] = useState("");
-  const [dateSession, setDateSession] = useState<Dayjs | null>(dayjs());
+  const [course, setCourse] = useState<Course | null>(null);
+  const [studentContribute, setStudentContribute] = useState("");
+  const [studentPresent, setStudentPresent] = useState("");
+  const [studentTask, setStudentTask] = useState("");
+  const [sessionProblem, setSessionProblem] = useState("");
+  const [sessionDate, setSessionDate] = useState<Dayjs | null>(dayjs());
   const [comment, setComment] = useState("");
-  const [studentName, setStudentName] = useState<StudentUser | null>(null);
+  const [studentId, setStudentId] = useState<StudentId | null>(null);
 
-  const {
-    setErrMsg,
-    allCourse,
-    getAllCourse,
-
-    postComment,
-    errMsg,
-  } = useAddComment(courseName, studentName, comment);
+  const { setErrMsg, allCourse, postComment, errMsg } = useAddComment(
+    course,
+    studentId,
+    comment,
+    sessionDate!.toISOString(),
+    studentContribute,
+    studentTask,
+    sessionProblem,
+    studentPresent
+  );
 
   useEffect(() => {
     setErrMsg("");
-  }, [comment, courseName, setErrMsg, studentName]);
-
-  useEffect(() => {
-    getAllCourse();
-    // eslint-disable-next-line
-  }, []);
+  }, [comment, course, setErrMsg, studentId]);
 
   const defaultProps1 = {
     options: allCourse,
@@ -89,19 +91,14 @@ const AddComment = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // postComment();
-    console.log(
-      dateSession?.toISOString(),
-      courseName?.courseName,
-      participation,
-      presence,
-      homework,
-      significantProblem,
-      comment
-    );
+    postComment();
   };
 
-  const { state, pathname } = useLocation();
+  const { state, pathname }: any = useLocation();
+
+  useEffect(() => {
+    state && setStudentId({ id: state.student.id });
+  }, [state]);
 
   if (!state) {
     //if add url in address bar(not push the button) so you don't have state
@@ -114,7 +111,11 @@ const AddComment = () => {
     <Container>
       <FormBox component="form" onSubmit={handleSubmit}>
         <SelectBox>
-          <Typography variant="h4" gutterBottom>
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{ width: "100% !important" }}
+          >
             ثبت گزارش برای {student.firstName} {student.lastName}
           </Typography>
         </SelectBox>
@@ -129,7 +130,7 @@ const AddComment = () => {
             options={allCourse}
             renderInput={(params) => <TextField {...params} />}
             onChange={(event: any, newValue: Course | null) => {
-              setCourseName(newValue);
+              setCourse(newValue);
             }}
           />
         </SelectBox>
@@ -138,38 +139,38 @@ const AddComment = () => {
             تاریخ جلسه
           </Typography>
           <DatePicker
-            setDateSession={setDateSession}
-            dateSession={dateSession}
+            setSessionDate={setSessionDate}
+            sessionDate={sessionDate}
           />
         </SelectBox>
         <Commenting
           allChoice={allPresence}
           description="آیا مهارت آموز در جلسه حاضر بود؟"
-          handleChange={setPresence}
-          id="presence"
-          value={presence}
+          handleChange={setStudentPresent}
+          id="studentPresent"
+          value={studentPresent}
         />
         <Commenting
           allChoice={allParticipation}
           description="میزان مشارکت مهارت‌آموز در جلسه را چطور ارزیابی می‌کنید؟"
-          handleChange={setParticipation}
-          id="participation"
-          value={participation}
+          handleChange={setStudentContribute}
+          id="studentContribute"
+          value={studentContribute}
         />
         <Commenting
           allChoice={allHomework}
           description="در صورتی که تکلیف (یا هر اقدام پیشنهادی) 
             برای مهارت‌آموز در نظر گرفته شده بود، لطفا یکی از گزینه‌های زیر را انتخاب کنید."
-          handleChange={setHomework}
-          id="homework"
-          value={homework}
+          handleChange={setStudentTask}
+          id="studentTask"
+          value={studentTask}
         />
         <Commenting
           allChoice={allSignificantProblem}
           description="آیا مشکل قابل توجهی در جلسه وجود داشت؟"
-          handleChange={setSignificantProblem}
-          id="significantProblem"
-          value={significantProblem}
+          handleChange={setSessionProblem}
+          id="sessionProblem"
+          value={sessionProblem}
         />
 
         <SelectBox>
@@ -194,7 +195,16 @@ const AddComment = () => {
           <Button
             variant="contained"
             type="submit"
-            // disabled={!comment || !studentName || !courseName ? true : false}
+            disabled={
+              !course ||
+              !studentContribute ||
+              !studentPresent ||
+              !studentTask ||
+              !sessionProblem ||
+              !sessionDate ||
+              !comment ||
+              !studentId
+            }
           >
             ارسال
           </Button>

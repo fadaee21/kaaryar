@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
-import useLocalStorage from "../useLocalStorage";
+import { useAuth } from "../../context/AuthProvider";
 
 export const useGetComments = (page: number) => {
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
+  const {auth}=useAuth()
+  const roles = auth.roles.toString();
   const allCommentLink = `${roles}/survey/all?pageNum=${page - 1}&pageSize=10`;
   const countComment = `/${roles}/survey/count`;
   const [comments, setComments] = useState([]);

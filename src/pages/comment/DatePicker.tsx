@@ -3,12 +3,12 @@ import AdapterJalali from "@date-io/jalaali";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 
-export default function JalaliDatePicker({ dateSession, setDateSession }: any) {
+export default function JalaliDatePicker({ sessionDate, setDateSession }: any) {
   return (
     <LocalizationProvider dateAdapter={AdapterJalali}>
       <DatePicker
         mask="____/__/__"
-        value={dateSession}
+        value={sessionDate}
         onChange={(newValue) => setDateSession(newValue)}
         renderInput={(params) => <TextField {...params} />}
       />

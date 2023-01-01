@@ -9,7 +9,7 @@ import { Button, CardActions } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useGetImage from "../hooks/request/useGetImage";
 import { stringAvatar } from "../utils/avatarColor";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { useAuth } from "../context/AuthProvider";
 
 export default function StudentCard({
   moodleUser,
@@ -19,11 +19,10 @@ export default function StudentCard({
   const { email, firstName, lastName, username, id, picture } = moodleUser;
   const navigate = useNavigate();
   const { pic, getPicture } = useGetImage();
-  const [storedValue, setValue] = useLocalStorage("user", undefined);
-  const roles = storedValue.roles;
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   React.useEffect(() => {
-    console.log(pic);
     if (picture !== null) {
       getPicture(picture?.address);
     }

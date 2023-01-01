@@ -16,23 +16,18 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
-import useLocalStorage from "../hooks/useLocalStorage";
+
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { AppBar, DrawerHeader, drawerWidth, Main } from "../styles/sideBar";
-
-
-
-
+import { useAuth } from "../context/AuthProvider";
 
 export default function Sidebar({ listRoutes }: any) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [activeKey, setActiveKey] = React.useState(0);
   const navigate = useNavigate();
-  // const { auth } = useAuth();
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  // console.log(auth?.roles.toString())
+  const { auth } = useAuth();
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -92,8 +87,7 @@ export default function Sidebar({ listRoutes }: any) {
           {listRoutes
             .filter(
               (route: any) =>
-                route.showInNav === true &&
-                route.role === storedValue.roles.toString()
+                route.showInNav === true && route.role === auth.roles.toString()
             )
             .map((route: any) => {
               return (
@@ -118,7 +112,7 @@ export default function Sidebar({ listRoutes }: any) {
                         }}
                       >
                         <ListItemIcon>{route.icon}</ListItemIcon>
-                        <ListItemText primary={route.name}  />
+                        <ListItemText primary={route.name} />
                       </Box>
                     ) : (
                       <Box
@@ -129,7 +123,6 @@ export default function Sidebar({ listRoutes }: any) {
                           alignItems: "center",
                           justifyContent: "space-between",
                           width: "100%",
-                          
                         }}
                       >
                         <ListItemIcon>{route.icon}</ListItemIcon>

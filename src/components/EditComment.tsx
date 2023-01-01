@@ -11,7 +11,8 @@ import { editAxios } from "../api/axios";
 import { editCommentProp } from "../model";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions/transition";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { useAuth } from "../context/AuthProvider";
+
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -33,9 +34,10 @@ export const EditComment: React.FC<editCommentProp> = ({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const roles = storedValue.roles;
+
+  const {auth} = useAuth()
+  const roles = auth.roles[0];
+  
   const editCommentFunc = async () => {
     setLoading(true);
     setErrorMsg(null);

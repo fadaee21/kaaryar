@@ -17,7 +17,7 @@ import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import TablePic from "../../components/TablePic";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import { useAuth } from "../../context/AuthProvider";
 import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
@@ -42,9 +42,9 @@ const StudentListMoodleTable = () => {
       navigate("/");
     }
   };
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
+
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   useEffect(() => {
     getListLearner();
