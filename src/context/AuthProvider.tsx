@@ -10,7 +10,6 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { AuthType } from "../model";
 
 function useProviderAuthValue() {
-  console.count("context run")
   const [storedValue, setValue] = useLocalStorage("user", null);
   const [auth, setAuth] = useState<AuthType>(storedValue);
   useEffect(() => {

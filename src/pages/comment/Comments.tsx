@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import LoadingProgress from "../components/LoadingProgress";
+import LoadingProgress from "../../components/LoadingProgress";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
-import { Comment } from "../model";
-import { StyledTableCell, StyledTableRow } from "../styles/table";
+import { Comment } from "../../model";
+import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { Container } from "@mui/system";
 import {
   Alert,
@@ -24,20 +24,30 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useDeleteComment } from "../hooks/request/useDeleteComment";
-import { useGetComments } from "../hooks/request/useGetComments";
-import { dateConverter } from "../utils/dateConverter";
-import { EditComment } from "../components/EditComment";
-import { counterPagination } from "../utils/counterPagination";
+import { useDeleteComment } from "../../hooks/request/useDeleteComment";
+import { useGetComments } from "../../hooks/request/useGetComments";
+import { dateConverter } from "../../utils/dateConverter";
+import { EditComment } from "../../components/EditComment";
+import { counterPagination } from "../../utils/counterPagination";
+import { useLocation } from "react-router-dom";
+
+interface StateAuthWatch {
+  roleType: string;
+  roleAuth: string;
+}
 
 const Comments = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = React.useState(false);
-
+  // equality AuthRole With RoleWatch
+  const [authWatch, setAuthWatch] = useState(false);
   const [openEditState, setOpenEditState] = React.useState<boolean>(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [refreshByEdit, setRefreshByEdit] = useState(0);
   const [shareComment, setShareComment] = useState("");
+  const location = useLocation();
+  const { roleType, roleAuth } = location.state as StateAuthWatch;
+
   const handleClickOpenEdit = (id: number, comment: string) => {
     setOpenEditState(true);
     setEditId(id);
@@ -74,14 +84,21 @@ const Comments = () => {
     // eslint-disable-next-line
   }, [page, refresh, refreshByEdit]);
 
-  console.log(refreshByEdit);
-
   useEffect(() => {
     setTimeout(() => {
       setErrRemoveMsg("");
       setSuccessRemoveMsg("");
     }, 3000);
   }, [errRemoveMsg, setErrRemoveMsg, successRemoveMsg, setSuccessRemoveMsg]);
+  //check if "Auth" and "roleType comment watch" is same or not
+  //to disable edit and delete button
+  useEffect(() => {
+    if (roleAuth === roleType) {
+      setAuthWatch(false);
+    } else {
+      setAuthWatch(true);
+    }
+  }, [roleAuth, roleType]);
 
   if (loading) {
     return <LoadingProgress />;
@@ -161,11 +178,21 @@ const Comments = () => {
                         <ListItem sx={{ pt: 0 }}>
                           <IconButton
                             onClick={() => handleClickOpenEdit(id, comment)}
+                            disabled={authWatch}
                           >
-                            <EditIcon color="primary" fontSize="small" />
+                            <EditIcon
+                              color={authWatch ? "disabled" : "primary"}
+                              fontSize="small"
+                            />
                           </IconButton>
-                          <IconButton onClick={() => handleClickOpen(id)}>
-                            <DeleteIcon color="error" fontSize="small" />
+                          <IconButton
+                            onClick={() => handleClickOpen(id)}
+                            disabled={authWatch}
+                          >
+                            <DeleteIcon
+                              color={authWatch ? "disabled" : "error"}
+                              fontSize="small"
+                            />
                           </IconButton>
                         </ListItem>
                       </StyledTableCell>
@@ -223,7 +250,7 @@ const Comments = () => {
           my: 4,
         }}
         size="large"
-        count={counterPagination(commentCounter,10)}
+        count={counterPagination(commentCounter, 10)}
         variant="outlined"
         shape="rounded"
         page={page}

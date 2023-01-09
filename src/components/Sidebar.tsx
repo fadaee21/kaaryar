@@ -26,8 +26,8 @@ export default function Sidebar({ listRoutes }: any) {
   const [open, setOpen] = React.useState(false);
   const [activeKey, setActiveKey] = React.useState(0);
   const navigate = useNavigate();
-  const { auth } = useAuth();
-  
+  const { auth, setAuth } = useAuth();
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -38,6 +38,7 @@ export default function Sidebar({ listRoutes }: any) {
 
   const handleExit = () => {
     localStorage.removeItem("user");
+    setAuth({ token: "", roles: [], username: "" });
     navigate("/");
   };
 

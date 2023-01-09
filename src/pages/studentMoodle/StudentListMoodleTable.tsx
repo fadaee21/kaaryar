@@ -55,7 +55,6 @@ const StudentListMoodleTable = () => {
   if (loading) {
     return <LoadingProgress />;
   }
-  console.log(students);
 
   return (
     <Box sx={{ m: 2 }}>
@@ -71,7 +70,7 @@ const StudentListMoodleTable = () => {
           <ExcelExport
             fileName={"excel export"}
             apiData={students}
-            handleClose={console.log("first")}
+            handleClose={console.log("excel handle close")}
           />
           {/* //! export excel */}
           <TableContainer component={Paper}>
