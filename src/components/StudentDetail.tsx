@@ -7,6 +7,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 interface Student {
   student: MoodleUser | null;
@@ -21,7 +22,8 @@ const StudentDetail = ({ student }: Student) => {
       getPicture(student!.picture?.address);
     }
   }, []);
-
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
   return (
     <>
       <Box
@@ -39,6 +41,8 @@ const StudentDetail = ({ student }: Student) => {
           aria-label="small button group"
         >
           <Button
+          //admin doesn't allow to add comment
+            sx={{ display: `${roles === "admin" ? "none" : "block"}` }}
             onClick={() =>
               navigate("add-comment", {
                 state: {
