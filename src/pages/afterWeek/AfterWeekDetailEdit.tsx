@@ -57,7 +57,7 @@ const AfterWeekDetailEdit = () => {
     const { name, value } = e.target;
     setStudent((prev: any) => ({ ...prev, [name]: value }));
   };
-  
+  //some properties of beforeWeek must be change in afterWeek
   const handleChangeBefore = (e: any) => {
     const { name, value } = e.target;
     setStudent((prev: any) => ({

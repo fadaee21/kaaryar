@@ -53,8 +53,8 @@ const RegisterFormTable = () => {
       setIds([]);
     }
   };
-  
-  const {auth} = useAuth()
+
+  const { auth } = useAuth();
   const roles = auth.roles.toString();
 
   //handle multi selected checkbox
@@ -90,7 +90,7 @@ const RegisterFormTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
           >
-            <Typography variant="h3"> لیست فرم های پذیرش</Typography>
+            <Typography variant="h3"> لیست فرم های ثبت نام</Typography>
           </Box>
           {/* //!component for searching student */}
 

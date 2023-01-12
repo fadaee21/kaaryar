@@ -22,6 +22,7 @@ import AdmissionFormDetail from "./pages/afterWeek/AfterWeekDetail";
 import AdmissionFormDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import justTest from "./pages/justTest";
 import AllComments from "./pages/comment/AllComments";
+import UserProfile from "./pages/profile/UserProfile";
 
 const ListRoutes = [
   // ta________________________________
@@ -77,6 +78,14 @@ const ListRoutes = [
     showInNav: false,
     role: "ta",
     key: "ta6",
+  },
+  {
+    path: "teacher/profile",
+    name: " ",
+    component: UserProfile,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher7",
   },
 
   //!at the moment mentor is ignored
@@ -178,6 +187,14 @@ const ListRoutes = [
     showInNav: false,
     role: "teacher",
     key: "teacher6",
+  },
+  {
+    path: "ta/profile",
+    name: " ",
+    component: UserProfile,
+    showInNav: false,
+    role: "ta",
+    key: "ta7",
   },
 
   // {
@@ -387,12 +404,20 @@ const ListRoutes = [
     key: "admin14",
   },
   {
+    path: "admin/profile",
+    name: " ",
+    component: UserProfile,
+    showInNav: false,
+    role: "admin",
+    key: "admin15",
+  },
+  {
     path: "test",
     name: " ",
     icon: <AddCommentIcon />,
     component: justTest,
     showInNav: false,
-    role: "teacher",
+    role: "admin",
     key: "test11111111111",
   },
 ];

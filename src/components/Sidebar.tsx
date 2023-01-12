@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,17 +16,22 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
-
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { AppBar, DrawerHeader, drawerWidth, Main } from "../styles/sideBar";
 import { useAuth } from "../context/AuthProvider";
-
+import { Menu, MenuItem, Typography } from "@mui/material";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 export default function Sidebar({ listRoutes }: any) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [activeKey, setActiveKey] = React.useState(0);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
+
+  const roleUser = auth.roles.toString();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -37,9 +42,22 @@ export default function Sidebar({ listRoutes }: any) {
   };
 
   const handleExit = () => {
+    handleClose()
     localStorage.removeItem("user");
     setAuth({ token: "", roles: [], username: "" });
     navigate("/");
+  };
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleNavigateProfilePage = () => {
+    handleClose()
+    navigate(`${roleUser}/profile`);
   };
 
   return (
@@ -56,9 +74,56 @@ export default function Sidebar({ listRoutes }: any) {
           >
             <MenuIcon />
           </IconButton>
-          {/* <Typography variant="h6" noWrap component="div">
-            Persistent drawer
-          </Typography> */}
+          <Box sx={{ marginLeft: "auto" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                {anchorEl ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+              <Typography sx={{ mr: 1 }}>{auth.username}</Typography>
+              <AccountCircle />
+            </Box>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleNavigateProfilePage}>
+                <ListItemIcon sx={{ marginRight: 1 }}>
+                  {<AccountCircle />}
+                </ListItemIcon>
+                <ListItemText>پروفایل کاربری</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleExit}>
+                <ListItemIcon sx={{ rotate: "180deg", mr: 1 }}>
+                  {<LogoutIcon />}
+                </ListItemIcon>
+                <ListItemText>خروج</ListItemText>
+              </MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -88,7 +153,7 @@ export default function Sidebar({ listRoutes }: any) {
           {listRoutes
             .filter(
               (route: any) =>
-                route.showInNav === true && route.role === auth.roles.toString()
+                route.showInNav === true && route.role === roleUser
             )
             .map((route: any) => {
               return (
@@ -134,12 +199,6 @@ export default function Sidebar({ listRoutes }: any) {
                 </ListItem>
               );
             })}
-          <ListItem>
-            <ListItemButton onClick={handleExit}>
-              <ListItemIcon>{<ExitToAppIcon />}</ListItemIcon>
-              <ListItemText>خروج</ListItemText>
-            </ListItemButton>
-          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>
