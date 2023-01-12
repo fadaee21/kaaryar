@@ -1,8 +1,8 @@
-export type RoleType = ADMIN | TEACHER | TA | MENTOR;
+export type RoleType = "admin" | "teacher" | "ta" | "mentor";
 
 export interface AuthType {
   username: string;
-  password: string;
+  password?: string;
   roles: RoleType[];
   token: string;
   id?: number;
@@ -35,6 +35,9 @@ export interface StudentUser {
   firstName: string;
   lastName: string;
   roles: RolesStudent[];
+}
+export interface StudentId {
+  id: number;
 }
 
 export interface StudentProp {

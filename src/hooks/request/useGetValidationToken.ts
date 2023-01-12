@@ -9,12 +9,14 @@ const useGetValidationToken = () => {
   const getValid = async () => {
     setLoadingVal(false);
     try {
-      let response = await getData("/moodle/user/20");
-      if (response.data) {
+      //todo: need special link for this
+      let response = await getData("/teacher/test");
+      if (response.status === 200) {
         setTokenValidation(true);
       }
       setLoadingVal(true);
     } catch (error) {
+      console.log(error)
       setTokenValidation(false);
       setLoadingVal(true);
     }

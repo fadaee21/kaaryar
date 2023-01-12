@@ -11,8 +11,8 @@ import {
 import { Box } from "@mui/system";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 import { useApprove } from "../../hooks/request/useApprove";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import { BeforeWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
@@ -31,11 +31,10 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   id,
   typeComp,
 }) => {
-  const {  successObject, getApprove } = useApprove();
+  const { successObject, getApprove } = useApprove();
   const navigate = useNavigate();
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   return (
     <>

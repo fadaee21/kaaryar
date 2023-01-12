@@ -1,52 +1,61 @@
 import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData, postData } from "../../api/axios";
-import { Course, StudentUser } from "../../model";
-import useLocalStorage from "../useLocalStorage";
-
+import { useAuth } from "../../context/AuthProvider";
+import { Course, StudentId } from "../../model";
 
 export const useAddComment = (
-  courseName: Course | null,
-  studentName: StudentUser | null,
-  comment: string
-  ) => {
-    const [allCourse, setAllCourse] = useState([]);
-    const [allStudent, setAllStudent] = useState([]);
-    const [errMsg, setErrMsg] = useState("");
-    const navigate = useNavigate();
-    const [storedValue, setValue] = useLocalStorage("user", null);
-    const roles = storedValue.roles
+  course: Course | null,
+  studentId: StudentId | null,
+  comment: string,
+  sessionDate: string,
+  sessionProblem: string,
+  studentTask: string,
+  studentContribute: string,
+  //it should be string or boolean?? ask alireza
+  studentPresent: boolean | string
+) => {
+  const [errMsg, setErrMsg] = useState("");
+  const navigate = useNavigate();
+  const {auth} = useAuth()
+  const roles = auth.roles.toString();
+  const [allCourse, setAllCourse] = useState([]);
 
-    const allCourseLink = `/${roles}/course/all?pageNum=0&pageSize=100`;
-    const allStudentLink = `/${roles}/user/all?pageNum=0&pageSize=400`;
-    const postCommentLink = `/${roles}/survey/new`;
+  const postCommentLink = `/${roles}/survey/new`;
+  const allCourseLink = `/${roles}/course/all?pageNum=0&pageSize=100`;
 
   const getAllCourse = async () => {
     try {
       const response = await getData(allCourseLink);
       setAllCourse(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
       navigate("/");
     }
   };
-  const getAllStudent = async () => {
-    const response = await getData(allStudentLink);
-    setAllStudent(response.data);
-  };
+
+  useEffect(() => {
+    getAllCourse();
+    // eslint-disable-next-line
+  }, []);
 
   const postComment = async () => {
     try {
       const response = await postData(postCommentLink, {
         data: {
+          studentUser: studentId,
+          course: course,
           comment: comment,
-          studentUser: studentName,
-          course: courseName,
+          sessionDate: sessionDate,
+          studentContribute: studentContribute,
+          studentTask: studentTask,
+          sessionProblem: sessionProblem,
+          studentPresent: studentPresent,
         },
       });
-
+      console.log(response.data.state);
       if (response.data.state === "exist") {
         setErrMsg("این نظر قبلا ثبت شده است");
       }
@@ -67,9 +76,6 @@ export const useAddComment = (
   return {
     setErrMsg,
     allCourse,
-    getAllCourse,
-    allStudent,
-    getAllStudent,
     postComment,
     errMsg,
   };

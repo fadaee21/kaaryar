@@ -14,8 +14,8 @@ import LoadingProgress from "../../components/LoadingProgress";
 import { SearchAfter } from "../../components/Searching";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
+import { useAuth } from "../../context/AuthProvider";
 import useCountPagination from "../../hooks/request/useCountPagination";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import { AfterWeekType } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
 
@@ -49,9 +49,9 @@ const AfterWeekTable = () => {
       navigate("/");
     }
   };
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
+
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   useEffect(() => {
     getListLearner();

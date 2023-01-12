@@ -4,17 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { userLogin } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 import { RoleType } from "../../model";
-import useLocalStorage from "../useLocalStorage";
 
 export const useSubmitLogin = (username: string, password: string) => {
   const loginURL = "/auth/login";
   const { setAuth } = useAuth();
   const navigate = useNavigate();
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
 
   const [errMsg, setErrMsg] = useState("");
-  // eslint-disable-next-line
+
   const handleLogin = async () => {
     try {
       const response = await userLogin(loginURL, {
@@ -23,17 +20,11 @@ export const useSubmitLogin = (username: string, password: string) => {
           password,
         },
       });
-
-      const roleResponseServer: RoleType = "teacher";
+      console.log(response);
+      const roleResponseServer: RoleType = "admin";
       const accessToken = response?.data?.authorization;
 
       setAuth({
-        username,
-        password,
-        roles: [roleResponseServer],
-        token: accessToken,
-      });
-      setValue({
         username,
         roles: [roleResponseServer],
         token: accessToken,

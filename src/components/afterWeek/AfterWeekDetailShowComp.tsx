@@ -12,12 +12,13 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 import { useApprove } from "../../hooks/request/useApprove";
 import useGetImage from "../../hooks/request/useGetImage";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import { AfterWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
+const LookUpLink = React.lazy(() => import("./LookUpLink"));
 // import UploadImage from "../UploadImage";
 
 interface AfterWeekStudentShow {
@@ -35,9 +36,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
 }) => {
   const { getApprove, successObject } = useApprove();
   const navigate = useNavigate();
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
+
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   const { pic, getPicture } = useGetImage();
 
@@ -348,6 +349,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
+      {/* link after week student to moodle student */}
+      <LookUpLink student={student} id={id} />
+
       <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
       </Typography>

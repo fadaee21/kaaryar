@@ -24,21 +24,21 @@ import { useSubmitLogin } from "../hooks/request/useLogin";
 import { Navigate, useLocation } from "react-router-dom";
 
 import useGetValidationToken from "../hooks/request/useGetValidationToken";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { useAuth } from "../context/AuthProvider";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const location = useLocation();
   // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
   const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
   const [tokenValidation, loadingVal] = useGetValidationToken();
 
   useEffect(() => {
     setErrMsg("");
-    // eslint-disable-next-line
-  }, [username, password]);
+  }, [username, password, setErrMsg]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +55,7 @@ const Login = () => {
     <>
       {tokenValidation ? (
         <Navigate
-          to={`/${storedValue?.roles}/dashboard`}
+          to={`/${roles}/dashboard`}
           state={{ from: location }}
           replace
         />

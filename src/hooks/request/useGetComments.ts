@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
-import useLocalStorage from "../useLocalStorage";
+import { useAuth } from "../../context/AuthProvider";
 
 export const useGetComments = (page: number) => {
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
-  const allCommentLink = `${roles}/survey/all?pageNum=${page - 1}&pageSize=10`;
-  const countComment = `/${roles}/survey/count`;
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commentCounter, setCommentCounter] = useState<string>("0");
   const navigate = useNavigate();
+
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
+  const location = useLocation();
+  const rolesState: any = location.state;
+
   useEffect(() => {
     const getCountComment = async () => {
       try {
+        const countComment = `/${rolesState.roleType}/survey/count`;
         let { data } = await getData(countComment);
         setCommentCounter(data.message);
       } catch (error) {
         console.log("comment Counter", error);
+        navigate(`/${roles}/all-comments`);
       }
     };
     getCountComment();
@@ -26,6 +30,9 @@ export const useGetComments = (page: number) => {
 
   const getListLearner = async () => {
     try {
+      const allCommentLink = `${rolesState.roleType}/survey/all?pageNum=${
+        page - 1
+      }&pageSize=10`;
       let response = await getData(allCommentLink);
       setComments(response.data);
       setLoading(false);
@@ -33,7 +40,6 @@ export const useGetComments = (page: number) => {
       //TODO:handle Error
       console.log("catch block of error");
       console.log(error);
-      navigate("/");
     }
   };
 

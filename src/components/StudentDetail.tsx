@@ -1,4 +1,4 @@
-import { Avatar, Button, Container, Grid } from "@mui/material";
+import { Avatar, Button, ButtonGroup, Container, Grid } from "@mui/material";
 import React from "react";
 import useGetImage from "../hooks/request/useGetImage";
 import { MoodleUser } from "../model";
@@ -7,6 +7,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 interface Student {
   student: MoodleUser | null;
@@ -15,12 +16,14 @@ interface Student {
 const StudentDetail = ({ student }: Student) => {
   const { pic, getPicture } = useGetImage();
   const navigate = useNavigate();
+
   React.useEffect(() => {
     if (student!.picture !== null) {
       getPicture(student!.picture?.address);
     }
   }, []);
-
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
   return (
     <>
       <Box
@@ -31,15 +34,29 @@ const StudentDetail = ({ student }: Student) => {
           marginRight: 5,
         }}
       >
-        <Button
+        <ButtonGroup
           variant="contained"
-          endIcon={<ArrowBackIcon />}
           color="secondary"
           size="small"
-          onClick={() => navigate(-1)}
+          aria-label="small button group"
         >
-          بازگشت
-        </Button>
+          <Button
+          //admin doesn't allow to add comment
+            sx={{ display: `${roles === "admin" ? "none" : "block"}` }}
+            onClick={() =>
+              navigate("add-comment", {
+                state: {
+                  student: student,
+                },
+              })
+            }
+          >
+            ثبت نظر
+          </Button>
+          <Button endIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>
+            بازگشت
+          </Button>
+        </ButtonGroup>
       </Box>
       <Container maxWidth="lg">
         <Grid container>

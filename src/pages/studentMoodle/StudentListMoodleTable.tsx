@@ -17,7 +17,7 @@ import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import TablePic from "../../components/TablePic";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import { useAuth } from "../../context/AuthProvider";
 import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
@@ -27,7 +27,7 @@ const StudentListMoodleTable = () => {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const allStudentMoodle = `moodle/user/all?pageNum=${page - 1}&pageSize=60`;
-
+  //TODO:  take it from this page to a hook
   const getListLearner = async () => {
     setLoading(true);
     try {
@@ -42,9 +42,9 @@ const StudentListMoodleTable = () => {
       navigate("/");
     }
   };
-  // eslint-disable-next-line
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const [roles] = storedValue.roles;
+
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   useEffect(() => {
     getListLearner();
@@ -55,7 +55,6 @@ const StudentListMoodleTable = () => {
   if (loading) {
     return <LoadingProgress />;
   }
-  console.log(students);
 
   return (
     <Box sx={{ m: 2 }}>
@@ -71,7 +70,7 @@ const StudentListMoodleTable = () => {
           <ExcelExport
             fileName={"excel export"}
             apiData={students}
-            handleClose={console.log("first")}
+            handleClose={console.log("excel handle close")}
           />
           {/* //! export excel */}
           <TableContainer component={Paper}>
@@ -106,7 +105,12 @@ const StudentListMoodleTable = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "25%", verticalAlign: "top" }}
+                        sx={{
+                          width: "25%",
+                          verticalAlign: "top",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => navigate(`/${roles}/student/${id}`)}
                       >
                         <Typography variant="body1">
                           {firstName + " " + lastName}
@@ -139,7 +143,7 @@ const StudentListMoodleTable = () => {
                         sx={{ width: "30%", verticalAlign: "top" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
-                          <ButtonGroup
+                          {/* <ButtonGroup
                             variant="contained"
                             color="secondary"
                             size="small"
@@ -153,7 +157,7 @@ const StudentListMoodleTable = () => {
                               جزییات
                             </Button>
                             <Button>ویرایش</Button>
-                          </ButtonGroup>
+                          </ButtonGroup> */}
                         </ListItem>
                       </StyledTableCell>
                     </StyledTableRow>

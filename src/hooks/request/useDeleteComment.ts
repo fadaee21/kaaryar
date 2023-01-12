@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { removeData } from "../../api/axios";
-import useLocalStorage from "../useLocalStorage";
+import { useAuth } from "../../context/AuthProvider";
 export const useDeleteComment = (idComment: number | undefined) => {
   const [refresh, setRefresh] = useState(false);
   const [errRemoveMsg, setErrRemoveMsg] = useState("");
   const [successRemoveMsg, setSuccessRemoveMsg] = useState("");
-  const [storedValue, setValue] = useLocalStorage("user", null);
-  const roles = storedValue.roles
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
 
   const removeComment = async () => {
     console.log(idComment);
