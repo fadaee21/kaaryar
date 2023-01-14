@@ -1,9 +1,9 @@
 import FileSaver from "file-saver";
 import * as XLSX from "sheetjs-style";
-import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-export const ExcelExport = ({ apiData, fileName, handleClose }) => {
+export const ExcelExport = ({ apiData, fileName }) => {
   const fileType =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
@@ -17,18 +17,15 @@ export const ExcelExport = ({ apiData, fileName, handleClose }) => {
   };
 
   return (
-    <>
-      <ListItemButton
-        onClick={() => {
-          exportToCSV(apiData, fileName);
-          handleClose();
-        }}
-      >
-        <ListItemIcon>
-          <FileDownloadIcon />
-        </ListItemIcon>
-        <ListItemText primary="گرفتن خروجی اکسل" />
-      </ListItemButton>
-    </>
+    <Button
+      color="secondary"
+      endIcon={<FileDownloadIcon />}
+      variant="contained"
+      onClick={() => {
+        exportToCSV(apiData, fileName);
+      }}
+    >
+      گرفتن خروجی اکسل
+    </Button>
   );
 };

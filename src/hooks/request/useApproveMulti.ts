@@ -10,8 +10,9 @@ const useApproveMulti = () => {
   ) => {
     setSuccessMulti(false);
     try {
+      // problem: in backend, just approve one id
       const response = await editAxios(`${approveLink}/${id}`);
-      console.log(response.data.state, id);
+      console.log(response.data.state, `${approveLink}/${id}}`);
       if (response.status === 200) {
         console.log(response.data);
         return setSuccessMulti(true);

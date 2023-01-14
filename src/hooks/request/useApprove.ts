@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { editAxios } from "../../api/axios";
 
-export const useApprove = () => {
+export const useApproveWeek = () => {
   const [success, setSuccess] = useState(false);
   const [successObject, setSuccessObject] = useState("");
 
-  const getApprove = async (
+  const getApproveWeek = async (
     id: string | undefined,
-    approveObj:
-      | { acceptWeekChecked: boolean }
-      | { afterWeekChecked: boolean }
-      | { checked: boolean },
+    approveObj: { acceptWeekChecked: boolean } | { afterWeekChecked: boolean },
     approveLink: string
   ) => {
     try {
+      console.log(`${approveLink}/${id}`);
       const response = await editAxios(`${approveLink}/${id}`, {
         data: approveObj,
       });
@@ -34,31 +32,37 @@ export const useApprove = () => {
   return {
     success,
     successObject,
-    getApprove,
+    getApproveWeek,
   };
 };
 
-// export const useApproveReg = () => {
-//   const [success, setSuccess] = useState(false);
+export const useApproveReg = () => {
+  const [success, setSuccess] = useState(false);
+  const [successObject, setSuccessObject] = useState("");
 
-//   const getApprove = async (id: string, admission: boolean) => {
-//     try {
-//       const response = await editAxios(`/reg/form/approve/${id}`, {
-//         // i dont know nam of object
-//         data: { aaaa: admission },
-//       });
-//       console.log(response);
-//       if (response.status === 200) {
-//         return setSuccess(true);
-//       }
-//       console.log(response);
-//       setSuccess(false);
-//     } catch (error) {
-//       console.log(error);
-//       setSuccess(false);
-//     }
-//   };
+  const getApproveReg = async (
+    id: string | undefined,
+    approveObj: { status: boolean },
+    approveLink: string
+  ) => {
+    try {
+      console.log(`${approveLink}/${id}`);
+      const response = await editAxios(`${approveLink}/${id}`, {
+        params: approveObj,
+      });
+      console.log(response.data.state, id);
+      if (response.status === 200) {
+        const obj = Object.keys(approveObj)[0];
+        setSuccessObject(obj);
+        return setSuccess(true);
+      }
+      setSuccess(false);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      setSuccess(false);
+    }
+  };
 
-//   return { success, getApprove };
-// };
-  
+  return { success, successObject, getApproveReg };
+};
