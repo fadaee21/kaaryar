@@ -12,7 +12,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { useApprove } from "../../hooks/request/useApprove";
+import { useApproveWeek } from "../../hooks/request/useApprove";
 import { BeforeWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
@@ -31,7 +31,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   id,
   typeComp,
 }) => {
-  const { successObject, getApprove } = useApprove();
+  const { successObject, getApproveWeek } = useApproveWeek();
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -70,7 +70,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { acceptWeekChecked: true }, approveLink);
+              getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||
@@ -84,7 +84,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { acceptWeekChecked: false }, approveLink);
+              getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||
@@ -455,7 +455,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { acceptWeekChecked: true }, approveLink);
+              getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||
@@ -469,7 +469,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { acceptWeekChecked: false }, approveLink);
+              getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
             }}
             disabled={
               student?.acceptWeekChecked ||

@@ -1,4 +1,6 @@
 import {
+  Button,
+  ButtonGroup,
   Pagination,
   Paper,
   Table,
@@ -10,8 +12,10 @@ import { Box, Container } from "@mui/system";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
+import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import { SearchRegister } from "../../components/Searching";
+import SearchAll from "../../components/search/SearchAll";
+// import { SearchRegister } from "../../components/Searching";
 // import SearchingGender from "../../components/SearchingGender";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
@@ -27,9 +31,9 @@ const RegisterFormTable = () => {
   // const [checkStateIds, setCheckStateIds] = useState<string>("");
   const [ids, setIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
-  const [searchingStudentRegister, setSearchingStudentRegister] =
-    useState<RegistrationForm | null>(null);
-  const [filterGender, setFilterGender] = useState<RegistrationForm[] | null>();
+  const [searchingStudentRegister, setSearchingStudentRegister] = useState<
+    RegistrationForm[] | null
+  >(null);
   const navigate = useNavigate();
   const allStudentReg = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
   const examFormCount = "/reg/form/count";
@@ -74,6 +78,7 @@ const RegisterFormTable = () => {
 
   useEffect(() => {
     getListLearner();
+    setSearchingStudentRegister(null);
     window.scrollTo(0, 0);
     // eslint-disable-next-line
   }, [page, successMulti]);
@@ -88,37 +93,50 @@ const RegisterFormTable = () => {
         <Container maxWidth="xl">
           <Box
             component={"div"}
-            sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+            sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h3"> لیست فرم های ثبت نام</Typography>
+            <Typography variant="h4"> لیست فرم های ثبت نام</Typography>
+            <Box>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={() =>
+                  getApproveMulti(ids.toString(), "/reg/form/multiple/approve")
+                }
+                disabled={ids.toString() === ""}
+                sx={{ mr: 0.5 }}
+              >
+                تایید گروهی
+              </Button>
+              <ExcelExport
+                fileName={"Applicant Info"}
+                apiData={
+                  searchingStudentRegister
+                    ? searchingStudentRegister?.map((i) => i)
+                    : students?.map((i) => i)
+                }
+              />
+            </Box>
           </Box>
           {/* //!component for searching student */}
 
           <Box
             sx={{
-              width: { xs: "100%", md: "50%" },
+              width: "100%",
               my: 3,
-              boxShadow: "2px 2px 5px 2px #eee",
             }}
           >
-            <SearchRegister
+            <SearchAll
               setSearchingStudentRegister={setSearchingStudentRegister}
+              searchPage="reg"
             />
           </Box>
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader
-                students={students}
-                searchingStudent={searchingStudentRegister}
-                setFilterGender={setFilterGender}
-                filterGender={filterGender}
-                checkStateIds={ids.toString()}
-                getApproveMulti={getApproveMulti}
-              />
-
+              <TableHeader />
               {/*//! while searching show the search content */}
-              {!searchingStudentRegister && !filterGender && (
+              {!searchingStudentRegister && (
                 <TableBody>
                   {students.map((RegisterUser: RegistrationForm) => {
                     return (
@@ -143,52 +161,32 @@ const RegisterFormTable = () => {
                 </TableBody>
               )}
               {/* show content if searching in the box */}
-              {searchingStudentRegister && (
-                <TableBody>
-                  <TableBodyAll
-                    roles={roles}
-                    id={searchingStudentRegister?.id}
-                    birthDate={searchingStudentRegister?.birthDate}
-                    family={searchingStudentRegister?.family}
-                    firstName={searchingStudentRegister?.firstName}
-                    registrationCode={
-                      searchingStudentRegister?.registrationCode
-                    }
-                    codeMeli={searchingStudentRegister?.codeMeli}
-                    mobile={searchingStudentRegister?.mobile}
-                    email={searchingStudentRegister?.email}
-                    directNav="register-form"
-                    gender={searchingStudentRegister?.gender}
-                    checked={searchingStudentRegister?.checked}
-                    handleCheckBox={handleCheckBox}
-                  />
-                </TableBody>
-              )}
-              {/* show content if defining the gender */}
-              {filterGender && !searchingStudentRegister && (
-                <TableBody>
-                  {filterGender?.map((item) => {
+              <TableBody>
+                {searchingStudentRegister?.map(
+                  (searchingStudentRegister: any) => {
                     return (
                       <TableBodyAll
                         roles={roles}
-                        key={item.id}
-                        id={item.id}
-                        birthDate={item.birthDate}
-                        family={item.family}
-                        firstName={item.firstName}
-                        registrationCode={item.registrationCode}
-                        codeMeli={item.codeMeli}
-                        mobile={item.mobile}
-                        email={item.email}
+                        key={searchingStudentRegister?.id}
+                        id={searchingStudentRegister?.id}
+                        birthDate={searchingStudentRegister?.birthDate}
+                        family={searchingStudentRegister?.family}
+                        firstName={searchingStudentRegister?.firstName}
+                        registrationCode={
+                          searchingStudentRegister?.registrationCode
+                        }
+                        codeMeli={searchingStudentRegister?.codeMeli}
+                        mobile={searchingStudentRegister?.mobile}
+                        email={searchingStudentRegister?.email}
                         directNav="register-form"
-                        gender={item.gender}
-                        checked={item.checked}
+                        gender={searchingStudentRegister?.gender}
+                        checked={searchingStudentRegister?.checked}
                         handleCheckBox={handleCheckBox}
                       />
                     );
-                  })}
-                </TableBody>
-              )}
+                  }
+                )}
+              </TableBody>
             </Table>
           </TableContainer>
         </Container>

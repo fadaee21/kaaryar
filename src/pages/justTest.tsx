@@ -1,8 +1,8 @@
 import React from "react";
-// import LookUpLink from "../components/afterWeek/LookUpLink";
+// import SearchAll from "../components/search/SearchBefore/SearchAll";
 
 const justTest = () => {
-  return <p>just test</p>;
+  return <></>;
 };
 
 export default justTest;

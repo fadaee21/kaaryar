@@ -13,7 +13,7 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { useApprove } from "../../hooks/request/useApprove";
+import { useApproveWeek } from "../../hooks/request/useApprove";
 import useGetImage from "../../hooks/request/useGetImage";
 import { AfterWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
@@ -34,7 +34,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   id,
   typeComp,
 }) => {
-  const { getApprove, successObject } = useApprove();
+  const { getApproveWeek, successObject } = useApproveWeek();
   const navigate = useNavigate();
 
   const { auth } = useAuth();
@@ -78,7 +78,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { afterWeekChecked: true }, approveLink);
+              getApproveWeek(id, { afterWeekChecked: true }, approveLink);
             }}
           >
             تایید
@@ -86,7 +86,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { afterWeekChecked: false }, approveLink);
+              getApproveWeek(id, { afterWeekChecked: false }, approveLink);
             }}
           >
             عدم تایید
@@ -444,7 +444,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { afterWeekChecked: true }, approveLink);
+              getApproveWeek(id, { afterWeekChecked: true }, approveLink);
             }}
           >
             تایید
@@ -452,7 +452,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Button
             variant="contained"
             onClick={() => {
-              getApprove(id, { afterWeekChecked: false }, approveLink);
+              getApproveWeek(id, { afterWeekChecked: false }, approveLink);
             }}
           >
             عدم تایید

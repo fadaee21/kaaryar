@@ -2,6 +2,8 @@ import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { getData } from "../api/axios";
 
+//Searching totally change and this component doesn't use any more
+
 export const SearchBefore = ({ setSearchingStudentBefore }: any) => {
   const [inputValue, setValue] = useState("");
 

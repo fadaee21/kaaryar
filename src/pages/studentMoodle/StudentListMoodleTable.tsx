@@ -67,11 +67,7 @@ const StudentListMoodleTable = () => {
             <Typography variant="h3"> لیست مهارت جوها</Typography>
           </Box>
           {/* //! export excel */}
-          <ExcelExport
-            fileName={"excel export"}
-            apiData={students}
-            handleClose={console.log("excel handle close")}
-          />
+          <ExcelExport fileName={"excel export"} apiData={students} />
           {/* //! export excel */}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">

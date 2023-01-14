@@ -23,7 +23,6 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
   const allStudentMoodle = `moodle/user/all?pageNum=0&pageSize=600`;
   const oneStudentLink = `exam/after/week/form/${id}`;
 
-  console.log(studentIdLink);
   //get all list
   const getListLearner = async () => {
     setLoading(true);

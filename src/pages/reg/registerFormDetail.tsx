@@ -14,7 +14,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 // import { useApproveReg } from "../../hooks/request/useApprove";
 import { RegistrationForm } from "../../model";
-import { useApprove } from "../../hooks/request/useApprove";
+import { useApproveReg } from "../../hooks/request/useApprove";
 import { useAuth } from "../../context/AuthProvider";
 
 const RegisterFormDetail = () => {
@@ -26,7 +26,7 @@ const RegisterFormDetail = () => {
   const { auth } = useAuth();
   const roles = auth.roles.toString();
   // const { success, getApprove } = useApproveReg();
-  const { getApprove, successObject, success } = useApprove();
+  const { getApproveReg, successObject, success } = useApproveReg();
   const studentId = `/reg/form/${id}`;
   const approveLink = "/reg/form/approve";
   const getStudent = async () => {
@@ -77,10 +77,10 @@ const RegisterFormDetail = () => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => getApprove(id, { checked: true }, approveLink)}
+            onClick={() => getApproveReg(id, { status: true }, approveLink)}
             disabled={
               student?.checked ||
-              // successObject === "checked"
+              // successObject === "status"
               success
                 ? true
                 : false
@@ -90,10 +90,10 @@ const RegisterFormDetail = () => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => getApprove(id, { checked: false }, approveLink)}
+            onClick={() => getApproveReg(id, { status: false }, approveLink)}
             disabled={
               student?.checked ||
-              // successObject === "checked"
+              // successObject === "status"
               success
                 ? true
                 : false

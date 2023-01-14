@@ -1,7 +1,7 @@
 import { Dashboard } from "./pages/Dashboard";
 import StudentPage from "./pages/studentMoodle/StudentPage";
 import StudentListMoodleTable from "./pages/studentMoodle/StudentListMoodleTable";
-import Comments from "./pages/comment/Comments";
+import Comments from "./pages/comment/TableComments";
 import AddComment from "./pages/comment/AddComment";
 import BeforeWeekTable from "./pages/beforeWeek/BeforeWeekTable";
 import BeforeWeekDetail from "./pages/beforeWeek/BeforeWeekDetail";
@@ -23,6 +23,7 @@ import AdmissionFormDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import justTest from "./pages/justTest";
 import AllComments from "./pages/comment/AllComments";
 import UserProfile from "./pages/profile/UserProfile";
+import WatchComment from "./pages/comment/WatchComment";
 
 const ListRoutes = [
   // ta________________________________
@@ -53,7 +54,7 @@ const ListRoutes = [
     key: "ta3",
   },
   {
-    path: "ta/all-comments/comments",
+    path: "ta/all-comments/:roleQuery",
     name: "همه نظرات",
     icon: <CommentIcon />,
     component: Comments,
@@ -80,12 +81,20 @@ const ListRoutes = [
     key: "ta6",
   },
   {
-    path: "teacher/profile",
+    path: "ta/profile",
     name: " ",
     component: UserProfile,
     showInNav: false,
-    role: "teacher",
-    key: "teacher7",
+    role: "ta",
+    key: "ta7",
+  },
+  {
+    path: "ta/all-comments/:roleQuery/:id",
+    name: " ",
+    component: WatchComment,
+    showInNav: false,
+    role: "ta",
+    key: "ta8",
   },
 
   //!at the moment mentor is ignored
@@ -163,7 +172,7 @@ const ListRoutes = [
     key: "teacher3",
   },
   {
-    path: "teacher/all-comments/comments",
+    path: "teacher/all-comments/:roleQuery",
     name: " ",
     component: Comments,
     showInNav: false,
@@ -189,12 +198,20 @@ const ListRoutes = [
     key: "teacher6",
   },
   {
-    path: "ta/profile",
+    path: "teacher/profile",
     name: " ",
     component: UserProfile,
     showInNav: false,
-    role: "ta",
-    key: "ta7",
+    role: "teacher",
+    key: "teacher7",
+  },
+  {
+    path: "teacher/all-comments/:roleQuery/:id",
+    name: " ",
+    component: WatchComment,
+    showInNav: false,
+    role: "teacher",
+    key: "teacher8",
   },
 
   // {
@@ -301,7 +318,7 @@ const ListRoutes = [
     key: "admin3",
   },
   {
-    path: "admin/all-comments/comments",
+    path: "admin/all-comments/:roleQuery",
     name: " ",
     icon: <CommentIcon />,
     component: Comments,
@@ -410,6 +427,14 @@ const ListRoutes = [
     showInNav: false,
     role: "admin",
     key: "admin15",
+  },
+  {
+    path: "admin/all-comments/:roleQuery/:id",
+    name: " ",
+    component: WatchComment,
+    showInNav: false,
+    role: "admin",
+    key: "admin16",
   },
   {
     path: "test",

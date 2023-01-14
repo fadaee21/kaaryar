@@ -10,8 +10,9 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
+import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import { SearchAfter } from "../../components/Searching";
+import SearchAll from "../../components/search/SearchAll";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
 import { useAuth } from "../../context/AuthProvider";
@@ -23,11 +24,12 @@ const AfterWeekTable = () => {
   const [afterWeekStudents, setAfterWeekStudents] = useState<AfterWeekType[]>(
     []
   );
-  const [filterGender, setFilterGender] = useState<AfterWeekType[] | null>();
+
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [searchingStudentAfter, setSearchingStudentAfter] =
-    useState<AfterWeekType | null>(null);
+  const [searchingStudentAfter, setSearchingStudentAfter] = useState<
+    AfterWeekType[] | null
+  >(null);
 
   const navigate = useNavigate();
   const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${
@@ -35,6 +37,7 @@ const AfterWeekTable = () => {
   }&pageSize=20`;
   const examFormCount = "/exam/after/week/form/count";
   const [counterPage] = useCountPagination(examFormCount);
+
   const getListLearner = async () => {
     setLoading(true);
     try {
@@ -69,35 +72,40 @@ const AfterWeekTable = () => {
         <Container maxWidth="xl">
           <Box
             component={"div"}
-            sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+            sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h3"> لیست هفته پذیرش</Typography>
+            <Typography variant="h4"> لیست هفته پذیرش</Typography>
+            <ExcelExport
+              fileName={"Applicant Info"}
+              apiData={
+                searchingStudentAfter
+                  ? searchingStudentAfter?.map(
+                      (i) => i.beforeWeekForm.registrationForm
+                    )
+                  : afterWeekStudents?.map(
+                      (i) => i.beforeWeekForm.registrationForm
+                    )
+              }
+            />
           </Box>
           {/* //!component for searching student */}
           <Box
             sx={{
-              width: { xs: "100%", md: "50%" },
+              width: "100%",
               my: 3,
-              boxShadow: "2px 2px 5px 2px #eee",
             }}
           >
-            <SearchAfter setSearchingStudentAfter={setSearchingStudentAfter} />
+            <SearchAll
+              setSearchingStudentAfter={setSearchingStudentAfter}
+              searchPage="afterWeek"
+            />
           </Box>
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader
-                students={afterWeekStudents
-                  .map((i) => i.beforeWeekForm)
-                  .map((i) => i.registrationForm)}
-                searchingStudent={
-                  searchingStudentAfter?.beforeWeekForm?.registrationForm
-                }
-                setFilterGender={setFilterGender}
-                filterGender={filterGender}
-              />
+              <TableHeader />
               {/*//! while searching show the search content */}
-              {searchingStudentAfter === null && !filterGender && (
+              {searchingStudentAfter === null && (
                 <TableBody>
                   {afterWeekStudents.map((afterWeekStudent: AfterWeekType) => {
                     const {
@@ -137,89 +145,57 @@ const AfterWeekTable = () => {
                   })}
                 </TableBody>
               )}
-              {searchingStudentAfter && (
-                <TableBody>
-                  <TableBodyAll
-                    roles={roles}
-                    id={
-                      searchingStudentAfter.beforeWeekForm.registrationForm.id
-                    }
-                    birthDate={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .birthDate
-                    }
-                    family={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .family
-                    }
-                    firstName={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .firstName
-                    }
-                    registrationCode={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .registrationCode
-                    }
-                    codeMeli={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .codeMeli
-                    }
-                    mobile={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .mobile
-                    }
-                    email={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .email
-                    }
-                    gender={
-                      searchingStudentAfter.beforeWeekForm.registrationForm
-                        .gender
-                    }
-                    checked={searchingStudentAfter.afterWeekChecked}
-                    directNav="after-week"
-                  />
-                </TableBody>
-              )}
-              {!searchingStudentAfter && filterGender && (
-                <TableBody>
-                  {filterGender?.map((item) => {
-                    const {
-                      id,
-                      beforeWeekForm: {
-                        registrationForm: {
-                          birthDate,
-                          family,
-                          firstName,
-                          registrationCode,
-                          codeMeli,
-                          mobile,
-                          email,
-                          gender,
-                        },
-                      },
-                      afterWeekChecked,
-                    } = item;
-                    return (
-                      <TableBodyAll
-                        roles={roles}
-                        key={id}
-                        id={id}
-                        birthDate={birthDate}
-                        family={family}
-                        firstName={firstName}
-                        registrationCode={registrationCode}
-                        codeMeli={codeMeli}
-                        mobile={mobile}
-                        email={email}
-                        gender={gender}
-                        checked={afterWeekChecked}
-                        directNav="register-form"
-                      />
-                    );
-                  })}
-                </TableBody>
-              )}
+
+              <TableBody>
+                {searchingStudentAfter?.map((searchingStudentAfter: any) => {
+                  console.log(searchingStudentAfter);
+                  return (
+                    <TableBodyAll
+                      roles={roles}
+                      key={
+                        searchingStudentAfter.beforeWeekForm.registrationForm.id
+                      }
+                      id={
+                        searchingStudentAfter.beforeWeekForm.registrationForm.id
+                      }
+                      birthDate={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .birthDate
+                      }
+                      family={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .family
+                      }
+                      firstName={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .firstName
+                      }
+                      registrationCode={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .registrationCode
+                      }
+                      codeMeli={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .codeMeli
+                      }
+                      mobile={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .mobile
+                      }
+                      email={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .email
+                      }
+                      gender={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .gender
+                      }
+                      checked={searchingStudentAfter.afterWeekChecked}
+                      directNav="after-week"
+                    />
+                  );
+                })}
+              </TableBody>
             </Table>
           </TableContainer>
         </Container>
