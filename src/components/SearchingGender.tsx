@@ -5,7 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 // import FormLabel from "@mui/material/FormLabel";
 import { getData } from "../api/axios";
-
+//Searching totally change and this component doesn't use any more
 const options = [
   { value: "زن", label: "زن" },
   { value: "مرد", label: "مرد" },

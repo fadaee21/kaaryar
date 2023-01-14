@@ -93,15 +93,18 @@ const RegisterFormTable = () => {
         <Container maxWidth="xl">
           <Box
             component={"div"}
-            sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+            sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h3"> لیست فرم های ثبت نام</Typography>
-            <ButtonGroup color="secondary" variant="contained">
+            <Typography variant="h4"> لیست فرم های ثبت نام</Typography>
+            <Box>
               <Button
+                color="secondary"
+                variant="contained"
                 onClick={() =>
                   getApproveMulti(ids.toString(), "/reg/form/multiple/approve")
                 }
                 disabled={ids.toString() === ""}
+                sx={{ mr: 0.5 }}
               >
                 تایید گروهی
               </Button>
@@ -113,7 +116,7 @@ const RegisterFormTable = () => {
                     : students?.map((i) => i)
                 }
               />
-            </ButtonGroup>
+            </Box>
           </Box>
           {/* //!component for searching student */}
 

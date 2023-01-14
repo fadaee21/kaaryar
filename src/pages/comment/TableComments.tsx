@@ -29,12 +29,9 @@ import { useGetComments } from "../../hooks/request/useGetComments";
 import { dateConverter } from "../../utils/dateConverter";
 import { EditComment } from "../../components/EditComment";
 import { counterPagination } from "../../utils/counterPagination";
-import { useLocation } from "react-router-dom";
-
-interface StateAuthWatch {
-  roleType: string;
-  roleAuth: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useAuth } from "../../context/AuthProvider";
 
 const Comments = () => {
   const [page, setPage] = useState(1);
@@ -45,17 +42,18 @@ const Comments = () => {
   const [editId, setEditId] = useState<number | null>(null);
   const [refreshByEdit, setRefreshByEdit] = useState(0);
   const [shareComment, setShareComment] = useState("");
-  const location = useLocation();
-  const { roleType, roleAuth } = location.state as StateAuthWatch;
+  const { roleQuery } = useParams();
+  const { auth } = useAuth();
+  const navigate = useNavigate();
 
   const handleClickOpenEdit = (id: number, comment: string) => {
     setOpenEditState(true);
     setEditId(id);
     setShareComment(comment);
   };
-
+  const roleAuth = auth.roles.toString();
   const [idComment, setIdComment] = useState<number>();
-  const { getListLearner, comments, loading, commentCounter } =
+  const { getListComments, comments, loading, commentCounter } =
     useGetComments(page);
   const {
     removeComment,
@@ -80,7 +78,7 @@ const Comments = () => {
   };
 
   useEffect(() => {
-    getListLearner();
+    getListComments();
     // eslint-disable-next-line
   }, [page, refresh, refreshByEdit]);
 
@@ -90,15 +88,14 @@ const Comments = () => {
       setSuccessRemoveMsg("");
     }, 3000);
   }, [errRemoveMsg, setErrRemoveMsg, successRemoveMsg, setSuccessRemoveMsg]);
-  //check if "Auth" and "roleType comment watch" is same or not
-  //to disable edit and delete button
+
   useEffect(() => {
-    if (roleAuth === roleType) {
+    if (roleQuery === roleAuth) {
       setAuthWatch(false);
     } else {
       setAuthWatch(true);
     }
-  }, [roleAuth, roleType]);
+  }, [roleQuery, roleAuth]);
 
   if (loading) {
     return <LoadingProgress />;
@@ -176,6 +173,15 @@ const Comments = () => {
                         sx={{ verticalAlign: "top" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
+                          <IconButton
+                            onClick={() =>
+                              navigate(
+                                `/${roleAuth}/all-comments/${roleQuery}/${id}`
+                              )
+                            }
+                          >
+                            <VisibilityIcon color="primary" />
+                          </IconButton>
                           <IconButton
                             onClick={() => handleClickOpenEdit(id, comment)}
                             disabled={authWatch}

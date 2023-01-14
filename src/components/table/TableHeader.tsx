@@ -8,6 +8,7 @@ const TableHeader = () => {
     <TableHead>
       <StyledTableRow>
         {pathname.endsWith("register-form") && <StyledTableCell />}
+        <StyledTableCell align="center">وضعیت</StyledTableCell>
         <StyledTableCell align="left">نام و نام خانوادگی</StyledTableCell>
         <StyledTableCell align="center">سال تولد</StyledTableCell>
         <StyledTableCell align="center">جنسیت</StyledTableCell>
@@ -15,7 +16,6 @@ const TableHeader = () => {
         <StyledTableCell align="center">کد ملی</StyledTableCell>
         <StyledTableCell align="center">موبایل</StyledTableCell>
         <StyledTableCell align="center">ایمیل</StyledTableCell>
-        <StyledTableCell align="center">وضعیت</StyledTableCell>
       </StyledTableRow>
     </TableHead>
   );

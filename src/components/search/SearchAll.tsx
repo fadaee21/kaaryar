@@ -109,9 +109,9 @@ const SearchAll = ({
       </Grid>
       <Grid item xs={3}>
         <Button
-          sx={{ width: "100%" }}
+          sx={{ width: "100%",minHeight:"55px" }}
           endIcon={<SearchIcon />}
-          variant="contained"
+          variant="outlined"
           onClick={handleClick}
         >
           جستجو

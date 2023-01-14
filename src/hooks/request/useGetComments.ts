@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 
@@ -10,14 +10,14 @@ export const useGetComments = (page: number) => {
   const navigate = useNavigate();
 
   const { auth } = useAuth();
+  const {roleQuery} = useParams()
   const roles = auth.roles.toString();
-  const location = useLocation();
-  const rolesState: any = location.state;
+
 
   useEffect(() => {
     const getCountComment = async () => {
       try {
-        const countComment = `/${rolesState.roleType}/survey/count`;
+        const countComment = `/${roleQuery}/survey/count`;
         let { data } = await getData(countComment);
         setCommentCounter(data.message);
       } catch (error) {
@@ -28,9 +28,9 @@ export const useGetComments = (page: number) => {
     getCountComment();
   }, []);
 
-  const getListLearner = async () => {
+  const getListComments = async () => {
     try {
-      const allCommentLink = `${rolesState.roleType}/survey/all?pageNum=${
+      const allCommentLink = `${roleQuery}/survey/all?pageNum=${
         page - 1
       }&pageSize=10`;
       let response = await getData(allCommentLink);
@@ -43,5 +43,5 @@ export const useGetComments = (page: number) => {
     }
   };
 
-  return { getListLearner, comments, loading, commentCounter };
+  return { getListComments, comments, loading, commentCounter };
 };

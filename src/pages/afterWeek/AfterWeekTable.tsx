@@ -72,9 +72,9 @@ const AfterWeekTable = () => {
         <Container maxWidth="xl">
           <Box
             component={"div"}
-            sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+            sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h3"> لیست هفته پذیرش</Typography>
+            <Typography variant="h4"> لیست هفته پذیرش</Typography>
             <ExcelExport
               fileName={"Applicant Info"}
               apiData={

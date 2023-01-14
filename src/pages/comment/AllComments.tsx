@@ -3,18 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
 const AllComments = () => {
-  
-  
   const {
     auth: { roles },
   } = useAuth();
   const navigate = useNavigate();
 
   const roleNavigate = (roleCommentsWatch: string) => {
- 
-    navigate(`/${roles[0]}/all-comments/comments`, {
-      state: { roleType: roleCommentsWatch,roleAuth:roles[0] },
-    });
+    navigate(`/${roles[0]}/all-comments/${roleCommentsWatch}`);
   };
   console.log(roles[0]);
 

@@ -42,10 +42,21 @@ const TableBodyAll = ({
           />
         </StyledTableCell>
       )}
-
       <StyledTableCell
         align="left"
-        sx={{ width: "23%", verticalAlign: "center", cursor: "pointer" }}
+        sx={{ width: "10%", verticalAlign: "center" }}
+      >
+        <Typography variant="body1">
+          {checked === true
+            ? `تایید شده`
+            : checked === null
+            ? `در انتظار تایید`
+            : `تایید نشده`}
+        </Typography>
+      </StyledTableCell>
+      <StyledTableCell
+        align="left"
+        sx={{ width: "15%", verticalAlign: "center", cursor: "pointer" }}
         onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
       >
         <Typography variant="body1">{firstName + " " + family}</Typography>
@@ -105,18 +116,6 @@ const TableBodyAll = ({
         }}
       >
         <Typography variant="body2">{email}</Typography>
-      </StyledTableCell>
-      <StyledTableCell
-        align="left"
-        sx={{ width: "2%", verticalAlign: "center" }}
-      >
-        <Typography variant="body1">
-          {checked === true
-            ? `تایید شده`
-            : checked === null
-            ? `در انتظار تایید`
-            : `تایید نشده`}
-        </Typography>
       </StyledTableCell>
 
       {/* <StyledTableCell

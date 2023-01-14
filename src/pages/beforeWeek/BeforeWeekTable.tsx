@@ -72,9 +72,9 @@ const BeforeWeekTable = () => {
         <Container maxWidth="xl">
           <Box
             component={"div"}
-            sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+            sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h3"> لیست فرم های آزمون</Typography>
+            <Typography variant="h4"> لیست فرم های آزمون</Typography>
 
             <ExcelExport
               fileName={"Applicant Info"}
