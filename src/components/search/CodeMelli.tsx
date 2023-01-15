@@ -1,8 +1,8 @@
-import { TextField } from "@mui/material";
+import { SearchField } from "../../styles/search";
 
 const CodeMelli = ({ setCodeMelliState }: any) => {
   return (
-    <TextField
+    <SearchField
       id="outlined-basic"
       label="کد ملی"
       variant="outlined"

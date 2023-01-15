@@ -1,9 +1,8 @@
-import { TextField } from "@mui/material";
-import React from "react";
+import { SearchField } from "../../styles/search";
 
 const SearchEmail = ({ setEmailState }: any) => {
   return (
-    <TextField
+    <SearchField
       id="outlined-email"
       label="ایمیل"
       variant="outlined"

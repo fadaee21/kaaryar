@@ -1,9 +1,8 @@
-import { TextField } from "@mui/material";
-
+import { SearchField } from "../../styles/search";
 
 const Mobile = ({ setMobileState }: any) => {
   return (
-    <TextField
+    <SearchField
       id="outlined-basic"
       label="شماره موبایل"
       variant="outlined"

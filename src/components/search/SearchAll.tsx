@@ -6,18 +6,21 @@ import Mobile from "./Mobile";
 import SearchProvinces from "./Provinces";
 import SearchEmail from "./SearchEmail";
 import SearchGender from "./SearchGender";
-import { SearchName } from "./SearchName";
+import { SearchFamily } from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
 import SearchIcon from "@mui/icons-material/Search";
+import { SearchFirstName } from "./SearchFirstName";
 
 const SearchAll = ({
   setSearchingStudentBefore,
   setSearchingStudentAfter,
   setSearchingStudentRegister,
+  setSearchingMoodleStudent,
   searchPage,
 }: any) => {
   const [allState, setAllState] = useState<object | null>(null);
-  const [outputName, setOutputName] = useState<string | null>(null);
+  const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
+  const [outputFamily, setOutputFamily] = useState<string | null>(null);
   const [outputGender, setOutputGender] = useState<string | null>(null);
   const [codeMelliState, setCodeMelliState] = useState<string | null>(null);
   const [mobileState, setMobileState] = useState<string | null>(null);
@@ -28,7 +31,13 @@ const SearchAll = ({
   const beforeWeekSearch = "/exam/before/week/search/param";
   const afterWeekSearch = "/exam/after/week/search/param";
   const regSearch = "/reg/search/param";
+  const moodleSearch = "/moodle/search/param";
+  // this component search for 4 pages
+  //at first find the api link for searching
   const searchLink = () => {
+    if (searchPage === "moodle") {
+      return moodleSearch;
+    }
     if (searchPage === "beforeWeek") {
       return beforeWeekSearch;
     }
@@ -40,16 +49,19 @@ const SearchAll = ({
 
   useEffect(() => {
     setAllState({
-      family: outputName,
+      firstName: outputFirstName,
+      family: outputFamily,
       gender: outputGender,
       codeMeli: codeMelliState,
       status: statusState,
-      province: provincesState,
+      city: provincesState,
+      // province: provincesState,
       mobile: mobileState,
       email: emailState,
     });
   }, [
-    outputName,
+    outputFirstName,
+    outputFamily,
     outputGender,
     codeMelliState,
     mobileState,
@@ -64,6 +76,8 @@ const SearchAll = ({
         params: allState,
       });
       if (response.status === 200) {
+        //for each search you need specific setState
+        searchPage === "moodle" && setSearchingMoodleStudent(response.data);
         searchPage === "beforeWeek" && setSearchingStudentBefore(response.data);
         searchPage === "afterWeek" && setSearchingStudentAfter(response.data);
         searchPage === "reg" && setSearchingStudentRegister(response.data);
@@ -83,34 +97,48 @@ const SearchAll = ({
   return (
     <Grid container spacing={2}>
       <Grid item xs={3}>
-        <SearchName
-          setOutputName={setOutputName}
+        <SearchFirstName
+          setOutputFirstName={setOutputFirstName}
           searchPage={searchPage}
           searchLink={searchLink()}
         />
       </Grid>
       <Grid item xs={3}>
-        <CodeMelli setCodeMelliState={setCodeMelliState} />
+        <SearchFamily
+          setOutputFamily={setOutputFamily}
+          searchPage={searchPage}
+          searchLink={searchLink()}
+        />
       </Grid>
+      {/* some field not use in moodle search at the moment */}
+      {searchPage !== "moodle" && (
+        <Grid item xs={3}>
+          <CodeMelli setCodeMelliState={setCodeMelliState} />
+        </Grid>
+      )}
       <Grid item xs={3}>
         <Mobile setMobileState={setMobileState} />
       </Grid>
-      <Grid item xs={3}>
-        <SearchEmail setEmailState={setEmailState} />
-      </Grid>
-      <Grid item xs={3}>
-        <SearchGender setOutputGender={setOutputGender} />
-      </Grid>
+      {searchPage !== "moodle" && (
+        <Grid item xs={3}>
+          <SearchGender setOutputGender={setOutputGender} />
+        </Grid>
+      )}
       <Grid item xs={3}>
         <SearchProvinces setProvincesState={setProvincesState} />
       </Grid>
+      {searchPage !== "moodle" && (
+        <Grid item xs={3}>
+          <StatusSearch setStatusState={setStatusState} />
+        </Grid>
+      )}
       <Grid item xs={3}>
-        <StatusSearch setStatusState={setStatusState} />
+        <SearchEmail setEmailState={setEmailState} />
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={3} sx={{ ml: "auto" }}>
         <Button
-          sx={{ width: "100%",minHeight:"55px" }}
-          endIcon={<SearchIcon />}
+          sx={{ width: "100%" }}
+          endIcon={<SearchIcon sx={{ rotate: "90deg" }} />}
           variant="outlined"
           onClick={handleClick}
         >
