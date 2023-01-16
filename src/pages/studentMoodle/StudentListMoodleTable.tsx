@@ -92,7 +92,7 @@ const StudentListMoodleTable = () => {
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
               >
-                <Typography>جستجو</Typography>
+                <Typography  variant="button" >جستجو</Typography>
                 <ExpandMoreIcon
                   className={chevronDir ? styleRot.rotate180 : styleRot.rotate0}
                 />

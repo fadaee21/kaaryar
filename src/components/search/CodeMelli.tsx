@@ -1,6 +1,10 @@
 import { SearchField } from "../../styles/search/searchField";
 
-const CodeMelli = ({ setCodeMelliState }: any) => {
+interface CodeMelliType {
+  setCodeMelliState: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const CodeMelli = ({ setCodeMelliState }: CodeMelliType) => {
   return (
     <SearchField
       id="outlined-basic"

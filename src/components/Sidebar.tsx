@@ -21,9 +21,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { AppBar, DrawerHeader, drawerWidth, Main } from "../styles/sideBar";
 import { useAuth } from "../context/AuthProvider";
 import { Menu, MenuItem, Typography } from "@mui/material";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import logoWithName from "../assets/logoWithName.png";
+import style from "../styles/search/searchChevron.module.css";
+
 export default function Sidebar({ listRoutes }: any) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -80,11 +81,13 @@ export default function Sidebar({ listRoutes }: any) {
             src={logoWithName}
             alt={"kaaryar logo"}
             sx={{
+              mr:5,
               width: "8rem",
               height: "auto",
               ...(open && { display: "none" }),
             }}
           />
+            <Typography variant="subtitle2">سامانه مدیریت پروفایل</Typography>
           <Box sx={{ marginLeft: "auto" }}>
             <Box
               sx={{
@@ -101,7 +104,9 @@ export default function Sidebar({ listRoutes }: any) {
                 onClick={handleMenu}
                 color="inherit"
               >
-                {anchorEl ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                <ExpandMoreIcon
+                  className={anchorEl ? style.rotate180 : style.rotate0}
+                />
               </IconButton>
               <Typography sx={{ mr: 1 }}>{auth.username}</Typography>
               <AccountCircle />

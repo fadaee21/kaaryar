@@ -1,6 +1,10 @@
 import { SearchField } from "../../styles/search/searchField";
 
-const Mobile = ({ setMobileState }: any) => {
+interface MobileType {
+  setMobileState: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const Mobile = ({ setMobileState }: MobileType) => {
   return (
     <SearchField
       id="outlined-basic"

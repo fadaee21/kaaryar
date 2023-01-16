@@ -1,6 +1,8 @@
 import { SearchField } from "../../styles/search/searchField";
-
-const SearchEmail = ({ setEmailState }: any) => {
+interface SearchEmailType {
+  setEmailState: React.Dispatch<React.SetStateAction<string | null>>;
+}
+const SearchEmail = ({ setEmailState }: SearchEmailType) => {
   return (
     <SearchField
       id="outlined-email"

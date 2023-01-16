@@ -10,6 +10,7 @@ import { SearchFamily } from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
 import SearchIcon from "@mui/icons-material/Search";
 import { SearchFirstName } from "./SearchFirstName";
+import SearchCity from "./SearchCity";
 
 interface SearchAllType {
   setSearchingStudentBefore?: any;
@@ -43,6 +44,7 @@ const SearchAll: ({
   const [mobileState, setMobileState] = useState<string | null>(null);
   const [emailState, setEmailState] = useState<string | null>(null);
   const [provincesState, setProvincesState] = useState<string | null>(null);
+  const [cityState, setCityState] = useState<string | null>(null);
   const [statusState, setStatusState] = useState<boolean | null>(null);
 
   const beforeWeekSearch = "/exam/before/week/search/param";
@@ -71,7 +73,7 @@ const SearchAll: ({
       gender: outputGender,
       codeMeli: codeMelliState,
       status: statusState,
-      city: provincesState,
+      city: cityState,
       province: provincesState,
       mobile: mobileState,
       email: emailState,
@@ -85,6 +87,7 @@ const SearchAll: ({
     emailState,
     provincesState,
     statusState,
+    cityState,
   ]);
 
   //if AccordionDetails was close, do nothing(fetching data and mounting component)
@@ -147,9 +150,16 @@ const SearchAll: ({
           <SearchGender setOutputGender={setOutputGender} />
         </Grid>
       )}
-      <Grid item xs={3}>
-        <SearchProvinces setProvincesState={setProvincesState} />
-      </Grid>
+      {searchPage !== "moodle" && (
+        <Grid item xs={3}>
+          <SearchProvinces setProvincesState={setProvincesState} />
+        </Grid>
+      )}
+      {searchPage === "moodle" && (
+        <Grid item xs={3}>
+          <SearchCity setCityState={setCityState} />
+        </Grid>
+      )}
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
           <StatusSearch setStatusState={setStatusState} />

@@ -1,6 +1,8 @@
 import Select from "react-select";
-
-const StatusSearch = ({ setStatusState }: any) => {
+interface StatusSearchType {
+  setStatusState: React.Dispatch<React.SetStateAction<boolean | null>>;
+}
+const StatusSearch = ({ setStatusState }: StatusSearchType) => {
   const options = [
     { value: true, label: "تایید شده" },
     { value: false, label: "تایید نشده" },

@@ -1,6 +1,8 @@
 import Select from "react-select";
-
-const SearchGender = ({ setOutputGender }: any) => {
+interface SearchGenderType {
+  setOutputGender: React.Dispatch<React.SetStateAction<string | null>>;
+}
+const SearchGender = ({ setOutputGender }: SearchGenderType) => {
   const options = [
     { value: "زن", label: "زن" },
     { value: "مرد", label: "مرد" },

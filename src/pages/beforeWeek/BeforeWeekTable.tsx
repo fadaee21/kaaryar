@@ -95,7 +95,7 @@ const BeforeWeekTable = () => {
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
               >
-                <Typography>جستجو</Typography>
+                <Typography  variant="button" >جستجو</Typography>
                 <ExpandMoreIcon
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
