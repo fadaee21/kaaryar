@@ -13,19 +13,25 @@ import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
-// import { SearchBefore } from "../../components/Searching";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
 import { useAuth } from "../../context/AuthProvider";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { BeforeWeekType } from "../../model";
-
 import { counterPagination } from "../../utils/counterPagination";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  AccordionStyled,
+  AccordionSummaryStyled,
+} from "../../styles/search/accordion";
+import style from "../../styles/search/searchChevron.module.css";
 
 const BeforeWeekTable = () => {
   const [students, setStudents] = useState<BeforeWeekType[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentBefore, setSearchingStudentBefore] = useState<
     BeforeWeekType[] | null
   >(null);
@@ -74,30 +80,51 @@ const BeforeWeekTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> لیست فرم های آزمون</Typography>
-
-            <ExcelExport
-              fileName={"Applicant Info"}
-              apiData={
-                searchingStudentBefore
-                  ? searchingStudentBefore?.map((i) => i.registrationForm)
-                  : students?.map((i) => i.registrationForm)
-              }
-            />
+            <Typography variant="h4"> لیست ارزیابی</Typography>
           </Box>
-          {/* //!component for searching student */}
-          <Box
-            sx={{
-              width: "100%",
-              my: 3,
-            }}
-          >
-            <SearchAll
-              setSearchingStudentBefore={setSearchingStudentBefore}
-              searchPage="beforeWeek"
-            />
-          </Box>
-
+          <AccordionStyled>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
+            >
+              <AccordionSummaryStyled
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => setChevronDir(!chevronDir)}
+              >
+                <Typography>جستجو</Typography>
+                <ExpandMoreIcon
+                  className={chevronDir ? style.rotate180 : style.rotate0}
+                />
+              </AccordionSummaryStyled>
+              <ExcelExport
+                fileName={"Applicant Info"}
+                apiData={
+                  searchingStudentBefore
+                    ? searchingStudentBefore?.map((i) => i.registrationForm)
+                    : students?.map((i) => i.registrationForm)
+                }
+              />
+            </Box>
+            <AccordionDetails>
+              {/* //!component for searching student */}
+              <Box
+                sx={{
+                  width: "100%",
+                  my: 3,
+                }}
+              >
+                <SearchAll
+                  setSearchingStudentBefore={setSearchingStudentBefore}
+                  searchPage="beforeWeek"
+                  chevronDir={chevronDir}
+                />
+              </Box>
+            </AccordionDetails>
+          </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader />
@@ -174,22 +201,24 @@ const BeforeWeekTable = () => {
           </TableContainer>
         </Container>
       </Box>
-      <Pagination
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          my: 4,
-        }}
-        size="large"
-        count={counterPagination(counterPage, 20)}
-        variant="outlined"
-        shape="rounded"
-        page={page}
-        onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-          setPage(value);
-        }}
-      />
+      {!searchingStudentBefore && (
+        <Pagination
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            my: 4,
+          }}
+          size="large"
+          count={counterPagination(counterPage, 20)}
+          variant="outlined"
+          shape="rounded"
+          page={page}
+          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+            setPage(value);
+          }}
+        />
+      )}
     </Box>
   );
 };

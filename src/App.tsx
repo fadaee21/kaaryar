@@ -1,7 +1,5 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-
-import "./App.css";
 import Login from "./pages/Login";
 import Layout from "./pages/Layout";
 import ListRoutes from "./ListRoutes";

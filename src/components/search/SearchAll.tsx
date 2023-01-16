@@ -11,13 +11,30 @@ import StatusSearch from "./StatusSearch";
 import SearchIcon from "@mui/icons-material/Search";
 import { SearchFirstName } from "./SearchFirstName";
 
-const SearchAll = ({
+interface SearchAllType {
+  setSearchingStudentBefore?: any;
+  setSearchingStudentAfter?: any;
+  setSearchingStudentRegister?: any;
+  setSearchingMoodleStudent?: any;
+  searchPage: string;
+  chevronDir: boolean;
+}
+
+const SearchAll: ({
   setSearchingStudentBefore,
   setSearchingStudentAfter,
   setSearchingStudentRegister,
   setSearchingMoodleStudent,
   searchPage,
-}: any) => {
+  chevronDir,
+}: SearchAllType) => JSX.Element = ({
+  setSearchingStudentBefore,
+  setSearchingStudentAfter,
+  setSearchingStudentRegister,
+  setSearchingMoodleStudent,
+  searchPage,
+  chevronDir,
+}) => {
   const [allState, setAllState] = useState<object | null>(null);
   const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
   const [outputFamily, setOutputFamily] = useState<string | null>(null);
@@ -55,7 +72,7 @@ const SearchAll = ({
       codeMeli: codeMelliState,
       status: statusState,
       city: provincesState,
-      // province: provincesState,
+      province: provincesState,
       mobile: mobileState,
       email: emailState,
     });
@@ -70,11 +87,17 @@ const SearchAll = ({
     statusState,
   ]);
 
+  //if AccordionDetails was close, do nothing(fetching data and mounting component)
+  if (!chevronDir) {
+    return <></>;
+  }
+
   const fetchData = async () => {
     try {
       const response = await getData(searchLink(), {
         params: allState,
       });
+      console.log(response);
       if (response.status === 200) {
         //for each search you need specific setState
         searchPage === "moodle" && setSearchingMoodleStudent(response.data);

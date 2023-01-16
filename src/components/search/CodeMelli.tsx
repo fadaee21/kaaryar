@@ -1,4 +1,4 @@
-import { SearchField } from "../../styles/search";
+import { SearchField } from "../../styles/search/searchField";
 
 const CodeMelli = ({ setCodeMelliState }: any) => {
   return (

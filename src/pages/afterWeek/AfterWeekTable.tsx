@@ -19,6 +19,13 @@ import { useAuth } from "../../context/AuthProvider";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { AfterWeekType } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  AccordionStyled,
+  AccordionSummaryStyled,
+} from "../../styles/search/accordion";
+import style from "../../styles/search/searchChevron.module.css";
 
 const AfterWeekTable = () => {
   const [afterWeekStudents, setAfterWeekStudents] = useState<AfterWeekType[]>(
@@ -27,6 +34,7 @@ const AfterWeekTable = () => {
 
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentAfter, setSearchingStudentAfter] = useState<
     AfterWeekType[] | null
   >(null);
@@ -75,32 +83,54 @@ const AfterWeekTable = () => {
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
             <Typography variant="h4"> لیست هفته پذیرش</Typography>
-            <ExcelExport
-              fileName={"Applicant Info"}
-              apiData={
-                searchingStudentAfter
-                  ? searchingStudentAfter?.map(
-                      (i) => i.beforeWeekForm.registrationForm
-                    )
-                  : afterWeekStudents?.map(
-                      (i) => i.beforeWeekForm.registrationForm
-                    )
-              }
-            />
           </Box>
-          {/* //!component for searching student */}
-          <Box
-            sx={{
-              width: "100%",
-              my: 3,
-            }}
-          >
-            <SearchAll
-              setSearchingStudentAfter={setSearchingStudentAfter}
-              searchPage="afterWeek"
-            />
-          </Box>
-
+          <AccordionStyled>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
+            >
+              <AccordionSummaryStyled
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => setChevronDir(!chevronDir)}
+              >
+                <Typography>جستجو</Typography>
+                <ExpandMoreIcon
+                  className={chevronDir ? style.rotate180 : style.rotate0}
+                />
+              </AccordionSummaryStyled>
+              <ExcelExport
+                fileName={"Applicant Info"}
+                apiData={
+                  searchingStudentAfter
+                    ? searchingStudentAfter?.map(
+                        (i) => i.beforeWeekForm.registrationForm
+                      )
+                    : afterWeekStudents?.map(
+                        (i) => i.beforeWeekForm.registrationForm
+                      )
+                }
+              />
+            </Box>
+            <AccordionDetails>
+              {/* //!component for searching student */}
+              <Box
+                sx={{
+                  width: "100%",
+                  my: 3,
+                }}
+              >
+                <SearchAll
+                  setSearchingStudentAfter={setSearchingStudentAfter}
+                  searchPage="afterWeek"
+                  chevronDir={chevronDir}
+                />
+              </Box>
+            </AccordionDetails>
+          </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader />

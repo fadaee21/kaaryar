@@ -21,11 +21,19 @@ import TablePic from "../../components/TablePic";
 import { useAuth } from "../../context/AuthProvider";
 import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  AccordionStyled,
+  AccordionSummaryStyled,
+} from "../../styles/search/accordion";
+import styleRot from "../../styles/search/searchChevron.module.css";
 
 const StudentListMoodleTable = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [chevronDir, setChevronDir] = useState(false);
   const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
     MoodleUser[] | null
   >(null);
@@ -68,27 +76,52 @@ const StudentListMoodleTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> لیست مهارت جوها</Typography>
-            {/* //! export excel */}
-            <ExcelExport
-              fileName={"excel export"}
-              apiData={
-                searchingMoodleStudent ? searchingMoodleStudent : students
-              }
-            />
-            {/* //! export excel */}
+            <Typography variant="h4"> لیست مهارت آموزان</Typography>
           </Box>
-          <Box
-            sx={{
-              width: "100%",
-              my: 3,
-            }}
-          >
-            <SearchAll
-              setSearchingMoodleStudent={setSearchingMoodleStudent}
-              searchPage="moodle"
-            />
-          </Box>
+
+          <AccordionStyled>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
+            >
+              <AccordionSummaryStyled
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => setChevronDir(!chevronDir)}
+              >
+                <Typography>جستجو</Typography>
+                <ExpandMoreIcon
+                  className={chevronDir ? styleRot.rotate180 : styleRot.rotate0}
+                />
+
+                {/* //! export excel */}
+              </AccordionSummaryStyled>
+              <ExcelExport
+                fileName={"excel export"}
+                apiData={
+                  searchingMoodleStudent ? searchingMoodleStudent : students
+                }
+              />
+            </Box>
+            <AccordionDetails>
+              {/* //! export excel */}
+              <Box
+                sx={{
+                  width: "100%",
+                  my: 3,
+                }}
+              >
+                <SearchAll
+                  setSearchingMoodleStudent={setSearchingMoodleStudent}
+                  searchPage="moodle"
+                  chevronDir={chevronDir}
+                />
+              </Box>
+            </AccordionDetails>
+          </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHead>

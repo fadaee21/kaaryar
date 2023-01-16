@@ -23,6 +23,7 @@ import { useAuth } from "../context/AuthProvider";
 import { Menu, MenuItem, Typography } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import logoWithName from "../assets/logoWithName.png";
 export default function Sidebar({ listRoutes }: any) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -42,7 +43,7 @@ export default function Sidebar({ listRoutes }: any) {
   };
 
   const handleExit = () => {
-    handleClose()
+    handleClose();
     localStorage.removeItem("user");
     setAuth({ token: "", roles: [], username: "" });
     navigate("/");
@@ -56,7 +57,7 @@ export default function Sidebar({ listRoutes }: any) {
     setAnchorEl(null);
   };
   const handleNavigateProfilePage = () => {
-    handleClose()
+    handleClose();
     navigate(`${roleUser}/profile`);
   };
 
@@ -74,6 +75,16 @@ export default function Sidebar({ listRoutes }: any) {
           >
             <MenuIcon />
           </IconButton>
+          <Box
+            component={"img"}
+            src={logoWithName}
+            alt={"kaaryar logo"}
+            sx={{
+              width: "8rem",
+              height: "auto",
+              ...(open && { display: "none" }),
+            }}
+          />
           <Box sx={{ marginLeft: "auto" }}>
             <Box
               sx={{
