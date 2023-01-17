@@ -1,5 +1,4 @@
 import Select from "react-select";
-
 interface SearchProvincesType {
   setProvincesState: React.Dispatch<React.SetStateAction<string | null>>;
 }
@@ -43,6 +42,12 @@ const SearchProvinces = ({ setProvincesState }: SearchProvincesType) => {
       options={options}
       placeholder="استان"
       onChange={(e: any) => setProvincesState(e.value)}
+      styles={{
+        control: (baseStyles) => ({
+          ...baseStyles,
+          height: "3rem",
+        }),
+      }}
     />
   );
 };

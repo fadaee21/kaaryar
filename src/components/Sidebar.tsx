@@ -87,7 +87,7 @@ export default function Sidebar({ listRoutes }: any) {
               ...(open && { display: "none" }),
             }}
           />
-            <Typography variant="subtitle2">سامانه مدیریت پروفایل</Typography>
+            <Typography variant="subtitle2">سامانه مدیریت پروفایل کاریار</Typography>
           <Box sx={{ marginLeft: "auto" }}>
             <Box
               sx={{

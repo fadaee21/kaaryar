@@ -14,6 +14,12 @@ const StatusSearch = ({ setStatusState }: StatusSearchType) => {
       options={options}
       placeholder="وضعیت"
       onChange={(e: any) => setStatusState(e.value)}
+      styles={{
+        control: (baseStyles) => ({
+          ...baseStyles,
+          height: "3rem",
+        }),
+      }}
     />
   );
 };

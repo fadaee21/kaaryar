@@ -48,6 +48,12 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
+           styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
         />
       )}
       {searchPage === "beforeWeek" && (
@@ -64,6 +70,12 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
+           styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
         />
       )}
       {searchPage === "afterWeek" && (
@@ -82,6 +94,12 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
+           styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
         />
       )}
       {searchPage === "moodle" && (
@@ -98,6 +116,12 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
+           styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
         />
       )}
     </>

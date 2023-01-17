@@ -13,6 +13,12 @@ const SearchGender = ({ setOutputGender }: SearchGenderType) => {
       options={options}
       placeholder="جنسیت"
       onChange={(e: any) => setOutputGender(e.value)}
+      styles={{
+        control: (baseStyles) => ({
+          ...baseStyles,
+          height: "3rem",
+        }),
+      }}
     />
   );
 };
