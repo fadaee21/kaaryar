@@ -1,9 +1,10 @@
-import { TextField } from "@mui/material";
-import React from "react";
-
-const SearchEmail = ({ setEmailState }: any) => {
+import { SearchField } from "../../styles/search/searchField";
+interface SearchEmailType {
+  setEmailState: React.Dispatch<React.SetStateAction<string | null>>;
+}
+const SearchEmail = ({ setEmailState }: SearchEmailType) => {
   return (
-    <TextField
+    <SearchField
       id="outlined-email"
       label="ایمیل"
       variant="outlined"

@@ -17,5 +17,6 @@ export const GridContainerFooter = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     justifyContent: "space-around",
     flexDirection: "row",
+    alignItems: "center",
   },
 }));

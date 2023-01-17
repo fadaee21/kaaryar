@@ -11,26 +11,27 @@ import RegisterFormTable from "./pages/reg/registerFormTable";
 import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
-import CommentIcon from "@mui/icons-material/Comment";
-import AddCommentIcon from "@mui/icons-material/AddComment";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import PortraitIcon from "@mui/icons-material/Portrait";
+// import DashboardIcon from "@mui/icons-material/Dashboard";
+// import PeopleIcon from "@mui/icons-material/People";
+// import CommentIcon from "@mui/icons-material/Comment";
+// import AddCommentIcon from "@mui/icons-material/AddComment";
+// import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+// import HowToRegIcon from "@mui/icons-material/HowToReg";
+// import PortraitIcon from "@mui/icons-material/Portrait";
 import AdmissionFormDetail from "./pages/afterWeek/AfterWeekDetail";
 import AdmissionFormDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import justTest from "./pages/justTest";
 import AllComments from "./pages/comment/AllComments";
 import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
+import skillSeeker from "./pages/skillSeeker/skillSeeker";
 
 const ListRoutes = [
   // ta________________________________
   {
     path: "ta/dashboard",
     name: "داشبورد",
-    icon: <DashboardIcon />,
+    // icon: <DashboardIcon />,
     component: Dashboard,
     showInNav: true,
     role: "ta",
@@ -38,8 +39,8 @@ const ListRoutes = [
   },
   {
     path: "ta/student",
-    name: "لیست مهارت جو ها",
-    icon: <PeopleIcon />,
+    name: "لیست مهارت جویان",
+    // icon: <PeopleIcon />,
     component: StudentListMoodleTable,
     showInNav: true,
     role: "ta",
@@ -55,8 +56,8 @@ const ListRoutes = [
   },
   {
     path: "ta/all-comments/:roleQuery",
-    name: "همه نظرات",
-    icon: <CommentIcon />,
+    name: "نظرات",
+    // icon: <CommentIcon />,
     component: Comments,
     showInNav: false,
     role: "ta",
@@ -64,8 +65,8 @@ const ListRoutes = [
   },
   {
     path: "ta/all-comments",
-    name: "همه نظرات",
-    icon: <CommentIcon />,
+    name: "نظرات",
+    // icon: <CommentIcon />,
     component: AllComments,
     showInNav: true,
     role: "ta",
@@ -74,7 +75,7 @@ const ListRoutes = [
   {
     path: "ta/student/:id/add-comment",
     name: "افزودن نظر جدید",
-    icon: <AddCommentIcon />,
+    // icon: <AddCommentIcon />,
     component: AddComment,
     showInNav: false,
     role: "ta",
@@ -102,7 +103,7 @@ const ListRoutes = [
   // {
   //   path: "mentor/dashboard",
   //   name: "داشبورد",
-  //   icon: <DashboardIcon />,
+    // icon: <DashboardIcon />,
   //   component: Dashboard,
   //   showInNav: true,
   //   role: "mentor",
@@ -110,7 +111,7 @@ const ListRoutes = [
   // },
   // {
   //   path: "mentor/student",
-  //   name: "لیست مهارت جو ها",
+  //   name: "لیست مهارت جویان",
   //   icon: <PeopleIcon />,
   //   component: StudentListMoodleTable,
   //   showInNav: true,
@@ -127,7 +128,7 @@ const ListRoutes = [
   // },
   // {
   //   path: "mentor/comments",
-  //   name: "همه نظرات",
+  //   name: "نظرات",
   //   icon: <CommentIcon />,
   //   component: Comments,
   //   showInNav: true,
@@ -148,7 +149,7 @@ const ListRoutes = [
   {
     path: "teacher/dashboard",
     name: "داشبورد",
-    icon: <DashboardIcon />,
+    // icon: <DashboardIcon />,
     component: Dashboard,
     showInNav: true,
     role: "teacher",
@@ -156,8 +157,8 @@ const ListRoutes = [
   },
   {
     path: "teacher/student",
-    name: "لیست مهارت جو ها",
-    icon: <PeopleIcon />,
+    name: "لیست مهارت جویان",
+    // icon: <PeopleIcon />,
     component: StudentListMoodleTable,
     showInNav: true,
     role: "teacher",
@@ -181,8 +182,8 @@ const ListRoutes = [
   },
   {
     path: "teacher/all-comments",
-    name: "همه نظرات",
-    icon: <CommentIcon />,
+    name: "نظرات",
+    // icon: <CommentIcon />,
     component: AllComments,
     showInNav: true,
     role: "teacher",
@@ -191,7 +192,7 @@ const ListRoutes = [
   {
     path: "teacher/student/:id/add-comment",
     name: "افزودن نظر جدید",
-    icon: <AddCommentIcon />,
+    // icon: <AddCommentIcon />,
     component: AddComment,
     showInNav: false,
     role: "teacher",
@@ -217,7 +218,7 @@ const ListRoutes = [
   // {
   //   path: "teacher/register-form",
   //   name: "لیست فرم های ثبت نام ",
-  //   icon: <AppRegistrationIcon />,
+    // icon: <AppRegistrationIcon />,
   //   component: RegisterFormTable,
   //   showInNav: true,
   //   role: "teacher",
@@ -294,82 +295,47 @@ const ListRoutes = [
   {
     path: "admin/dashboard",
     name: "داشبورد",
-    icon: <DashboardIcon />,
+    // icon: <DashboardIcon />,
     component: Dashboard,
     showInNav: true,
     role: "admin",
     key: "admin1",
   },
   {
-    path: "admin/student",
-    name: "لیست مهارت جو ها",
-    icon: <PeopleIcon />,
-    component: StudentListMoodleTable,
+    path: "admin/register-form",
+    name: "لیست ثبت نام ",
+    // icon: <AppRegistrationIcon />,
+    component: RegisterFormTable,
     showInNav: true,
     role: "admin",
     key: "admin2",
   },
   {
-    path: "admin/student/:id",
-    name: "جزییات مهارت جو ها",
-    component: StudentPage,
-    showInNav: false,
+    path: "admin/before-week",
+    name: "لیست ارزیابی",
+    // icon: <PortraitIcon />,
+    component: BeforeWeekTable,
+    showInNav: true,
     role: "admin",
     key: "admin3",
   },
   {
-    path: "admin/all-comments/:roleQuery",
-    name: " ",
-    icon: <CommentIcon />,
-    component: Comments,
-    showInNav: false,
+    path: "admin/after-week",
+    name: "لیست هفته پذیرش",
+    // icon: <HowToRegIcon />,
+    component: AfterWeekTable,
+    showInNav: true,
     role: "admin",
     key: "admin4",
   },
   {
-    path: "admin/all-comments",
-    name: "همه نظرات",
-    icon: <CommentIcon />,
-    component: AllComments,
+    path: "admin/skill-seeker",
+    name: "لیست مهارت جویان",
+    // icon: <AddCommentIcon />,
+    component: skillSeeker,
     showInNav: true,
     role: "admin",
-    key: "admin15",
-  },
-  {
-    path: "admin/student/:id/add-comment",
-    name: "افزودن نظر جدید",
-    icon: <AddCommentIcon />,
-    component: AddComment,
-    showInNav: false,
-    role: "admin",
-    key: "admin5",
-  },
-  {
-    path: "admin/register-form",
-    name: "لیست فرم های ثبت نام ",
-    icon: <AppRegistrationIcon />,
-    component: RegisterFormTable,
-    showInNav: true,
-    role: "admin",
-    key: "admin6",
-  },
-  {
-    path: "admin/before-week",
-    name: "لیست فرم های آزمون",
-    icon: <PortraitIcon />,
-    component: BeforeWeekTable,
-    showInNav: true,
-    role: "admin",
-    key: "admin7",
-  },
-  {
-    path: "admin/after-week",
-    name: "لیست هفته پذیرش",
-    icon: <HowToRegIcon />,
-    component: AfterWeekTable,
-    showInNav: true,
-    role: "admin",
-    key: "admin8",
+    key: "admin18",
   },
   {
     path: "admin/before-week/:id",
@@ -377,7 +343,7 @@ const ListRoutes = [
     component: BeforeWeekDetail,
     showInNav: false,
     role: "admin",
-    key: "admin9",
+    key: "admin5",
   },
   {
     path: "admin/before-week-edit/:id",
@@ -385,7 +351,7 @@ const ListRoutes = [
     component: BeforeWeekDetailEdit,
     showInNav: false,
     role: "admin",
-    key: "admin10",
+    key: "admin6",
   },
 
   {
@@ -394,7 +360,7 @@ const ListRoutes = [
     component: RegisterDetail,
     showInNav: false,
     role: "admin",
-    key: "admin11",
+    key: "admin7",
   },
   {
     path: "admin/register-form-edit/:id",
@@ -402,7 +368,7 @@ const ListRoutes = [
     component: RegisterFormDetailEdit,
     showInNav: false,
     role: "admin",
-    key: "admin12",
+    key: "admin8",
   },
   {
     path: "admin/after-week/:id",
@@ -410,7 +376,7 @@ const ListRoutes = [
     component: AdmissionFormDetail,
     showInNav: false,
     role: "admin",
-    key: "admin13",
+    key: "admin9",
   },
   {
     path: "admin/after-week-edit/:id",
@@ -418,7 +384,7 @@ const ListRoutes = [
     component: AdmissionFormDetailEdit,
     showInNav: false,
     role: "admin",
-    key: "admin14",
+    key: "admin10",
   },
   {
     path: "admin/profile",
@@ -426,7 +392,7 @@ const ListRoutes = [
     component: UserProfile,
     showInNav: false,
     role: "admin",
-    key: "admin15",
+    key: "admin11",
   },
   {
     path: "admin/all-comments/:roleQuery/:id",
@@ -434,12 +400,58 @@ const ListRoutes = [
     component: WatchComment,
     showInNav: false,
     role: "admin",
+    key: "admin12",
+  },
+  {
+    path: "admin/student",
+    name: "لیست مهارت آموزان",
+    // icon: <PeopleIcon />,
+    component: StudentListMoodleTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin13",
+  },
+  {
+    path: "admin/student/:id",
+    name: " ",
+    component: StudentPage,
+    showInNav: false,
+    role: "admin",
+    key: "admin14",
+  },
+  {
+    path: "admin/all-comments/:roleQuery",
+    name: " ",
+    // icon: <CommentIcon />,
+    component: Comments,
+    showInNav: false,
+    role: "admin",
+    key: "admin15",
+  },
+  {
+    path: "admin/all-comments",
+    name: "نظرات",
+    // icon: <CommentIcon />,
+    component: AllComments,
+    showInNav: true,
+    role: "admin",
     key: "admin16",
   },
   {
+    path: "admin/student/:id/add-comment",
+    name: "افزودن نظر جدید",
+    // icon: <AddCommentIcon />,
+    component: AddComment,
+    showInNav: false,
+    role: "admin",
+    key: "admin17",
+  },
+
+
+  {
     path: "test",
     name: " ",
-    icon: <AddCommentIcon />,
+    // icon: <AddCommentIcon />,
     component: justTest,
     showInNav: false,
     role: "admin",

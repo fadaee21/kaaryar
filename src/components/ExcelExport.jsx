@@ -18,6 +18,7 @@ export const ExcelExport = ({ apiData, fileName }) => {
 
   return (
     <Button
+      sx={{ ml: "auto" }}
       color="secondary"
       endIcon={<FileDownloadIcon />}
       variant="contained"
@@ -25,7 +26,7 @@ export const ExcelExport = ({ apiData, fileName }) => {
         exportToCSV(apiData, fileName);
       }}
     >
-      گرفتن خروجی اکسل
+       خروجی اکسل
     </Button>
   );
 };

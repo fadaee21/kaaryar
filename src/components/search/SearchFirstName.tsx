@@ -1,14 +1,18 @@
 import AsyncSelect from "react-select/async";
 import { getData } from "../../api/axios";
 
-export const SearchName = ({ setOutputName, searchPage, searchLink }: any) => {
+export const SearchFirstName = ({
+  setOutputFirstName,
+  searchPage,
+  searchLink,
+}: any) => {
   // const [inputValue, setValue] = useState<string>();
 
   const fetchData = async (inputValue: string) => {
     try {
       const response = await getData(searchLink, {
         params: {
-          keyword: inputValue,
+          firstName: inputValue,
         },
       });
       if (response.status === 200) {
@@ -34,36 +38,46 @@ export const SearchName = ({ setOutputName, searchPage, searchLink }: any) => {
         <AsyncSelect
           // value={inputValue}
           defaultOptions={true}
-          getOptionLabel={(e: any) => e.firstName + " " + e.family}
-          getOptionValue={(e: any) => e.firstName + e.family}
+          getOptionLabel={(e: any) => e.firstName}
+          getOptionValue={(e: any) => e.firstName}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputName(e.family)} //just family (not first name) it may cause BUG if you have 2 person with same family
+          onChange={(e: any) => setOutputFirstName(e.firstName)}
           cacheOptions
           loadOptions={promiseOptions}
-          placeholder="نام و نام خانوادگی"
+          placeholder="نام"
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
         />
       )}
       {searchPage === "beforeWeek" && (
         <AsyncSelect
           // value={inputValue}
           defaultOptions={true}
-          getOptionLabel={(e: any) =>
-            e.registrationForm.firstName + " " + e.registrationForm.family
-          }
-          getOptionValue={(e: any) =>
-            e.registrationForm.firstName + e.registrationForm.family
-          }
+          getOptionLabel={(e: any) => e.registrationForm.firstName}
+          getOptionValue={(e: any) => e.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputName(e.registrationForm.family)} //just family (not first name) it may cause BUG if you have 2 person with same family
+          onChange={(e: any) =>
+            setOutputFirstName(e.registrationForm.firstName)
+          }
           cacheOptions
           loadOptions={promiseOptions}
-          placeholder="نام و نام خانوادگی"
+          placeholder="نام"
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
         />
       )}
       {searchPage === "afterWeek" && (
@@ -71,24 +85,49 @@ export const SearchName = ({ setOutputName, searchPage, searchLink }: any) => {
           // value={inputValue}
           defaultOptions={true}
           getOptionLabel={(e: any) =>
-            e.beforeWeekForm.registrationForm.firstName +
-            " " +
-            e.beforeWeekForm.registrationForm.family
+            e.beforeWeekForm.registrationForm.firstName
           }
           getOptionValue={(e: any) =>
-            e.beforeWeekForm.registrationForm.firstName +
-            e.beforeWeekForm.registrationForm.family
+            e.beforeWeekForm.registrationForm.firstName
           }
           // onInputChange={(e) => setValue(e)}
           onChange={(e: any) =>
-            setOutputName(e.beforeWeekForm.registrationForm.family)
-          } //just family (not first name) it may cause BUG if you have 2 person with same family
+            setOutputFirstName(e.beforeWeekForm.registrationForm.firstName)
+          }
           cacheOptions
           loadOptions={promiseOptions}
-          placeholder="نام و نام خانوادگی"
+          placeholder="نام"
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
+        />
+      )}
+      {searchPage === "moodle" && (
+        <AsyncSelect
+          // value={inputValue}
+          defaultOptions={true}
+          getOptionLabel={(e: any) => e.firstName}
+          getOptionValue={(e: any) => e.firstName}
+          // onInputChange={(e) => setValue(e)}
+          onChange={(e: any) => setOutputFirstName(e.firstName)}
+          cacheOptions
+          loadOptions={promiseOptions}
+          placeholder="نام"
+          noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+          loadingMessage={() => "لطفا کمی صبر کنید"}
+          name="searchName"
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+          }}
         />
       )}
     </>

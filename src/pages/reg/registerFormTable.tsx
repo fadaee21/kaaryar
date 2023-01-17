@@ -1,6 +1,5 @@
 import {
   Button,
-  ButtonGroup,
   Pagination,
   Paper,
   Table,
@@ -15,8 +14,6 @@ import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
-// import { SearchRegister } from "../../components/Searching";
-// import SearchingGender from "../../components/SearchingGender";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
 import { useAuth } from "../../context/AuthProvider";
@@ -24,6 +21,13 @@ import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { RegistrationForm } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  AccordionStyled,
+  AccordionSummaryStyled,
+} from "../../styles/search/accordion";
+import style from "../../styles/search/searchChevron.module.css";
 
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
@@ -31,6 +35,7 @@ const RegisterFormTable = () => {
   // const [checkStateIds, setCheckStateIds] = useState<string>("");
   const [ids, setIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
+  const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
@@ -95,42 +100,68 @@ const RegisterFormTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> لیست فرم های ثبت نام</Typography>
-            <Box>
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={() =>
-                  getApproveMulti(ids.toString(), "/reg/form/multiple/approve")
-                }
-                disabled={ids.toString() === ""}
-                sx={{ mr: 0.5 }}
-              >
-                تایید گروهی
-              </Button>
-              <ExcelExport
-                fileName={"Applicant Info"}
-                apiData={
-                  searchingStudentRegister
-                    ? searchingStudentRegister?.map((i) => i)
-                    : students?.map((i) => i)
-                }
-              />
-            </Box>
+            <Typography variant="h4"> لیست ثبت نام</Typography>
           </Box>
-          {/* //!component for searching student */}
 
-          <Box
-            sx={{
-              width: "100%",
-              my: 3,
-            }}
-          >
-            <SearchAll
-              setSearchingStudentRegister={setSearchingStudentRegister}
-              searchPage="reg"
-            />
-          </Box>
+          <AccordionStyled>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
+            >
+              <AccordionSummaryStyled
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => setChevronDir(!chevronDir)}
+              >
+                <Typography variant="button">جستجو</Typography>
+                <ExpandMoreIcon
+                  className={chevronDir ? style.rotate180 : style.rotate0}
+                />
+              </AccordionSummaryStyled>
+              <Box sx={{ ml: "auto" }}>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() =>
+                    getApproveMulti(
+                      ids.toString(),
+                      "/reg/form/multiple/approve"
+                    )
+                  }
+                  disabled={ids.toString() === ""}
+                  sx={{ mr: 0.5 }}
+                >
+                  تایید گروهی
+                </Button>
+                <ExcelExport
+                  fileName={"Applicant Info"}
+                  apiData={
+                    searchingStudentRegister
+                      ? searchingStudentRegister?.map((i) => i)
+                      : students?.map((i) => i)
+                  }
+                />
+              </Box>
+            </Box>
+            <AccordionDetails>
+              <Box
+                sx={{
+                  width: "100%",
+                  my: 3,
+                }}
+              >
+                {/* //!component for searching student */}
+                <SearchAll
+                  setSearchingStudentRegister={setSearchingStudentRegister}
+                  searchPage="reg"
+                  chevronDir={chevronDir}
+                />
+              </Box>
+            </AccordionDetails>
+          </AccordionStyled>
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">

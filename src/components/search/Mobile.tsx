@@ -1,9 +1,12 @@
-import { TextField } from "@mui/material";
+import { SearchField } from "../../styles/search/searchField";
 
+interface MobileType {
+  setMobileState: React.Dispatch<React.SetStateAction<string | null>>;
+}
 
-const Mobile = ({ setMobileState }: any) => {
+const Mobile = ({ setMobileState }: MobileType) => {
   return (
-    <TextField
+    <SearchField
       id="outlined-basic"
       label="شماره موبایل"
       variant="outlined"
