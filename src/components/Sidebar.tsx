@@ -24,6 +24,8 @@ import { Menu, MenuItem, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import logoWithName from "../assets/logoWithName.png";
 import style from "../styles/search/searchChevron.module.css";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import Face6Icon from '@mui/icons-material/Face6';
 
 export default function Sidebar({ listRoutes }: any) {
   const theme = useTheme();
@@ -81,13 +83,15 @@ export default function Sidebar({ listRoutes }: any) {
             src={logoWithName}
             alt={"kaaryar logo"}
             sx={{
-              mr:5,
+              mr: 5,
               width: "8rem",
               height: "auto",
               ...(open && { display: "none" }),
             }}
           />
-            <Typography variant="subtitle2">سامانه مدیریت پروفایل کاریار</Typography>
+          <Typography variant="subtitle2">
+            سامانه مدیریت پروفایل کاریار
+          </Typography>
           <Box sx={{ marginLeft: "auto" }}>
             <Box
               sx={{
@@ -126,17 +130,37 @@ export default function Sidebar({ listRoutes }: any) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
+              <MenuItem>
+                <ListItemIcon sx={{ marginRight: 1 }}>
+                  {roleUser === "admin" ? (
+                    <AdminPanelSettingsIcon />
+                  ) : (
+                    <Face6Icon />
+                  )}
+                </ListItemIcon>
+                <ListItemText
+                  secondary={`نقش شما:
+                  ${
+                    roleUser === "admin"
+                      ? "ادمین"
+                      : roleUser === "mentor"
+                      ? "منتور"
+                      : "مربی حل تمرین"
+                  }`}
+                />
+              </MenuItem>
               <MenuItem onClick={handleNavigateProfilePage}>
                 <ListItemIcon sx={{ marginRight: 1 }}>
                   {<AccountCircle />}
                 </ListItemIcon>
-                <ListItemText>پروفایل کاربری</ListItemText>
+                <ListItemText secondary="پروفایل کاربری" />
               </MenuItem>
+              <Divider variant="middle" />
               <MenuItem onClick={handleExit}>
                 <ListItemIcon sx={{ rotate: "180deg", mr: 1 }}>
                   {<LogoutIcon />}
                 </ListItemIcon>
-                <ListItemText>خروج</ListItemText>
+                <ListItemText secondary="خروج" />
               </MenuItem>
             </Menu>
           </Box>

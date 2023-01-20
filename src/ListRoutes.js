@@ -40,7 +40,7 @@ const ListRoutes = [
   },
   {
     path: "ta/student",
-    name: "فهرست متقاضیان",
+    name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
     component: StudentListMoodleTable,
     showInNav: true,
@@ -119,7 +119,7 @@ const ListRoutes = [
   },
   {
     path: "mentor/student",
-    name: "فهرست متقاضیان",
+    name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
     component: StudentListMoodleTable,
     showInNav: true,

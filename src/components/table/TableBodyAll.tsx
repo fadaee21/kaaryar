@@ -65,7 +65,7 @@ const TableBodyAll = ({
             ? `تایید شده`
             : checked === null
             ? `در انتظار تایید`
-            : `رد نشده`}
+            : `رد شده`}
         </Typography>
       </StyledTableCell>
       <StyledTableCell

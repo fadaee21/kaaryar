@@ -20,9 +20,22 @@ export const useSubmitLogin = (username: string, password: string) => {
           password,
         },
       });
-      console.log(response);
-      const roleResponseServer: RoleType = "admin";
+      const res = response.data.profile.roles;
+      const roleResponseServer: RoleType =
+        res.indexOf("manager") >= 0
+          ? "admin"
+          : res.indexOf("mentor") >= 0
+          ? "mentor"
+          : res.indexOf("editingteacher") >= 0
+          ? "ta"
+          : undefined;
+      // response.data.profile.roles.toString();
       const accessToken = response?.data?.authorization;
+
+      if (!roleResponseServer) {
+        setErrMsg("شما مجاز به ورود در سامانه نمی باشید ");
+        return;
+      }
 
       setAuth({
         username,
