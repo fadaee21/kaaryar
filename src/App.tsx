@@ -63,8 +63,8 @@ function App() {
                 }
               )}
             </Route>
-            <Route element={<RequireAuth allowedRoles={[Roles.TEACHER]} />}>
-              {ListRoutes.filter((route) => route.role === "teacher").map(
+            <Route element={<RequireAuth allowedRoles={[Roles.MENTOR]} />}>
+              {ListRoutes.filter((route) => route.role === "mentor").map(
                 (route, key) => {
                   return (
                     <Route

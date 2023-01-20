@@ -8,15 +8,28 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ExamFormDetailComp from "../../components/beforeWeek/InitialDataRegistered";
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
 import AfterWeekDetailShowComp from "../../components/afterWeek/AfterWeekDetailShowComp";
+import AlertDialog from "../../components/modal/AlertDialog";
+import { useApproveWeek } from "../../hooks/request/useApprove";
 
 const AfterWeekDetail = () => {
   const [student, setStudent] = useState<AfterWeekType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertType, setAlertType] = useState<
+    "approve" | "disApprove" | undefined
+  >(undefined);
+  const { successObject, getApproveWeek } = useApproveWeek();
+  const handleOpenAlert = (alert: "approve" | "disApprove") => {
+    console.log(alert);
+    setAlertType(alert);
+    setOpenAlert(true);
+  };
+  const handleCloseAlert = () => setOpenAlert(false);
+
   const navigate = useNavigate();
   const { id } = useParams();
-
   const studentIdAfterWeek = `/exam/after/week/form/${id}`;
-
+  const approveLink = "/exam/after/week/form/approve";
   const getStudent = async () => {
     setLoading(true);
     try {
@@ -37,6 +50,16 @@ const AfterWeekDetail = () => {
     window.scrollTo(0, 0);
     // eslint-disable-next-line
   }, []);
+
+  const handleApprove = () => {
+    console.log("you trigger approve after Week");
+    getApproveWeek(id, { afterWeekChecked: true }, approveLink);
+  };
+  const handleDisApprove = () => {
+    console.log("you trigger disApprove after Week");
+    getApproveWeek(id, { afterWeekChecked: false }, approveLink);
+  };
+
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
   if (loading) {
@@ -80,8 +103,21 @@ const AfterWeekDetail = () => {
           student={student}
           matches={matches}
           id={id}
+          successObject={successObject}
+          handleOpenAlert={handleOpenAlert}
         />
       </Container>
+      <AlertDialog
+        handleCloseAlert={handleCloseAlert}
+        openAlert={openAlert}
+        firstName={student?.beforeWeekForm?.registrationForm.firstName}
+        family={student?.beforeWeekForm?.registrationForm.family}
+        alertType={alertType}
+        handleApprove={
+          alertType === "approve" ? handleApprove : handleDisApprove
+        }
+        alertPage="پذیرش"
+      />
     </>
   );
 };

@@ -82,7 +82,7 @@ const AfterWeekTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> لیست هفته پذیرش</Typography>
+            <Typography variant="h4"> فهرست هفته پذیرش</Typography>
           </Box>
           <AccordionStyled>
             <Box
@@ -97,7 +97,7 @@ const AfterWeekTable = () => {
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
               >
-                <Typography  variant="button" >جستجو</Typography>
+                <Typography variant="button">جستجو</Typography>
                 <ExpandMoreIcon
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
@@ -135,7 +135,7 @@ const AfterWeekTable = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader />
               {/*//! while searching show the search content */}
-              {searchingStudentAfter === null && (
+              {!searchingStudentAfter && (
                 <TableBody>
                   {afterWeekStudents.map((afterWeekStudent: AfterWeekType) => {
                     const {
@@ -230,22 +230,24 @@ const AfterWeekTable = () => {
           </TableContainer>
         </Container>
       </Box>
-      <Pagination
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          my: 4,
-        }}
-        size="large"
-        count={counterPagination(counterPage, 20)}
-        variant="outlined"
-        shape="rounded"
-        page={page}
-        onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-          setPage(value);
-        }}
-      />
+      {!searchingStudentAfter && (
+        <Pagination
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            my: 4,
+          }}
+          size="large"
+          count={counterPagination(counterPage, 20)}
+          variant="outlined"
+          shape="rounded"
+          page={page}
+          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+            setPage(value);
+          }}
+        />
+      )}
     </Box>
   );
 };

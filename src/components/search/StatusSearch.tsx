@@ -5,7 +5,7 @@ interface StatusSearchType {
 const StatusSearch = ({ setStatusState }: StatusSearchType) => {
   const options = [
     { value: true, label: "تایید شده" },
-    { value: false, label: "تایید نشده" },
+    { value: false, label: "رد شده" },
     { value: null, label: "در انتظار تایید" },
   ];
 

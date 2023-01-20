@@ -1,4 +1,4 @@
-export type RoleType = "admin" | "teacher" | "ta" | "mentor";
+export type RoleType = "admin" | "mentor" | "ta" | "mentor" | undefined;
 
 export interface AuthType {
   username: string;
@@ -51,19 +51,17 @@ export interface Course {
   courseName: string;
 }
 export interface Comment {
-  id: number;
-  checked: boolean;
+  checked: true;
   comment: string;
   createTime: string;
-  updateTime?: string;
+  id: number;
+  sessionDate: string;
+  sessionProblem: string;
+  studentContribute: string;
+  studentPresent: true;
+  studentTask: string;
+  updateTime: string;
   studentUser: StudentUser;
-  taUser: {
-    id: number;
-    username: string;
-    firstName: string;
-    lastName: string;
-    roles: [];
-  };
   course: Course;
 }
 
@@ -73,9 +71,9 @@ export interface Course {
 }
 
 export interface editCommentProp {
-  editId: number | null;
+  // editId: number | null;
   openEditState: boolean;
-  shareComment: string;
+  shareComment: any;
   setOpenEditState: React.Dispatch<React.SetStateAction<boolean>>;
   setRefreshByEdit: React.Dispatch<React.SetStateAction<number>>;
 }
