@@ -13,7 +13,7 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { useApproveWeek } from "../../hooks/request/useApprove";
+
 import useGetImage from "../../hooks/request/useGetImage";
 import { AfterWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
@@ -26,15 +26,18 @@ interface AfterWeekStudentShow {
   matches: boolean;
   id: string | undefined;
   typeComp: "exam" | "admission";
+  successObject: string;
+  handleOpenAlert: (alert: "approve" | "disApprove") => void;
 }
-const approveLink = "/exam/after/week/form/approve";
+
 const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   student,
   matches,
   id,
   typeComp,
+  successObject,
+  handleOpenAlert,
 }) => {
-  const { getApproveWeek, successObject } = useApproveWeek();
   const navigate = useNavigate();
 
   const { auth } = useAuth();
@@ -66,7 +69,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           size="large"
           aria-label="small button group"
           disabled={
-            student?.afterWeekChecked || successObject === "afterWeekChecked"
+            student?.afterWeekChecked !== null ||
+            successObject === "afterWeekChecked"
               ? true
               : false
           }
@@ -77,17 +81,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              getApproveWeek(id, { afterWeekChecked: true }, approveLink);
-            }}
+            onClick={() => handleOpenAlert("approve")}
           >
             تایید
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              getApproveWeek(id, { afterWeekChecked: false }, approveLink);
-            }}
+            onClick={() => handleOpenAlert("disApprove")}
           >
             عدم تایید
           </Button>
@@ -432,7 +432,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           size="large"
           aria-label="small button group"
           disabled={
-            student?.afterWeekChecked || successObject === "afterWeekChecked"
+            student?.afterWeekChecked !== null ||
+            successObject === "afterWeekChecked"
               ? true
               : false
           }
@@ -443,17 +444,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              getApproveWeek(id, { afterWeekChecked: true }, approveLink);
-            }}
+            onClick={() => handleOpenAlert("approve")}
           >
             تایید
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              getApproveWeek(id, { afterWeekChecked: false }, approveLink);
-            }}
+            onClick={() => handleOpenAlert("disApprove")}
           >
             عدم تایید
           </Button>

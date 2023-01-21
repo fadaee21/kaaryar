@@ -100,7 +100,7 @@ const RegisterFormTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> لیست ثبت نام</Typography>
+            <Typography variant="h4"> فهرست ثبت نام</Typography>
           </Box>
 
           <AccordionStyled>
@@ -222,22 +222,24 @@ const RegisterFormTable = () => {
           </TableContainer>
         </Container>
       </Box>
-      <Pagination
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          my: 4,
-        }}
-        size="large"
-        count={counterPagination(counterPage, 20)}
-        variant="outlined"
-        shape="rounded"
-        page={page}
-        onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-          setPage(value);
-        }}
-      />
+      {!searchingStudentRegister && (
+        <Pagination
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            my: 4,
+          }}
+          size="large"
+          count={counterPagination(counterPage, 20)}
+          variant="outlined"
+          shape="rounded"
+          page={page}
+          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+            setPage(value);
+          }}
+        />
+      )}
     </Box>
   );
 };

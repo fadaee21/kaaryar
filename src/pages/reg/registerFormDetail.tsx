@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
@@ -16,10 +16,21 @@ import RegisterFormDetailComp from "../../components/RegisterFormDetail/Register
 import { RegistrationForm } from "../../model";
 import { useApproveReg } from "../../hooks/request/useApprove";
 import { useAuth } from "../../context/AuthProvider";
+import AlertDialog from "../../components/modal/AlertDialog";
 
 const RegisterFormDetail = () => {
   const [student, setStudent] = useState<RegistrationForm | null>(null);
   const [loading, setLoading] = useState(true);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertType, setAlertType] = useState<
+    "approve" | "disApprove" | undefined
+  >(undefined);
+  const handleOpenAlert = (alert: "approve" | "disApprove") => {
+    console.log(alert);
+    setAlertType(alert);
+    setOpenAlert(true);
+  };
+  const handleCloseAlert = () => setOpenAlert(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -50,6 +61,16 @@ const RegisterFormDetail = () => {
     // eslint-disable-next-line
   }, []);
 
+  //handle approve and disApprove trigger in modal
+  const handleApprove = () => {
+    console.log("you trigger approve");
+    getApproveReg(id, { status: true }, approveLink);
+  };
+  const handleDisApprove = () => {
+    console.log("you trigger disApprove");
+    getApproveReg(id, { status: false }, approveLink);
+  };
+
   if (loading) {
     return <LoadingProgress />;
   }
@@ -77,27 +98,15 @@ const RegisterFormDetail = () => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => getApproveReg(id, { status: true }, approveLink)}
-            disabled={
-              student?.checked ||
-              // successObject === "status"
-              success
-                ? true
-                : false
-            }
+            onClick={() => handleOpenAlert("approve")}
+            // disabled={student?.checked !== null || success ? true : false}
           >
             تایید
           </Button>
           <Button
             variant="contained"
-            onClick={() => getApproveReg(id, { status: false }, approveLink)}
-            disabled={
-              student?.checked ||
-              // successObject === "status"
-              success
-                ? true
-                : false
-            }
+            onClick={() => handleOpenAlert("disApprove")}
+            // disabled={student?.checked !== null || success ? true : false}
           >
             عدم تایید
           </Button>
@@ -110,6 +119,17 @@ const RegisterFormDetail = () => {
         <RegisterFormDetailComp student={student} />
         <Divider />
       </Container>
+      <AlertDialog
+        handleCloseAlert={handleCloseAlert}
+        openAlert={openAlert}
+        firstName={student?.firstName}
+        family={student?.family}
+        alertType={alertType}
+        handleApprove={
+          alertType === "approve" ? handleApprove : handleDisApprove
+        }
+        alertPage="پذیرش"
+      />
     </>
   );
 };

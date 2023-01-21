@@ -7,12 +7,11 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-import { editAxios } from "../api/axios";
-import { editCommentProp } from "../model";
+import { editAxios } from "../../api/axios";
+import { editCommentProp } from "../../model";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions/transition";
-import { useAuth } from "../context/AuthProvider";
-
+import { useAuth } from "../../context/AuthProvider";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -24,7 +23,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export const EditComment: React.FC<editCommentProp> = ({
-  editId,
+  // editId,
   openEditState,
   setOpenEditState,
   setRefreshByEdit,
@@ -35,14 +34,14 @@ export const EditComment: React.FC<editCommentProp> = ({
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const {auth} = useAuth()
+  const { auth } = useAuth();
   const roles = auth.roles[0];
-  
+  console.log(shareComment);
   const editCommentFunc = async () => {
     setLoading(true);
     setErrorMsg(null);
     try {
-      await editAxios(`${roles}/survey/${editId}`, {
+      await editAxios(`${roles}/survey/${shareComment.id}`, {
         data: {
           comment,
         },
@@ -121,8 +120,9 @@ export const EditComment: React.FC<editCommentProp> = ({
             sx={{ width: "100%" }}
             multiline
             onChange={(e) => setComment(e.target.value)}
-            value={comment === " " ? shareComment : comment}
+            value={comment === " " ? shareComment?.comment : comment}
           />
+
           {loading && (
             <>
               <LinearProgress

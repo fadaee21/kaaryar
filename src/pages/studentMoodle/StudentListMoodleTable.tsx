@@ -76,7 +76,7 @@ const StudentListMoodleTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> لیست مهارت آموزان</Typography>
+            <Typography variant="h4"> فهرست مهارت آموزان</Typography>
           </Box>
 
           <AccordionStyled>

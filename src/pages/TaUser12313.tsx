@@ -28,7 +28,7 @@
 //       <Container maxWidth="lg">
 //         {/* //Todo: change the text */}
 //         <Typography variant="h3" color={"textPrimary"} sx={{ my: 5 }}>
-//           لیست نفرات
+//           فهرست نفرات
 //         </Typography>
 
 //         {students.map((student: StudentUser) => (

@@ -10,15 +10,16 @@ const useGetValidationToken = () => {
     setLoadingVal(false);
     try {
       //todo: need special link for this
-      let response = await getData("/teacher/test");
+      let response = await getData("/mentor/test");
       if (response.status === 200) {
         setTokenValidation(true);
       }
       setLoadingVal(true);
     } catch (error) {
-      console.log(error)
+      // console.log(error);
       setTokenValidation(false);
       setLoadingVal(true);
+      throw new Error("you need to log in again");
     }
   };
 

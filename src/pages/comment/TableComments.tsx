@@ -27,7 +27,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
 import { dateConverter } from "../../utils/dateConverter";
-import { EditComment } from "../../components/EditComment";
 import { counterPagination } from "../../utils/counterPagination";
 import { useNavigate, useParams } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -37,24 +36,23 @@ const Comments = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = React.useState(false);
   // equality AuthRole With RoleWatch
+  //if roleQuery was not same with roleAuth,you are not allowed to
+  //edit or post comment,just you can see the comment
   const [authWatch, setAuthWatch] = useState(false);
-  const [openEditState, setOpenEditState] = React.useState<boolean>(false);
-  const [editId, setEditId] = useState<number | null>(null);
-  const [refreshByEdit, setRefreshByEdit] = useState(0);
-  const [shareComment, setShareComment] = useState("");
   const { roleQuery } = useParams();
   const { auth } = useAuth();
+  const roleAuth = auth.roles.toString();
   const navigate = useNavigate();
 
-  const handleClickOpenEdit = (id: number, comment: string) => {
-    setOpenEditState(true);
-    setEditId(id);
-    setShareComment(comment);
-  };
-  const roleAuth = auth.roles.toString();
-  const [idComment, setIdComment] = useState<number>();
   const { getListComments, comments, loading, commentCounter } =
     useGetComments(page);
+
+  const handleClickOpenEdit = (id: any) => {
+    navigate(
+      `/${roleAuth}/all-comments/${roleQuery}/${id}/editing`
+    );
+  };
+  const [idComment, setIdComment] = useState<number>();
   const {
     removeComment,
     refresh,
@@ -80,7 +78,7 @@ const Comments = () => {
   useEffect(() => {
     getListComments();
     // eslint-disable-next-line
-  }, [page, refresh, refreshByEdit]);
+  }, [page, refresh]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -109,7 +107,7 @@ const Comments = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
           >
-            <Typography variant="h3"> لیست نظرات</Typography>
+            <Typography variant="h3"> فهرست نظرات</Typography>
           </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -183,7 +181,7 @@ const Comments = () => {
                             <VisibilityIcon color="primary" />
                           </IconButton>
                           <IconButton
-                            onClick={() => handleClickOpenEdit(id, comment)}
+                            onClick={() => handleClickOpenEdit(id)}
                             disabled={authWatch}
                           >
                             <EditIcon
@@ -205,13 +203,6 @@ const Comments = () => {
                     </StyledTableRow>
                   );
                 })}
-                <EditComment
-                  editId={editId}
-                  openEditState={openEditState}
-                  setOpenEditState={setOpenEditState}
-                  setRefreshByEdit={setRefreshByEdit}
-                  shareComment={shareComment}
-                />
                 <Dialog
                   open={open}
                   onClose={handleClose}

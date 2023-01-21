@@ -36,22 +36,36 @@ const TableBodyAll = ({
           align="left"
           sx={{ width: "2%", verticalAlign: "center" }}
         >
-          <Checkbox
-            size="small"
-            onChange={(e) => handleCheckBox(e, id.toString())}
-          />
+          {checked !== true && (
+            <Checkbox
+              size="small"
+              onChange={(e) => handleCheckBox(e, id.toString())}
+            />
+          )}
         </StyledTableCell>
       )}
       <StyledTableCell
         align="left"
         sx={{ width: "10%", verticalAlign: "center" }}
       >
-        <Typography variant="body1">
+        <Typography
+          variant="body2"
+          sx={{
+            textAlign: "center",
+            borderRadius: "5px",
+            boxShadow: "0px 1px 2.5px",
+            ...(checked === true
+              ? { backgroundColor: "#64dd1720" }
+              : checked === null
+              ? { backgroundColor: "#ffab0045" }
+              : { backgroundColor: "#ff174420" }),
+          }}
+        >
           {checked === true
             ? `تایید شده`
             : checked === null
             ? `در انتظار تایید`
-            : `تایید نشده`}
+            : `رد شده`}
         </Typography>
       </StyledTableCell>
       <StyledTableCell

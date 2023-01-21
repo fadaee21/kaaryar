@@ -12,7 +12,6 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { useApproveWeek } from "../../hooks/request/useApprove";
 import { BeforeWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
@@ -23,15 +22,17 @@ interface ExamStudent {
   id: string | undefined;
   //typeComp:help to check which page use and show or not show button group
   typeComp: "exam" | "admission";
+  successObject?: string;
+  handleOpenAlert?: (alert: "approve" | "disApprove") => void;
 }
-const approveLink = "/exam/before/week/form/approve";
 const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   student,
   matches,
   id,
   typeComp,
+  successObject,
+  handleOpenAlert,
 }) => {
-  const { successObject, getApproveWeek } = useApproveWeek();
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -55,43 +56,25 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           size="large"
           aria-label="small button group"
           sx={{ ...(typeComp === "admission" && { display: "none" }) }}
+          disabled={
+            student?.acceptWeekChecked !== null ||
+            successObject === "acceptWeekChecked"
+              ? true
+              : false
+          }
         >
-          <Button
-            onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}
-            disabled={
-              student?.acceptWeekChecked ||
-              successObject === "acceptWeekChecked"
-                ? true
-                : false
-            }
-          >
+          <Button onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}>
             ویرایش
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
-            }}
-            disabled={
-              student?.acceptWeekChecked ||
-              successObject === "acceptWeekChecked"
-                ? true
-                : false
-            }
+            onClick={() => handleOpenAlert?.("approve")}
           >
             تایید
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
-            }}
-            disabled={
-              student?.acceptWeekChecked ||
-              successObject === "acceptWeekChecked"
-                ? true
-                : false
-            }
+            onClick={() => handleOpenAlert?.("disApprove")}
           >
             عدم تایید
           </Button>
@@ -440,43 +423,27 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           size="large"
           aria-label="small button group"
           sx={{ ...(typeComp === "admission" && { display: "none" }) }}
+          disabled={
+            student?.acceptWeekChecked !== null ||
+            successObject === "acceptWeekChecked"
+              ? true
+              : false
+          }
         >
-          <Button
-            onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}
-            disabled={
-              student?.acceptWeekChecked ||
-              successObject === "acceptWeekChecked"
-                ? true
-                : false
-            }
-          >
+          <Button onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}>
             ویرایش
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
-            }}
-            disabled={
-              student?.acceptWeekChecked ||
-              successObject === "acceptWeekChecked"
-                ? true
-                : false
-            }
+            onClick={() => handleOpenAlert?.("approve")}
           >
             تایید
           </Button>
           <Button
             variant="contained"
             onClick={() => {
-              getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
+              handleOpenAlert && handleOpenAlert("disApprove");
             }}
-            disabled={
-              student?.acceptWeekChecked ||
-              successObject === "acceptWeekChecked"
-                ? true
-                : false
-            }
           >
             عدم تایید
           </Button>

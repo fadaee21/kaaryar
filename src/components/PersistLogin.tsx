@@ -12,7 +12,7 @@ export const PersistLogin = () => {
 
   if (!loadingVal) {
     return (
-      <Box sx={{ mt: 64 }}>
+      <Box sx={{ mt: 12 }}>
         <LoadingProgress />
       </Box>
     );

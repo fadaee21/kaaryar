@@ -80,7 +80,7 @@ const BeforeWeekTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> لیست ارزیابی</Typography>
+            <Typography variant="h4"> فهرست ارزیابی</Typography>
           </Box>
           <AccordionStyled>
             <Box

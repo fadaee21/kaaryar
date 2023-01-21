@@ -13,13 +13,13 @@ const AllComments = () => {
   };
   console.log(roles[0]);
 
-  if (roles[0] === "teacher") {
+  if (roles[0] === "mentor") {
     return (
       <Box sx={{ width: 300, ml: "auto", mr: "auto" }}>
-        <p>teacher comments</p>
-        <button onClick={() => roleNavigate("teacher")}>watch</button>
-        <p>ta comments</p>
-        <button onClick={() => roleNavigate("ta")}>watch</button>
+        <p>mentor comments</p>
+        <button onClick={() => roleNavigate("mentor")}>watch</button>
+        {/* <p>ta comments</p>
+        <button onClick={() => roleNavigate("ta")}>watch</button> */}
       </Box>
     );
   }
@@ -34,10 +34,10 @@ const AllComments = () => {
 
   return (
     <Box sx={{ width: 300, ml: "auto", mr: "auto" }}>
+      {/* <p>mentor comments</p>
+      <button onClick={() => roleNavigate("mentor")}>watch</button> */}
       <p>mentor comments</p>
       <button onClick={() => roleNavigate("mentor")}>watch</button>
-      <p>teacher comments</p>
-      <button onClick={() => roleNavigate("teacher")}>watch</button>
       <p>ta comments</p>
       <button onClick={() => roleNavigate("ta")}>watch</button>
     </Box>
