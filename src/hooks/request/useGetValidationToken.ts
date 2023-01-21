@@ -16,9 +16,10 @@ const useGetValidationToken = () => {
       }
       setLoadingVal(true);
     } catch (error) {
-      console.log(error)
+      // console.log(error);
       setTokenValidation(false);
       setLoadingVal(true);
+      throw new Error("you need to log in again");
     }
   };
 

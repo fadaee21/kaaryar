@@ -28,8 +28,8 @@ export const useSubmitLogin = (username: string, password: string) => {
           ? "mentor"
           : res.indexOf("editingteacher") >= 0
           ? "ta"
-          : undefined;
-      // response.data.profile.roles.toString();
+          : null;
+
       const accessToken = response?.data?.authorization;
 
       if (!roleResponseServer) {

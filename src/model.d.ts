@@ -1,4 +1,4 @@
-export type RoleType = "admin" | "mentor" | "ta" | "mentor" | undefined;
+export type RoleType = "admin" | "mentor" | "ta" | "mentor" | null;
 
 export interface AuthType {
   username: string;

@@ -20,9 +20,7 @@ import {
 import bg from "../assets/bg.png";
 import backgd from "../assets/backgd.png";
 import { useSubmitLogin } from "../hooks/request/useLogin";
-
 import { Navigate, useLocation } from "react-router-dom";
-
 import useGetValidationToken from "../hooks/request/useGetValidationToken";
 import { useAuth } from "../context/AuthProvider";
 
@@ -32,7 +30,7 @@ const Login = () => {
   const location = useLocation();
   // eslint-disable-next-line
   const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  const roles = auth?.roles?.toString();
   const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
   const [tokenValidation, loadingVal] = useGetValidationToken();
 
@@ -53,7 +51,7 @@ const Login = () => {
 
   return (
     <>
-      {tokenValidation ? (
+      {auth && tokenValidation ? (
         <Navigate
           to={`/${roles}/dashboard`}
           state={{ from: location }}
