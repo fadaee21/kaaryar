@@ -17,9 +17,13 @@ import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
-import TablePic from "../../components/TablePic";
+import TablePic, { TablePic2 } from "../../components/TablePic";
 import { useAuth } from "../../context/AuthProvider";
-import { MoodleUser } from "../../model";
+import {
+  MoodleUser,
+  // MoodleUser,
+  MoodleUserAssignee,
+} from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -28,38 +32,22 @@ import {
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
 import styleRot from "../../styles/search/searchChevron.module.css";
+import useMoodleAssignee from "../../hooks/request/useMoodleAssignee";
 
 const StudentListMoodleTable = () => {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
   const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
     MoodleUser[] | null
   >(null);
-  const navigate = useNavigate();
-  const allStudentMoodle = `moodle/user/all?pageNum=${page - 1}&pageSize=60`;
-  //TODO:  take it from this page to a hook
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(allStudentMoodle);
-      setStudents(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
+
+  const { getListAssignee, students, loading } = useMoodleAssignee();
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-
+  const navigate = useNavigate();
   useEffect(() => {
-    getListLearner();
+    getListAssignee();
     window.scrollTo(0, 0);
     // eslint-disable-next-line
   }, [page]);
@@ -92,7 +80,7 @@ const StudentListMoodleTable = () => {
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
               >
-                <Typography  variant="button" >جستجو</Typography>
+                <Typography variant="button">جستجو</Typography>
                 <ExpandMoreIcon
                   className={chevronDir ? styleRot.rotate180 : styleRot.rotate0}
                 />
@@ -138,20 +126,24 @@ const StudentListMoodleTable = () => {
               </TableHead>
               {!searchingMoodleStudent && (
                 <TableBody>
-                  {students.map((moodleUser: MoodleUser) => {
+                  {students.map((moodleUser: MoodleUserAssignee, i: React.Key | null | undefined) => {
                     const {
                       id,
-                      firstName,
-                      lastName,
-                      username,
-                      email,
-                      picture,
-                      city,
-                      mobile,
+                      studentId,
+                      // firstName,
+                      // lastName,
+                      // username,
+                      // email,
+                      // picture,
+                      // city,
+                      // mobile,
+                      studentName,
+                      studentFamily,
                     } = moodleUser;
                     return (
                       <StyledTableRow
-                        key={id}
+                        //TODO: id from moodle Assignee is not unique for now insert index for key
+                        key={i}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
@@ -160,7 +152,11 @@ const StudentListMoodleTable = () => {
                           align="left"
                           sx={{ width: "5%", verticalAlign: "top" }}
                         >
-                          <TablePic picture={picture} lastName={lastName} />
+                          <TablePic2
+                            studentId={studentId}
+                            lastName={studentFamily}
+                          />
+                          {/* <TablePic picture={picture} lastName={lastName} /> */}
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -169,10 +165,13 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                             cursor: "pointer",
                           }}
-                          onClick={() => navigate(`/${roles}/student/${id}`)}
+                          onClick={() =>
+                            navigate(`/${roles}/student/${studentId}`)
+                          }
                         >
                           <Typography variant="body1">
-                            {firstName + " " + lastName}
+                            {studentName + " " + studentFamily}
+                            {/* {firstName + " " + lastName} */}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
@@ -183,7 +182,7 @@ const StudentListMoodleTable = () => {
                           }}
                         >
                           <Typography variant="body2" textAlign={"left"}>
-                            {username}
+                            {/* {username} */}
                           </Typography>
                         </StyledTableCell>
 
@@ -194,7 +193,9 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                           }}
                         >
-                          <Typography variant="body2">{city}</Typography>
+                          <Typography variant="body2">
+                            {/* {city} */}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -203,7 +204,9 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                           }}
                         >
-                          <Typography variant="body2">{mobile}</Typography>
+                          <Typography variant="body2">
+                            {/* {mobile} */}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -212,7 +215,9 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                           }}
                         >
-                          <Typography variant="body2">{email}</Typography>
+                          <Typography variant="body2">
+                            {/* {email} */}
+                          </Typography>
                         </StyledTableCell>
 
                         {/* <StyledTableCell
@@ -247,6 +252,7 @@ const StudentListMoodleTable = () => {
                   (searchingMoodleStudent: MoodleUser) => {
                     const {
                       id,
+                      // studentId,
                       firstName,
                       lastName,
                       username,
@@ -254,7 +260,10 @@ const StudentListMoodleTable = () => {
                       picture,
                       city,
                       mobile,
+                      // studentName,
+                      // studentFamily,
                     } = searchingMoodleStudent;
+
                     return (
                       <StyledTableRow
                         key={id}
@@ -279,6 +288,7 @@ const StudentListMoodleTable = () => {
                         >
                           <Typography variant="body1">
                             {firstName + " " + lastName}
+                            {/* {studentName + " " + studentFamily} */}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
@@ -352,7 +362,7 @@ const StudentListMoodleTable = () => {
           </TableContainer>
         </Container>
       </Box>
-      {!searchingMoodleStudent && (
+      {/* {!searchingMoodleStudent && (
         <Pagination
           sx={{
             display: "flex",
@@ -369,7 +379,7 @@ const StudentListMoodleTable = () => {
             setPage(value);
           }}
         />
-      )}
+      )} */}
     </Box>
   );
 };

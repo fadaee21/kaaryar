@@ -26,6 +26,7 @@ import {
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
+import TableEmpty from "../../components/table/TableEmpty";
 
 const AfterWeekTable = () => {
   const [afterWeekStudents, setAfterWeekStudents] = useState<AfterWeekType[]>(
@@ -44,7 +45,7 @@ const AfterWeekTable = () => {
     page - 1
   }&pageSize=20`;
   const examFormCount = "/exam/after/week/form/count";
-  const [counterPage] = useCountPagination(examFormCount);
+  const [, counterPage] = useCountPagination(examFormCount);
 
   const getListLearner = async () => {
     setLoading(true);
@@ -131,9 +132,13 @@ const AfterWeekTable = () => {
               </Box>
             </AccordionDetails>
           </AccordionStyled>
+          {/* //!for empty response of search return TableEmpty */}
+          {searchingStudentAfter?.length === 0 && <TableEmpty />}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              {/* //!for empty response of search don't return TableHeader */}
+              {searchingStudentAfter?.length !== 0 && <TableHeader />}
+
               {/*//! while searching show the search content */}
               {!searchingStudentAfter && (
                 <TableBody>

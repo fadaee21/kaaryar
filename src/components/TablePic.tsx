@@ -1,9 +1,11 @@
 import { Avatar } from "@mui/material";
 import React from "react";
+import { getData } from "../api/axios";
 import useGetImage from "../hooks/request/useGetImage";
 import { stringAvatar } from "../utils/avatarColor";
 
 const TablePic = ({ picture, lastName }: any) => {
+  console.log(picture)
   const { pic, getPicture } = useGetImage();
   React.useEffect(() => {
     if (picture !== null) {
@@ -23,3 +25,30 @@ const TablePic = ({ picture, lastName }: any) => {
 };
 
 export default TablePic;
+
+
+export const TablePic2 = ({ studentId, lastName }: any) => {
+  const { pic, getPicture } = useGetImage();
+  React.useEffect(() => {
+    const getLink = async () => {
+      try {
+        const res = await getData(`/moodle/user/image/${studentId}`);
+        const data = await res.data;
+        data && getPicture(data.imageAddress);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getLink();
+  }, []);
+
+  return (
+    <>
+      {pic !== undefined ? (
+        <Avatar src={pic} />
+      ) : (
+        <Avatar {...stringAvatar(lastName)} />
+      )}
+    </>
+  );
+};

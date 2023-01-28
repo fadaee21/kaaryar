@@ -17,6 +17,7 @@ const Commenting: React.FC<CommentingType> = ({
   allChoice,
   description,
 }) => {
+  
   return (
     <SelectBox>
       <Typography variant="body2" gutterBottom>

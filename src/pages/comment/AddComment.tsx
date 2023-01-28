@@ -5,11 +5,6 @@ import AddCommentComp from "../../components/comment/AddCommentComp";
 import { StudentId } from "../../model";
 import { SelectBox } from "../../styles/addComment/formBox";
 
-// interface LocationType {
-//   state: MoodleUser;
-//   pathname: string;
-// }
-
 const AddComment = () => {
   const [studentId, setStudentId] = useState<StudentId | null>(null);
 

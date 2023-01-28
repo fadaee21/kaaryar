@@ -5,6 +5,8 @@ import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
 interface TBodyType extends TableBodyAllType {
   handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  resultStatus?: string;
+  checkBoxDisplay?: boolean;
 }
 
 const TableBodyAll = ({
@@ -21,6 +23,8 @@ const TableBodyAll = ({
   gender,
   checked,
   handleCheckBox,
+  checkBoxDisplay,
+  resultStatus,
 }: TBodyType) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -36,7 +40,8 @@ const TableBodyAll = ({
           align="left"
           sx={{ width: "2%", verticalAlign: "center" }}
         >
-          {checked !== true && (
+          {/* show check box only if search for null */}
+          {checked === null && checkBoxDisplay && (
             <Checkbox
               size="small"
               onChange={(e) => handleCheckBox(e, id.toString())}
@@ -48,25 +53,37 @@ const TableBodyAll = ({
         align="left"
         sx={{ width: "10%", verticalAlign: "center" }}
       >
-        <Typography
-          variant="body2"
-          sx={{
-            textAlign: "center",
-            borderRadius: "5px",
-            boxShadow: "0px 1px 2.5px",
-            ...(checked === true
-              ? { backgroundColor: "#64dd1720" }
+        {/* if (skill-seeker page show  8 status type) else (show 3 status) */}
+        {pathname.endsWith("skill-seeker") ? (
+          <Typography
+            variant="body2"
+            sx={{
+              textAlign: "center",
+            }}
+          >
+            {resultStatus}
+          </Typography>
+        ) : (
+          <Typography
+            variant="body2"
+            sx={{
+              textAlign: "center",
+              borderRadius: "5px",
+              boxShadow: "0px 1px 2.5px",
+              ...(checked === true
+                ? { backgroundColor: "#64dd1720" }
+                : checked === null
+                ? { backgroundColor: "#ffab0045" }
+                : { backgroundColor: "#ff174420" }),
+            }}
+          >
+            {checked === true
+              ? `تایید شده`
               : checked === null
-              ? { backgroundColor: "#ffab0045" }
-              : { backgroundColor: "#ff174420" }),
-          }}
-        >
-          {checked === true
-            ? `تایید شده`
-            : checked === null
-            ? `در انتظار تایید`
-            : `رد شده`}
-        </Typography>
+              ? `در انتظار تایید`
+              : `رد شده`}
+          </Typography>
+        )}
       </StyledTableCell>
       <StyledTableCell
         align="left"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../api/axios";
+import { useAuth } from "../../context/AuthProvider";
 import { Course, StudentId } from "../../model";
 
 interface Comment {
@@ -18,13 +19,15 @@ interface Comment {
 const useGetOneComment = () => {
   const [allComment, setAllComment] = useState<Comment | null>(null);
   const [loading, setLoading] = useState(true);
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
   const navigate = useNavigate();
-  const { roleQuery, id } = useParams();
+  const { id } = useParams();
 
   const getListComments = async () => {
     setLoading(true);
     try {
-      const allCommentLink = `${roleQuery}/survey/${id}`;
+      const allCommentLink = `${roles}/survey/${id}`;
       let response = await getData(allCommentLink);
       setAllComment(response.data);
       setLoading(false);

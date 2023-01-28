@@ -3,11 +3,10 @@ import { getData } from "../../api/axios";
 
 export const SearchFamily = ({
   setOutputFamily,
+  outputFamily,
   searchPage,
   searchLink,
 }: any) => {
-  // const [inputValue, setValue] = useState<string>();
-
   const fetchData = async (inputValue: string) => {
     try {
       const response = await getData(searchLink, {
@@ -36,7 +35,7 @@ export const SearchFamily = ({
     <>
       {searchPage === "reg" && (
         <AsyncSelect
-          // value={inputValue}
+          value={outputFamily ? { family: outputFamily } : null}
           defaultOptions={true}
           getOptionLabel={(e: any) => e.family}
           getOptionValue={(e: any) => e.family}
@@ -48,7 +47,7 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
-           styles={{
+          styles={{
             control: (baseStyles) => ({
               ...baseStyles,
               height: "3rem",
@@ -58,7 +57,9 @@ export const SearchFamily = ({
       )}
       {searchPage === "beforeWeek" && (
         <AsyncSelect
-          // value={inputValue}
+          value={
+            outputFamily ? { registrationForm: { family: outputFamily } } : null
+          }
           defaultOptions={true}
           getOptionLabel={(e: any) => e.registrationForm.family}
           getOptionValue={(e: any) => e.registrationForm.family}
@@ -70,7 +71,7 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
-           styles={{
+          styles={{
             control: (baseStyles) => ({
               ...baseStyles,
               height: "3rem",
@@ -80,7 +81,15 @@ export const SearchFamily = ({
       )}
       {searchPage === "afterWeek" && (
         <AsyncSelect
-          // value={inputValue}
+          value={
+            outputFamily
+              ? {
+                  beforeWeekForm: {
+                    registrationForm: { family: outputFamily },
+                  },
+                }
+              : null
+          }
           defaultOptions={true}
           getOptionLabel={(e: any) => e.beforeWeekForm.registrationForm.family}
           getOptionValue={(e: any) => e.beforeWeekForm.registrationForm.family}
@@ -94,7 +103,7 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
-           styles={{
+          styles={{
             control: (baseStyles) => ({
               ...baseStyles,
               height: "3rem",
@@ -104,7 +113,7 @@ export const SearchFamily = ({
       )}
       {searchPage === "moodle" && (
         <AsyncSelect
-          // value={inputValue}
+          value={outputFamily ? { lastName: outputFamily } : null}
           defaultOptions={true}
           getOptionLabel={(e: any) => e.lastName}
           getOptionValue={(e: any) => e.lastName}
@@ -116,7 +125,7 @@ export const SearchFamily = ({
           noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
           loadingMessage={() => "لطفا کمی صبر کنید"}
           name="searchName"
-           styles={{
+          styles={{
             control: (baseStyles) => ({
               ...baseStyles,
               height: "3rem",

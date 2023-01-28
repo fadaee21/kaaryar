@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
 import useGetImage from "../../hooks/request/useGetImage";
@@ -39,7 +39,10 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   handleOpenAlert,
 }) => {
   const navigate = useNavigate();
-
+  //use this component for skill-seeker page temporarily
+  const location = useLocation();
+  const seekerPage = location.pathname.includes("skill-seeker");
+  console.log(seekerPage);
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
@@ -63,35 +66,37 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           فرم ثبت نام هفته پذیرش
         </Typography>
 
-        <ButtonGroup
-          variant="contained"
-          color="secondary"
-          size="large"
-          aria-label="small button group"
-          disabled={
-            student?.afterWeekChecked !== null ||
-            successObject === "afterWeekChecked"
-              ? true
-              : false
-          }
-          sx={{ ...(typeComp === "admission" && { display: "show" }) }}
-        >
-          <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
-            ویرایش
-          </Button>
-          <Button
+        {!seekerPage && (
+          <ButtonGroup
             variant="contained"
-            onClick={() => handleOpenAlert("approve")}
+            color="secondary"
+            size="large"
+            aria-label="small button group"
+            disabled={
+              student?.afterWeekChecked !== null ||
+              successObject === "afterWeekChecked"
+                ? true
+                : false
+            }
+            sx={{ ...(typeComp === "admission" && { display: "show" }) }}
           >
-            تایید
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleOpenAlert("disApprove")}
-          >
-            عدم تایید
-          </Button>
-        </ButtonGroup>
+            <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
+              ویرایش
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleOpenAlert("approve")}
+            >
+              تایید کردن
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleOpenAlert("disApprove")}
+            >
+              رد کردن
+            </Button>
+          </ButtonGroup>
+        )}
       </Box>
       <BoxExamDetail
         colorActive={
@@ -350,7 +355,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         </Grid>
       </BoxExamDetail>
       {/* link after week student to moodle student */}
-      <LookUpLink student={student} id={id} />
+      {!seekerPage && <LookUpLink student={student} id={id} />}
 
       <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
@@ -426,35 +431,37 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           mb: 5,
         }}
       >
-        <ButtonGroup
-          variant="contained"
-          color="secondary"
-          size="large"
-          aria-label="small button group"
-          disabled={
-            student?.afterWeekChecked !== null ||
-            successObject === "afterWeekChecked"
-              ? true
-              : false
-          }
-          sx={{ ...(typeComp === "admission" && { display: "show" }) }}
-        >
-          <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
-            ویرایش
-          </Button>
-          <Button
+        {!seekerPage && (
+          <ButtonGroup
             variant="contained"
-            onClick={() => handleOpenAlert("approve")}
+            color="secondary"
+            size="large"
+            aria-label="small button group"
+            disabled={
+              student?.afterWeekChecked !== null ||
+              successObject === "afterWeekChecked"
+                ? true
+                : false
+            }
+            sx={{ ...(typeComp === "admission" && { display: "show" }) }}
           >
-            تایید
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleOpenAlert("disApprove")}
-          >
-            عدم تایید
-          </Button>
-        </ButtonGroup>
+            <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
+              ویرایش
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleOpenAlert("approve")}
+            >
+              تایید کردن
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleOpenAlert("disApprove")}
+            >
+              رد کردن
+            </Button>
+          </ButtonGroup>
+        )}
       </Box>
     </>
   );

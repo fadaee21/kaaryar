@@ -1,9 +1,13 @@
 import Select from "react-select";
 interface SearchProvincesType {
-  setProvincesState: React.Dispatch<React.SetStateAction<string | null>>;
+  setProvincesState: React.Dispatch<React.SetStateAction<string>>;
+  provincesState: String;
 }
 
-const SearchProvinces = ({ setProvincesState }: SearchProvincesType) => {
+const SearchProvinces = ({
+  setProvincesState,
+  provincesState,
+}: SearchProvincesType) => {
   const options = [
     { value: "آذربایجان شرقی", label: "آذربایجان شرقی" },
     { value: "آذربایجان غربی", label: "آذربایجان غربی" },
@@ -38,6 +42,9 @@ const SearchProvinces = ({ setProvincesState }: SearchProvincesType) => {
 
   return (
     <Select
+      value={
+        provincesState ? { label: provincesState, value: provincesState } : null
+      }
       maxMenuHeight={150}
       options={options}
       placeholder="استان"

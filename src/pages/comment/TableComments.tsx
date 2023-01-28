@@ -38,19 +38,16 @@ const Comments = () => {
   // equality AuthRole With RoleWatch
   //if roleQuery was not same with roleAuth,you are not allowed to
   //edit or post comment,just you can see the comment
-  const [authWatch, setAuthWatch] = useState(false);
-  const { roleQuery } = useParams();
+
   const { auth } = useAuth();
   const roleAuth = auth.roles.toString();
   const navigate = useNavigate();
 
   const { getListComments, comments, loading, commentCounter } =
     useGetComments(page);
-
+  console.log(comments);
   const handleClickOpenEdit = (id: any) => {
-    navigate(
-      `/${roleAuth}/all-comments/${roleQuery}/${id}/editing`
-    );
+    navigate(`/${roleAuth}/all-comments/${id}/editing`);
   };
   const [idComment, setIdComment] = useState<number>();
   const {
@@ -87,18 +84,16 @@ const Comments = () => {
     }, 3000);
   }, [errRemoveMsg, setErrRemoveMsg, successRemoveMsg, setSuccessRemoveMsg]);
 
-  useEffect(() => {
-    if (roleQuery === roleAuth) {
-      setAuthWatch(false);
-    } else {
-      setAuthWatch(true);
-    }
-  }, [roleQuery, roleAuth]);
-
+  if (roleAuth === "admin") {
+    return (
+      <p style={{ marginLeft: "auto", marginRight: "auto" }}>
+        WAITING FOR CREATING API
+      </p>
+    );
+  }
   if (loading) {
     return <LoadingProgress />;
   }
-
   return (
     <>
       <Box component={"article"} sx={{ my: 10 }}>
@@ -117,6 +112,7 @@ const Comments = () => {
                   <StyledTableCell align="left">
                     نام و نام خانوادگی
                   </StyledTableCell>
+                  <StyledTableCell align="left">نظر دهنده</StyledTableCell>
                   <StyledTableCell align="left">دوره آموزشی</StyledTableCell>
                   <StyledTableCell align="left">نظرات</StyledTableCell>
                   <StyledTableCell align="left"></StyledTableCell>
@@ -124,8 +120,14 @@ const Comments = () => {
               </TableHead>
               <TableBody>
                 {comments.map((commentItem: Comment) => {
-                  const { id, course, studentUser, comment, createTime } =
-                    commentItem;
+                  const {
+                    id,
+                    course,
+                    studentUser,
+                    comment,
+                    createTime,
+                    mentorUser,
+                  } = commentItem;
                   return (
                     <StyledTableRow
                       key={id}
@@ -136,7 +138,7 @@ const Comments = () => {
                       <StyledTableCell
                         component="th"
                         scope="row"
-                        sx={{ width: "20%", verticalAlign: "top" }}
+                        sx={{ width: "10%", verticalAlign: "top" }}
                       >
                         <Typography variant="body2">
                           {dateConverter(createTime)}
@@ -144,7 +146,7 @@ const Comments = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "20%", verticalAlign: "top" }}
+                        sx={{ width: "15%", verticalAlign: "top" }}
                       >
                         <Typography variant="body1">
                           {studentUser.firstName + " " + studentUser.lastName}
@@ -152,51 +154,48 @@ const Comments = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ verticalAlign: "top" }}
+                        sx={{ width: "15%", verticalAlign: "top" }}
                       >
-                        <Typography variant="body2" textAlign={"right"}>
+                        <Typography variant="body2">
+                          {mentorUser.firstName + " " + mentorUser.lastName}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="left"
+                        sx={{ width: "15%", verticalAlign: "top" }}
+                      >
+                        <Typography variant="body2">
                           {course.courseName}
                         </Typography>
                       </StyledTableCell>
 
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "50%", verticalAlign: "top" }}
+                        sx={{
+                          width: "30%",
+                          verticalAlign: "top",
+                        }}
                       >
                         <Typography variant="body2">{comment}</Typography>
                       </StyledTableCell>
 
                       <StyledTableCell
                         align="left"
-                        sx={{ verticalAlign: "top" }}
+                        sx={{ width: "5%", verticalAlign: "top" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
                           <IconButton
                             onClick={() =>
-                              navigate(
-                                `/${roleAuth}/all-comments/${roleQuery}/${id}`
-                              )
+                              navigate(`/${roleAuth}/all-comments/${id}`)
                             }
                           >
-                            <VisibilityIcon color="primary" />
+                            <VisibilityIcon fontSize="small" color="info" />
                           </IconButton>
-                          <IconButton
-                            onClick={() => handleClickOpenEdit(id)}
-                            disabled={authWatch}
-                          >
-                            <EditIcon
-                              color={authWatch ? "disabled" : "primary"}
-                              fontSize="small"
-                            />
+                          <IconButton onClick={() => handleClickOpenEdit(id)}>
+                            <EditIcon fontSize="small" color="primary" />
                           </IconButton>
-                          <IconButton
-                            onClick={() => handleClickOpen(id)}
-                            disabled={authWatch}
-                          >
-                            <DeleteIcon
-                              color={authWatch ? "disabled" : "error"}
-                              fontSize="small"
-                            />
+                          <IconButton onClick={() => handleClickOpen(id)}>
+                            <DeleteIcon fontSize="small" color="error" />
                           </IconButton>
                         </ListItem>
                       </StyledTableCell>

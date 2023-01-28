@@ -12,7 +12,6 @@ const StudentPage
   const navigate = useNavigate();
   const { id } = useParams();
 
-  console.log(id);
   const studentId = `/moodle/user/${id}`;
 
   const getStudent = async () => {

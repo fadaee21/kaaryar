@@ -21,7 +21,6 @@ import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 import AdmissionFormDetail from "./pages/afterWeek/AfterWeekDetail";
 import AdmissionFormDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import justTest from "./pages/justTest";
-import AllComments from "./pages/comment/AllComments";
 import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
@@ -56,19 +55,10 @@ const ListRoutes = [
     key: "ta3",
   },
   {
-    path: "ta/all-comments/:roleQuery",
-    name: "نظرات",
-    // icon: <CommentIcon />,
-    component: Comments,
-    showInNav: false,
-    role: "ta",
-    key: "ta4",
-  },
-  {
     path: "ta/all-comments",
     name: "نظرات",
     // icon: <CommentIcon />,
-    component: AllComments,
+    component: Comments,
     showInNav: true,
     role: "ta",
     key: "ta5",
@@ -91,7 +81,7 @@ const ListRoutes = [
     key: "ta7",
   },
   {
-    path: "ta/all-comments/:roleQuery/:id",
+    path: "ta/all-comments/:id",
     name: " ",
     component: WatchComment,
     showInNav: false,
@@ -99,7 +89,7 @@ const ListRoutes = [
     key: "ta8",
   },
   {
-    path: "ta/all-comments/:roleQuery/:id/editing",
+    path: "ta/all-comments/:id/editing",
     name: " ",
     component: EditComments11,
     showInNav: false,
@@ -134,19 +124,12 @@ const ListRoutes = [
     role: "mentor",
     key: "mentor3",
   },
-  {
-    path: "mentor/all-comments/:roleQuery",
-    name: " ",
-    component: Comments,
-    showInNav: false,
-    role: "mentor",
-    key: "mentor4",
-  },
+
   {
     path: "mentor/all-comments",
     name: "نظرات",
     // icon: <CommentIcon />,
-    component: AllComments,
+    component: Comments,
     showInNav: true,
     role: "mentor",
     key: "mentor5",
@@ -169,7 +152,7 @@ const ListRoutes = [
     key: "mentor7",
   },
   {
-    path: "mentor/all-comments/:roleQuery/:id",
+    path: "mentor/all-comments/:id",
     name: " ",
     component: WatchComment,
     showInNav: false,
@@ -177,7 +160,7 @@ const ListRoutes = [
     key: "mentor8",
   },
   {
-    path: "mentor/all-comments/:roleQuery/:id/editing",
+    path: "mentor/all-comments/:id/editing",
     name: " ",
     component: EditComments11,
     showInNav: false,
@@ -289,7 +272,7 @@ const ListRoutes = [
     key: "admin11",
   },
   {
-    path: "admin/all-comments/:roleQuery/:id",
+    path: "admin/all-comments/:id",
     name: " ",
     component: WatchComment,
     showInNav: false,
@@ -314,19 +297,10 @@ const ListRoutes = [
     key: "admin14",
   },
   {
-    path: "admin/all-comments/:roleQuery",
-    name: " ",
-    // icon: <CommentIcon />,
-    component: Comments,
-    showInNav: false,
-    role: "admin",
-    key: "admin15",
-  },
-  {
     path: "admin/all-comments",
     name: "نظرات",
     // icon: <CommentIcon />,
-    component: AllComments,
+    component: Comments,
     showInNav: true,
     role: "admin",
     key: "admin16",
@@ -339,6 +313,16 @@ const ListRoutes = [
     showInNav: false,
     role: "admin",
     key: "admin17",
+  },
+  {
+    path: "admin/skill-seeker/:id",
+    name: "",
+    // icon: <AddCommentIcon />,
+    //for this address,using afterWeekDetail, may someday need to change
+    component: AdmissionFormDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin18",
   },
 
   {

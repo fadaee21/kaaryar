@@ -1,4 +1,10 @@
-import { Autocomplete, Button, FormHelperText, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  FormHelperText,
+  TextField,
+  Typography,
+} from "@mui/material";
 import DatePicker from "../../pages/comment/DatePicker";
 import React, { useEffect, useState } from "react";
 import { useAddComment } from "../../hooks/request/useAddComment";
@@ -20,6 +26,7 @@ const allParticipation = [
     message:
       "قابل قبول   (مهارت‌آموز موضوعی برای صحبت کردن آماده نکرده بود؛ اما در بحث شرکت می‌کرد و به سوالات جواب‌های مفصلی می‌داد)",
   },
+  { message: "این یک کامنت کوتاه برای تست ۲۳" },
 ];
 const allPresence = [
   { message: "بله" },
@@ -34,6 +41,7 @@ const allSignificantProblem = [
   { message: "بله؛ مشکل عمده‌ای که نیاز به توجه فوری کاریار دارد" },
   { message: "بله؛ مشکلی جزئی وجود داشت" },
   { message: "خیر؛ مشکلی وجود نداشت" },
+  { message: "این یک کامنت کوتاه برای تست ۷۶" },
 ];
 const allHomework = [
   { message: "تکلیف را به طور کامل انجام داده بود" },
@@ -43,9 +51,10 @@ const allHomework = [
   },
   { message: "تکلیف را انجام نداده بود؛ با خودش روند پیگیری را هماهنگ کردم" },
   { message: "تکلیفی برای این جلسه در نظر گرفته نشد بود" },
+  { message: "این یک کامنت کوتاه برای تست ۹۸" },
 ];
 
-const AddCommentComp = ({studentId}:any) => {
+const AddCommentComp = ({ studentId }: any) => {
   const [course, setCourse] = useState<Course | null>(null);
   const [studentContribute, setStudentContribute] = useState("");
   const [studentPresent, setStudentPresent] = useState("");

@@ -1,74 +1,57 @@
-import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData } from "../api/axios";
-import LoadingProgress from "../components/LoadingProgress";
-// import  Pagination  from "@mui/material/Pagination";
-import Grid from "@mui/material/Grid";
-import StudentCard from "../components/StudentCard";
-import { MoodleUser } from "../model";
+import { Grid } from "@mui/material";
+import { Container } from "@mui/system";
+import React from "react";
+import AfterListDash from "../components/dashboard/AfterListDash";
+import BeforeListDash from "../components/dashboard/BeforeListDash";
+import LastOpinionDash from "../components/dashboard/LastOpinionDash";
+import OngoingCourseDash from "../components/dashboard/OngoingCourseDash";
+import RegListDash from "../components/dashboard/RegListDash";
+import SkillSeekerListDash from "../components/dashboard/SkillSeekerListDash";
+import StudentListDash from "../components/dashboard/StudentListDash";
+import TeachingCourseDash from "../components/dashboard/TeachingCourseDash";
+import { useAuth } from "../context/AuthProvider";
 
 export const Dashboard = () => {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line 
-  const [page, setPage] = useState(15);
-  //i select 15, Aimless! it could be pagination or sth else
-  const navigate = useNavigate();
-  const allStudentMoodle = `moodle/user/all?pageNum=${page}&pageSize=9`;
-
-  const getListLearner = async () => {
-    setLoading(true);
-
-    try {
-      let response = await getData(allStudentMoodle);
-      setStudents(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
-
-  useEffect(() => {
-    getListLearner();
-    window.scrollTo(0, 0);
-    // eslint-disable-next-line
-  }, [page]);
-
-  if (loading) {
-    return <LoadingProgress />;
-  }
-
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
   return (
-    <Box sx={{ m: 5 }}>
-      <Grid container spacing={4}>
-        {students.map((moodleUser: MoodleUser) => {
-          return (
-            <Grid item key={moodleUser.id} xs={12} md={6} lg={4}>
-              <StudentCard moodleUser={moodleUser} />
+    <>
+      {roles === "admin" && (
+        <Container maxWidth="lg">
+          <Grid container rowSpacing={2} columnSpacing={4} sx={{ mb: 5 }}>
+            <Grid item xs={12} sm={6}>
+              <RegListDash />
             </Grid>
-          );
-        })}
-      </Grid>
-      {/* <Pagination
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          my: 4,
-        }}
-        size="large"
-        count={24}
-        variant="outlined"
-        shape="rounded"
-        onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-          setPage(value - 1);
-        }}
-      /> */}
-    </Box>
+            <Grid item xs={12} sm={6}>
+              <BeforeListDash />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <AfterListDash />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <LastOpinionDash />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <OngoingCourseDash />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TeachingCourseDash />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StudentListDash />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <SkillSeekerListDash />
+            </Grid>
+          </Grid>
+        </Container>
+      )}
+      {roles === "ta" ||
+        (roles === "mentor" && (
+          <p style={{ marginLeft: "auto", marginRight: "auto" }}>
+            dashboard for mentor/ta
+          </p>
+        ))}
+    </>
   );
 };
