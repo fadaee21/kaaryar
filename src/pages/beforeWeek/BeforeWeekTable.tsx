@@ -37,10 +37,10 @@ const BeforeWeekTable = () => {
     BeforeWeekType[] | null
   >(null);
   const navigate = useNavigate();
-
+  const pageSize = 20;
   const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${
     page - 1
-  }&pageSize=20`;
+  }&pageSize=${pageSize}`;
   const examFormCount = "/exam/before/week/form/count";
 
   const [, counterPage] = useCountPagination(examFormCount);
@@ -217,7 +217,7 @@ const BeforeWeekTable = () => {
             my: 4,
           }}
           size="large"
-          count={counterPagination(counterPage, 20)}
+          count={counterPagination(counterPage, pageSize)}
           variant="outlined"
           shape="rounded"
           page={page}

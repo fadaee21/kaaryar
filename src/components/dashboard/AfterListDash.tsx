@@ -6,14 +6,14 @@ import { BoxDashboard, PaperDashboard } from "../../styles/dashboard";
 import LoadingProgress from "../LoadingProgress";
 
 const AfterListDash = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [loading, counterPage] = useCountPagination(
     "/exam/after/week/form/count"
   );
   const [loadingAwait, awaitNumber] = useAwaitingConfirm(
     "/exam/after/week/search/param"
   );
-  console.log(counterPage);
+
   if (loading && loadingAwait) {
     return (
       <PaperDashboard>
@@ -26,12 +26,16 @@ const AfterListDash = () => {
     <PaperDashboard>
       <BoxDashboard>
         <Typography variant="body1">فهرست هفته پذیرش</Typography>
-        <Button variant="text" color="info" onClick={()=>navigate("/admin/after-week")} >
+        <Button
+          variant="text"
+          color="info"
+          onClick={() => navigate("/admin/after-week")}
+        >
           مشاهده
         </Button>
       </BoxDashboard>
       <Typography variant="body2" sx={{ my: 2 }}>
-      {!!awaitNumber
+        {!!awaitNumber
           ? ` تعداد ${awaitNumber} مورد در انتظار تایید وجود دارد`
           : "مورد جدیدی برای بررسی وجود ندارد"}
       </Typography>

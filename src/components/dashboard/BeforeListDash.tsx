@@ -13,7 +13,7 @@ const BeforeListDash = () => {
   const [loadingAwait, awaitNumber] = useAwaitingConfirm(
     "/exam/before/week/search/param"
   );
-  console.log(counterPage);
+
   if (loading && loadingAwait) {
     return (
       <PaperDashboard>

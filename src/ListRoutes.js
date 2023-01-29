@@ -1,4 +1,4 @@
-import { Dashboard } from "./pages/Dashboard";
+
 import StudentPage from "./pages/studentMoodle/StudentPage";
 import StudentListMoodleTable from "./pages/studentMoodle/StudentListMoodleTable";
 import Comments from "./pages/comment/TableComments";
@@ -25,6 +25,9 @@ import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
 import EditComments11 from "./pages/comment/EditComments11";
+import StudentOfAdmin from "./pages/studentMoodle/StudentOfAdmin";
+import Dashboard from "./pages/dashboard/Dashboard";
+import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 
 const ListRoutes = [
   // ta________________________________
@@ -173,7 +176,7 @@ const ListRoutes = [
     path: "admin/dashboard",
     name: "داشبورد",
     // icon: <DashboardIcon />,
-    component: Dashboard,
+    component: DashboardAdmin,
     showInNav: true,
     role: "admin",
     key: "admin1",
@@ -283,7 +286,7 @@ const ListRoutes = [
     path: "admin/student",
     name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
-    component: StudentListMoodleTable,
+    component: StudentOfAdmin,
     showInNav: true,
     role: "admin",
     key: "admin13",

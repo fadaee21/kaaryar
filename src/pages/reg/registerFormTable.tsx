@@ -42,7 +42,10 @@ const RegisterFormTable = () => {
   >(null);
 
   const navigate = useNavigate();
-  const allStudentReg = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
+  const pageSize = 20;
+  const allStudentReg = `/reg/form/all?pageNum=${
+    page - 1
+  }&pageSize=${pageSize}`;
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, successMulti } = useApproveMulti();
@@ -252,7 +255,7 @@ const RegisterFormTable = () => {
             my: 4,
           }}
           size="large"
-          count={counterPagination(counterPage, 20)}
+          count={counterPagination(counterPage, pageSize)}
           variant="outlined"
           shape="rounded"
           page={page}

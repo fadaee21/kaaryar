@@ -1,8 +1,8 @@
 import { Avatar } from "@mui/material";
 import React from "react";
-import { getData } from "../api/axios";
-import useGetImage from "../hooks/request/useGetImage";
-import { stringAvatar } from "../utils/avatarColor";
+import { getData } from "../../api/axios";
+import useGetImage from "../../hooks/request/useGetImage";
+import { stringAvatar } from "../../utils/avatarColor";
 
 const TablePic = ({ picture, lastName }: any) => {
   console.log(picture)

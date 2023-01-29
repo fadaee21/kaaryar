@@ -115,6 +115,17 @@ export interface MoodleUser {
     address: string;
   };
 }
+
+export interface moodleJustStudent {
+  id: number;
+  moodleRole: {
+    userRole: "student";
+  };
+  contextId: 252;
+  moodleUser: MoodleUser;
+  epochTimeModified: number;
+}
+
 export interface MoodleUserAssignee {
   id: number;
   studentId: number;

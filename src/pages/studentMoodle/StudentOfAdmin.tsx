@@ -11,19 +11,14 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
-import TablePic, { TablePic2 } from "../../components/table/TablePic";
+import TablePic from "../../components/table/TablePic";
 import { useAuth } from "../../context/AuthProvider";
-import {
-  MoodleUser,
-  // MoodleUser,
-  MoodleUserAssignee,
-} from "../../model";
+import { moodleJustStudent, MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -34,14 +29,21 @@ import {
 import styleRot from "../../styles/search/searchChevron.module.css";
 import useMoodle from "../../hooks/request/useMoodle";
 
-const StudentListMoodleTable = () => {
-  
+const StudentOfAdmin = () => {
+  const [page, setPage] = useState(1);
+  const pageSize = 30;
+  const adminStudent = `moodle/user/student/all?pageNum=${
+    page - 1
+  }&pageSize=${pageSize}`;
+  //   waiting for creating link to count the number of student
+  //   const studentCount = "";
+  //   const [, counterPage] = useCountPagination(studentCount);
   const [chevronDir, setChevronDir] = useState(false);
   const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
     MoodleUser[] | null
   >(null);
 
-  const { students, loading } = useMoodle("/moodle/user/assignee");
+  const { students, loading } = useMoodle(adminStudent, page);
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -122,26 +124,22 @@ const StudentListMoodleTable = () => {
               {!searchingMoodleStudent && (
                 <TableBody>
                   {students.map(
-                    (
-                      moodleUser: MoodleUserAssignee,
-                      i: React.Key | null | undefined
-                    ) => {
+                    (moodleUser: moodleJustStudent, i: React.Key) => {
                       const {
-                        id,
-                        studentId,
-                        // firstName,
-                        // lastName,
-                        // username,
-                        // email,
-                        // picture,
-                        // city,
-                        // mobile,
-                        studentName,
-                        studentFamily,
+                        moodleUser: {
+                          id,
+                          firstName,
+                          lastName,
+                          username,
+                          email,
+                          picture,
+                          city,
+                          mobile,
+                        },
                       } = moodleUser;
                       return (
                         <StyledTableRow
-                          //TODO: id from moodle Assignee is not unique for now insert index for key
+                          //TODO:add id as key not index
                           key={i}
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
@@ -151,11 +149,7 @@ const StudentListMoodleTable = () => {
                             align="left"
                             sx={{ width: "5%", verticalAlign: "top" }}
                           >
-                            <TablePic2
-                              studentId={studentId}
-                              lastName={studentFamily}
-                            />
-                            {/* <TablePic picture={picture} lastName={lastName} /> */}
+                            <TablePic picture={picture} lastName={lastName} />
                           </StyledTableCell>
                           <StyledTableCell
                             align="left"
@@ -164,13 +158,10 @@ const StudentListMoodleTable = () => {
                               verticalAlign: "top",
                               cursor: "pointer",
                             }}
-                            onClick={() =>
-                              navigate(`/${roles}/student/${studentId}`)
-                            }
+                            onClick={() => navigate(`/${roles}/student/${id}`)}
                           >
                             <Typography variant="body1">
-                              {studentName + " " + studentFamily}
-                              {/* {firstName + " " + lastName} */}
+                              {firstName + " " + lastName}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
@@ -181,7 +172,7 @@ const StudentListMoodleTable = () => {
                             }}
                           >
                             <Typography variant="body2" textAlign={"left"}>
-                              {/* {username} */}
+                              {username}
                             </Typography>
                           </StyledTableCell>
 
@@ -192,9 +183,7 @@ const StudentListMoodleTable = () => {
                               verticalAlign: "top",
                             }}
                           >
-                            <Typography variant="body2">
-                              {/* {city} */}
-                            </Typography>
+                            <Typography variant="body2">{city}</Typography>
                           </StyledTableCell>
                           <StyledTableCell
                             align="left"
@@ -203,9 +192,7 @@ const StudentListMoodleTable = () => {
                               verticalAlign: "top",
                             }}
                           >
-                            <Typography variant="body2">
-                              {/* {mobile} */}
-                            </Typography>
+                            <Typography variant="body2">{mobile}</Typography>
                           </StyledTableCell>
                           <StyledTableCell
                             align="left"
@@ -214,33 +201,31 @@ const StudentListMoodleTable = () => {
                               verticalAlign: "top",
                             }}
                           >
-                            <Typography variant="body2">
-                              {/* {email} */}
-                            </Typography>
+                            <Typography variant="body2">{email}</Typography>
                           </StyledTableCell>
 
                           {/* <StyledTableCell
-                        align="left"
-                        sx={{ width: "30%", verticalAlign: "top" }}
-                      >
-                        <ListItem sx={{ pt: 0 }}> */}
+                          align="left"
+                          sx={{ width: "30%", verticalAlign: "top" }}
+                        >
+                          <ListItem sx={{ pt: 0 }}> */}
                           {/* <ButtonGroup
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            aria-label="small button group"
-                          >
-                            <Button
-                              onClick={() =>
-                                navigate(`/${roles}/student/${id}`)
-                              }
+                              variant="contained"
+                              color="secondary"
+                              size="small"
+                              aria-label="small button group"
                             >
-                              جزییات
-                            </Button>
-                            <Button>ویرایش</Button>
-                          </ButtonGroup> */}
+                              <Button
+                                onClick={() =>
+                                  navigate(`/${roles}/student/${id}`)
+                                }
+                              >
+                                جزییات
+                              </Button>
+                              <Button>ویرایش</Button>
+                            </ButtonGroup> */}
                           {/* </ListItem>
-                      </StyledTableCell> */}
+                        </StyledTableCell> */}
                         </StyledTableRow>
                       );
                     }
@@ -252,7 +237,6 @@ const StudentListMoodleTable = () => {
                   (searchingMoodleStudent: MoodleUser) => {
                     const {
                       id,
-                      // studentId,
                       firstName,
                       lastName,
                       username,
@@ -260,8 +244,6 @@ const StudentListMoodleTable = () => {
                       picture,
                       city,
                       mobile,
-                      // studentName,
-                      // studentFamily,
                     } = searchingMoodleStudent;
 
                     return (
@@ -288,7 +270,6 @@ const StudentListMoodleTable = () => {
                         >
                           <Typography variant="body1">
                             {firstName + " " + lastName}
-                            {/* {studentName + " " + studentFamily} */}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
@@ -332,27 +313,27 @@ const StudentListMoodleTable = () => {
                         </StyledTableCell>
 
                         {/* <StyledTableCell
-                        align="left"
-                        sx={{ width: "30%", verticalAlign: "top" }}
-                      >
-                        <ListItem sx={{ pt: 0 }}> */}
+                          align="left"
+                          sx={{ width: "30%", verticalAlign: "top" }}
+                        >
+                          <ListItem sx={{ pt: 0 }}> */}
                         {/* <ButtonGroup
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            aria-label="small button group"
-                          >
-                            <Button
-                              onClick={() =>
-                                navigate(`/${roles}/student/${id}`)
-                              }
+                              variant="contained"
+                              color="secondary"
+                              size="small"
+                              aria-label="small button group"
                             >
-                              جزییات
-                            </Button>
-                            <Button>ویرایش</Button>
-                          </ButtonGroup> */}
+                              <Button
+                                onClick={() =>
+                                  navigate(`/${roles}/student/${id}`)
+                                }
+                              >
+                                جزییات
+                              </Button>
+                              <Button>ویرایش</Button>
+                            </ButtonGroup> */}
                         {/* </ListItem>
-                      </StyledTableCell> */}
+                        </StyledTableCell> */}
                       </StyledTableRow>
                     );
                   }
@@ -362,7 +343,7 @@ const StudentListMoodleTable = () => {
           </TableContainer>
         </Container>
       </Box>
-      {/* {!searchingMoodleStudent && (
+      {!searchingMoodleStudent && (
         <Pagination
           sx={{
             display: "flex",
@@ -371,7 +352,8 @@ const StudentListMoodleTable = () => {
             my: 4,
           }}
           size="large"
-          count={24}
+          count={60}
+          //   count={counterPagination(counterPage, pageSize)}
           variant="outlined"
           shape="rounded"
           page={page}
@@ -379,8 +361,8 @@ const StudentListMoodleTable = () => {
             setPage(value);
           }}
         />
-      )} */}
+      )}
     </Box>
   );
 };
-export default StudentListMoodleTable;
+export default StudentOfAdmin;

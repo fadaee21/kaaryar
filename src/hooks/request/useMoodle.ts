@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
 
-const useMoodleAssignee = () => {
+const useMoodle = (linkApi: string, page?: number) => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   // const allStudentMoodle = `moodle/user/all?pageNum=${page - 1}&pageSize=60`;
-  const allStudentMoodle = "/moodle/user/assignee";
+  // const allStudentMoodle = "/moodle/user/assignee";
 
-  const getListAssignee = async () => {
+  const getList = async () => {
     setLoading(true);
     try {
-      let response = await getData(allStudentMoodle);
+      let response = await getData(linkApi);
       setStudents(response.data);
       setLoading(false);
     } catch (error) {
@@ -25,7 +25,12 @@ const useMoodleAssignee = () => {
     }
   };
 
-  return { students, loading, getListAssignee };
+  useEffect(() => {
+    getList();
+    window.scrollTo(0, 0);
+  }, [page]);
+
+  return { students, loading };
 };
 
-export default useMoodleAssignee;
+export default useMoodle;

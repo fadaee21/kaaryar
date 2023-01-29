@@ -41,9 +41,10 @@ const AfterWeekTable = () => {
   >(null);
 
   const navigate = useNavigate();
+  const pageSize = 20;
   const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${
     page - 1
-  }&pageSize=20`;
+  }&pageSize=${pageSize}`;
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
@@ -244,7 +245,7 @@ const AfterWeekTable = () => {
             my: 4,
           }}
           size="large"
-          count={counterPagination(counterPage, 20)}
+          count={counterPagination(counterPage, pageSize)}
           variant="outlined"
           shape="rounded"
           page={page}
