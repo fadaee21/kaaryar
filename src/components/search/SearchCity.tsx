@@ -1,12 +1,14 @@
 import React from "react";
 import { SearchField } from "../../styles/search/searchField";
 interface SearchCityType {
-  setCityState: React.Dispatch<React.SetStateAction<string | null>>;
+  setCityState: React.Dispatch<React.SetStateAction<string>>;
+  cityState: string;
 }
 
-const SearchCity = ({ setCityState }: SearchCityType) => {
+const SearchCity = ({ setCityState, cityState }: SearchCityType) => {
   return (
     <SearchField
+      value={cityState || ""}
       id="outlined-basic"
       label="شهر"
       variant="outlined"

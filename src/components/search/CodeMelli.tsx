@@ -1,16 +1,18 @@
 import { SearchField } from "../../styles/search/searchField";
 
 interface CodeMelliType {
-  setCodeMelliState: React.Dispatch<React.SetStateAction<string | null>>;
+  codeMelliState: string;
+  setCodeMelliState: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CodeMelli = ({ setCodeMelliState }: CodeMelliType) => {
+const CodeMelli = ({ setCodeMelliState, codeMelliState }: CodeMelliType) => {
   return (
     <SearchField
       id="outlined-basic"
       label="کد ملی"
       variant="outlined"
       onChange={(e) => setCodeMelliState(e.target.value)}
+      value={codeMelliState}
     />
   );
 };

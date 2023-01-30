@@ -1,14 +1,9 @@
 import { Container, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import AddCommentComp from "../../components/comment/AddCommentComp";
+import AddOrEditComment from "../../components/comment/AddOrEditComment";
 import { StudentId } from "../../model";
 import { SelectBox } from "../../styles/addComment/formBox";
-
-// interface LocationType {
-//   state: MoodleUser;
-//   pathname: string;
-// }
 
 const AddComment = () => {
   const [studentId, setStudentId] = useState<StudentId | null>(null);
@@ -33,7 +28,11 @@ const AddComment = () => {
           ثبت گزارش برای {student.firstName} {student.lastName}
         </Typography>
       </SelectBox>
-      <AddCommentComp studentId={studentId} />
+      <AddOrEditComment
+        studentId={studentId}
+        compType={"adding"}
+        allComment={null}
+      />
     </Container>
   );
 };

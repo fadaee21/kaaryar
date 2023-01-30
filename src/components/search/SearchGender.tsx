@@ -1,8 +1,9 @@
 import Select from "react-select";
 interface SearchGenderType {
-  setOutputGender: React.Dispatch<React.SetStateAction<string | null>>;
+  setOutputGender: React.Dispatch<React.SetStateAction<any>>;
+  outputGender: any;
 }
-const SearchGender = ({ setOutputGender }: SearchGenderType) => {
+const SearchGender = ({ setOutputGender, outputGender }: SearchGenderType) => {
   const options = [
     { value: "زن", label: "زن" },
     { value: "مرد", label: "مرد" },
@@ -10,6 +11,7 @@ const SearchGender = ({ setOutputGender }: SearchGenderType) => {
 
   return (
     <Select
+      value={outputGender ? { label: outputGender, value: outputGender } : null}
       options={options}
       placeholder="جنسیت"
       onChange={(e: any) => setOutputGender(e.value)}

@@ -1,5 +1,5 @@
 import { Button, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getData } from "../../api/axios";
 import CodeMelli from "./CodeMelli";
 import Mobile from "./Mobile";
@@ -11,6 +11,7 @@ import StatusSearch from "./StatusSearch";
 import SearchIcon from "@mui/icons-material/Search";
 import { SearchFirstName } from "./SearchFirstName";
 import SearchCity from "./SearchCity";
+import { GreyButton } from "../../styles/Button";
 
 interface SearchAllType {
   setSearchingStudentBefore?: any;
@@ -36,15 +37,17 @@ const SearchAll: ({
   searchPage,
   chevronDir,
 }) => {
-  const [allState, setAllState] = useState<object | null>(null);
+  // const [allState, setAllState] = useState<object | null>(null);
   const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
   const [outputFamily, setOutputFamily] = useState<string | null>(null);
-  const [outputGender, setOutputGender] = useState<string | null>(null);
-  const [codeMelliState, setCodeMelliState] = useState<string | null>(null);
-  const [mobileState, setMobileState] = useState<string | null>(null);
-  const [emailState, setEmailState] = useState<string | null>(null);
-  const [provincesState, setProvincesState] = useState<string | null>(null);
-  const [cityState, setCityState] = useState<string | null>(null);
+  const [outputGender, setOutputGender] = useState<string>("");
+  const [codeMelliState, setCodeMelliState] = useState<string>("");
+  const [mobileState, setMobileState] = useState<string>("");
+  const [emailState, setEmailState] = useState<string>("");
+  const [provincesState, setProvincesState] = useState<string>("");
+  const [cityState, setCityState] = useState<string>("");
+  //this state is for handling statusState===null
+  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null);
   const [statusState, setStatusState] = useState<boolean | null>(null);
 
   const beforeWeekSearch = "/exam/before/week/search/param";
@@ -66,39 +69,15 @@ const SearchAll: ({
     return regSearch;
   };
 
-  useEffect(() => {
-    setAllState({
-      firstName: outputFirstName,
-      family: outputFamily,
-      gender: outputGender,
-      codeMeli: codeMelliState,
-      status: statusState,
-      city: cityState,
-      province: provincesState,
-      mobile: mobileState,
-      email: emailState,
-    });
-  }, [
-    outputFirstName,
-    outputFamily,
-    outputGender,
-    codeMelliState,
-    mobileState,
-    emailState,
-    provincesState,
-    statusState,
-    cityState,
-  ]);
-
-  //if AccordionDetails was close, do nothing(fetching data and mounting component)
+  //if AccordionDetails is close, do nothing(fetching data and mounting component)
   if (!chevronDir) {
     return <></>;
   }
 
-  const fetchData = async () => {
+  const fetchData = async (obj: any) => {
     try {
       const response = await getData(searchLink(), {
-        params: allState,
+        params: obj,
       });
       console.log(response);
       if (response.status === 200) {
@@ -115,15 +94,51 @@ const SearchAll: ({
     }
   };
 
-  const handleClick = () => {
-    console.log(allState);
-    fetchData();
+  const handleSearch = () => {
+    fetchData({
+      firstName: outputFirstName,
+      family: outputFamily,
+      gender: outputGender,
+      codeMeli: codeMelliState,
+      status: statusState,
+      //add state for handling status===null
+      state: stateWaiting,
+      city: cityState,
+      province: provincesState,
+      mobile: mobileState,
+      email: emailState,
+    });
+  };
+
+  const clearSearch = () => {
+    fetchData({
+      firstName: "",
+      family: "",
+      gender: "",
+      codeMeli: "",
+      status: null,
+      city: "",
+      province: "",
+      mobile: "",
+      email: "",
+    });
+    setStatusState(null);
+    setStateWaiting(null);
+    setOutputFirstName(null);
+    setOutputFamily(null);
+    setOutputGender("");
+    setCodeMelliState("");
+    setMobileState("");
+    setEmailState("");
+    setProvincesState("");
+    setCityState("");
   };
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={3}>
         <SearchFirstName
+          outputFirstName={outputFirstName}
           setOutputFirstName={setOutputFirstName}
           searchPage={searchPage}
           searchLink={searchLink()}
@@ -131,6 +146,7 @@ const SearchAll: ({
       </Grid>
       <Grid item xs={3}>
         <SearchFamily
+          outputFamily={outputFamily}
           setOutputFamily={setOutputFamily}
           searchPage={searchPage}
           searchLink={searchLink()}
@@ -139,41 +155,75 @@ const SearchAll: ({
       {/* some field not use in moodle search at the moment */}
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
-          <CodeMelli setCodeMelliState={setCodeMelliState} />
+          <CodeMelli
+            codeMelliState={codeMelliState}
+            setCodeMelliState={setCodeMelliState}
+          />
         </Grid>
       )}
       <Grid item xs={3}>
-        <Mobile setMobileState={setMobileState} />
+        <Mobile setMobileState={setMobileState} mobileState={mobileState} />
       </Grid>
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
-          <SearchGender setOutputGender={setOutputGender} />
+          <SearchGender
+            outputGender={outputGender}
+            setOutputGender={setOutputGender}
+          />
         </Grid>
       )}
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
-          <SearchProvinces setProvincesState={setProvincesState} />
+          <SearchProvinces
+            provincesState={provincesState}
+            setProvincesState={setProvincesState}
+          />
         </Grid>
       )}
       {searchPage === "moodle" && (
         <Grid item xs={3}>
-          <SearchCity setCityState={setCityState} />
+          <SearchCity cityState={cityState} setCityState={setCityState} />
         </Grid>
       )}
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
-          <StatusSearch setStatusState={setStatusState} />
+          <StatusSearch
+            statusState={statusState}
+            setStatusState={setStatusState}
+            stateWaiting={stateWaiting}
+            setStateWaiting={setStateWaiting}
+          />
         </Grid>
       )}
       <Grid item xs={3}>
-        <SearchEmail setEmailState={setEmailState} />
+        <SearchEmail emailState={emailState} setEmailState={setEmailState} />
       </Grid>
       <Grid item xs={3} sx={{ ml: "auto" }}>
+        <GreyButton
+          sx={{ width: "100%" }}
+          variant="outlined"
+          onClick={clearSearch}
+        >
+          پاک کردن
+        </GreyButton>
+      </Grid>
+      <Grid item xs={6}>
         <Button
           sx={{ width: "100%" }}
           endIcon={<SearchIcon sx={{ rotate: "90deg" }} />}
           variant="outlined"
-          onClick={handleClick}
+          onClick={handleSearch}
+          // disabled={
+          //   outputFirstName ||
+          //   outputFamily ||
+          //   outputGender ||
+          //   codeMelliState ||
+          //   statusState ||
+          //   cityState ||
+          //   provincesState ||
+          //   mobileState ||
+          //   emailState
+          // }
         >
           جستجو
         </Button>

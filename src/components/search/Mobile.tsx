@@ -1,12 +1,14 @@
 import { SearchField } from "../../styles/search/searchField";
 
 interface MobileType {
-  setMobileState: React.Dispatch<React.SetStateAction<string | null>>;
+  mobileState: string;
+  setMobileState: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Mobile = ({ setMobileState }: MobileType) => {
+const Mobile = ({ setMobileState, mobileState }: MobileType) => {
   return (
     <SearchField
+      value={mobileState || ""}
       id="outlined-basic"
       label="شماره موبایل"
       variant="outlined"

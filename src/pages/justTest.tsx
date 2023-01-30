@@ -1,8 +1,16 @@
+import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import React from "react";
-// import SearchAll from "../components/search/SearchBefore/SearchAll";
 
 const justTest = () => {
-  return <></>;
+  return (
+   <Table>
+     <TableBody>
+      <TableRow>
+        <TableCell>aaaaaaaaaaaa</TableCell>
+      </TableRow>
+    </TableBody>
+   </Table>
+  );
 };
 
 export default justTest;

@@ -1,72 +1,77 @@
-import { Autocomplete, Button, FormHelperText, TextField, Typography } from "@mui/material";
-import DatePicker from "../../pages/comment/DatePicker";
+import {
+  Autocomplete,
+  Button,
+  FormHelperText,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { JalaliDatePicker } from "./JalaliDatePicker";
 import React, { useEffect, useState } from "react";
 import { useAddComment } from "../../hooks/request/useAddComment";
-import { Course } from "../../model";
+import { Comment, Course, StudentId } from "../../model";
 import { FormBox, SelectBox } from "../../styles/addComment/formBox";
 import Commenting from "./Commenting";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+import {
+  allStudentTask,
+  allStudentContribute,
+  allSessionProblem,
+  allStudentPresent,
+} from "./commentOptions";
 
-const allParticipation = [
-  {
-    message:
-      "بالاتر از حد انتظار  (مهارت‌آموز موضوعاتی را از قبل آماده کرده بود و در جلسه مشارکت فعال داشت)",
-  },
-  {
-    message:
-      "پایین‌تر از حد انتظار   (مهارت‌آموز موضوعی برای صحبت کردن آماده نکرده بود و به سوالاتی که مطرح می‌شد جواب‌های کوتاه می‌داد)",
-  },
-  {
-    message:
-      "قابل قبول   (مهارت‌آموز موضوعی برای صحبت کردن آماده نکرده بود؛ اما در بحث شرکت می‌کرد و به سوالات جواب‌های مفصلی می‌داد)",
-  },
-];
-const allPresence = [
-  { message: "بله" },
-  { message: "خیر" },
-  { message: "فقط بخشی از جلسه را حضور داشت" },
-];
-const allSignificantProblem = [
-  {
-    message:
-      "مشکل عمده مانند نارضایتی کامل مهارت‌آموز و اظهار علاقه به خروج از دوره، خرابی لپ‌تاپ و عدم دسترسی به کامپیوتر؛  مشکل جزئی مانند حضور مهارت‌آموز در مکانی شلوغ و ...",
-  },
-  { message: "بله؛ مشکل عمده‌ای که نیاز به توجه فوری کاریار دارد" },
-  { message: "بله؛ مشکلی جزئی وجود داشت" },
-  { message: "خیر؛ مشکلی وجود نداشت" },
-];
-const allHomework = [
-  { message: "تکلیف را به طور کامل انجام داده بود" },
-  {
-    message:
-      "تکلیف را انجام نداده بود؛ بهتر است تیم کاریار هم در این مورد پیگیری کند",
-  },
-  { message: "تکلیف را انجام نداده بود؛ با خودش روند پیگیری را هماهنگ کردم" },
-  { message: "تکلیفی برای این جلسه در نظر گرفته نشد بود" },
-];
-
-const AddCommentComp = ({studentId}:any) => {
-  const [course, setCourse] = useState<Course | null>(null);
-  const [studentContribute, setStudentContribute] = useState("");
-  const [studentPresent, setStudentPresent] = useState("");
-  const [studentTask, setStudentTask] = useState("");
-  const [sessionProblem, setSessionProblem] = useState("");
-  const [sessionDate, setSessionDate] = useState<Dayjs | null>(dayjs());
-  const [comment, setComment] = useState("");
-
-  const { setErrMsg, allCourse, postComment, errMsg } = useAddComment(
-    course,
-    studentId,
-    comment,
-    sessionDate!.toISOString(),
-    studentContribute,
-    studentTask,
-    sessionProblem,
-    studentPresent
+interface AddCommentType {
+  studentId: StudentId | null; //this prop just for adding
+  compType: "adding" | "editing";
+  allComment: Comment | null; //this prop just for editing
+}
+const AddOrEditComment = ({
+  studentId,
+  compType,
+  allComment,
+}: AddCommentType) => {
+  const [course, setCourse] = useState<Course | null>(
+    allComment ? allComment.course : null
   );
+  const [studentContribute, setStudentContribute] = useState(
+    allComment ? allComment.studentContribute : ""
+  );
+  const [studentPresent, setStudentPresent] = useState(
+    allComment
+      ? allComment.studentPresent === true
+        ? "بله"
+        : allComment.studentPresent === false
+        ? "خیر"
+        : "فقط بخشی از جلسه را حضور داشت"
+      : ""
+  );
+  const [studentTask, setStudentTask] = useState(
+    allComment ? allComment.studentTask : ""
+  );
+  const [sessionProblem, setSessionProblem] = useState(
+    allComment ? allComment.sessionProblem : ""
+  );
+  const [sessionDate, setSessionDate] = useState<any>(
+    allComment ? new Date(allComment.sessionDate) : dayjs()
+  );
+  const [comment, setComment] = useState(allComment ? allComment.comment : "");
+
+  const { setErrMsg, allCourse, postComment, errMsg, putComment } =
+    useAddComment(
+      course,
+      studentId,
+      comment,
+      sessionDate!.toISOString(),
+      sessionProblem,
+      studentTask,
+      studentContribute,
+      studentPresent
+    );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    postComment();
+    compType === "adding" && postComment();
+    compType === "editing" &&
+      putComment(allComment?.id, allComment?.studentUser);
   };
 
   useEffect(() => {
@@ -93,30 +98,37 @@ const AddCommentComp = ({studentId}:any) => {
           onChange={(event: any, newValue: Course | null) => {
             setCourse(newValue);
           }}
+          value={course}
+          isOptionEqualToValue={(option, value) =>
+            option.courseName === value.courseName
+          }
         />
       </SelectBox>
       <SelectBox>
         <Typography variant="body2" gutterBottom>
           تاریخ جلسه
         </Typography>
-        <DatePicker setSessionDate={setSessionDate} sessionDate={sessionDate} />
+        <JalaliDatePicker
+          setSessionDate={setSessionDate}
+          sessionDate={sessionDate}
+        />
       </SelectBox>
       <Commenting
-        allChoice={allPresence}
+        allChoice={allStudentPresent}
         description="آیا مهارت آموز در جلسه حاضر بود؟"
         handleChange={setStudentPresent}
         id="studentPresent"
         value={studentPresent}
       />
       <Commenting
-        allChoice={allParticipation}
+        allChoice={allStudentContribute}
         description="میزان مشارکت مهارت‌آموز در جلسه را چطور ارزیابی می‌کنید؟"
         handleChange={setStudentContribute}
         id="studentContribute"
         value={studentContribute}
       />
       <Commenting
-        allChoice={allHomework}
+        allChoice={allStudentTask}
         description="در صورتی که تکلیف (یا هر اقدام پیشنهادی) 
             برای مهارت‌آموز در نظر گرفته شده بود، لطفا یکی از گزینه‌های زیر را انتخاب کنید."
         handleChange={setStudentTask}
@@ -124,7 +136,7 @@ const AddCommentComp = ({studentId}:any) => {
         value={studentTask}
       />
       <Commenting
-        allChoice={allSignificantProblem}
+        allChoice={allSessionProblem}
         description="آیا مشکل قابل توجهی در جلسه وجود داشت؟"
         handleChange={setSessionProblem}
         id="sessionProblem"
@@ -147,6 +159,7 @@ const AddCommentComp = ({studentId}:any) => {
           onChange={(e) => setComment(e.target.value)}
           type="text"
           autoComplete="off"
+          value={comment}
         />
       </SelectBox>
       <SelectBox>
@@ -160,11 +173,10 @@ const AddCommentComp = ({studentId}:any) => {
             !studentTask ||
             !sessionProblem ||
             !sessionDate ||
-            !comment ||
-            !studentId
+            !comment
           }
         >
-          ارسال
+          {compType === "adding" ? "ارسال" : "ویرایش"}
         </Button>
         <FormHelperText error>
           <Typography variant="caption">{errMsg ? errMsg : " "}</Typography>
@@ -174,4 +186,4 @@ const AddCommentComp = ({studentId}:any) => {
   );
 };
 
-export default AddCommentComp;
+export default AddOrEditComment;

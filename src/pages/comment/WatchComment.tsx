@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import LoadingProgress from "../../components/LoadingProgress";
 import useGetOneComment from "../../hooks/request/useGetOneComment";
+import { JalaliDatePicker } from "../../components/comment/JalaliDatePicker";
 
 const WatchComment = () => {
   const { allComment, loading } = useGetOneComment();
@@ -10,7 +11,11 @@ const WatchComment = () => {
   }
 
   return (
-    <Box sx={{m:5}}>
+    <Box sx={{ m: 5 }}>
+      <JalaliDatePicker
+        sessionDate={allComment ? new Date(allComment.sessionDate) : new Date()}
+        usageType="watching"
+      />
       <div>{allComment?.comment}</div>
       <div>{allComment?.studentContribute}</div>
       <div>{allComment?.sessionProblem}</div>

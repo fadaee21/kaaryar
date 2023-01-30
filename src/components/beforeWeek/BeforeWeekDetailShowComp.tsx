@@ -70,13 +70,13 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             variant="contained"
             onClick={() => handleOpenAlert?.("approve")}
           >
-            تایید
+            تایید کردن
           </Button>
           <Button
             variant="contained"
             onClick={() => handleOpenAlert?.("disApprove")}
           >
-            عدم تایید
+            رد کردن
           </Button>
         </ButtonGroup>
       </Box>
@@ -437,7 +437,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             variant="contained"
             onClick={() => handleOpenAlert?.("approve")}
           >
-            تایید
+            تایید کردن
           </Button>
           <Button
             variant="contained"
@@ -445,7 +445,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               handleOpenAlert && handleOpenAlert("disApprove");
             }}
           >
-            عدم تایید
+            رد کردن
           </Button>
         </ButtonGroup>
       </Box>

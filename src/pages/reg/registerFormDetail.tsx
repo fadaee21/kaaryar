@@ -99,16 +99,16 @@ const RegisterFormDetail = () => {
           <Button
             variant="contained"
             onClick={() => handleOpenAlert("approve")}
-            // disabled={student?.checked !== null || success ? true : false}
+            disabled={student?.checked !== null || success ? true : false}
           >
-            تایید
+            تایید کردن
           </Button>
           <Button
             variant="contained"
             onClick={() => handleOpenAlert("disApprove")}
-            // disabled={student?.checked !== null || success ? true : false}
+            disabled={student?.checked !== null || success ? true : false}
           >
-            عدم تایید
+            رد کردن
           </Button>
           <Button endIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>
             بازگشت

@@ -28,6 +28,7 @@ import {
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
+import TableEmpty from "../../components/table/TableEmpty";
 
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
@@ -39,10 +40,14 @@ const RegisterFormTable = () => {
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
+
   const navigate = useNavigate();
-  const allStudentReg = `/reg/form/all?pageNum=${page - 1}&pageSize=20`;
+  const pageSize = 20;
+  const allStudentReg = `/reg/form/all?pageNum=${
+    page - 1
+  }&pageSize=${pageSize}`;
   const examFormCount = "/reg/form/count";
-  const [counterPage] = useCountPagination(examFormCount);
+  const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, successMulti } = useApproveMulti();
 
   const getListLearner = async () => {
@@ -134,7 +139,21 @@ const RegisterFormTable = () => {
                   disabled={ids.toString() === ""}
                   sx={{ mr: 0.5 }}
                 >
-                  تایید گروهی
+                  تایید کردن گروهی
+                </Button>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() =>
+                    getApproveMulti(
+                      ids.toString(),
+                      "/reg/form/multiple/disapprove"
+                    )
+                  }
+                  disabled={ids.toString() === ""}
+                  sx={{ mr: 0.5 }}
+                >
+                  رد کردن گروهی
                 </Button>
                 <ExcelExport
                   fileName={"Applicant Info"}
@@ -162,10 +181,13 @@ const RegisterFormTable = () => {
               </Box>
             </AccordionDetails>
           </AccordionStyled>
-
+          {/* //!for empty response of search return TableEmpty */}
+          {searchingStudentRegister?.length === 0 && <TableEmpty />}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              {/* //!for empty response of search don't return TableHeader */}
+              {searchingStudentRegister?.length !== 0 && <TableHeader />}
+
               {/*//! while searching show the search content */}
               {!searchingStudentRegister && (
                 <TableBody>
@@ -186,6 +208,7 @@ const RegisterFormTable = () => {
                         gender={RegisterUser.gender}
                         checked={RegisterUser.checked}
                         handleCheckBox={handleCheckBox}
+                        checkBoxDisplay={false}
                       />
                     );
                   })}
@@ -213,6 +236,7 @@ const RegisterFormTable = () => {
                         gender={searchingStudentRegister?.gender}
                         checked={searchingStudentRegister?.checked}
                         handleCheckBox={handleCheckBox}
+                        checkBoxDisplay={true}
                       />
                     );
                   }
@@ -231,7 +255,7 @@ const RegisterFormTable = () => {
             my: 4,
           }}
           size="large"
-          count={counterPagination(counterPage, 20)}
+          count={counterPagination(counterPage, pageSize)}
           variant="outlined"
           shape="rounded"
           page={page}

@@ -1,4 +1,4 @@
-export type RoleType = "admin" | "mentor" | "ta" | "mentor" | null;
+export type RoleType = "admin" | "mentor" | "ta" | "teacher" | null;
 
 export interface AuthType {
   username: string;
@@ -35,6 +35,11 @@ export interface StudentUser {
   firstName: string;
   lastName: string;
   roles: RolesStudent[];
+  city: string;
+  email: string;
+  mobile: string;
+  phone: string;
+  username: string;
 }
 export interface StudentId {
   id: number;
@@ -50,8 +55,20 @@ export interface Course {
   id: number;
   courseName: string;
 }
+
+export interface MentorUser {
+  city: string;
+  email: string;
+  firstName: string;
+  id: number;
+  lastName: string;
+  mobile: string;
+  phone: string;
+  roles: Array;
+  username: string;
+}
 export interface Comment {
-  checked: true;
+  checked: boolean;
   comment: string;
   createTime: string;
   id: number;
@@ -63,6 +80,8 @@ export interface Comment {
   updateTime: string;
   studentUser: StudentUser;
   course: Course;
+  //? not sure about mentorUser...it could change by changing the role
+  mentorUser: MentorUser;
 }
 
 export interface Course {
@@ -100,6 +119,26 @@ export interface MoodleUser {
   picture: {
     address: string;
   };
+}
+//this is just for admin
+export interface moodleJustStudent {
+  id: number;
+  moodleRole: {
+    userRole: "student";
+  };
+  contextId: 252;
+  moodleUser: MoodleUser;
+  epochTimeModified: number;
+}
+//this is for mentor/ta
+export interface MoodleUserAssignee {
+  id: number;
+  studentId: number;
+  role: string;
+  studentName: string;
+  firstname: string;
+  lastname: string;
+  studentFamily: string;
 }
 
 export interface LocalStorage {
@@ -218,4 +257,15 @@ export interface TableBodyAllType {
   directNav: string;
   gender: string;
   checked: boolean;
+}
+
+export interface SeekerStudent {
+  id: number;
+  registrationCode: string;
+  regForm: RegistrationForm;
+  regChecked: boolean;
+  beforeWeekForm: BeforeWeekType;
+  beforeWeekChecked: boolean;
+  afterWeekForm: AfterWeekType;
+  afterWeekChecked: true;
 }

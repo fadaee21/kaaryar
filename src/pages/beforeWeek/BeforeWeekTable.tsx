@@ -26,6 +26,7 @@ import {
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
+import TableEmpty from "../../components/table/TableEmpty";
 
 const BeforeWeekTable = () => {
   const [students, setStudents] = useState<BeforeWeekType[]>([]);
@@ -36,13 +37,14 @@ const BeforeWeekTable = () => {
     BeforeWeekType[] | null
   >(null);
   const navigate = useNavigate();
-
+  const pageSize = 20;
   const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${
     page - 1
-  }&pageSize=20`;
+  }&pageSize=${pageSize}`;
   const examFormCount = "/exam/before/week/form/count";
 
-  const [counterPage] = useCountPagination(examFormCount);
+  const [, counterPage] = useCountPagination(examFormCount);
+  console.log(counterPage);
 
   const getListLearner = async () => {
     setLoading(true);
@@ -95,7 +97,7 @@ const BeforeWeekTable = () => {
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
               >
-                <Typography  variant="button" >جستجو</Typography>
+                <Typography variant="button">جستجو</Typography>
                 <ExpandMoreIcon
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
@@ -125,9 +127,14 @@ const BeforeWeekTable = () => {
               </Box>
             </AccordionDetails>
           </AccordionStyled>
+
+          {/* //!for empty response of search return TableEmpty */}
+          {searchingStudentBefore?.length === 0 && <TableEmpty />}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              {/* //!for empty response of search don't return TableHeader */}
+              {searchingStudentBefore?.length !== 0 && <TableHeader />}
+
               {/*//! while searching show the search content */}
               {!searchingStudentBefore && (
                 <TableBody>
@@ -210,7 +217,7 @@ const BeforeWeekTable = () => {
             my: 4,
           }}
           size="large"
-          count={counterPagination(counterPage, 20)}
+          count={counterPagination(counterPage, pageSize)}
           variant="outlined"
           shape="rounded"
           page={page}

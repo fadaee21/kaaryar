@@ -3,11 +3,10 @@ import { getData } from "../../api/axios";
 
 export const SearchFirstName = ({
   setOutputFirstName,
+  outputFirstName,
   searchPage,
   searchLink,
 }: any) => {
-  // const [inputValue, setValue] = useState<string>();
-
   const fetchData = async (inputValue: string) => {
     try {
       const response = await getData(searchLink, {
@@ -36,7 +35,7 @@ export const SearchFirstName = ({
     <>
       {searchPage === "reg" && (
         <AsyncSelect
-          // value={inputValue}
+          value={outputFirstName ? { firstName: outputFirstName } : null}
           defaultOptions={true}
           getOptionLabel={(e: any) => e.firstName}
           getOptionValue={(e: any) => e.firstName}
@@ -58,7 +57,11 @@ export const SearchFirstName = ({
       )}
       {searchPage === "beforeWeek" && (
         <AsyncSelect
-          // value={inputValue}
+          value={
+            outputFirstName
+              ? { registrationForm: { firstName: outputFirstName } }
+              : null
+          }
           defaultOptions={true}
           getOptionLabel={(e: any) => e.registrationForm.firstName}
           getOptionValue={(e: any) => e.registrationForm.firstName}
@@ -82,18 +85,22 @@ export const SearchFirstName = ({
       )}
       {searchPage === "afterWeek" && (
         <AsyncSelect
-          // value={inputValue}
+          value={
+            outputFirstName
+              ? {
+                  beforeWeekForm: {
+                    registrationForm: { firstName: outputFirstName },
+                  },
+                }
+              : null
+          }
           defaultOptions={true}
-          getOptionLabel={(e: any) =>
-            e.beforeWeekForm.registrationForm.firstName
-          }
-          getOptionValue={(e: any) =>
-            e.beforeWeekForm.registrationForm.firstName
-          }
+          getOptionLabel={(e) => e.beforeWeekForm.registrationForm.firstName}
+          getOptionValue={(e) => e.beforeWeekForm.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) =>
-            setOutputFirstName(e.beforeWeekForm.registrationForm.firstName)
-          }
+          onChange={(e) => {
+            setOutputFirstName(e?.beforeWeekForm.registrationForm.firstName);
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام"
@@ -110,7 +117,7 @@ export const SearchFirstName = ({
       )}
       {searchPage === "moodle" && (
         <AsyncSelect
-          // value={inputValue}
+          value={outputFirstName ? { firstName: outputFirstName } : null}
           defaultOptions={true}
           getOptionLabel={(e: any) => e.firstName}
           getOptionValue={(e: any) => e.firstName}

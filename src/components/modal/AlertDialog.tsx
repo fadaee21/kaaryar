@@ -32,13 +32,12 @@ export default function AlertDialog({
       {alertType === "approve" && (
         <>
           <DialogTitle id="alert-dialog-title">
-            <Typography variant="h5">تایید {alertPage}</Typography>
+            <Typography sx={{fontWeight:"700"}} variant="h5" component="p">تایید {alertPage}</Typography>
           </DialogTitle>
           <DialogContent>
             {/* <DialogContentText id="alert-dialog-description"> */}
-            <Typography variant="h6" gutterBottom>
-              آیا می خواهید {alertPage}
-              {firstName} {family} را تایید کنید؟
+            <Typography variant="h6" component="p"  gutterBottom>
+              آیا می خواهید {alertPage} {firstName} {family} را تایید کنید؟
             </Typography>
             <Typography variant="body2">
               با این کار، یک ایمیل به متقاضی ارسال می شود و از این راه به او
@@ -59,19 +58,18 @@ export default function AlertDialog({
       {alertType === "disApprove" && (
         <>
           <DialogTitle id="alert-dialog-title">
-            <Typography variant="h5">رد {alertPage}</Typography>
+            <Typography sx={{fontWeight:"700"}} variant="h5" component="p">رد {alertPage}</Typography>
           </DialogTitle>
           <DialogContent>
             {/* <DialogContentText id="alert-dialog-description"> */}
-            <Typography variant="h6" gutterBottom>
-              آیا می خواهید {alertPage}
-              {firstName} {family} را رد کنید؟
+            <Typography variant="h6" component="p" gutterBottom>
+              آیا می خواهید {alertPage} {firstName} {family} را رد کنید؟
             </Typography>
             <Typography variant="body2">
               با این کار، یک ایمیل به متقاضی ارسال می شود و از این راه به او
               اطلاع رسانی خواهد شد.
             </Typography>
-            <Typography variant="body2" gutterBottom>
+            {/* <Typography variant="body2" gutterBottom>
               شما می توانید در ضمیمه این ایمیل، توضیحات اضافه ای مبنی بر علت رد
               شدن، اضافه کنید
             </Typography>
@@ -83,7 +81,7 @@ export default function AlertDialog({
               type="text"
               fullWidth
               variant="outlined"
-            />
+            /> */}
             {/* </DialogContentText> */}
           </DialogContent>
           <DialogActions>
