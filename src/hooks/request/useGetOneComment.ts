@@ -2,19 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-import { Course, StudentId } from "../../model";
-
-interface Comment {
-  course: Course | null;
-  studentId: StudentId | null;
-  comment: string;
-  sessionDate: string;
-  sessionProblem: string;
-  studentTask: string;
-  studentContribute: string;
-  //it should be string or boolean?? ask alireza
-  studentPresent: boolean | string;
-}
+import { Comment } from "../../model";
 
 const useGetOneComment = () => {
   const [allComment, setAllComment] = useState<Comment | null>(null);
@@ -24,12 +12,14 @@ const useGetOneComment = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const getListComments = async () => {
+  const oneComment = async () => {
     setLoading(true);
     try {
-      const allCommentLink = `${roles}/survey/${id}`;
-      let response = await getData(allCommentLink);
-      setAllComment(response.data);
+      const commentLink = `${roles}/survey/${id}`;
+      let response = await getData(commentLink);
+      let data = await response.data
+      setAllComment(data);
+      console.log(data)
       setLoading(false);
     } catch (error) {
       //TODO:handle Error
@@ -40,7 +30,7 @@ const useGetOneComment = () => {
     }
   };
   useEffect(() => {
-    getListComments();
+    oneComment();
     window.scroll(0, 0);
   }, []);
 

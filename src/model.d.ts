@@ -35,6 +35,11 @@ export interface StudentUser {
   firstName: string;
   lastName: string;
   roles: RolesStudent[];
+  city: string;
+  email: string;
+  mobile: string;
+  phone: string;
+  username: string;
 }
 export interface StudentId {
   id: number;
@@ -63,7 +68,7 @@ export interface MentorUser {
   username: string;
 }
 export interface Comment {
-  checked: true;
+  checked: boolean;
   comment: string;
   createTime: string;
   id: number;
@@ -115,7 +120,7 @@ export interface MoodleUser {
     address: string;
   };
 }
-
+//this is just for admin
 export interface moodleJustStudent {
   id: number;
   moodleRole: {
@@ -125,7 +130,7 @@ export interface moodleJustStudent {
   moodleUser: MoodleUser;
   epochTimeModified: number;
 }
-
+//this is for mentor/ta
 export interface MoodleUserAssignee {
   id: number;
   studentId: number;

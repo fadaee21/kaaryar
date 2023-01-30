@@ -28,7 +28,7 @@ import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
 import { dateConverter } from "../../utils/dateConverter";
 import { counterPagination } from "../../utils/counterPagination";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "../../context/AuthProvider";
 

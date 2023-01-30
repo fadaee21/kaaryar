@@ -24,7 +24,7 @@ import justTest from "./pages/justTest";
 import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
-import EditComments11 from "./pages/comment/EditComments11";
+import EditComments from "./pages/comment/EditComments";
 import StudentOfAdmin from "./pages/studentMoodle/StudentOfAdmin";
 import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
@@ -94,7 +94,7 @@ const ListRoutes = [
   {
     path: "ta/all-comments/:id/editing",
     name: " ",
-    component: EditComments11,
+    component: EditComments,
     showInNav: false,
     role: "ta",
     key: "ta9",
@@ -165,7 +165,7 @@ const ListRoutes = [
   {
     path: "mentor/all-comments/:id/editing",
     name: " ",
-    component: EditComments11,
+    component: EditComments,
     showInNav: false,
     role: "mentor",
     key: "mentor9",

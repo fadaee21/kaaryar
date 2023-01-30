@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { styled } from "@mui/system";
 
 export const FormBox = styled(Box)(({ theme }) => ({
@@ -31,4 +31,8 @@ export const SelectBox = styled(Box)(({ theme }) => ({
     "& .MuiInputBase-root": { width: "75ch" },
     "& .MuiTypography-root": { width: "90ch" },
   },
+}));
+
+export const RtlInputDate = styled(TextField)(() => ({
+  "& .MuiInputBase-input": { direction: "ltr" },
 }));

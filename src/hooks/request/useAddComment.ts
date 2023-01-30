@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData, postData } from "../../api/axios";
+import { getData, postData, editAxios } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-import { Course, StudentId } from "../../model";
+import { Course, StudentId, StudentUser } from "../../model";
 
 export const useAddComment = (
   course: Course | null,
@@ -101,10 +101,69 @@ export const useAddComment = (
       setErrMsg(" نظر شما ثبت نشد");
     }
   };
+
+  const putComment = async (
+    id: number | undefined,
+    studentUser: StudentUser | undefined
+  ) => {
+    console.log(
+      "course:",
+      course,
+      "studentUser:",
+      studentUser,
+      "comment:",
+      comment,
+      "sessionDate:",
+      sessionDate,
+      "sessionProblem:",
+      sessionProblem,
+      "studentTask:",
+      studentTask,
+      "studentContribute:",
+      studentContribute,
+      "studentPresent:",
+      studentPresent
+    );
+    try {
+      const response = await editAxios(`${roles}/survey/${id}`, {
+        data: {
+          studentUser: studentUser,
+          course: course,
+          comment: comment,
+          sessionDate: sessionDate,
+          studentContribute: studentContribute,
+          studentTask: studentTask,
+          sessionProblem: sessionProblem,
+          studentPresent: StPresentBoolean(),
+        },
+      });
+      const data = await response.data;
+      console.log(data);
+      if (response.data.state === "exist") {
+        setErrMsg("این نظر قبلا ثبت شده است");
+      }
+      if (response.data.state === "success") {
+        navigate(`/${roles}/all-comments`);
+      }
+      setErrMsg(" نظر شما ثبت نشد");
+    } catch (error) {
+      const err = error as AxiosError;
+      console.log(err);
+      if (err.response?.status === 401) {
+        setErrMsg("شما مجاز به ثبت  نظر نمی باشید");
+      }
+      if (err.response?.status === 403) {
+        setErrMsg("امکان ثبت  نظر شما نیست");
+      }
+      setErrMsg(" نظر شما ثبت نشد");
+    }
+  };
+
   return {
     setErrMsg,
     allCourse,
     postComment,
+    putComment,
     errMsg,
   };
 };
