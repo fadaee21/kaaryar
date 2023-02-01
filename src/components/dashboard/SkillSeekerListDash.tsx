@@ -28,7 +28,7 @@ const SkillSeekerListDash = () => {
         </Button>
       </BoxDashboard>
       <Typography variant="body2" sx={{ my: 2 }}>
-        تعداد -- مورد در انتظار تکمیل وجود دارد
+      در این فهرست می‌توانید تمام افرادی که در مراحل ثبت‌نام، ارزیابی، و یا هفته پذیرش هستند، مشاهده کنید.
       </Typography>
       <Typography variant="body2">تعداد کل: {counterPage}</Typography>
     </PaperDashboard>
