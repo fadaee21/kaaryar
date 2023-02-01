@@ -27,8 +27,8 @@ const RegListDB = () => {
       </BoxDashboard>
       <Typography variant="body2" sx={{ my: 2 }}>
         {!!awaitNumber
-          ? ` تعداد ${awaitNumber} مورد در انتظار تایید وجود دارد`
-          : "مورد جدیدی برای بررسی وجود ندارد"}
+          ? ` تعداد ${awaitNumber} مورد در انتظار تایید وجود دارد.`
+          : "مورد جدیدی برای بررسی وجود ندارد."}
       </Typography>
       <Typography variant="body2">تعداد کل: {counterPage}</Typography>
     </PaperDashboard>

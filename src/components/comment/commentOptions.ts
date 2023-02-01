@@ -38,3 +38,12 @@ export const allStudentTask = [
   { message: "تکلیفی برای این جلسه در نظر گرفته نشد بود" },
   { message: "این یک کامنت کوتاه برای تست allStudentTask" },
 ];
+
+export const descComment = {
+  allStudentPresent: "آیا مهارت آموز در جلسه حاضر بود؟",
+  allStudentContribute:
+    "میزان مشارکت مهارت‌آموز در جلسه را چطور ارزیابی می‌کنید؟",
+  allStudentTask:
+    "در صورتی که تکلیف (یا هر اقدام پیشنهادی)  برای مهارت‌آموز در نظر گرفته شده بود، لطفا یکی از گزینه‌های زیر را انتخاب کنید.",
+  allSessionProblem: "آیا مشکل قابل توجهی در جلسه وجود داشت؟",
+};

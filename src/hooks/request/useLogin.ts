@@ -55,7 +55,7 @@ export const useSubmitLogin = (username: string, password: string) => {
       } else if (err.response?.status === 400) {
         setErrMsg("نام کاربری یا پسورد را وارد نکرده اید");
       } else if (err.response?.status === 401) {
-        setErrMsg("برای شما حسابی ایجاد نشده است");
+        setErrMsg("نام کاربری یا پسورد را اشتباه وارد کرده اید");
       } else {
         setErrMsg("ورود ناموفق");
       }

@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, Paper, TextField } from "@mui/material";
 import { styled } from "@mui/system";
 
 export const FormBox = styled(Box)(({ theme }) => ({
@@ -35,4 +35,10 @@ export const SelectBox = styled(Box)(({ theme }) => ({
 
 export const RtlInputDate = styled(TextField)(() => ({
   "& .MuiInputBase-input": { direction: "ltr" },
+}));
+
+export const PaperW = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(1, 1),
+  minHeight: "12rem",
+  "& .MuiTypography-root": { margin: theme.spacing(1,0) },
 }));

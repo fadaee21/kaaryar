@@ -17,6 +17,7 @@ import {
   allStudentContribute,
   allSessionProblem,
   allStudentPresent,
+  descComment,
 } from "./commentOptions";
 
 interface AddCommentType {
@@ -115,29 +116,28 @@ const AddOrEditComment = ({
       </SelectBox>
       <Commenting
         allChoice={allStudentPresent}
-        description="آیا مهارت آموز در جلسه حاضر بود؟"
+        description= {descComment.allStudentPresent}
         handleChange={setStudentPresent}
         id="studentPresent"
         value={studentPresent}
       />
       <Commenting
         allChoice={allStudentContribute}
-        description="میزان مشارکت مهارت‌آموز در جلسه را چطور ارزیابی می‌کنید؟"
+        description={descComment.allStudentContribute}
         handleChange={setStudentContribute}
         id="studentContribute"
         value={studentContribute}
       />
       <Commenting
         allChoice={allStudentTask}
-        description="در صورتی که تکلیف (یا هر اقدام پیشنهادی) 
-            برای مهارت‌آموز در نظر گرفته شده بود، لطفا یکی از گزینه‌های زیر را انتخاب کنید."
+        description={descComment.allStudentTask}
         handleChange={setStudentTask}
         id="studentTask"
         value={studentTask}
       />
       <Commenting
         allChoice={allSessionProblem}
-        description="آیا مشکل قابل توجهی در جلسه وجود داشت؟"
+        description={descComment.allSessionProblem}
         handleChange={setSessionProblem}
         id="sessionProblem"
         value={sessionProblem}
