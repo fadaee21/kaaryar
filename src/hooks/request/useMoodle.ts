@@ -12,7 +12,8 @@ const useMoodle = (linkApi: string, page?: number) => {
     setLoading(true);
     try {
       let response = await getData(linkApi);
-      setStudents(response.data);
+      let data = await response.data;
+      setStudents(data);
       setLoading(false);
     } catch (error) {
       //TODO:handle Error

@@ -38,9 +38,9 @@ const Comments = () => {
   const { auth } = useAuth();
   const roleAuth = auth.roles.toString();
   const navigate = useNavigate();
-
+  const pageSize = 10;
   const { getListComments, commentsTable, loading, commentCounter } =
-    useGetComments(page);
+    useGetComments(page, pageSize);
   console.log(commentsTable);
   const handleClickOpenEdit = (id: any) => {
     navigate(`/${roleAuth}/all-comments/${id}/editing`);
@@ -80,13 +80,6 @@ const Comments = () => {
     }, 3000);
   }, [errRemoveMsg, setErrRemoveMsg, successRemoveMsg, setSuccessRemoveMsg]);
 
-  // if (roleAuth === "admin") {
-  //   return (
-  //     <p style={{ marginLeft: "auto", marginRight: "auto" }}>
-  //       WAITING FOR CREATING API
-  //     </p>
-  //   );
-  // }
   if (loading) {
     return <LoadingProgress />;
   }
@@ -257,11 +250,11 @@ const Comments = () => {
           my: 4,
         }}
         size="large"
-        count={counterPagination(commentCounter, 10)}
+        count={counterPagination(commentCounter, pageSize)}
         variant="outlined"
         shape="rounded"
         page={page}
-        onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+        onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
           setPage(value);
         }}
       />

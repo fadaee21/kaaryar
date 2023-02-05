@@ -118,19 +118,19 @@ const WatchComment = () => {
         </Box>
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={3}>
-            <PaperW>
+            <PaperW sx={{minHeight: "8rem"}}>
               <Typography variant="body2">نام منتور</Typography>
               <Typography variant="body1">{`${commenterUser.firstName} ${commenterUser.lastName}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
-            <PaperW>
+            <PaperW sx={{minHeight: "8rem"}}>
               <Typography variant="body2">نام مهارت آموز</Typography>
               <Typography variant="body1">{`${firstName} ${lastName}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
-            <PaperW>
+            <PaperW sx={{minHeight: "8rem"}}>
               <Typography variant="body2">تاریخ جلسه</Typography>
               <Typography variant="body1">
                 {dateConverter(sessionDate)}
@@ -138,7 +138,7 @@ const WatchComment = () => {
             </PaperW>
           </Grid>
           <Grid item xs={3}>
-            <PaperW>
+            <PaperW sx={{minHeight: "8rem"}}>
               <Typography variant="body2">
                 {descComment.allStudentPresent}
               </Typography>
