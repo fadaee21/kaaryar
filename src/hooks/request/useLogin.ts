@@ -28,7 +28,7 @@ export const useSubmitLogin = (username: string, password: string) => {
           // expires: new Date(Date.now() + 3600 * 24 * 1000),
           secure: true,
           maxAge: 3600 * 12,
-          sameSite: "none",
+          sameSite: "strict",
         });
         const res = response.data.profile.roles;
         const roleResponseServer: RoleType =
