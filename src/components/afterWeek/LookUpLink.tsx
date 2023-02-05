@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
-import { AfterWeekType, MoodleUser } from "../../model";
+import { AfterWeekType, moodleJustStudent } from "../../model";
 
 interface LookUpLinkType {
   student: AfterWeekType | null;
@@ -20,7 +20,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
   const [studentIdLink, setStudentIdLink] = useState<number | undefined>(); // get id student from moodle
   const [loading, setLoading] = useState(true);
   const [feedBackMessage, setFeedBackMessage] = useState("");
-  const allStudentMoodle = `moodle/user/all?pageNum=0&pageSize=600`;
+  const allStudentMoodle = `moodle/user/student/all?pageNum=0&pageSize=10000`;
   const oneStudentLink = `exam/after/week/form/${id}`;
 
   //get all list
@@ -51,6 +51,12 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
       clearTimeout(timer);
     };
   }, [feedBackMessage]);
+
+  const tt = students.filter(
+    (i: moodleJustStudent) =>
+      i.moodleUser.lastName === "امامی" && i.moodleUser.firstName === "زهرا"
+  );
+  console.log("پیدا کردن نفرات تکراری مثلا زهرا امامی:", tt);
 
   //edit user
   const handleLinkStudent = async (e: React.FormEvent) => {
@@ -84,13 +90,19 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
 
   const defaultProps = {
     options: students,
-    getOptionLabel: (option: MoodleUser) =>
-      +option.id + "_" + option.firstName + " " + option.lastName,
+    getOptionLabel: (option: moodleJustStudent) =>
+      +option.id +
+      "_" +
+      option.moodleUser.firstName +
+      " " +
+      option.moodleUser.lastName,
   };
   useEffect(() => {
     handleClick2();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [studentIdLink]);
+
+  console.log(students.length);
 
   return (
     <>
@@ -105,7 +117,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           {...defaultProps}
           id="close-on-select"
           sx={{ width: 300, mr: 5 }}
-          onChange={(event: any, newValue: MoodleUser | null) => {
+          onChange={(_event, newValue) => {
             setStudentIdLink(newValue?.id);
           }}
           renderInput={(params) => (

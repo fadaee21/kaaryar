@@ -12,14 +12,17 @@ const useGetOneComment = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const linkGetOne =
+    roles === "admin" ? `total/survey/${id}` : `${roles}/survey/${id}`;
+
   const oneComment = async () => {
     setLoading(true);
     try {
-      const commentLink = `${roles}/survey/${id}`;
+      const commentLink = linkGetOne;
       let response = await getData(commentLink);
-      let data = await response.data
+      let data = await response.data;
       setAllComment(data);
-      console.log(data)
+      console.log(data);
       setLoading(false);
     } catch (error) {
       //TODO:handle Error

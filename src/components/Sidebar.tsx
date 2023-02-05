@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-
+import Cookies from "universal-cookie";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -25,7 +25,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import logoWithName from "../assets/logoWithName.png";
 import style from "../styles/search/searchChevron.module.css";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import Face6Icon from '@mui/icons-material/Face6';
+import Face6Icon from "@mui/icons-material/Face6";
+import LogoLight from "./LogoLightSVG";
 
 export default function Sidebar({ listRoutes }: any) {
   const theme = useTheme();
@@ -44,11 +45,12 @@ export default function Sidebar({ listRoutes }: any) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const cookie = new Cookies();
 
   const handleExit = () => {
     handleClose();
-    localStorage.removeItem("user");
-    setAuth({ token: "", roles: [], username: "" });
+    cookie.remove("token");
+    setAuth({ roles: [], username: "" });
     navigate("/");
   };
 
@@ -79,16 +81,18 @@ export default function Sidebar({ listRoutes }: any) {
             <MenuIcon />
           </IconButton>
           <Box
-            component={"img"}
-            src={logoWithName}
-            alt={"kaaryar logo"}
+            // component={"img"}
+            // src={logoWithName}
+            // alt={"kaaryar logo"}
             sx={{
               mr: 5,
               width: "8rem",
               height: "auto",
               ...(open && { display: "none" }),
             }}
-          />
+          >
+            <LogoLight />
+          </Box>
           <Typography variant="subtitle2">
             سامانه مدیریت پروفایل کاریار
           </Typography>

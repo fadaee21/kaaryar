@@ -11,7 +11,6 @@ export const allStudentContribute = [
     message:
       "قابل قبول   (مهارت‌آموز موضوعی برای صحبت کردن آماده نکرده بود؛ اما در بحث شرکت می‌کرد و به سوالات جواب‌های مفصلی می‌داد)",
   },
-  { message: "allStudentContribute  " },
 ];
 export const allStudentPresent = [
   { message: "بله" },
@@ -26,7 +25,6 @@ export const allSessionProblem = [
   { message: "بله؛ مشکل عمده‌ای که نیاز به توجه فوری کاریار دارد" },
   { message: "بله؛ مشکلی جزئی وجود داشت" },
   { message: "خیر؛ مشکلی وجود نداشت" },
-  { message: "این یک کامنت کوتاه برای تست allSessionProblem" },
 ];
 export const allStudentTask = [
   { message: "تکلیف را به طور کامل انجام داده بود" },
@@ -36,7 +34,6 @@ export const allStudentTask = [
   },
   { message: "تکلیف را انجام نداده بود؛ با خودش روند پیگیری را هماهنگ کردم" },
   { message: "تکلیفی برای این جلسه در نظر گرفته نشد بود" },
-  { message: "این یک کامنت کوتاه برای تست allStudentTask" },
 ];
 
 export const descComment = {

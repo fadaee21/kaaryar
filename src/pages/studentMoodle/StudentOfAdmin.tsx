@@ -1,7 +1,4 @@
 import {
-  Button,
-  ButtonGroup,
-  ListItem,
   Pagination,
   Paper,
   Table,
@@ -28,16 +25,18 @@ import {
 } from "../../styles/search/accordion";
 import styleRot from "../../styles/search/searchChevron.module.css";
 import useMoodle from "../../hooks/request/useMoodle";
+import useCountPagination from "../../hooks/request/useCountPagination";
+import { counterPagination } from "../../utils/counterPagination";
 
 const StudentOfAdmin = () => {
   const [page, setPage] = useState(1);
-  const pageSize = 30;
+  const pageSize = 25;
   const adminStudent = `moodle/user/student/all?pageNum=${
     page - 1
   }&pageSize=${pageSize}`;
-  //   waiting for creating link to count the number of student
-  //   const studentCount = "";
-  //   const [, counterPage] = useCountPagination(studentCount);
+
+  const studentCount = "moodle/user/student/count";
+  const [, counterPage] = useCountPagination(studentCount);
   const [chevronDir, setChevronDir] = useState(false);
   const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
     MoodleUser[] | null
@@ -52,7 +51,6 @@ const StudentOfAdmin = () => {
   if (loading) {
     return <LoadingProgress />;
   }
-
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -352,12 +350,11 @@ const StudentOfAdmin = () => {
             my: 4,
           }}
           size="large"
-          count={60}
-          //   count={counterPagination(counterPage, pageSize)}
+          count={counterPagination(counterPage, pageSize)}
           variant="outlined"
           shape="rounded"
           page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          onChange={(_event, value: number) => {
             setPage(value);
           }}
         />

@@ -78,7 +78,7 @@ export const useAddComment = (
           studentContribute: studentContribute,
           studentTask: studentTask,
           sessionProblem: sessionProblem,
-          studentPresent: StPresentBoolean(),
+          isStudentPresent: StPresentBoolean(),
         },
       });
       console.log(response);
@@ -134,7 +134,7 @@ export const useAddComment = (
           studentContribute: studentContribute,
           studentTask: studentTask,
           sessionProblem: sessionProblem,
-          studentPresent: StPresentBoolean(),
+          isStudentPresent: StPresentBoolean(),
         },
       });
       const data = await response.data;

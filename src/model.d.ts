@@ -4,7 +4,7 @@ export interface AuthType {
   username: string;
   password?: string;
   roles: RoleType[];
-  token: string;
+  // token: string;
   id?: number;
 }
 
@@ -68,20 +68,31 @@ export interface MentorUser {
   username: string;
 }
 export interface Comment {
-  checked: boolean;
+  isChecked: boolean;
   comment: string;
   createTime: string;
   id: number;
   sessionDate: string;
   sessionProblem: string;
   studentContribute: string;
-  studentPresent: true;
+  isStudentPresent: true;
   studentTask: string;
   updateTime: string;
   studentUser: StudentUser;
   course: Course;
-  //? not sure about mentorUser...it could change by changing the role
-  mentorUser: MentorUser;
+  commenterUser: MentorUser;
+}
+
+export interface CommentTable {
+  comment: string;
+  commenterUser: MoodleUser;
+  course: MoodleCourse;
+  createTime: string;
+  id: number;
+  isChecked: boolean;
+  role: string;
+  studentUser: MoodleUser;
+  updateTime: string;
 }
 
 export interface Course {
@@ -126,7 +137,7 @@ export interface moodleJustStudent {
   moodleRole: {
     userRole: "student";
   };
-  contextId: 252;
+  contextId: number;
   moodleUser: MoodleUser;
   epochTimeModified: number;
 }

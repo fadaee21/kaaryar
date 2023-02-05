@@ -39,7 +39,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   handleOpenAlert,
 }) => {
   const navigate = useNavigate();
-  //use this component for skill-seeker page temporarily
+  // this component use for skill-seeker page also,in that page you don't need approve button.handling this by location
   const location = useLocation();
   const seekerPage = location.pathname.includes("skill-seeker");
   console.log(seekerPage);

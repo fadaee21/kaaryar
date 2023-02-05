@@ -8,7 +8,7 @@ import LoadingProgress from "../LoadingProgress";
 const RegListDB = () => {
   const [loading, counterPage] = useCountPagination("/reg/form/count");
   const [loadingAwait, awaitNumber] = useAwaitingConfirm("/reg/search/param");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   if (loading && loadingAwait) {
     return (
       <PaperDashboard>
@@ -21,7 +21,11 @@ const RegListDB = () => {
     <PaperDashboard>
       <BoxDashboard>
         <Typography variant="body1">فهرست ثبت نام</Typography>
-        <Button variant="text" color="info" onClick={()=>navigate("/admin/register-form")}>
+        <Button
+          variant="text"
+          color="info"
+          onClick={() => navigate("/admin/register-form")}
+        >
           مشاهده
         </Button>
       </BoxDashboard>
