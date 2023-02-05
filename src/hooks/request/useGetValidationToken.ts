@@ -6,7 +6,7 @@ const useGetValidationToken = () => {
   const [tokenValidation, setTokenValidation] = useState(false);
   const [loadingVal, setLoadingVal] = useState(false);
   const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  const roles = auth?.roles?.toString();
   // just for token validation
   const getValid = async () => {
     setLoadingVal(false);

@@ -22,7 +22,6 @@ import { AppBar, DrawerHeader, drawerWidth, Main } from "../styles/sideBar";
 import { useAuth } from "../context/AuthProvider";
 import { Menu, MenuItem, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import logoWithName from "../assets/logoWithName.png";
 import style from "../styles/search/searchChevron.module.css";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Face6Icon from "@mui/icons-material/Face6";
@@ -49,9 +48,9 @@ export default function Sidebar({ listRoutes }: any) {
 
   const handleExit = () => {
     handleClose();
-    cookie.remove("token");
-    setAuth({ roles: [], username: "" });
     navigate("/");
+    cookie.remove("token", { sameSite: "strict" });
+    setAuth({ roles: [], username: "" });
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
