@@ -1,14 +1,12 @@
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import useMoodle from "../../hooks/request/useMoodle";
+import useCountPagination from "../../hooks/request/useCountPagination";
 import { BoxDashboard, PaperDashboard } from "../../styles/dashboard";
 import LoadingProgress from "../LoadingProgress";
+const studentCount = "moodle/user/student/count";
 
 const StudentListDash = () => {
-  //TODO:this is temporarily,alireza should create api to count this
-  const { loading, students } = useMoodle(
-    "moodle/user/all?pageNum=0&pageSize=10000"
-  );
+  const [loading, counterPage] = useCountPagination(studentCount);
 
   const navigate = useNavigate();
   if (loading) {
@@ -31,7 +29,7 @@ const StudentListDash = () => {
           مشاهده
         </Button>
       </BoxDashboard>
-      <Typography variant="body2">تعداد کل: {students.length}</Typography>
+      <Typography variant="body2">تعداد کل: {counterPage}</Typography>
     </PaperDashboard>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../api/axios";
 
@@ -7,8 +7,6 @@ const useMoodle = (linkApi: string, page?: number) => {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  // const allStudentMoodle = `moodle/user/all?pageNum=${page - 1}&pageSize=60`;
-  // const allStudentMoodle = "/moodle/user/assignee";
 
   const getList = async () => {
     setLoading(true);

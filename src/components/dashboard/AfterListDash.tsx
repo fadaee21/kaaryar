@@ -16,7 +16,7 @@ const AfterListDash = () => {
 
   if (loading && loadingAwait) {
     return (
-      <PaperDashboard>
+      <PaperDashboard >
         <LoadingProgress usage="paper" />
       </PaperDashboard>
     );

@@ -5,7 +5,7 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
-import { Comment } from "../../model";
+import { CommentTable } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { Container } from "@mui/system";
 import {
@@ -35,17 +35,13 @@ import { useAuth } from "../../context/AuthProvider";
 const Comments = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = React.useState(false);
-  // equality AuthRole With RoleWatch
-  //if roleQuery was not same with roleAuth,you are not allowed to
-  //edit or post comment,just you can see the comment
-
   const { auth } = useAuth();
   const roleAuth = auth.roles.toString();
   const navigate = useNavigate();
 
-  const { getListComments, comments, loading, commentCounter } =
+  const { getListComments, commentsTable, loading, commentCounter } =
     useGetComments(page);
-  console.log(comments);
+  console.log(commentsTable);
   const handleClickOpenEdit = (id: any) => {
     navigate(`/${roleAuth}/all-comments/${id}/editing`);
   };
@@ -84,13 +80,13 @@ const Comments = () => {
     }, 3000);
   }, [errRemoveMsg, setErrRemoveMsg, successRemoveMsg, setSuccessRemoveMsg]);
 
-  if (roleAuth === "admin") {
-    return (
-      <p style={{ marginLeft: "auto", marginRight: "auto" }}>
-        WAITING FOR CREATING API
-      </p>
-    );
-  }
+  // if (roleAuth === "admin") {
+  //   return (
+  //     <p style={{ marginLeft: "auto", marginRight: "auto" }}>
+  //       WAITING FOR CREATING API
+  //     </p>
+  //   );
+  // }
   if (loading) {
     return <LoadingProgress />;
   }
@@ -119,15 +115,18 @@ const Comments = () => {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {comments.map((commentItem: Comment) => {
+                {commentsTable?.map((commentItem: CommentTable) => {
                   const {
                     id,
                     course,
                     studentUser,
                     comment,
                     createTime,
-                    mentorUser,
+                    commenterUser,
                   } = commentItem;
+
+                  console.log(createTime);
+
                   return (
                     <StyledTableRow
                       key={id}
@@ -141,7 +140,7 @@ const Comments = () => {
                         sx={{ width: "10%", verticalAlign: "top" }}
                       >
                         <Typography variant="body2">
-                          {dateConverter(createTime)}
+                          {createTime && dateConverter(createTime)}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -157,7 +156,9 @@ const Comments = () => {
                         sx={{ width: "15%", verticalAlign: "top" }}
                       >
                         <Typography variant="body2">
-                          {mentorUser.firstName + " " + mentorUser.lastName}
+                          {commenterUser.firstName +
+                            " " +
+                            commenterUser.lastName}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -191,10 +192,20 @@ const Comments = () => {
                           >
                             <VisibilityIcon fontSize="small" color="info" />
                           </IconButton>
-                          <IconButton onClick={() => handleClickOpenEdit(id)}>
+                          <IconButton
+                            sx={{
+                              ...(roleAuth === "admin" && { display: "none" }),
+                            }}
+                            onClick={() => handleClickOpenEdit(id)}
+                          >
                             <EditIcon fontSize="small" color="primary" />
                           </IconButton>
-                          <IconButton onClick={() => handleClickOpen(id)}>
+                          <IconButton
+                            sx={{
+                              ...(roleAuth === "admin" && { display: "none" }),
+                            }}
+                            onClick={() => handleClickOpen(id)}
+                          >
                             <DeleteIcon fontSize="small" color="error" />
                           </IconButton>
                         </ListItem>

@@ -7,19 +7,14 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { FooterTheme, GridContainerFooter } from "../styles/footer";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
-import logoWithName from "../assets/logoWithName.png";
+import LogoLight from "./LogoLightSVG";
 const Footer = () => {
   return (
     <FooterTheme>
       <Container maxWidth="xl">
         <GridContainerFooter container>
           <Grid item sx={{ flex: 1.1, ml: 5 }}>
-            <Box
-              component={"img"}
-              src={logoWithName}
-              alt={"kaaryar logo"}
-              sx={{ width: "9rem", height: "auto" }}
-            />
+            <LogoLight/>
           </Grid>
           <Grid item sx={{ flex: 3 }}>
             <Typography

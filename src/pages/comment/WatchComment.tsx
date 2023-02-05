@@ -41,12 +41,12 @@ const WatchComment = () => {
     id,
     comment,
     sessionDate,
-    studentPresent,
+    isStudentPresent,
     studentContribute,
     studentTask,
     sessionProblem,
     studentUser: { firstName, lastName },
-    mentorUser,
+    commenterUser,
   } = allComment as Comment;
 
   const handleClickOpenEdit = () => {
@@ -85,7 +85,10 @@ const WatchComment = () => {
           </Typography>
           <Button
             endIcon={<DeleteIcon />}
-            sx={{ ml: "auto" }}
+            sx={{
+              ml: "auto",
+              ...(roles.toString() === "admin" && { display: "none" }),
+            }}
             variant="contained"
             color="error"
             onClick={() => handleClickOpen(id)}
@@ -93,9 +96,12 @@ const WatchComment = () => {
             حذف نظر
           </Button>
           <Button
+            sx={{
+              mx: 1,
+              ...(roles.toString() === "admin" && { display: "none" }),
+            }}
             onClick={handleClickOpenEdit}
             endIcon={<EditIcon />}
-            sx={{ mx: 1 }}
             variant="outlined"
           >
             ویرایش نظر
@@ -105,6 +111,7 @@ const WatchComment = () => {
             endIcon={<ArrowBackIcon />}
             variant="outlined"
             color="inherit"
+            sx={{ ...(roles.toString() === "admin" && { ml: "auto" }) }}
           >
             بازگشت
           </Button>
@@ -113,7 +120,7 @@ const WatchComment = () => {
           <Grid item xs={3}>
             <PaperW>
               <Typography variant="body2">نام منتور</Typography>
-              <Typography variant="body1">{`${mentorUser.firstName} ${mentorUser.lastName}`}</Typography>
+              <Typography variant="body1">{`${commenterUser.firstName} ${commenterUser.lastName}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
@@ -136,9 +143,9 @@ const WatchComment = () => {
                 {descComment.allStudentPresent}
               </Typography>
               <Typography variant="body1">
-                {studentPresent === true
+                {isStudentPresent === true
                   ? "بله"
-                  : studentPresent === null
+                  : isStudentPresent === null
                   ? "فقط بخشی از جلسه را حضور داشت"
                   : "خیر"}
               </Typography>

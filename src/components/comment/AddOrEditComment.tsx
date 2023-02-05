@@ -19,6 +19,7 @@ import {
   allStudentPresent,
   descComment,
 } from "./commentOptions";
+import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
 
 interface AddCommentType {
   studentId: StudentId | null; //this prop just for adding
@@ -38,9 +39,9 @@ const AddOrEditComment = ({
   );
   const [studentPresent, setStudentPresent] = useState(
     allComment
-      ? allComment.studentPresent === true
+      ? allComment.isStudentPresent === true
         ? "بله"
-        : allComment.studentPresent === false
+        : allComment.isStudentPresent === false
         ? "خیر"
         : "فقط بخشی از جلسه را حضور داشت"
       : ""
@@ -67,6 +68,9 @@ const AddOrEditComment = ({
       studentContribute,
       studentPresent
     );
+
+  console.log("Date:", sessionDate);
+  console.log("algorithm:", zeroUTCOffset(sessionDate));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,7 +120,7 @@ const AddOrEditComment = ({
       </SelectBox>
       <Commenting
         allChoice={allStudentPresent}
-        description= {descComment.allStudentPresent}
+        description={descComment.allStudentPresent}
         handleChange={setStudentPresent}
         id="studentPresent"
         value={studentPresent}

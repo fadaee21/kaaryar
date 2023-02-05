@@ -6,6 +6,7 @@ export const PaperDashboard = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1, 3),
   // color: theme.palette.text.primary,
   minHeight: 165,
+  height: "100%",
 }));
 
 export const BoxDashboard = styled(Box)(({ theme }) => ({

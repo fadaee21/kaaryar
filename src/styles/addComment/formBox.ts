@@ -39,6 +39,6 @@ export const RtlInputDate = styled(TextField)(() => ({
 
 export const PaperW = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1, 1),
-  minHeight: "12rem",
+  minHeight: "14rem",
   "& .MuiTypography-root": { margin: theme.spacing(1,0) },
 }));

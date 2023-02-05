@@ -13,6 +13,7 @@ const useCountPagination = (counting: string) => {
         setLoading(false);
       } catch (error) {
         console.log("Page Counter", error);
+        setLoading(false);
       }
     };
     getCountComment();

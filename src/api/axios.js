@@ -1,12 +1,11 @@
 import axios from "axios";
-
-
+import Cookies from "universal-cookie";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.baseURL = "https://api.pm.kaaryar.ir/";
 
 export const userLogin = axios.create({
   method: "POST",
-  timeout: 3000,
+  timeout: 5000,
 });
 
 export const getData = axios.create({
@@ -24,11 +23,11 @@ export const editAxios = axios.create({
   method: "PUT",
 });
 
+const cookie = new Cookies();
+
 getData.interceptors.request.use(
   (request) => {
-    const data = window.localStorage.getItem("user");
-    const resp = JSON.parse(data);
-    request.headers.common["Authorization"] = resp.token;
+    request.headers.common["Authorization"] = cookie.get("token");
     return request;
   },
   (error) => {
@@ -38,9 +37,7 @@ getData.interceptors.request.use(
 
 postData.interceptors.request.use(
   (request) => {
-    const data = window.localStorage.getItem("user");
-    const resp = JSON.parse(data);
-    request.headers.common["Authorization"] = resp.token;
+    request.headers.common["Authorization"] = cookie.get("token");
     return request;
   },
   (error) => {
@@ -49,9 +46,7 @@ postData.interceptors.request.use(
 );
 editAxios.interceptors.request.use(
   (request) => {
-    const data = window.localStorage.getItem("user");
-    const resp = JSON.parse(data);
-    request.headers.common["Authorization"] = resp.token;
+    request.headers.common["Authorization"] = cookie.get("token");
     return request;
   },
   (error) => {
@@ -60,9 +55,7 @@ editAxios.interceptors.request.use(
 );
 removeData.interceptors.request.use(
   (request) => {
-    const data = window.localStorage.getItem("user");
-    const resp = JSON.parse(data);
-    request.headers.common["Authorization"] = resp.token;
+    request.headers.common["Authorization"] = cookie.get("token");
     return request;
   },
   (error) => {

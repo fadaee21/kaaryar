@@ -11,19 +11,14 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
 import TablePic, { TablePic2 } from "../../components/table/TablePic";
 import { useAuth } from "../../context/AuthProvider";
-import {
-  MoodleUser,
-  // MoodleUser,
-  MoodleUserAssignee,
-} from "../../model";
+import { MoodleUser, MoodleUserAssignee } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -35,7 +30,6 @@ import styleRot from "../../styles/search/searchChevron.module.css";
 import useMoodle from "../../hooks/request/useMoodle";
 
 const StudentListMoodleTable = () => {
-  
   const [chevronDir, setChevronDir] = useState(false);
   const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
     MoodleUser[] | null
@@ -122,12 +116,9 @@ const StudentListMoodleTable = () => {
               {!searchingMoodleStudent && (
                 <TableBody>
                   {students.map(
-                    (
-                      moodleUser: MoodleUserAssignee,
-                      i: React.Key | null | undefined
-                    ) => {
+                    (moodleUser: MoodleUserAssignee, i: React.Key) => {
                       const {
-                        id,
+                        // id,
                         studentId,
                         // firstName,
                         // lastName,
