@@ -23,6 +23,7 @@ import { useSubmitLogin } from "../hooks/request/useLogin";
 import { Navigate, useLocation } from "react-router-dom";
 import useGetValidationToken from "../hooks/request/useGetValidationToken";
 import { useAuth } from "../context/AuthProvider";
+import LoadingProgress from "../components/LoadingProgress";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -46,7 +47,11 @@ const Login = () => {
   };
 
   if (!loadingVal) {
-    return <></>;
+    return (
+      <Box sx={{ mt: 12 }}>
+        <LoadingProgress />
+      </Box>
+    );
   }
 
   return (
