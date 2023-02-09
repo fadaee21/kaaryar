@@ -41,7 +41,6 @@ const Comments = () => {
   const pageSize = 10;
   const { getListComments, commentsTable, loading, commentCounter } =
     useGetComments(page, pageSize);
-  console.log(commentsTable);
   const handleClickOpenEdit = (id: any) => {
     navigate(`/${roleAuth}/all-comments/${id}/editing`);
   };
@@ -117,8 +116,6 @@ const Comments = () => {
                     createTime,
                     commenterUser,
                   } = commentItem;
-
-                  console.log(createTime);
 
                   return (
                     <StyledTableRow

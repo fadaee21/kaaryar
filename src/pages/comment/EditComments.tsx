@@ -10,7 +10,6 @@ const EditComments = () => {
   if (loading) {
     return <LoadingProgress />;
   }
-  console.log(allComment);
   return (
     <Container>
       <SelectBox>

@@ -23,7 +23,7 @@ const useGetValidationToken = () => {
       }
       setLoadingVal(true);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       setTokenValidation(false);
       setLoadingVal(true);
       navigate("/");
@@ -33,7 +33,7 @@ const useGetValidationToken = () => {
 
   useEffect(() => {
     //if roles array is empty,getValid is false
-    if (!!auth.roles.length) {
+    if (!!auth?.roles.length) {
       getValid();
     } else {
       navigate("/");
