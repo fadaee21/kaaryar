@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useState } from "react";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
+import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
 
 const WatchComment = () => {
   const [open, setOpen] = useState(false);
@@ -118,27 +119,28 @@ const WatchComment = () => {
         </Box>
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={3}>
-            <PaperW sx={{minHeight: "8rem"}}>
+            <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">نام منتور</Typography>
               <Typography variant="body1">{`${commenterUser.firstName} ${commenterUser.lastName}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
-            <PaperW sx={{minHeight: "8rem"}}>
+            <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">نام مهارت آموز</Typography>
               <Typography variant="body1">{`${firstName} ${lastName}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
-            <PaperW sx={{minHeight: "8rem"}}>
+            <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">تاریخ جلسه</Typography>
               <Typography variant="body1">
-                {dateConverter(sessionDate)}
+                {/* in post Date of comment i must change type toISOstring,when fetch Date,it response with one day false! zero utc help to improve this fault */}
+                {dateConverter(zeroUTCOffset(new Date(sessionDate)))}
               </Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
-            <PaperW sx={{minHeight: "8rem"}}>
+            <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">
                 {descComment.allStudentPresent}
               </Typography>

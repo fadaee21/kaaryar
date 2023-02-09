@@ -26,7 +26,6 @@ export const useGetComments = (page: number, pageSize: number) => {
       try {
         let { data } = await getData(countComment);
         setCommentCounter(data.message);
-        console.log("تعداد کامنت ها: ", data.message);
       } catch (error) {
         console.log("comment Counter", error);
       }

@@ -24,6 +24,7 @@ export const GridGuestLogin = styled(Grid)(({ theme }) => ({
   textAlign: "center",
   padding: theme.spacing(0, 3),
   backgroundColor: "#f7e5f1",
+  [theme.breakpoints.down("sm")]: { display: "none" },
 }));
 
 export const GridUserLogin = styled(Grid)(({ theme }) => ({

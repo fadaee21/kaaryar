@@ -49,7 +49,7 @@ export default function Sidebar({ listRoutes }: any) {
   const handleExit = () => {
     handleClose();
     navigate("/");
-    cookie.remove("token", { sameSite: "strict" });
+    cookie.remove("token", { path: "/", sameSite: "strict" });
     setAuth({ roles: [], username: "" });
   };
 

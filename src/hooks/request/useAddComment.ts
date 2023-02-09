@@ -81,7 +81,7 @@ export const useAddComment = (
           isStudentPresent: StPresentBoolean(),
         },
       });
-      console.log(response);
+
       if (response.data.state === "exist") {
         setErrMsg("این نظر قبلا ثبت شده است");
       }
