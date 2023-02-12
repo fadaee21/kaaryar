@@ -37,7 +37,7 @@ const RegisterFormDetail = () => {
   const { auth } = useAuth();
   const roles = auth.roles.toString();
   // const { success, getApprove } = useApproveReg();
-  const { getApproveReg, successObject, success } = useApproveReg();
+  const { getApproveReg, success } = useApproveReg();
   const studentId = `/reg/form/${id}`;
   const approveLink = "/reg/form/approve";
   const getStudent = async () => {

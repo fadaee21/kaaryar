@@ -21,7 +21,13 @@ let theme = createTheme({
       color: "#373a3c",
     },
     h5: {
-      fontSize: "1.5rem",
+      fontSize: "1.6rem",
+      fontWeight: "500",
+      lineHeight: 1.2,
+      color: "#373a3c",
+    },
+    h6: {
+      fontSize: "1.15rem",
       fontWeight: "500",
       lineHeight: 1.2,
       color: "#373a3c",

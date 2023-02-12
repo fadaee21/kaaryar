@@ -164,21 +164,23 @@ export interface RegistrationForm {
   id: number;
   checked: boolean;
   registrationCode: string;
-  codeMeli: string;
+  codeMeli?: string;
   firstName: string;
   family: string;
-  province: string;
-  city: string;
-  gender: string;
-  birthDate: string;
-  mobile: string;
-  email: string;
-  familiarity: string;
-  education: string;
-  studyField: string;
-  selectedField: string;
-  description: string;
-  token: string;
+  province?: string;
+  city?: string;
+  gender?: string;
+  birthDate?: string;
+  mobile?: string;
+  email?: string;
+  familiarity?: string;
+  education?: string;
+  studyField?: string;
+  selectedField?: string;
+  description?: string;
+  token?: string;
+  highSchoolYear?: string;
+  refer?: string;
 }
 
 export interface BeforeWeekType {
@@ -255,19 +257,15 @@ interface AfterWeekType {
   workCommit: string;
 }
 
-export interface TableBodyAllType {
-  id: number;
-  birthDate: string;
-  family: string;
-  firstName: string;
-  registrationCode: string;
-  codeMeli: string;
-  mobile: string;
-  email: string;
+export interface TableBodyAllType extends RegistrationForm {
+  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  resultStatus?: string;
+  checkBoxDisplay?: boolean;
   roles: string;
   directNav: string;
-  gender: string;
-  checked: boolean;
+  //movaghat ta json dorost she
+  highSchoolYear?: string;
+  refer?: string;
 }
 
 export interface SeekerStudent {

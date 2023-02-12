@@ -156,7 +156,7 @@ export default function Sidebar({ listRoutes }: any) {
                 <ListItemIcon sx={{ marginRight: 1 }}>
                   {<AccountCircle />}
                 </ListItemIcon>
-                <ListItemText secondary="پروفایل کاربری" />
+                <ListItemText secondary="حساب کاربری" />
               </MenuItem>
               <Divider variant="middle" />
               <MenuItem onClick={handleExit}>
