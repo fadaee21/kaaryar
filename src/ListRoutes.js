@@ -1,4 +1,3 @@
-
 import StudentPage from "./pages/studentMoodle/StudentPage";
 import StudentListMoodleTable from "./pages/studentMoodle/StudentListMoodleTable";
 import Comments from "./pages/comment/TableComments";
@@ -28,6 +27,7 @@ import EditComments from "./pages/comment/EditComments";
 import StudentOfAdmin from "./pages/studentMoodle/StudentOfAdmin";
 import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
+import Volunteer from "./pages/volunteer/Volunteer";
 
 const ListRoutes = [
   // ta________________________________
@@ -99,6 +99,15 @@ const ListRoutes = [
     role: "ta",
     key: "ta9",
   },
+  {
+    path: "ta/volunteer",
+    name: "فهرست پروفایل داوطلبان",
+    // icon:<></>,
+    component: Volunteer,
+    showInNav: true,
+    role: "ta",
+    key: "ta10",
+  },
 
   // mentor____________________________________________
   {
@@ -169,6 +178,15 @@ const ListRoutes = [
     showInNav: false,
     role: "mentor",
     key: "mentor9",
+  },
+  {
+    path: "mentor/volunteer",
+    name: "فهرست پروفایل داوطلبان",
+    // icon:<></>,
+    component: Volunteer,
+    showInNav: true,
+    role: "mentor",
+    key: "mentor10",
   },
 
   // admin__________________________________________
@@ -300,6 +318,15 @@ const ListRoutes = [
     key: "admin14",
   },
   {
+    path: "admin/volunteer",
+    name: "فهرست پروفایل داوطلبان",
+    // icon:<></>,
+    component: Volunteer,
+    showInNav: true,
+    role: "admin",
+    key: "admin19",
+  },
+  {
     path: "admin/all-comments",
     name: "نظرات",
     // icon: <CommentIcon />,
@@ -327,6 +354,7 @@ const ListRoutes = [
     role: "admin",
     key: "admin18",
   },
+
 
   {
     path: "test",

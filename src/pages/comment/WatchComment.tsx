@@ -77,7 +77,6 @@ const WatchComment = () => {
           sx={{
             mb: 8,
             display: "flex",
-            justifyContent: "flex",
             alignItems: "center",
           }}
         >

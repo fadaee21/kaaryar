@@ -9,8 +9,6 @@ import {
   Divider,
   useMediaQuery,
   Box,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
@@ -115,24 +113,22 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                   />
                 </FormControl>
               </ListItem>
+
               <ListItem>
                 <FormControl
                   fullWidth
                   sx={{ width: "40ch" }}
                   variant="standard"
                 >
-                  <InputLabel id="idGenderLabel">جنسیت : </InputLabel>
-                  <Select
-                    labelId="idGenderLabel"
-                    id="idGender"
-                    name="gender"
+                  <InputLabel htmlFor="highSchoolYear">
+                    سال دبیرستان :{" "}
+                  </InputLabel>
+                  <Input
+                    id="highSchoolYear"
+                    value={student?.highSchoolYear || " "}
                     onChange={handleChange}
-                    label="gender"
-                    value={student?.gender}
-                  >
-                    <MenuItem value={"مرد"}>مرد</MenuItem>
-                    <MenuItem value={"زن"}>زن</MenuItem>
-                  </Select>
+                    name="highSchoolYear"
+                  />
                 </FormControl>
               </ListItem>
               <ListItem>
@@ -141,12 +137,14 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                   sx={{ width: "40ch" }}
                   variant="standard"
                 >
-                  <InputLabel htmlFor="codeMeli">کد ملی : </InputLabel>
+                  <InputLabel htmlFor="referInst">
+                    نام معرف یا موسسه :{" "}
+                  </InputLabel>
                   <Input
-                    id="stuYear"
-                    value={student?.codeMeli || " "}
+                    id="referInst"
+                    value={student?.refer || " "}
                     onChange={handleChange}
-                    name="codeMeli"
+                    name="refer"
                   />
                 </FormControl>
               </ListItem>

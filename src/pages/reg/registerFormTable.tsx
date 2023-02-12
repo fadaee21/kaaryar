@@ -14,7 +14,7 @@ import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
-import TableBodyAll from "../../components/table/TableBodyAll";
+import RegTableBodyAll from "../../components/table/RegTableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
 import { useAuth } from "../../context/AuthProvider";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
@@ -191,24 +191,24 @@ const RegisterFormTable = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentRegister && (
                 <TableBody>
-                  {students.map((RegisterUser: RegistrationForm) => {
+                  {students.map((RegisterUser: any /*RegistrationForm*/) => {
                     return (
-                      <TableBodyAll
+                      <RegTableBodyAll
                         key={RegisterUser.id}
                         id={RegisterUser.id}
                         roles={roles}
-                        birthDate={RegisterUser.birthDate}
                         family={RegisterUser.family}
                         firstName={RegisterUser.firstName}
                         registrationCode={RegisterUser.registrationCode}
-                        codeMeli={RegisterUser.codeMeli}
-                        mobile={RegisterUser.mobile}
-                        email={RegisterUser.email}
                         directNav="register-form"
-                        gender={RegisterUser.gender}
                         checked={RegisterUser.checked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
+                        education={RegisterUser.education}
+                        refer={RegisterUser.refer}
+                        highSchoolYear={RegisterUser.highSchoolYear}
+                        familiarity={RegisterUser.familiarity}
+                        province={RegisterUser.province}
                       />
                     );
                   })}
@@ -219,24 +219,25 @@ const RegisterFormTable = () => {
                 {searchingStudentRegister?.map(
                   (searchingStudentRegister: any) => {
                     return (
-                      <TableBodyAll
+                      <RegTableBodyAll
                         roles={roles}
                         key={searchingStudentRegister?.id}
                         id={searchingStudentRegister?.id}
-                        birthDate={searchingStudentRegister?.birthDate}
                         family={searchingStudentRegister?.family}
                         firstName={searchingStudentRegister?.firstName}
                         registrationCode={
                           searchingStudentRegister?.registrationCode
                         }
-                        codeMeli={searchingStudentRegister?.codeMeli}
-                        mobile={searchingStudentRegister?.mobile}
-                        email={searchingStudentRegister?.email}
                         directNav="register-form"
-                        gender={searchingStudentRegister?.gender}
                         checked={searchingStudentRegister?.checked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={true}
+                        refer={searchingStudentRegister?.refer}
+                        highSchoolYear={
+                          searchingStudentRegister?.highSchoolYear
+                        }
+                        familiarity={searchingStudentRegister?.familiarity}
+                        province={searchingStudentRegister?.province}
                       />
                     );
                   }

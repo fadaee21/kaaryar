@@ -5,12 +5,12 @@ import useGetImage from "../../hooks/request/useGetImage";
 import { stringAvatar } from "../../utils/avatarColor";
 
 const TablePic = ({ picture, lastName }: any) => {
-  console.log(picture)
   const { pic, getPicture } = useGetImage();
   React.useEffect(() => {
     if (picture !== null) {
       getPicture(picture?.address);
     }
+     // eslint-disable-next-line
   }, []);
 
   return (
@@ -26,7 +26,6 @@ const TablePic = ({ picture, lastName }: any) => {
 
 export default TablePic;
 
-
 export const TablePic2 = ({ studentId, lastName }: any) => {
   const { pic, getPicture } = useGetImage();
   React.useEffect(() => {
@@ -40,6 +39,7 @@ export const TablePic2 = ({ studentId, lastName }: any) => {
       }
     };
     getLink();
+     // eslint-disable-next-line
   }, []);
 
   return (
