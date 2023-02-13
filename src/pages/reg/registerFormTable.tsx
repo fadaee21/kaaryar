@@ -88,8 +88,8 @@ const RegisterFormTable = () => {
 
   useEffect(() => {
     getListLearner();
-    setSearchingStudentRegister(null);
     window.scrollTo(0, 0);
+    setChevronDir(false);
     // eslint-disable-next-line
   }, [page, successMulti]);
 

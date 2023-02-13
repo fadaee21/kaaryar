@@ -67,6 +67,7 @@ const BeforeWeekTable = () => {
   useEffect(() => {
     getListLearner();
     window.scrollTo(0, 0);
+    setChevronDir(false); //after changing the page close search bar
     // eslint-disable-next-line
   }, [page]);
 

@@ -356,6 +356,7 @@ const StudentOfAdmin = () => {
           page={page}
           onChange={(_event, value: number) => {
             setPage(value);
+            setChevronDir(false); //after changing the page close search bar
           }}
         />
       )}

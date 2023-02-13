@@ -2,20 +2,20 @@ import { Button, Grid } from "@mui/material";
 import { useState } from "react";
 import { getData } from "../../api/axios";
 // import CodeMelli from "./CodeMelli";
-import Mobile from "./Mobile";
-import SearchProvinces from "./Provinces";
-import SearchEmail from "./SearchEmail";
 // import SearchGender from "./SearchGender";
+import { SearchFirstName } from "./SearchFirstName";
 import { SearchFamily } from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
+import SearchSelect from "./SearchSelect";
+import SearchString from "./SearchString";
 import SearchIcon from "@mui/icons-material/Search";
-import { SearchFirstName } from "./SearchFirstName";
-import SearchCity from "./SearchCity";
 import { GreyButton } from "../../styles/Button";
-import Refer from "./Refer";
-import HighSchool from "./highSchool";
-import Registration from "./Registration";
-
+import {
+  acquaintanceOptions,
+  eduLevelOptions,
+  highSchoolOptions,
+  provinceOptions,
+} from "./searchOptions";
 interface SearchAllType {
   setSearchingStudentBefore?: any;
   setSearchingStudentAfter?: any;
@@ -40,30 +40,28 @@ const SearchAll: ({
   searchPage,
   chevronDir,
 }) => {
-  // const [allState, setAllState] = useState<object | null>(null);
   const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
   const [outputFamily, setOutputFamily] = useState<string | null>(null);
-  // const [outputGender, setOutputGender] = useState<string>("");
-  // const [codeMelliState, setCodeMelliState] = useState<string>("");
   const [referState, setReferState] = useState<string | null>(null);
   const [highSchoolState, setHighSchoolState] = useState<string | null>(null);
   const [registerCodeState, setRegisterCodeState] = useState<string | null>(
     null
   );
-  const [mobileState, setMobileState] = useState<string>("");
-  const [emailState, setEmailState] = useState<string>("");
-  const [provincesState, setProvincesState] = useState<string>("");
-  const [cityState, setCityState] = useState<string>("");
-  //this state is for handling statusState===null
-  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null);
+  const [mobileState, setMobileState] = useState<string | null>("");
+  const [emailState, setEmailState] = useState<string | null>("");
+  const [provincesState, setProvincesState] = useState<string | null>(null);
+  const [cityState, setCityState] = useState<string | null>("");
+  // const [codeMelliState, setCodeMelliState] = useState<string>("");
+  // const [outputGender, setOutputGender] = useState<string>("");
+  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
   const [statusState, setStatusState] = useState<boolean | null>(null);
-
+  const [acquaintance, setAcquaintance] = useState<string | null>(null);
+  const [eduLevel, setEduLevel] = useState<string | null>(null);
   const beforeWeekSearch = "/exam/before/week/search/param";
   const afterWeekSearch = "/exam/after/week/search/param";
   const regSearch = "/reg/search/param";
   const moodleSearch = "/moodle/search/param";
-  // this component search for 4 pages
-  //at first find the api link for searching
+  // below function search in 4 pages at first find the api link for searching
   const searchLink = () => {
     if (searchPage === "moodle") {
       return moodleSearch;
@@ -104,49 +102,53 @@ const SearchAll: ({
 
   const handleSearch = () => {
     fetchData({
-      firstName: outputFirstName,
-      family: outputFamily,
-      // gender: outputGender,
-      // codeMeli: codeMelliState,
-      status: statusState,
+      firstName: outputFirstName?.trim(),
+      family: outputFamily?.trim(),
       refer: referState,
       highSchoolYear: highSchoolState,
       registrationCode: registerCodeState,
-      //add state for handling status===null
-      state: stateWaiting,
+      status: statusState,
+      state: stateWaiting, //add state for handling status===null
       city: cityState,
       province: provincesState,
       mobile: mobileState,
       email: emailState,
+      // gender: outputGender,
+      // codeMeli: codeMelliState,
     });
   };
 
   const clearSearch = () => {
-    fetchData({
-      firstName: "",
-      family: "",
-      // gender: "",
-      // codeMeli:""
-      refer: null,
-      highSchoolYear: null,
-      registerCodeState: null,
-      status: null,
-      city: "",
-      province: "",
-      mobile: "",
-      email: "",
-    });
+    // fetchData({
+    //   firstName: "",
+    //   family: "",
+    //   refer: null,
+    //   highSchoolYear: null,
+    //   registerCodeState: null,
+    //   acquaintance: null,
+    //   eduLevel: null,
+    //   status: null,
+    //   city: "",
+    //   province: "",
+    //   mobile: "",
+    //   email: "",
+    // });
     setStatusState(null);
     setStateWaiting(null);
     setOutputFirstName(null);
     setOutputFamily(null);
-    // setOutputGender("");
     setReferState(null);
     setHighSchoolState(null);
+    setAcquaintance(null);
+    setEduLevel(null);
     setMobileState("");
     setEmailState("");
     setProvincesState("");
     setCityState("");
+    searchPage === "moodle" && setSearchingMoodleStudent(null);
+    searchPage === "beforeWeek" && setSearchingStudentBefore(null);
+    searchPage === "afterWeek" && setSearchingStudentAfter(null);
+    searchPage === "reg" && setSearchingStudentRegister(null);
   };
 
   return (
@@ -167,30 +169,60 @@ const SearchAll: ({
           searchLink={searchLink()}
         />
       </Grid>
-      {/* some field not use in moodle search at the moment */}
-      {searchPage === "reg" && (
+      {searchPage === "reg" && ( //some field just use in registration search
         <Grid item xs={3}>
-          <Refer refer={referState} setRefer={setReferState} />
-        </Grid>
-      )}
-      {searchPage === "reg" && (
-        <Grid item xs={3}>
-          <HighSchool
-            highSchool={highSchoolState}
-            setHighSchool={setHighSchoolState}
+          <SearchString
+            state={referState}
+            setState={setReferState}
+            label="نام معرف یا موسسه"
           />
         </Grid>
       )}
-      {searchPage !== "moodle" && (
+      {searchPage === "reg" && (
         <Grid item xs={3}>
-          <Registration
-            registerCode={registerCodeState}
-            setRegisterCode={setRegisterCodeState}
+          <SearchSelect
+            state={highSchoolState}
+            setState={setHighSchoolState}
+            options={highSchoolOptions}
+            placeholder="سال دبیرستان"
+          />
+        </Grid>
+      )}
+      {searchPage === "reg" && (
+        <Grid item xs={3}>
+          <SearchSelect
+            state={eduLevel}
+            setState={setEduLevel}
+            options={eduLevelOptions}
+            placeholder="میزان تحصیلات"
+          />
+        </Grid>
+      )}
+      {searchPage === "reg" && (
+        <Grid item xs={3}>
+          <SearchSelect
+            state={acquaintance}
+            setState={setAcquaintance}
+            options={acquaintanceOptions}
+            placeholder="نحوه آشنایی"
+          />
+        </Grid>
+      )}
+      {searchPage !== "moodle" && ( //some field not use in moodle search at the moment
+        <Grid item xs={3}>
+          <SearchString
+            state={registerCodeState}
+            setState={setRegisterCodeState}
+            label="کد متقاضی"
           />
         </Grid>
       )}
       <Grid item xs={3}>
-        <Mobile setMobileState={setMobileState} mobileState={mobileState} />
+        <SearchString
+          setState={setMobileState}
+          state={mobileState}
+          label="شماره موبایل"
+        />
       </Grid>
       {/* {searchPage !== "moodle" && (
         <Grid item xs={3}>
@@ -202,15 +234,17 @@ const SearchAll: ({
       )} */}
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
-          <SearchProvinces
-            provincesState={provincesState}
-            setProvincesState={setProvincesState}
+          <SearchSelect
+            state={provincesState}
+            setState={setProvincesState}
+            options={provinceOptions}
+            placeholder="استان"
           />
         </Grid>
       )}
       {searchPage === "moodle" && (
         <Grid item xs={3}>
-          <SearchCity cityState={cityState} setCityState={setCityState} />
+          <SearchString state={cityState} setState={setCityState} label="شهر" />
         </Grid>
       )}
       {searchPage !== "moodle" && (
@@ -224,9 +258,12 @@ const SearchAll: ({
         </Grid>
       )}
       <Grid item xs={3}>
-        <SearchEmail emailState={emailState} setEmailState={setEmailState} />
+        <SearchString
+          state={emailState}
+          setState={setEmailState}
+          label="ایمیل"
+        />
       </Grid>
-      {/* {searchPage !== "reg" && (<Grid item xs={12}></Grid>)} */}
       <Grid item xs={12}></Grid>
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
@@ -243,17 +280,6 @@ const SearchAll: ({
           endIcon={<SearchIcon sx={{ rotate: "90deg" }} />}
           variant="outlined"
           onClick={handleSearch}
-          // disabled={
-          //   outputFirstName ||
-          //   outputFamily ||
-          //   outputGender ||
-          //   referState ||
-          //   statusState ||
-          //   cityState ||
-          //   provincesState ||
-          //   mobileState ||
-          //   emailState
-          // }
         >
           جستجو
         </Button>
