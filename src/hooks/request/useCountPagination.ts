@@ -17,6 +17,7 @@ const useCountPagination = (counting: string) => {
       }
     };
     getCountComment();
+    window.scroll(0, 0);
   }, []);
   return [loading, counterPage];
 };

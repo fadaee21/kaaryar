@@ -29,7 +29,9 @@ import style from "../../styles/search/searchChevron.module.css";
 import { seekerStateFinder } from "../../utils/seekerStateFinder";
 
 const SkillSeeker = () => {
-  const [seekerStudents, setSeekerStudents] = useState<SeekerStudent[]>([]);
+  const [seekerStudents, setSeekerStudents] = useState<SeekerStudent[] | null>(
+    null
+  );
 
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -42,13 +44,14 @@ const SkillSeeker = () => {
   const navigate = useNavigate();
   const allStudentSeeker = `/status/form/all?pageNum=${page - 1}&pageSize=20`;
   const examFormCount = "/status/form/count";
-  const [,counterPage] = useCountPagination(examFormCount);
+  const [, counterPage] = useCountPagination(examFormCount);
 
   const getListLearner = async () => {
     setLoading(true);
     try {
       let response = await getData(allStudentSeeker);
-      setSeekerStudents(response.data);
+      let data = await response.data;
+      setSeekerStudents(data);
       setLoading(false);
     } catch (error) {
       //TODO:handle Error
@@ -63,13 +66,14 @@ const SkillSeeker = () => {
   const roles = auth.roles.toString();
   useEffect(() => {
     getListLearner();
-    window.scrollTo(0, 0);
     // eslint-disable-next-line
   }, [page]);
 
   if (loading) {
     return <LoadingProgress />;
   }
+
+   console.log(seekerStudents)
 
   return (
     <Box sx={{ m: 2 }}>
@@ -103,11 +107,11 @@ const SkillSeeker = () => {
                 fileName={"Applicant Info"}
                 apiData={
                   searchingStudentSeeker
-                    ? searchingStudentSeeker?.map(
-                        (i) => i.beforeWeekForm.registrationForm
+                    ? searchingStudentSeeker.map(
+                        (i) => i.beforeWeekForm?.registrationForm
                       )
                     : seekerStudents?.map(
-                        (i) => i.beforeWeekForm.registrationForm
+                        (i) => i.beforeWeekForm?.registrationForm
                       )
                 }
               />
@@ -134,37 +138,30 @@ const SkillSeeker = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentSeeker && (
                 <TableBody>
-                  {seekerStudents.map((seekerStudent: SeekerStudent) => {
+                  {seekerStudents?.map((seekerStudent: SeekerStudent) => {
+                    console.log(seekerStudent.regForm);
                     const {
                       id,
-                      regForm: {
-                        birthDate,
-                        family,
-                        firstName,
-                        registrationCode,
-                        codeMeli,
-                        mobile,
-                        email,
-                        gender,
-                      },
+                      regForm,
                       afterWeekChecked,
                       beforeWeekChecked,
                       regChecked,
                     } = seekerStudent;
+
                     return (
                       <TableBodyAll
                         key={id}
                         id={id}
                         roles={roles}
-                        birthDate={birthDate}
-                        family={family}
-                        firstName={firstName}
-                        registrationCode={registrationCode}
-                        codeMeli={codeMeli}
-                        mobile={mobile}
-                        email={email}
+                        birthDate={regForm?.birthDate}
+                        family={regForm?.family}
+                        firstName={regForm?.firstName}
+                        registrationCode={regForm?.registrationCode}
+                        // codeMeli={regForm?.codeMeli}
+                        mobile={regForm?.mobile}
+                        email={regForm?.email}
                         directNav="skill-seeker"
-                        gender={gender}
+                        // gender={regForm?.gender}
                         // just send checked prop due to tableBodyAll need this prob,
                         //in this case does't any effect
                         //all state affair will handle in resultStatus
@@ -185,16 +182,7 @@ const SkillSeeker = () => {
                   (searchingStudentSeeker: SeekerStudent) => {
                     const {
                       id,
-                      regForm: {
-                        birthDate,
-                        family,
-                        firstName,
-                        registrationCode,
-                        codeMeli,
-                        mobile,
-                        email,
-                        gender,
-                      },
+                      regForm,
                       afterWeekChecked,
                       beforeWeekChecked,
                       regChecked,
@@ -204,14 +192,14 @@ const SkillSeeker = () => {
                         roles={roles}
                         key={id}
                         id={id}
-                        birthDate={birthDate}
-                        family={family}
-                        firstName={firstName}
-                        registrationCode={registrationCode}
-                        codeMeli={codeMeli}
-                        mobile={mobile}
-                        email={email}
-                        gender={gender}
+                        birthDate={regForm?.birthDate}
+                        family={regForm?.family}
+                        firstName={regForm?.firstName}
+                        registrationCode={regForm?.registrationCode}
+                        // codeMeli={regForm?.codeMeli}
+                        mobile={regForm?.mobile}
+                        email={regForm?.email}
+                        // gender={regForm?.gender}
                         checked={searchingStudentSeeker.afterWeekChecked}
                         directNav="skill-seeker"
                         resultStatus={seekerStateFinder(
