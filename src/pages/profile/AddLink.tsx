@@ -10,14 +10,14 @@ const AddLink = ({ setDesiredLink, desiredLink, children, id }: any) => {
     setDesiredLink(
       desiredLink.map((item: any) => {
         if (item.id === id) {
-          console.log(item);
           return { ...item, title: ti, address: ad };
         } else {
           return item;
         }
       })
     );
-  }, [ad, ti]);
+    // eslint-disable-next-line
+  }, [ad, desiredLink, id, ti]);
 
   return (
     <Box

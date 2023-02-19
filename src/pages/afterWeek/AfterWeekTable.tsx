@@ -36,6 +36,9 @@ const AfterWeekTable = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
+  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
+  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
+  const [statusState, setStatusState] = useState<boolean | null>(null);
   const [searchingStudentAfter, setSearchingStudentAfter] = useState<
     AfterWeekType[] | null
   >(null);
@@ -107,15 +110,11 @@ const AfterWeekTable = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"Applicant Info"}
-                apiData={
-                  searchingStudentAfter
-                    ? searchingStudentAfter?.map(
-                        (i) => i.beforeWeekForm.registrationForm
-                      )
-                    : afterWeekStudents?.map(
-                        (i) => i.beforeWeekForm.registrationForm
-                      )
-                }
+                linkAll="/exam/after/week/form/all?pageNum=0&pageSize=100000"
+                searchData={searchingStudentAfter?.map(
+                  (i) => i.beforeWeekForm.registrationForm
+                )}
+                useIn="after"
               />
             </Box>
             <AccordionDetails>
@@ -130,6 +129,10 @@ const AfterWeekTable = () => {
                   setSearchingStudentAfter={setSearchingStudentAfter}
                   searchPage="afterWeek"
                   chevronDir={chevronDir}
+                  stateWaiting={stateWaiting}
+                  setStateWaiting={setStateWaiting}
+                  statusState={statusState}
+                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>

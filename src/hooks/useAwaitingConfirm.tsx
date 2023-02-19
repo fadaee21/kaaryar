@@ -10,6 +10,7 @@ const useAwaitingConfirm = (apiLink: string) => {
       const response = await getData(apiLink, {
         params: { status: null, state: true },
       });
+      console.log(response.data)
       setAwaitNumber(response.data.length);
       if (response.status === 200) {
       } else {

@@ -23,6 +23,10 @@ interface SearchAllType {
   setSearchingMoodleStudent?: any;
   searchPage: string;
   chevronDir: boolean;
+  stateWaiting?: any;
+  setStateWaiting?: any;
+  statusState?: any;
+  setStatusState?: any;
 }
 
 const SearchAll: ({
@@ -32,6 +36,10 @@ const SearchAll: ({
   setSearchingMoodleStudent,
   searchPage,
   chevronDir,
+  stateWaiting,
+  setStateWaiting,
+  statusState,
+  setStatusState,
 }: SearchAllType) => JSX.Element = ({
   setSearchingStudentBefore,
   setSearchingStudentAfter,
@@ -39,6 +47,10 @@ const SearchAll: ({
   setSearchingMoodleStudent,
   searchPage,
   chevronDir,
+  stateWaiting,
+  setStateWaiting,
+  statusState,
+  setStatusState,
 }) => {
   const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
   const [outputFamily, setOutputFamily] = useState<string | null>(null);
@@ -53,8 +65,8 @@ const SearchAll: ({
   const [cityState, setCityState] = useState<string | null>("");
   // const [codeMelliState, setCodeMelliState] = useState<string>("");
   // const [outputGender, setOutputGender] = useState<string>("");
-  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
-  const [statusState, setStatusState] = useState<boolean | null>(null);
+  // const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
+  // const [statusState, setStatusState] = useState<boolean | null>(null);
   const [acquaintance, setAcquaintance] = useState<string | null>(null);
   const [eduLevel, setEduLevel] = useState<string | null>(null);
   const beforeWeekSearch = "/exam/before/week/search/param";
@@ -133,8 +145,6 @@ const SearchAll: ({
     //   mobile: "",
     //   email: "",
     // });
-    setStatusState(null);
-    setStateWaiting(null);
     setOutputFirstName(null);
     setOutputFamily(null);
     setReferState(null);
@@ -145,6 +155,8 @@ const SearchAll: ({
     setEmailState("");
     setProvincesState("");
     setCityState("");
+    searchPage !== "moodle" && setStateWaiting(null);
+    searchPage !== "moodle" && setStatusState(null);
     searchPage === "moodle" && setSearchingMoodleStudent(null);
     searchPage === "beforeWeek" && setSearchingStudentBefore(null);
     searchPage === "afterWeek" && setSearchingStudentAfter(null);
@@ -264,7 +276,7 @@ const SearchAll: ({
           label="ایمیل"
         />
       </Grid>
-      <Grid item xs={12}></Grid>
+      {/* <Grid item xs={12}></Grid> */}
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
           sx={{ width: "100%" }}
@@ -274,7 +286,7 @@ const SearchAll: ({
           پاک کردن
         </GreyButton>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item flex={1}>
         <Button
           sx={{ width: "100%" }}
           endIcon={<SearchIcon sx={{ rotate: "90deg" }} />}

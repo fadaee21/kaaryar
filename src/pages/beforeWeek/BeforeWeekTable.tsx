@@ -33,6 +33,9 @@ const BeforeWeekTable = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
+  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
+  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
+  const [statusState, setStatusState] = useState<boolean | null>(null);
   const [searchingStudentBefore, setSearchingStudentBefore] = useState<
     BeforeWeekType[] | null
   >(null);
@@ -105,11 +108,11 @@ const BeforeWeekTable = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"Applicant Info"}
-                apiData={
-                  searchingStudentBefore
-                    ? searchingStudentBefore?.map((i) => i.registrationForm)
-                    : students?.map((i) => i.registrationForm)
-                }
+                linkAll="/exam/before/week/form/all?pageNum=0&pageSize=10000000"
+                useIn="before"
+                searchData={searchingStudentBefore?.map(
+                  (i) => i.registrationForm
+                )}
               />
             </Box>
             <AccordionDetails>
@@ -124,6 +127,10 @@ const BeforeWeekTable = () => {
                   setSearchingStudentBefore={setSearchingStudentBefore}
                   searchPage="beforeWeek"
                   chevronDir={chevronDir}
+                  stateWaiting={stateWaiting}
+                  setStateWaiting={setStateWaiting}
+                  statusState={statusState}
+                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>

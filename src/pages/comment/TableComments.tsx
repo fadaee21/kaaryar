@@ -102,7 +102,7 @@ const Comments = () => {
                   </StyledTableCell>
                   <StyledTableCell align="left">نظر دهنده</StyledTableCell>
                   <StyledTableCell align="left">دوره آموزشی</StyledTableCell>
-                  <StyledTableCell align="left">نظرات</StyledTableCell>
+                  {/* <StyledTableCell align="left">نظرات</StyledTableCell> */}
                   <StyledTableCell align="left"></StyledTableCell>
                 </StyledTableRow>
               </TableHead>
@@ -112,7 +112,7 @@ const Comments = () => {
                     id,
                     course,
                     studentUser,
-                    comment,
+                    // comment,
                     createTime,
                     commenterUser,
                   } = commentItem;
@@ -160,7 +160,7 @@ const Comments = () => {
                         </Typography>
                       </StyledTableCell>
 
-                      <StyledTableCell
+                      {/* <StyledTableCell
                         align="left"
                         sx={{
                           width: "30%",
@@ -168,7 +168,7 @@ const Comments = () => {
                         }}
                       >
                         <Typography variant="body2">{comment}</Typography>
-                      </StyledTableCell>
+                      </StyledTableCell> */}
 
                       <StyledTableCell
                         align="left"

@@ -1,13 +1,14 @@
-import { Container, Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
+import { Stack } from "@mui/system";
 import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import AddOrEditComment from "../../components/comment/AddOrEditComment";
 import { StudentId } from "../../model";
-import { SelectBox } from "../../styles/addComment/formBox";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AddComment = () => {
   const [studentId, setStudentId] = useState<StudentId | null>(null);
-
+  const navigate = useNavigate();
   const { state, pathname }: any = useLocation();
 
   useEffect(() => {
@@ -22,12 +23,21 @@ const AddComment = () => {
   const { student } = state as any;
 
   return (
-    <Container>
-      <SelectBox>
-        <Typography variant="h5" gutterBottom sx={{ width: "100% !important" }}>
+    <Container maxWidth="lg">
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="h5" gutterBottom>
           ثبت گزارش برای {student.firstName} {student.lastName}
         </Typography>
-      </SelectBox>
+        <Button
+          onClick={() => navigate(-1)}
+          endIcon={<ArrowBackIcon />}
+          variant="outlined"
+          color="inherit"
+        >
+          بازگشت
+        </Button>
+      </Stack>
+
       <AddOrEditComment
         studentId={studentId}
         compType={"adding"}

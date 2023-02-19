@@ -37,6 +37,10 @@ const RegisterFormTable = () => {
   const [ids, setIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
+  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
+  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
+  const [statusState, setStatusState] = useState<boolean | null>(null);
+
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
@@ -91,7 +95,14 @@ const RegisterFormTable = () => {
     window.scrollTo(0, 0);
     setChevronDir(false);
     // eslint-disable-next-line
-  }, [page, successMulti]);
+  }, [page]);
+
+  useEffect(() => {
+    setSearchingStudentRegister(null);
+    setStateWaiting(null);
+    setStatusState(null);
+    setIds([]);
+  }, [successMulti]);
 
   if (loading) {
     return <LoadingProgress />;
@@ -130,12 +141,12 @@ const RegisterFormTable = () => {
                 <Button
                   color="secondary"
                   variant="contained"
-                  onClick={() =>
+                  onClick={() => {
                     getApproveMulti(
                       ids.toString(),
                       "/reg/form/multiple/approve"
-                    )
-                  }
+                    );
+                  }}
                   disabled={ids.toString() === ""}
                   sx={{ mr: 0.5 }}
                 >
@@ -157,11 +168,9 @@ const RegisterFormTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"Applicant Info"}
-                  apiData={
-                    searchingStudentRegister
-                      ? searchingStudentRegister?.map((i) => i)
-                      : students?.map((i) => i)
-                  }
+                  searchData={searchingStudentRegister?.map((i) => i)}
+                  linkAll="/reg/form/all?pageNum=0&pageSize=1000000"
+                  useIn="reg"
                 />
               </Box>
             </Box>
@@ -177,6 +186,10 @@ const RegisterFormTable = () => {
                   setSearchingStudentRegister={setSearchingStudentRegister}
                   searchPage="reg"
                   chevronDir={chevronDir}
+                  stateWaiting={stateWaiting}
+                  setStateWaiting={setStateWaiting}
+                  statusState={statusState}
+                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>

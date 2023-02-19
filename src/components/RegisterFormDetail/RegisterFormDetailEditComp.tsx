@@ -1,9 +1,6 @@
 import React from "react";
 import {
-  FormControl,
   Grid,
-  Input,
-  InputLabel,
   List,
   ListItem,
   Divider,
@@ -13,6 +10,14 @@ import {
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 import { RegistrationForm } from "../../model";
+import { EditingSelective } from "./EditingSelective";
+import {
+  acquaintanceOptions,
+  eduLevelOptions,
+  highSchoolOptions,
+  provinceOptions,
+} from "../search/searchOptions";
+import EditingInput from "./EditingInput";
 
 interface RegStudent {
   student: RegistrationForm | null;
@@ -39,240 +44,133 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="token">کد متقاضی : </InputLabel>
-                  <Input
-                    id="instituteType"
-                    value={student?.token || " "}
-                    onChange={handleChange}
-                    name="token"
-                  />
-                </FormControl>
+                <EditingInput
+                  handleChange={handleChange}
+                  name="token"
+                  placeholder="کد متقاضی"
+                  state={student?.token || ""}
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="firstName">نام : </InputLabel>
-                  <Input
-                    id="lastInstitute"
-                    value={student?.firstName || " "}
-                    onChange={handleChange}
-                    name="firstName"
-                  />
-                </FormControl>
+                <EditingInput
+                  handleChange={handleChange}
+                  name="firstName"
+                  placeholder="نام"
+                  state={student?.firstName || ""}
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="family">نام خانوادگی : </InputLabel>
-                  <Input
-                    id="eduLevel"
-                    value={student?.family || " "}
-                    onChange={handleChange}
-                    name="family"
-                  />
-                </FormControl>
+                <EditingInput
+                  handleChange={handleChange}
+                  name="family"
+                  placeholder="نام خانوادگی"
+                  state={student?.family || ""}
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="province">استان : </InputLabel>
-                  <Input
-                    id="stuSemester"
-                    value={student?.province || " "}
-                    onChange={handleChange}
-                    name="province"
-                  />
-                </FormControl>
+                <EditingSelective
+                  handleChange={handleChange}
+                  state={student?.province || " "}
+                  placeholder="استان"
+                  options={provinceOptions}
+                  name="province"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="city">شهر : </InputLabel>
-                  <Input
-                    id="stuYear"
-                    value={student?.city || " "}
-                    onChange={handleChange}
-                    name="city"
-                  />
-                </FormControl>
+                <EditingInput
+                  handleChange={handleChange}
+                  name="city"
+                  placeholder="شهر"
+                  state={student?.city || ""}
+                />
               </ListItem>
 
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="highSchoolYear">
-                    سال دبیرستان :{" "}
-                  </InputLabel>
-                  <Input
-                    id="highSchoolYear"
-                    value={student?.highSchoolYear || " "}
-                    onChange={handleChange}
-                    name="highSchoolYear"
-                  />
-                </FormControl>
+                <EditingSelective
+                  options={highSchoolOptions}
+                  placeholder="سال دبیرستان"
+                  handleChange={handleChange}
+                  state={student?.highSchoolYear || " "}
+                  name="highSchoolYear"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="referInst">
-                    نام معرف یا موسسه :{" "}
-                  </InputLabel>
-                  <Input
-                    id="referInst"
-                    value={student?.refer || " "}
-                    onChange={handleChange}
-                    name="refer"
-                  />
-                </FormControl>
+                <EditingInput
+                  placeholder="نام معرف یا موسسه"
+                  handleChange={handleChange}
+                  state={student?.refer || " "}
+                  name="refer"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="birthDate">سال تولد : </InputLabel>
-                  <Input
-                    id="stuYear"
-                    value={student?.birthDate || " "}
-                    onChange={handleChange}
-                    name="birthDate"
-                  />
-                </FormControl>
+                <EditingInput
+                  placeholder="سال تولد"
+                  handleChange={handleChange}
+                  state={student?.birthDate || " "}
+                  name="birthDate"
+                />
               </ListItem>
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="mobile">شماره همراه : </InputLabel>
-                  <Input
-                    id="instituteType"
-                    value={student?.mobile || " "}
-                    onChange={handleChange}
-                    name="mobile"
-                  />
-                </FormControl>
+                <EditingInput
+                  placeholder="شماره همراه"
+                  handleChange={handleChange}
+                  state={student?.mobile || " "}
+                  name="mobile"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="email">ایمیل : </InputLabel>
-                  <Input
-                    id="lastInstitute"
-                    value={student?.email || " "}
-                    onChange={handleChange}
-                    name="email"
-                  />
-                </FormControl>
+                <EditingInput
+                  placeholder="ایمیل"
+                  handleChange={handleChange}
+                  state={student?.email || " "}
+                  name="email"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="familiarity">نحوه آشنایی : </InputLabel>
-                  <Input
-                    id="eduLevel"
-                    value={student?.familiarity || " "}
-                    onChange={handleChange}
-                    name="familiarity"
-                  />
-                </FormControl>
+                <EditingSelective
+                  options={acquaintanceOptions}
+                  placeholder="نحوه آشنایی"
+                  handleChange={handleChange}
+                  state={student?.familiarity || " "}
+                  name="familiarity"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="education">میزان تحصیلات : </InputLabel>
-                  <Input
-                    id="stuSemester"
-                    value={student?.education || " "}
-                    onChange={handleChange}
-                    name="education"
-                  />
-                </FormControl>
+                <EditingSelective
+                  options={eduLevelOptions}
+                  placeholder="میزان تحصیلات"
+                  handleChange={handleChange}
+                  state={student?.education || " "}
+                  name="education"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="studyField">رشته تحصیلی : </InputLabel>
-                  <Input
-                    id="stuYear"
-                    value={student?.studyField || " "}
-                    onChange={handleChange}
-                    name="studyField"
-                  />
-                </FormControl>
+                <EditingInput
+                  placeholder="رشته تحصیلی"
+                  handleChange={handleChange}
+                  state={student?.studyField || " "}
+                  name="studyField"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="selectedField">
-                    رشته انتخابی در کاریار :{" "}
-                  </InputLabel>
-                  <Input
-                    id="stuYear"
-                    value={student?.selectedField || " "}
-                    onChange={handleChange}
-                    name="selectedField"
-                  />
-                </FormControl>
+                <EditingInput
+                  placeholder="رشته انتخابی در کاریار"
+                  handleChange={handleChange}
+                  state={student?.selectedField || " "}
+                  name="selectedField"
+                />
               </ListItem>
               <ListItem>
-                <FormControl
-                  fullWidth
-                  sx={{ width: "40ch" }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="description">توضیحات سایر :</InputLabel>
-                  <Input
-                    id="stuYear"
-                    value={student?.description || " "}
-                    onChange={handleChange}
-                    name="description"
-                  />
-                </FormControl>
+                <EditingInput
+                  placeholder="توضیحات سایر"
+                  handleChange={handleChange}
+                  state={student?.description || " "}
+                  name="description"
+                />
               </ListItem>
             </List>
           </Grid>

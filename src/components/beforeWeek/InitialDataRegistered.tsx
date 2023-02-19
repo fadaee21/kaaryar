@@ -60,24 +60,20 @@ const InitialDataRegistered: React.FC<ExamStudent> = ({ student }) => {
                 secondary={student?.registrationForm.city}
               />
             </ListItem>
+
             <ListItem>
               <ListItemText
-                primary="جنسیت :"
-                secondary={student?.registrationForm.gender}
+                primary="نام معرف یا موسسه :"
+                secondary={student?.registrationForm.refer}
               />
             </ListItem>
             <ListItem>
               <ListItemText
-                primary="کد ملی :"
-                secondary={student?.registrationForm.codeMeli}
+                primary="سال دبیرستان :"
+                secondary={student?.registrationForm.highSchoolYear}
               />
             </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="جنسیت :"
-                secondary={student?.registrationForm.gender}
-              />
-            </ListItem>
+
             <ListItem>
               <ListItemText
                 primary="سال تولد :"

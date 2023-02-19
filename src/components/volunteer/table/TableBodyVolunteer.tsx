@@ -1,10 +1,14 @@
 import { IconButton, Typography } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
 
 const TableBodyVolunteer = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const {
+    auth: { roles },
+  } = useAuth();
   return (
     <StyledTableRow
       sx={{
@@ -45,8 +49,9 @@ const TableBodyVolunteer = () => {
       >
         <IconButton
           onClick={() =>
-            // navigate(`/${roleAuth}/all-comments/${id}`)
-            console.log("hello volunteer")
+            // navigate(`/${roles}/volunteer/${id}`)
+            navigate(`/${roles}/volunteer/1`)
+            
           }
         >
           <VisibilityIcon fontSize="small" color="info" />

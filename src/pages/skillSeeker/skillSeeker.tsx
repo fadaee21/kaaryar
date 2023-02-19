@@ -73,7 +73,7 @@ const SkillSeeker = () => {
     return <LoadingProgress />;
   }
 
-   console.log(seekerStudents)
+  console.log(seekerStudents);
 
   return (
     <Box sx={{ m: 2 }}>
@@ -105,15 +105,11 @@ const SkillSeeker = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"Applicant Info"}
-                apiData={
-                  searchingStudentSeeker
-                    ? searchingStudentSeeker.map(
-                        (i) => i.beforeWeekForm?.registrationForm
-                      )
-                    : seekerStudents?.map(
-                        (i) => i.beforeWeekForm?.registrationForm
-                      )
-                }
+                linkAll="/status/form/all?pageNum=0&pageSize=100000"
+                searchData={searchingStudentSeeker?.map(
+                  (i) => i.beforeWeekForm?.registrationForm
+                )}
+                useIn="seeker"
               />
             </Box>
             <AccordionDetails>

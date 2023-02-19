@@ -84,9 +84,9 @@ const StudentOfAdmin = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"excel export"}
-                apiData={
-                  searchingMoodleStudent ? searchingMoodleStudent : students
-                }
+                linkAll="moodle/user/student/all?pageNum=0&pageSize=10000000"
+                searchData={searchingMoodleStudent}
+                useIn="studentOfAdmin"
               />
             </Box>
             <AccordionDetails>

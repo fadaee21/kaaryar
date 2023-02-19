@@ -52,6 +52,7 @@ export const SearchFirstName = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}
@@ -80,6 +81,7 @@ export const SearchFirstName = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}
@@ -112,6 +114,7 @@ export const SearchFirstName = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}
@@ -134,6 +137,7 @@ export const SearchFirstName = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}

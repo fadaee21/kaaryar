@@ -7,7 +7,12 @@ const Layout = () => {
     <>
       <Box
         component={"main"}
-        sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          overflowX: "hidden",
+        }}
       >
         <Outlet />
       </Box>

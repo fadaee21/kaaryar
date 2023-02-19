@@ -26,6 +26,7 @@ const SearchSelect = ({
           ...baseStyles,
           height: "3rem",
         }),
+        menu: (provided) => ({ ...provided, zIndex: 2 }),
       }}
     />
   );

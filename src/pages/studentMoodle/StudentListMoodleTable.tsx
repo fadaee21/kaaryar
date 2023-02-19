@@ -1,8 +1,8 @@
 import {
-  Button,
-  ButtonGroup,
-  ListItem,
-  Pagination,
+  // Button,
+  // ButtonGroup,
+  // ListItem,
+  // Pagination,
   Paper,
   Table,
   TableBody,
@@ -78,9 +78,9 @@ const StudentListMoodleTable = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"excel export"}
-                apiData={
-                  searchingMoodleStudent ? searchingMoodleStudent : students
-                }
+                linkAll="/moodle/user/assignee"
+                searchData={searchingMoodleStudent}
+                useIn="studentListMoodleTable"
               />
             </Box>
             <AccordionDetails>

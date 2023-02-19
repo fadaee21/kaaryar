@@ -6,13 +6,20 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useState } from "react";
-import { ProfileTitle } from "../../styles/profile";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ButtonBox,
+  DesireBox,
+  HeaderBox,
+  ProfileTitle,
+} from "../../styles/profile";
 import Selector from "./Selector";
 import UploadProfileImage from "./UploadProfileImage";
 import AddLink from "./AddLink";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 const UserProfile = () => {
   const [userProfile, setUserProfile] = useState({
     profileName: "",
@@ -43,6 +50,9 @@ const UserProfile = () => {
     gate: "",
   });
   const [about, setAbout] = useState("");
+  const {
+    auth: { roles },
+  } = useAuth();
 
   const handleChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,6 +68,7 @@ const UserProfile = () => {
     console.log(relatedLink);
     console.log(desiredLink);
     console.log(about);
+    navigate(`/${roles}/volunteer`);
   };
 
   const handleAddLink = () => {
@@ -70,29 +81,41 @@ const UserProfile = () => {
     const remove = desiredLink.filter((item) => item.id !== id);
     setDesiredLink(remove);
   };
+  const navigate = useNavigate();
+  const [emptyLink, setEmptyLink] = useState(true);
+  const checkEmptyDesireLink = useCallback(() => {
+    let arrTest: boolean[] = [];
+    desiredLink.forEach((item) => {
+      const { address, title } = item;
+      if (!address || !title) {
+        arrTest.push(true);
+      } else {
+        arrTest.push(false);
+      }
+    });
+    const result = arrTest.some((i) => i === true);
+    setEmptyLink(result);
+  }, [desiredLink]);
+
+  useEffect(() => {
+    checkEmptyDesireLink();
+  }, [checkEmptyDesireLink]);
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            mb: 3,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <HeaderBox>
           <Typography variant="h5">پروفایل من</Typography>
 
           <Button
-            // onClick={handleBack}
+            onClick={() => navigate(-1)}
             endIcon={<ArrowBackIcon />}
             variant="outlined"
             color="inherit"
           >
             بازگشت
           </Button>
-        </Box>
+        </HeaderBox>
         <Typography variant="body1">
           اینجا می‌توانید پروفایل عمومی خودتان را درست کنید. پروفایل شما برای
           سایر داوطلبان، ادمین، و در آینده برای مهارت‌آموزان قابل مشاهده است.
@@ -102,6 +125,7 @@ const UserProfile = () => {
         <Grid container spacing={2}>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileName"
               name="profileName"
               label="نام"
@@ -111,6 +135,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileFamily"
               name="profileFamily"
               label="نام خانوادگی"
@@ -130,6 +155,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileBirth"
               name="profileBirth"
               label="سال تولد"
@@ -139,6 +165,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileCountry"
               name="profileCountry"
               label="کشور محل سکونت"
@@ -149,6 +176,7 @@ const UserProfile = () => {
 
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileCity"
               name="profileCity"
               label="شهر محل سکونت"
@@ -158,6 +186,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileMobile"
               name="profileMobile"
               label="شماره موبایل"
@@ -167,6 +196,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileEmail"
               name="profileEmail"
               label="آدرس ایمیل"
@@ -206,9 +236,14 @@ const UserProfile = () => {
               handleChange={handleChange1}
               state={userProfile.profileEduLevel}
             />
+            <FormHelperText>
+              * مقطع تحصیلی که از آن فارغ‌التحصیل شده‌اید و یا اکنون در آن مشغول
+              به تحصیل هستید.
+            </FormHelperText>
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileFieldStudy"
               name="profileFieldStudy"
               label="آخرین رشته تحصیلی"
@@ -218,6 +253,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileEduPlace"
               name="profileEduPlace"
               label="آخرین محل تحصیل"
@@ -227,6 +263,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id="profileCurrentJob"
               name="profileCurrentJob"
               label="شغل فعلی"
@@ -236,6 +273,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={2.4}>
             <TextField
+              fullWidth
               id=""
               name="profileCurrentWorkPlace"
               label="محل کار فعلی"
@@ -243,10 +281,6 @@ const UserProfile = () => {
               size="small"
             />
           </Grid>
-          <FormHelperText sx={{ ml: 2 }}>
-            * مقطع تحصیلی که از آن فارغ‌التحصیل شده‌اید <br />و یا اکنون در آن
-            مشغول به تحصیل هستید.
-          </FormHelperText>
         </Grid>
         <ProfileTitle variant="h6">لینک های مرتبط</ProfileTitle>
         <Grid container spacing={2}>
@@ -307,17 +341,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={10}>
             <Typography variant="body1">لینک دلخواه</Typography>
-            <Box
-              sx={{
-                border: "1px solid #ccc",
-                borderRadius: 1.5,
-                p: 2,
-                mt: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-              }}
-            >
+            <DesireBox>
               {desiredLink.map((item) => (
                 <AddLink
                   key={item.id}
@@ -332,6 +356,7 @@ const UserProfile = () => {
                       color="primary"
                       endIcon={<AddIcon />}
                       onClick={handleAddLink}
+                      disabled={emptyLink}
                     >
                       افزودن
                     </Button>
@@ -348,7 +373,7 @@ const UserProfile = () => {
                   )}
                 </AddLink>
               ))}
-            </Box>
+            </DesireBox>
           </Grid>
         </Grid>
 
@@ -356,6 +381,7 @@ const UserProfile = () => {
         <Grid container>
           <Grid item xs={6}>
             <TextField
+              fullWidth
               id="outlined-multiline-static"
               placeholder="مختصری از خودتان بنویسید"
               multiline
@@ -365,15 +391,7 @@ const UserProfile = () => {
             />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            mb: 18.5,
-            mt: 5,
-          }}
-        >
+        <ButtonBox>
           <Button
             // onClick={handleBack}
             variant="outlined"
@@ -385,7 +403,7 @@ const UserProfile = () => {
           <Button variant="contained" color="primary" type="submit">
             ذخیره
           </Button>
-        </Box>
+        </ButtonBox>
       </Container>
     </Box>
   );

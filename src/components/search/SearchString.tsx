@@ -7,6 +7,7 @@ interface SearchType {
 const SearchString = ({ setState, state, label }: SearchType) => {
   return (
     <SearchField
+      fullWidth
       value={state || ""}
       id={`outlined-${label.substring(0, 2)}`}
       label={label}

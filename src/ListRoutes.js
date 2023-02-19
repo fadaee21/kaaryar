@@ -28,9 +28,10 @@ import StudentOfAdmin from "./pages/studentMoodle/StudentOfAdmin";
 import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import Volunteer from "./pages/volunteer/Volunteer";
+import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
 
 const ListRoutes = [
-  // ta________________________________
+  //! ta________________________________
   {
     path: "ta/dashboard",
     name: "داشبورد",
@@ -107,6 +108,15 @@ const ListRoutes = [
     showInNav: true,
     role: "ta",
     key: "ta10",
+  },
+  {
+    path: "ta/volunteer/:id",
+    name: "",
+    // icon:<></>,
+    component: VolunteerDetail,
+    showInNav: false,
+    role: "ta",
+    key: "ta11",
   },
 
   // mentor____________________________________________
@@ -188,8 +198,17 @@ const ListRoutes = [
     role: "mentor",
     key: "mentor10",
   },
+  {
+    path: "mentor/volunteer/:id",
+    name: "",
+    // icon:<></>,
+    component: VolunteerDetail,
+    showInNav: true,
+    role: "mentor",
+    key: "mentor11",
+  },
 
-  // admin__________________________________________
+  //! admin__________________________________________
   {
     path: "admin/dashboard",
     name: "داشبورد",
@@ -354,7 +373,15 @@ const ListRoutes = [
     role: "admin",
     key: "admin18",
   },
-
+  {
+    path: "admin/volunteer/:id",
+    name: "",
+    // icon:<></>,
+    component: VolunteerDetail,
+    showInNav: true,
+    role: "admin",
+    key: "mentor19",
+  },
 
   {
     path: "test",

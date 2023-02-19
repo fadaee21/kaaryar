@@ -52,6 +52,7 @@ export const SearchFamily = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}
@@ -76,6 +77,7 @@ export const SearchFamily = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}
@@ -108,6 +110,7 @@ export const SearchFamily = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}
@@ -130,6 +133,7 @@ export const SearchFamily = ({
               ...baseStyles,
               height: "3rem",
             }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
           }}
         />
       )}
