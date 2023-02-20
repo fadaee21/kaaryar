@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getData } from "../api/axios";
+import { getData } from "../../api/axios";
 
 const useAwaitingConfirm = (apiLink: string) => {
   const [loadingAwait, setLoadingAwait] = useState(true);

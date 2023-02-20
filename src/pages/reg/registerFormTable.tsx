@@ -29,6 +29,7 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
+import { addComma } from "../../utils/addComma";
 
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
@@ -220,8 +221,9 @@ const RegisterFormTable = () => {
                         education={RegisterUser.education}
                         refer={RegisterUser.refer}
                         highSchoolYear={RegisterUser.highSchoolYear}
-                        familiarity={RegisterUser.familiarity}
+                        familiarity={addComma(RegisterUser.familiarity)}
                         province={RegisterUser.province}
+                        createTime={RegisterUser.createTime}
                       />
                     );
                   })}
@@ -249,8 +251,9 @@ const RegisterFormTable = () => {
                         highSchoolYear={
                           searchingStudentRegister?.highSchoolYear
                         }
-                        familiarity={searchingStudentRegister?.familiarity}
+                        familiarity={addComma(searchingStudentRegister?.familiarity)}
                         province={searchingStudentRegister?.province}
+                        createTime={searchingStudentRegister?.createTime}
                       />
                     );
                   }

@@ -43,7 +43,8 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
         sx={{
           border: "1px solid #ccc",
           borderRadius: 2,
-          maxWidth: 400,
+          width: "25rem",
+          height: "11rem",
           p: 2,
           display: "flex",
           justifyContent: "space-evenly",
@@ -51,11 +52,11 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
         }}
       >
         {!profileImage ? (
-          <Box sx={{ mr: 10 }}>
+          <Box>
             <Button
               variant="outlined"
               component="label"
-              sx={{ px: 4, display: "block", mb: 1 }}
+              sx={{  display: "block", mb: 1,textAlign:"center" }}
             >
               فایل مورد نظر را انتخاب کنید
               <input

@@ -32,7 +32,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="instituteType"
-                  value={student?.instituteType || " "}
+                  value={student?.instituteType || ""}
                   onChange={handleChange}
                   name="instituteType"
                 />
@@ -45,7 +45,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="lastInstitute"
-                  value={student?.lastInstitute || " "}
+                  value={student?.lastInstitute || ""}
                   onChange={handleChange}
                   name="lastInstitute"
                 />
@@ -58,7 +58,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="eduLevel"
-                  value={student?.eduLevel || " "}
+                  value={student?.eduLevel || ""}
                   onChange={handleChange}
                   name="eduLevel"
                 />
@@ -71,7 +71,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="stuSemester"
-                  value={student?.stuSemester || " "}
+                  value={student?.stuSemester || ""}
                   onChange={handleChange}
                   name="stuSemester"
                 />
@@ -84,7 +84,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="stuYear"
-                  value={student?.stuYear || " "}
+                  value={student?.stuYear || ""}
                   onChange={handleChange}
                   name="stuYear"
                 />
@@ -100,7 +100,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               </InputLabel>
               <Input
                 id="currentInstType"
-                value={student?.currentInstType || " "}
+                value={student?.currentInstType || ""}
                 onChange={handleChange}
                 name="currentInstType"
               />
@@ -113,7 +113,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               </InputLabel>
               <Input
                 id="currentInstName"
-                value={student?.currentInstName || " "}
+                value={student?.currentInstName || ""}
                 onChange={handleChange}
                 name="currentInstName"
               />
@@ -124,7 +124,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               <InputLabel htmlFor="currentField">رشته تحصیلی فعلی</InputLabel>
               <Input
                 id="currentField"
-                value={student?.currentField || " "}
+                value={student?.currentField || ""}
                 onChange={handleChange}
                 name="currentField"
               />
@@ -140,7 +140,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="jobStatus">وضعیت فعلی اشتغال</InputLabel>
                 <Input
                   id="jobStatus"
-                  value={student?.jobStatus || " "}
+                  value={student?.jobStatus || ""}
                   onChange={handleChange}
                   name="jobStatus"
                 />
@@ -151,7 +151,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="jobType">نوع اشتغال</InputLabel>
                 <Input
                   id="jobType"
-                  value={student?.jobType || " "}
+                  value={student?.jobType || ""}
                   onChange={handleChange}
                   name="jobType"
                 />
@@ -162,7 +162,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="workTime">تعداد ساعت کاری</InputLabel>
                 <Input
                   id="workTime"
-                  value={student?.workTime || " "}
+                  value={student?.workTime || ""}
                   onChange={handleChange}
                   name="workTime"
                 />
@@ -175,7 +175,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="noneJobActivation"
-                  value={student?.noneJobActivation || " "}
+                  value={student?.noneJobActivation || ""}
                   onChange={handleChange}
                   name="noneJobActivation"
                 />
@@ -224,7 +224,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="jobTitle">نوع و سمت شغلی</InputLabel>
                 <Input
                   id="jobTitle"
-                  value={student?.jobTitle || " "}
+                  value={student?.jobTitle || ""}
                   onChange={handleChange}
                   name="jobTitle"
                 />
@@ -235,7 +235,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="avgSalary">متوسط حقوق ماهیانه</InputLabel>
                 <Input
                   id="avgSalary"
-                  value={student?.avgSalary || " "}
+                  value={student?.avgSalary || ""}
                   onChange={handleChange}
                   name="avgSalary"
                 />
@@ -246,7 +246,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="freeDailyTime">وقت آزاد روزانه</InputLabel>
                 <Input
                   id="freeDailyTime"
-                  value={student?.freeDailyTime || " "}
+                  value={student?.freeDailyTime || ""}
                   onChange={handleChange}
                   name="freeDailyTime"
                 />
@@ -259,7 +259,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="jobVision"
-                  value={student?.jobVision || " "}
+                  value={student?.jobVision || ""}
                   onChange={handleChange}
                   name="jobVision"
                 />
@@ -295,7 +295,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="computerAccess"
-                  value={student?.computerAccess || " "}
+                  value={student?.computerAccess || ""}
                   onChange={handleChange}
                   name="computerAccess"
                 />
@@ -327,7 +327,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="courseDescription">توضیح دوره</InputLabel>
                 <Input
                   id="courseDescription"
-                  value={student?.courseDescription || " "}
+                  value={student?.courseDescription || ""}
                   onChange={handleChange}
                   name="courseDescription"
                 />
@@ -340,7 +340,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="internetAccess"
-                  value={student?.internetAccess || " "}
+                  value={student?.internetAccess || ""}
                   onChange={handleChange}
                   name="internetAccess"
                 />
@@ -351,7 +351,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="accessTime">ساعات دسترسی</InputLabel>
                 <Input
                   id="accessTime"
-                  value={student?.accessTime || " "}
+                  value={student?.accessTime || ""}
                   onChange={handleChange}
                   name="accessTime"
                 />
@@ -368,7 +368,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 <InputLabel htmlFor="limitTime"> محدودیت زمانی</InputLabel>
                 <Input
                   id="limitTime"
-                  value={student?.limitTime || " "}
+                  value={student?.limitTime || ""}
                   onChange={handleChange}
                   name="limitTime"
                 />
@@ -385,7 +385,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="motivation"
-                  value={student?.motivation || " "}
+                  value={student?.motivation || ""}
                   onChange={handleChange}
                   name="motivation"
                 />
@@ -404,7 +404,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="familiar"
-                  value={student?.familiar || " "}
+                  value={student?.familiar || ""}
                   onChange={handleChange}
                   name="familiar"
                 />
@@ -422,7 +422,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="charity"
-                  value={student?.charity || " "}
+                  value={student?.charity || ""}
                   onChange={handleChange}
                   name="charity"
                 />
@@ -443,7 +443,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   <InputLabel htmlFor="eduStatus">وضعیت تحصیلی</InputLabel>
                   <Input
                     id="eduStatus"
-                    value={student?.eduStatus || " "}
+                    value={student?.eduStatus || ""}
                     onChange={handleChange}
                     name="eduStatus"
                   />
@@ -479,7 +479,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   <InputLabel htmlFor="beforeAcceptDesc">توضیحات</InputLabel>
                   <Input
                     id="beforeAcceptDesc"
-                    value={student?.beforeAcceptDesc || " "}
+                    value={student?.beforeAcceptDesc || ""}
                     onChange={handleChange}
                     name="beforeAcceptDesc"
                   />
@@ -495,7 +495,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 </InputLabel>
                 <Input
                   id="contCourseApproach"
-                  value={student?.contCourseApproach || " "}
+                  value={student?.contCourseApproach || ""}
                   onChange={handleChange}
                   name="contCourseApproach"
                 />

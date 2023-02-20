@@ -65,10 +65,12 @@ const RegisterFormDetail = () => {
   const handleApprove = () => {
     console.log("you trigger approve");
     getApproveReg(id, { status: true }, approveLink);
+    navigate(-1)
   };
   const handleDisApprove = () => {
     console.log("you trigger disApprove");
     getApproveReg(id, { status: false }, approveLink);
+    navigate(-1)
   };
 
   if (loading) {
@@ -127,6 +129,7 @@ const RegisterFormDetail = () => {
         alertType={alertType}
         handleApprove={
           alertType === "approve" ? handleApprove : handleDisApprove
+
         }
         alertPage="پذیرش"
       />

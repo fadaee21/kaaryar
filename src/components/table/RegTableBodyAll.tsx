@@ -2,6 +2,7 @@ import { Checkbox, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
+import { dateConverter } from "../../utils/dateConverter";
 
 const RegTableBodyAll = ({
   id,
@@ -18,6 +19,7 @@ const RegTableBodyAll = ({
   checkBoxDisplay,
   highSchoolYear,
   refer,
+  createTime,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
 
@@ -70,7 +72,7 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
+          width: "9%",
           verticalAlign: "center",
         }}
       >
@@ -78,10 +80,10 @@ const RegTableBodyAll = ({
       </StyledTableCell>
       <StyledTableCell
         align="left"
-        sx={{ width: "15%", verticalAlign: "center", cursor: "pointer" }}
+        sx={{ width: "12%", verticalAlign: "center", cursor: "pointer" }}
         onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
       >
-        <Typography variant="body1">{firstName + " " + family}</Typography>
+        <Typography variant="body2">{firstName + " " + family}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -95,7 +97,7 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "13%",
+          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -124,11 +126,22 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "15%",
+          width: "14%",
           verticalAlign: "center",
         }}
       >
         <Typography variant="body2">{refer}</Typography>
+      </StyledTableCell>
+      <StyledTableCell
+        align="center"
+        sx={{
+          width: "15%",
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">
+          {createTime && dateConverter(createTime)}
+        </Typography>
       </StyledTableCell>
     </StyledTableRow>
   );

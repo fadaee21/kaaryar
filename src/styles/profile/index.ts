@@ -17,9 +17,10 @@ export const DesireBox = styled(Box)(({ theme }) => ({
 
 export const ButtonBox = styled(Box)(({ theme }) => ({
   display: "flex",
-  justifyContent: "flex-end",
+  justifyContent: "flex-start",
   alignItems: "center",
-  margin: theme.spacing(5, 0, 18.5),
+  width:200,
+  margin: theme.spacing(10, 0, 18.5),
 }));
 
 export const HeaderBox = styled(Box)(({ theme }) => ({

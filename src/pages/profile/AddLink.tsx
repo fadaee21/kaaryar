@@ -21,19 +21,21 @@ const AddLink = ({ setDesiredLink, desiredLink, children, id }: any) => {
 
   return (
     <Box
-      id="ABC"
       sx={{
         display: "flex",
         gap: 2,
+        m: 1,
       }}
     >
       <TextField
+        sx={{ width: "64%" }}
         label="آدرس لینک"
         onChange={(e) => setAd(e.target.value)}
         size="small"
         value={ad}
       />
       <TextField
+        sx={{ width: "21%" }}
         label="عنوان لینک"
         onChange={(e) => setTi(e.target.value)}
         size="small"

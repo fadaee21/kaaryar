@@ -20,6 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
+import useEditProfile from "../../hooks/request/useEditProfile";
 const UserProfile = () => {
   const [userProfile, setUserProfile] = useState({
     profileName: "",
@@ -62,12 +63,15 @@ const UserProfile = () => {
     const { name, value } = e.target;
     setRelatedLink((prev: any) => ({ ...prev, [name]: value }));
   };
+  const { editProfile } = useEditProfile();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(userProfile);
     console.log(relatedLink);
     console.log(desiredLink);
     console.log(about);
+    editProfile(relatedLink, desiredLink, userProfile, about);
     navigate(`/${roles}/volunteer`);
   };
 
@@ -351,7 +355,7 @@ const UserProfile = () => {
                 >
                   {item.first ? (
                     <Button
-                      sx={{ px: 4 }}
+                      sx={{width:"10%"}}
                       variant="outlined"
                       color="primary"
                       endIcon={<AddIcon />}
@@ -362,7 +366,7 @@ const UserProfile = () => {
                     </Button>
                   ) : (
                     <Button
-                      sx={{ px: 4 }}
+                      sx={{width:"10%"}}
                       variant="outlined"
                       color="inherit"
                       endIcon={<DeleteIcon />}
@@ -392,15 +396,7 @@ const UserProfile = () => {
           </Grid>
         </Grid>
         <ButtonBox>
-          <Button
-            // onClick={handleBack}
-            variant="outlined"
-            color="primary"
-            sx={{ mr: 2 }}
-          >
-            مشاهده
-          </Button>
-          <Button variant="contained" color="primary" type="submit">
+          <Button variant="contained" color="primary" type="submit" fullWidth>
             ذخیره
           </Button>
         </ButtonBox>

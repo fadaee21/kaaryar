@@ -18,7 +18,7 @@ const EditingInput = ({
       <InputLabel htmlFor={name}>{placeholder}</InputLabel>
       <Input
         id={name}
-        value={state || " "}
+        value={state || ""}
         onChange={handleChange}
         name={name}
       />

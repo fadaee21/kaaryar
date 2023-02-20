@@ -62,7 +62,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+        <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
           فرم ثبت نام هفته پذیرش
         </Typography>
 
@@ -179,7 +179,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         </Grid>
       </BoxExamDetail>
 
-      <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+      <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه هفته پذیرش
       </Typography>
       <BoxExamDetail
@@ -357,7 +357,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       {/* link after week student to moodle student */}
       {!seekerPage && <LookUpLink student={student} id={id} />}
 
-      <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+      <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
       </Typography>
       <BoxExamDetail>
@@ -379,7 +379,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         </Grid>
       </BoxExamDetail>
 
-      <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+      <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         ثبت نام نهایی
       </Typography>
       <BoxExamDetail

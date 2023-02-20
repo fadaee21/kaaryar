@@ -1,7 +1,7 @@
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useCountPagination from "../../hooks/request/useCountPagination";
-import useAwaitingConfirm from "../../hooks/useAwaitingConfirm";
+import useAwaitingConfirm from "../../hooks/request/useAwaitingConfirm";
 import { BoxDashboard, PaperDashboard } from "../../styles/dashboard";
 import LoadingProgress from "../LoadingProgress";
 

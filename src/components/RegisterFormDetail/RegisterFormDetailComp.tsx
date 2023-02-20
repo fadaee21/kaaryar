@@ -9,6 +9,7 @@ import {
 import { RegistrationForm } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
+import { addComma } from "../../utils/addComma";
 
 interface RegStudent {
   student: RegistrationForm | null;
@@ -81,7 +82,7 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
             <ListItem>
               <ListItemText
                 primary="نحوه آشنایی :"
-                secondary={student?.familiarity}
+                secondary={addComma(student?.familiarity)}
               />
             </ListItem>
             <ListItem>

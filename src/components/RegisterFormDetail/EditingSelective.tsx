@@ -18,6 +18,7 @@ export function EditingSelective({
   placeholder,
   name,
 }: EditingSelectiveType) {
+  console.log(options)
   return (
     <FormControl fullWidth>
       <InputLabelEditing id="Editing-select-label">

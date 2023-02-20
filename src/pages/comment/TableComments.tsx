@@ -127,7 +127,7 @@ const Comments = () => {
                       <StyledTableCell
                         component="th"
                         scope="row"
-                        sx={{ width: "10%", verticalAlign: "top" }}
+                        sx={{ width: "10%", verticalAlign: "center" }}
                       >
                         <Typography variant="body2">
                           {createTime && dateConverter(createTime)}
@@ -135,7 +135,7 @@ const Comments = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "15%", verticalAlign: "top" }}
+                        sx={{ width: "15%", verticalAlign: "center" }}
                       >
                         <Typography variant="body1">
                           {studentUser.firstName + " " + studentUser.lastName}
@@ -143,7 +143,7 @@ const Comments = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "15%", verticalAlign: "top" }}
+                        sx={{ width: "15%", verticalAlign: "center" }}
                       >
                         <Typography variant="body2">
                           {commenterUser.firstName +
@@ -153,7 +153,7 @@ const Comments = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "15%", verticalAlign: "top" }}
+                        sx={{ width: "15%", verticalAlign: "center" }}
                       >
                         <Typography variant="body2">
                           {course.courseName}
@@ -164,7 +164,7 @@ const Comments = () => {
                         align="left"
                         sx={{
                           width: "30%",
-                          verticalAlign: "top",
+                          verticalAlign: "center",
                         }}
                       >
                         <Typography variant="body2">{comment}</Typography>
@@ -172,7 +172,7 @@ const Comments = () => {
 
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "5%", verticalAlign: "top" }}
+                        sx={{ width: "5%", verticalAlign: "center" }}
                       >
                         <ListItem sx={{ pt: 0 }}>
                           <IconButton

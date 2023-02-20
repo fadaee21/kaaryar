@@ -28,6 +28,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   handleChange,
 }) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
+  console.log(student)
   return (
     <BoxExamDetail>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
@@ -39,151 +40,149 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
         orientation={matches ? "vertical" : "horizontal"}
       />
 
-      {student ? (
-        <Grid container>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <EditingInput
-                  handleChange={handleChange}
-                  name="token"
-                  placeholder="کد متقاضی"
-                  state={student?.token || ""}
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  handleChange={handleChange}
-                  name="firstName"
-                  placeholder="نام"
-                  state={student?.firstName || ""}
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  handleChange={handleChange}
-                  name="family"
-                  placeholder="نام خانوادگی"
-                  state={student?.family || ""}
-                />
-              </ListItem>
-              <ListItem>
-                <EditingSelective
-                  handleChange={handleChange}
-                  state={student?.province || " "}
-                  placeholder="استان"
-                  options={provinceOptions}
-                  name="province"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  handleChange={handleChange}
-                  name="city"
-                  placeholder="شهر"
-                  state={student?.city || ""}
-                />
-              </ListItem>
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <EditingInput
+                handleChange={handleChange}
+                name="token"
+                placeholder="کد متقاضی"
+                state={student?.token || ""}
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                handleChange={handleChange}
+                name="firstName"
+                placeholder="نام"
+                state={student?.firstName || ""}
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                handleChange={handleChange}
+                name="family"
+                placeholder="نام خانوادگی"
+                state={student?.family || ""}
+              />
+            </ListItem>
+            <ListItem>
+              <EditingSelective
+                handleChange={handleChange}
+                state={student?.province || ""}
+                placeholder="استان"
+                options={provinceOptions}
+                name="province"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                handleChange={handleChange}
+                name="city"
+                placeholder="شهر"
+                state={student?.city || ""}
+              />
+            </ListItem>
 
-              <ListItem>
-                <EditingSelective
-                  options={highSchoolOptions}
-                  placeholder="سال دبیرستان"
-                  handleChange={handleChange}
-                  state={student?.highSchoolYear || " "}
-                  name="highSchoolYear"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  placeholder="نام معرف یا موسسه"
-                  handleChange={handleChange}
-                  state={student?.refer || " "}
-                  name="refer"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  placeholder="سال تولد"
-                  handleChange={handleChange}
-                  state={student?.birthDate || " "}
-                  name="birthDate"
-                />
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <EditingInput
-                  placeholder="شماره همراه"
-                  handleChange={handleChange}
-                  state={student?.mobile || " "}
-                  name="mobile"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  placeholder="ایمیل"
-                  handleChange={handleChange}
-                  state={student?.email || " "}
-                  name="email"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingSelective
-                  options={acquaintanceOptions}
-                  placeholder="نحوه آشنایی"
-                  handleChange={handleChange}
-                  state={student?.familiarity || " "}
-                  name="familiarity"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingSelective
-                  options={eduLevelOptions}
-                  placeholder="میزان تحصیلات"
-                  handleChange={handleChange}
-                  state={student?.education || " "}
-                  name="education"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  placeholder="رشته تحصیلی"
-                  handleChange={handleChange}
-                  state={student?.studyField || " "}
-                  name="studyField"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  placeholder="رشته انتخابی در کاریار"
-                  handleChange={handleChange}
-                  state={student?.selectedField || " "}
-                  name="selectedField"
-                />
-              </ListItem>
-              <ListItem>
-                <EditingInput
-                  placeholder="توضیحات سایر"
-                  handleChange={handleChange}
-                  state={student?.description || " "}
-                  name="description"
-                />
-              </ListItem>
-            </List>
-          </Grid>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "flex-start",
-              marginRight: 5,
-            }}
-          ></Box>
+            <ListItem>
+              <EditingSelective
+                options={highSchoolOptions}
+                placeholder="سال دبیرستان"
+                handleChange={handleChange}
+                state={student?.highSchoolYear || ""}
+                name="highSchoolYear"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                placeholder="نام معرف یا موسسه"
+                handleChange={handleChange}
+                state={student?.refer || ""}
+                name="refer"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                placeholder="سال تولد"
+                handleChange={handleChange}
+                state={student?.birthDate || ""}
+                name="birthDate"
+              />
+            </ListItem>
+          </List>
         </Grid>
-      ) : null}
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <EditingInput
+                placeholder="شماره همراه"
+                handleChange={handleChange}
+                state={student?.mobile || ""}
+                name="mobile"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                placeholder="ایمیل"
+                handleChange={handleChange}
+                state={student?.email || ""}
+                name="email"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingSelective
+                options={acquaintanceOptions}
+                placeholder="نحوه آشنایی"
+                handleChange={handleChange}
+                state={student?.familiarity || ""}
+                name="familiarity"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingSelective
+                options={eduLevelOptions}
+                placeholder="میزان تحصیلات"
+                handleChange={handleChange}
+                state={student?.education || ""}
+                name="education"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                placeholder="رشته تحصیلی"
+                handleChange={handleChange}
+                state={student?.studyField || ""}
+                name="studyField"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                placeholder="رشته انتخابی در کاریار"
+                handleChange={handleChange}
+                state={student?.selectedField || ""}
+                name="selectedField"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingInput
+                placeholder="توضیحات سایر"
+                handleChange={handleChange}
+                state={student?.description || ""}
+                name="description"
+              />
+            </ListItem>
+          </List>
+        </Grid>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "flex-start",
+            marginRight: 5,
+          }}
+        ></Box>
+      </Grid>
     </BoxExamDetail>
   );
 };

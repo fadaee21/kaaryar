@@ -15,7 +15,6 @@ console.log(successMulti)
       if (response.status === 200) {
         console.log(response.data);
         setSuccessMulti(false);
-        // return setSuccessMulti(true);
       }
       console.log(response.data);
     } catch (error) {

@@ -1,7 +1,9 @@
 export const provinceOptions = [
   { value: "آذربایجان شرقی", label: "آذربایجان شرقی" },
   { value: "آذربایجان غربی", label: "آذربایجان غربی" },
+  // { value: "اردبيل", label: "اردبيل" },
   { value: "اردبیل", label: "اردبیل" },
+  { value: "اصفهان", label: "اصفهان" },
   { value: "البرز", label: "البرز" },
   { value: "ایلام", label: "ایلام" },
   { value: "بوشهر", label: "بوشهر" },
@@ -23,6 +25,7 @@ export const provinceOptions = [
   { value: "کهگیلویه و بویراحمد", label: "کهگیلویه و بویراحمد" },
   { value: "گلستان", label: "گلستان" },
   { value: "گیلان", label: "گیلان" },
+  { value: "لرستان", label: "لرستان" },
   { value: "مازندران", label: "مازندران" },
   { value: "مرکزی", label: "مرکزی" },
   { value: "هرمزگان", label: "هرمزگان" },
@@ -31,6 +34,7 @@ export const provinceOptions = [
 ];
 
 export const highSchoolOptions = [
+  { label: "-", value: "-" },
   { label: "سال دهم", value: "سال دهم" },
   { label: "سال یازدهم", value: "سال یازدهم" },
   { label: "سال دوازدهم", value: "سال دوازدهم" },
@@ -49,6 +53,7 @@ export const acquaintanceOptions = [
 
 export const eduLevelOptions = [
   { label: "زیر دیپلم", value: "زیر دیپلم" },
+  { label: "دانش آموز", value: "دانش آموز" },
   { label: "دیپلم", value: "دیپلم" },
   { label: "دانشجوی کاردانی", value: "دانشجوی کاردانی" },
   { label: "کاردانی", value: "کاردانی" },
@@ -56,5 +61,6 @@ export const eduLevelOptions = [
   { label: "کارشناسی", value: "کارشناسی" },
   { label: "دانشجوی کارشناسی ارشد", value: "دانشجوی کارشناسی ارشد" },
   { label: "کارشناسی ارشد", value: "کارشناسی ارشد" },
+  { label: "دانشجوی دکتری", value: "دانشجوی دکتری" },
   { label: "دکتری و بالاتر", value: "دکتری و بالاتر" },
 ];
