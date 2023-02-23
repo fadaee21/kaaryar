@@ -27,6 +27,7 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
+import { useApproveWeek } from "../../hooks/request/useApprove";
 
 const BeforeWeekTable = () => {
   const [students, setStudents] = useState<BeforeWeekType[]>([]);
@@ -74,7 +75,9 @@ const BeforeWeekTable = () => {
     // eslint-disable-next-line
   }, [page]);
 
-  if (loading) {
+  const { loadingRegWeek } = useApproveWeek();
+
+  if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
 

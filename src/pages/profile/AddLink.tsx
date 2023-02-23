@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-const AddLink = ({ setDesiredLink, desiredLink, children, id }: any) => {
-  const [ad, setAd] = useState("");
-  const [ti, setTi] = useState("");
+const AddLink = ({
+  setDesiredLink,
+  address,
+  title,
+  children,
+  id,
+  desiredLink,
+}: any) => {
+  const [ad, setAd] = useState(address || "");
+  const [ti, setTi] = useState(title || "");
 
   useEffect(() => {
     setDesiredLink(

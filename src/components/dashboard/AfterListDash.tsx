@@ -14,9 +14,9 @@ const AfterListDash = () => {
     "/exam/after/week/search/param"
   );
 
-  if (loading && loadingAwait) {
+  if (loading || loadingAwait) {
     return (
-      <PaperDashboard >
+      <PaperDashboard>
         <LoadingProgress usage="paper" />
       </PaperDashboard>
     );

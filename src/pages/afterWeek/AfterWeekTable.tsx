@@ -27,6 +27,7 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
+import { useApproveWeek } from "../../hooks/request/useApprove";
 
 const AfterWeekTable = () => {
   const [afterWeekStudents, setAfterWeekStudents] = useState<AfterWeekType[]>(
@@ -75,8 +76,9 @@ const AfterWeekTable = () => {
     setChevronDir(false); //after changing the page close search bar
     // eslint-disable-next-line
   }, [page]);
+  const { loadingRegWeek } = useApproveWeek();
 
-  if (loading) {
+  if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
 

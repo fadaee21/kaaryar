@@ -30,6 +30,7 @@ import {
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
 import { addComma } from "../../utils/addComma";
+import { useApproveReg } from "../../hooks/request/useApprove";
 
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
@@ -54,7 +55,7 @@ const RegisterFormTable = () => {
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, successMulti } = useApproveMulti();
-
+  const { loadingRegApprove } = useApproveReg();
   const getListLearner = async () => {
     setLoading(true);
     try {
@@ -105,7 +106,7 @@ const RegisterFormTable = () => {
     setIds([]);
   }, [successMulti]);
 
-  if (loading) {
+  if (loading || loadingRegApprove) {
     return <LoadingProgress />;
   }
 
@@ -251,7 +252,9 @@ const RegisterFormTable = () => {
                         highSchoolYear={
                           searchingStudentRegister?.highSchoolYear
                         }
-                        familiarity={addComma(searchingStudentRegister?.familiarity)}
+                        familiarity={addComma(
+                          searchingStudentRegister?.familiarity
+                        )}
                         province={searchingStudentRegister?.province}
                         createTime={searchingStudentRegister?.createTime}
                       />

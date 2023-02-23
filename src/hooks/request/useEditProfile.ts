@@ -42,7 +42,7 @@ const useEditProfile = () => {
     about: About
   ) => {
     const { web, linkedin, github, gitlab, gate } = relatedLink;
-    
+
     const {
       profileName,
       profileFamily,
@@ -63,8 +63,7 @@ const useEditProfile = () => {
 
     try {
       setLoadingProfile(true);
-      // const res = await editAxios(`/user/profile/${id}`)
-      const res = await editAxios(`/user/profile/1`, {
+      const res = await editAxios(`/user/profile`, {
         data: {
           aboutMe: about,
           birthday: profileBirth,
@@ -72,14 +71,13 @@ const useEditProfile = () => {
           country: profileCountry,
           currentJob: profileCurrentJob,
           currentJobLocation: profileCurrentWorkPlace,
-          custom: "string",
+          custom: JSON.stringify(desiredLink),
           email: profileEmail,
           firstName: profileName,
           gender: profileGender,
           github: github,
           gitlab: gitlab,
-        //   id: 0,
-          imageAddress: profileImage,
+          // imageAddress: profileImage,
           lastEduLevel: profileEduLevel,
           lastEduLocation: profileEduPlace,
           lastMajor: profileFieldStudy,

@@ -1,16 +1,36 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
+import { postData } from "../../api/axios";
 
 const UploadProfileImage = ({ setUserProfile }: any) => {
   const [profileImage, setProfileImage] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const imageUploading = async (dataContent: FormData) => {
+    setSuccess(false);
+    try {
+      const response = await postData(`/user/profile/image/upload/`, {
+        data: dataContent,
+      });
+      const data = await response.data;
+      if (response.status === 200) {
+        setUserProfile((prev: any) => ({ ...prev, profileImage: data.url }));
+        setSuccess(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    //error or success message handling
+  };
 
   useEffect(() => {
     let dataContent = new FormData();
     dataContent.append("file", profileImage);
-    setUserProfile((prev: any) => ({ ...prev, profileImage: dataContent }));
+    console.log(dataContent);
+    dataContent && imageUploading(dataContent);
     // eslint-disable-next-line
   }, [profileImage]);
 
@@ -56,7 +76,7 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
             <Button
               variant="outlined"
               component="label"
-              sx={{  display: "block", mb: 1,textAlign:"center" }}
+              sx={{ display: "block", mb: 1, textAlign: "center" }}
             >
               فایل مورد نظر را انتخاب کنید
               <input

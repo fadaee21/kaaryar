@@ -13,7 +13,7 @@ import { GreyButton } from "../../styles/Button";
 import {
   acquaintanceOptions,
   eduLevelOptions,
-  highSchoolOptions,
+  highSchoolOptions2,
   provinceOptions,
 } from "./searchOptions";
 interface SearchAllType {
@@ -131,20 +131,6 @@ const SearchAll: ({
   };
 
   const clearSearch = () => {
-    // fetchData({
-    //   firstName: "",
-    //   family: "",
-    //   refer: null,
-    //   highSchoolYear: null,
-    //   registerCodeState: null,
-    //   acquaintance: null,
-    //   eduLevel: null,
-    //   status: null,
-    //   city: "",
-    //   province: "",
-    //   mobile: "",
-    //   email: "",
-    // });
     setOutputFirstName(null);
     setOutputFamily(null);
     setReferState(null);
@@ -195,7 +181,7 @@ const SearchAll: ({
           <SearchSelect
             state={highSchoolState}
             setState={setHighSchoolState}
-            options={highSchoolOptions}
+            options={highSchoolOptions2}
             placeholder="سال دبیرستان"
           />
         </Grid>

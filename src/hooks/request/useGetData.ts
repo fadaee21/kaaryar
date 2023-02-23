@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getData } from "../../api/axios";
 
 const useGetData = () => {
-  const [dataCall, setDataCall] = useState<any>("");
+  const [dataCall, setDataCall] = useState<any>();
   const [loadingCall, setLoadingCall] = useState(true);
 
   const getAllData = async (address: string) => {

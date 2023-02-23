@@ -3,7 +3,6 @@ import { editAxios } from "../../api/axios";
 
 const useApproveMulti = () => {
   const [successMulti, setSuccessMulti] = useState(false);
-console.log(successMulti)
   const getApproveMulti = async (
     id: string | undefined,
     approveLink: string

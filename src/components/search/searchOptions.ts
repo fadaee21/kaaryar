@@ -34,7 +34,12 @@ export const provinceOptions = [
 ];
 
 export const highSchoolOptions = [
-  { label: "-", value: "-" },
+  { label: "-", value: "" },
+  { label: "سال دهم", value: "سال دهم" },
+  { label: "سال یازدهم", value: "سال یازدهم" },
+  { label: "سال دوازدهم", value: "سال دوازدهم" },
+];
+export const highSchoolOptions2 = [
   { label: "سال دهم", value: "سال دهم" },
   { label: "سال یازدهم", value: "سال یازدهم" },
   { label: "سال دوازدهم", value: "سال دوازدهم" },

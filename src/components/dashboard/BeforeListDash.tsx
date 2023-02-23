@@ -14,7 +14,7 @@ const BeforeListDash = () => {
     "/exam/before/week/search/param"
   );
 
-  if (loading && loadingAwait) {
+  if (loading || loadingAwait) {
     return (
       <PaperDashboard>
         <LoadingProgress usage="paper" />

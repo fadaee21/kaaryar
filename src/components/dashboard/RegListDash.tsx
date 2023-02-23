@@ -9,7 +9,7 @@ const RegListDB = () => {
   const [loading, counterPage] = useCountPagination("/reg/form/count");
   const [loadingAwait, awaitNumber] = useAwaitingConfirm("/reg/search/param");
   const navigate = useNavigate();
-  if (loading && loadingAwait) {
+  if (loading || loadingAwait) {
     return (
       <PaperDashboard>
         <LoadingProgress usage="paper" />
