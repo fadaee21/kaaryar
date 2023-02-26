@@ -29,6 +29,8 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import Volunteer from "./pages/volunteer/Volunteer";
 import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
+import GraduateProfile from "./pages/graduate/GraduateProfile";
+import GraduateTable from "./pages/graduate/GraduateTable";
 
 const ListRoutes = [
   //! ta________________________________
@@ -343,7 +345,16 @@ const ListRoutes = [
     component: Volunteer,
     showInNav: true,
     role: "admin",
-    key: "admin19",
+    key: "admin15",
+  },
+  {
+    path: "admin/graduate",
+    name: "فهرست فارغ‌التحصیلان",
+    // icon:<></>,
+    component: GraduateTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin20",
   },
   {
     path: "admin/all-comments",
@@ -378,14 +389,24 @@ const ListRoutes = [
     name: "",
     // icon:<></>,
     component: VolunteerDetail,
-    showInNav: true,
+    showInNav: false,
     role: "admin",
-    key: "mentor19",
+    key: "admin19",
+  },
+
+  {
+    path: "admin/graduate/profile/1",
+    name: "",
+    // icon:<></>,
+    component: GraduateProfile,
+    showInNav: false,
+    role: "admin",
+    key: "admin21",
   },
 
   {
     path: "test",
-    name: " ",
+    name: "",
     // icon: <AddCommentIcon />,
     component: justTest,
     showInNav: false,

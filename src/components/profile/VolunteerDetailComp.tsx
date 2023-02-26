@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { deepOrange } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LinkIcon from "@mui/icons-material/Link";
@@ -97,7 +96,7 @@ const VolunteerDetailComp = ({
           </Box>
           <Stack direction="row" spacing={2}>
             {usernameParam === username && (
-              <Button //TODO:don't show for all
+              <Button
                 endIcon={<EditIcon />}
                 variant="outlined"
                 onClick={() => navigate(`/${roles}/profile`)}

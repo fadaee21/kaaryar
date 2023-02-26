@@ -13,7 +13,6 @@ const VolunteerDetail = () => {
   const person = `/user/profile/username/${username}`;
 
   useEffect(() => {
-    console.log(person);
     getAllData(person);
   }, []);
 
