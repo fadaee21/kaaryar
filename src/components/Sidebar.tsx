@@ -156,11 +156,11 @@ export default function Sidebar({ listRoutes }: any) {
                 <ListItemIcon sx={{ marginRight: 1 }}>
                   {<AccountCircle />}
                 </ListItemIcon>
-                <ListItemText secondary="حساب کاربری" />
+                <ListItemText secondary="پروفایل من" />
               </MenuItem>
               <Divider variant="middle" />
               <MenuItem onClick={handleExit}>
-                <ListItemIcon sx={{ rotate: "180deg", mr: 1 }}>
+                <ListItemIcon sx={{  mr: 1 }}>
                   {<LogoutIcon />}
                 </ListItemIcon>
                 <ListItemText secondary="خروج" />

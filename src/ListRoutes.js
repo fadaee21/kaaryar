@@ -28,9 +28,12 @@ import StudentOfAdmin from "./pages/studentMoodle/StudentOfAdmin";
 import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import Volunteer from "./pages/volunteer/Volunteer";
+import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
+import GraduateProfile from "./pages/graduate/GraduateProfile";
+import GraduateTable from "./pages/graduate/GraduateTable";
 
 const ListRoutes = [
-  // ta________________________________
+  //! ta________________________________
   {
     path: "ta/dashboard",
     name: "داشبورد",
@@ -107,6 +110,15 @@ const ListRoutes = [
     showInNav: true,
     role: "ta",
     key: "ta10",
+  },
+  {
+    path: "ta/volunteer/:username",
+    name: "",
+    // icon:<></>,
+    component: VolunteerDetail,
+    showInNav: false,
+    role: "ta",
+    key: "ta11",
   },
 
   // mentor____________________________________________
@@ -188,8 +200,17 @@ const ListRoutes = [
     role: "mentor",
     key: "mentor10",
   },
+  {
+    path: "mentor/volunteer/:username",
+    name: "",
+    // icon:<></>,
+    component: VolunteerDetail,
+    showInNav: true,
+    role: "mentor",
+    key: "mentor11",
+  },
 
-  // admin__________________________________________
+  //! admin__________________________________________
   {
     path: "admin/dashboard",
     name: "داشبورد",
@@ -324,7 +345,16 @@ const ListRoutes = [
     component: Volunteer,
     showInNav: true,
     role: "admin",
-    key: "admin19",
+    key: "admin15",
+  },
+  {
+    path: "admin/graduate",
+    name: "فهرست فارغ‌التحصیلان",
+    // icon:<></>,
+    component: GraduateTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin20",
   },
   {
     path: "admin/all-comments",
@@ -354,11 +384,29 @@ const ListRoutes = [
     role: "admin",
     key: "admin18",
   },
+  {
+    path: "admin/volunteer/:username",
+    name: "",
+    // icon:<></>,
+    component: VolunteerDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin19",
+  },
 
+  {
+    path: "admin/graduate/profile/1",
+    name: "",
+    // icon:<></>,
+    component: GraduateProfile,
+    showInNav: false,
+    role: "admin",
+    key: "admin21",
+  },
 
   {
     path: "test",
-    name: " ",
+    name: "",
     // icon: <AddCommentIcon />,
     component: justTest,
     showInNav: false,

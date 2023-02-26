@@ -46,7 +46,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+        <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
           فرم آزمون (فرم درخواست ثبت نام دردوره های آموزشی مطعوف به اشتغال
           کاریار)
         </Typography>
@@ -357,7 +357,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bolder", my: 5 }}>
+        <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
           ارزیابی قبل از پذیرش
         </Typography>
       </Box>

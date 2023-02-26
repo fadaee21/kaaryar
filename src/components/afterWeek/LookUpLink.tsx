@@ -52,11 +52,11 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
     };
   }, [feedBackMessage]);
 
-  const tt = students.filter(
-    (i: moodleJustStudent) =>
-      i.moodleUser.lastName === "امامی" && i.moodleUser.firstName === "زهرا"
-  );
-  console.log("پیدا کردن نفرات تکراری مثلا زهرا امامی:", tt);
+  // const tt = students.filter(
+  //   (i: moodleJustStudent) =>
+  //     i.moodleUser.lastName === "امامی" && i.moodleUser.firstName === "زهرا"
+  // );
+  // console.log("پیدا کردن نفرات تکراری مثلا زهرا امامی:", tt);
 
   //edit user
   const handleLinkStudent = async (e: React.FormEvent) => {

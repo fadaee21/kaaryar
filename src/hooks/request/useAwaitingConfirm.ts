@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getData } from "../api/axios";
+import { getData } from "../../api/axios";
 
 const useAwaitingConfirm = (apiLink: string) => {
   const [loadingAwait, setLoadingAwait] = useState(true);
@@ -12,6 +12,7 @@ const useAwaitingConfirm = (apiLink: string) => {
       });
       setAwaitNumber(response.data.length);
       if (response.status === 200) {
+        console.log(response.data);
       } else {
         console.log(response);
       }

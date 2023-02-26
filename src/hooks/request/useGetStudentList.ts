@@ -28,8 +28,6 @@
 // };
 
 
-import React from 'react'
-
 const useGetStudentList = () => {
   return (
     {}

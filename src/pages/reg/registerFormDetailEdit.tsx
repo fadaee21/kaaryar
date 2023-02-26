@@ -38,7 +38,7 @@ const RegisterFormDetailEdit = () => {
       if (response.status === 200) {
         navigate(-1);
       } else {
-        console.log("1234:", response);
+        console.log(response);
       }
       setLoadingPut(false);
     } catch (error) {
@@ -47,7 +47,7 @@ const RegisterFormDetailEdit = () => {
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStudent((prev: any) => ({ ...prev, [name]: value }));
   };

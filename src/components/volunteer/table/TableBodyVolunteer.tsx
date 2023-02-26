@@ -1,10 +1,20 @@
 import { IconButton, Typography } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
 
-const TableBodyVolunteer = () => {
-  // const navigate = useNavigate();
+const TableBodyVolunteer = ({
+  username,
+  firstName,
+  lastName,
+  id,
+  role,
+}: any) => {
+  const navigate = useNavigate();
+  const {
+    auth: { roles },
+  } = useAuth();
   return (
     <StyledTableRow
       sx={{
@@ -18,7 +28,7 @@ const TableBodyVolunteer = () => {
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">01</Typography>
+        <Typography variant="body2">{id}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -27,7 +37,7 @@ const TableBodyVolunteer = () => {
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">هما فکری</Typography>
+        <Typography variant="body2">{`${firstName} ${lastName}`}</Typography>
       </StyledTableCell>
 
       <StyledTableCell
@@ -37,18 +47,13 @@ const TableBodyVolunteer = () => {
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">منتور</Typography>
+        <Typography variant="body2">{role}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
         sx={{ width: "10%", verticalAlign: "center" }}
       >
-        <IconButton
-          onClick={() =>
-            // navigate(`/${roleAuth}/all-comments/${id}`)
-            console.log("hello volunteer")
-          }
-        >
+        <IconButton onClick={() => navigate(`/${roles}/volunteer/${username}`)}>
           <VisibilityIcon fontSize="small" color="info" />
         </IconButton>
       </StyledTableCell>

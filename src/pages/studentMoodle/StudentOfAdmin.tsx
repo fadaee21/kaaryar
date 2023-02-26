@@ -84,9 +84,9 @@ const StudentOfAdmin = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"excel export"}
-                apiData={
-                  searchingMoodleStudent ? searchingMoodleStudent : students
-                }
+                linkAll="moodle/user/student/all?pageNum=0&pageSize=10000000"
+                searchData={searchingMoodleStudent}
+                useIn="studentOfAdmin"
               />
             </Box>
             <AccordionDetails>
@@ -356,6 +356,7 @@ const StudentOfAdmin = () => {
           page={page}
           onChange={(_event, value: number) => {
             setPage(value);
+            setChevronDir(false); //after changing the page close search bar
           }}
         />
       )}

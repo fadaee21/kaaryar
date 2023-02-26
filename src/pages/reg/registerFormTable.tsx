@@ -29,6 +29,8 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
+import { addComma } from "../../utils/addComma";
+import { useApproveReg } from "../../hooks/request/useApprove";
 
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
@@ -37,6 +39,10 @@ const RegisterFormTable = () => {
   const [ids, setIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
+  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
+  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
+  const [statusState, setStatusState] = useState<boolean | null>(null);
+
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
@@ -49,7 +55,7 @@ const RegisterFormTable = () => {
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, successMulti } = useApproveMulti();
-
+  const { loadingRegApprove } = useApproveReg();
   const getListLearner = async () => {
     setLoading(true);
     try {
@@ -88,12 +94,19 @@ const RegisterFormTable = () => {
 
   useEffect(() => {
     getListLearner();
-    setSearchingStudentRegister(null);
     window.scrollTo(0, 0);
+    setChevronDir(false);
     // eslint-disable-next-line
-  }, [page, successMulti]);
+  }, [page]);
 
-  if (loading) {
+  useEffect(() => {
+    setSearchingStudentRegister(null);
+    setStateWaiting(null);
+    setStatusState(null);
+    setIds([]);
+  }, [successMulti]);
+
+  if (loading || loadingRegApprove) {
     return <LoadingProgress />;
   }
 
@@ -130,12 +143,12 @@ const RegisterFormTable = () => {
                 <Button
                   color="secondary"
                   variant="contained"
-                  onClick={() =>
+                  onClick={() => {
                     getApproveMulti(
                       ids.toString(),
                       "/reg/form/multiple/approve"
-                    )
-                  }
+                    );
+                  }}
                   disabled={ids.toString() === ""}
                   sx={{ mr: 0.5 }}
                 >
@@ -157,11 +170,9 @@ const RegisterFormTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"Applicant Info"}
-                  apiData={
-                    searchingStudentRegister
-                      ? searchingStudentRegister?.map((i) => i)
-                      : students?.map((i) => i)
-                  }
+                  searchData={searchingStudentRegister?.map((i) => i)}
+                  linkAll="/reg/form/all?pageNum=0&pageSize=1000000"
+                  useIn="reg"
                 />
               </Box>
             </Box>
@@ -177,6 +188,10 @@ const RegisterFormTable = () => {
                   setSearchingStudentRegister={setSearchingStudentRegister}
                   searchPage="reg"
                   chevronDir={chevronDir}
+                  stateWaiting={stateWaiting}
+                  setStateWaiting={setStateWaiting}
+                  statusState={statusState}
+                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>
@@ -207,8 +222,9 @@ const RegisterFormTable = () => {
                         education={RegisterUser.education}
                         refer={RegisterUser.refer}
                         highSchoolYear={RegisterUser.highSchoolYear}
-                        familiarity={RegisterUser.familiarity}
+                        familiarity={addComma(RegisterUser.familiarity)}
                         province={RegisterUser.province}
+                        createTime={RegisterUser.createTime}
                       />
                     );
                   })}
@@ -236,8 +252,11 @@ const RegisterFormTable = () => {
                         highSchoolYear={
                           searchingStudentRegister?.highSchoolYear
                         }
-                        familiarity={searchingStudentRegister?.familiarity}
+                        familiarity={addComma(
+                          searchingStudentRegister?.familiarity
+                        )}
                         province={searchingStudentRegister?.province}
+                        createTime={searchingStudentRegister?.createTime}
                       />
                     );
                   }

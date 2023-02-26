@@ -36,7 +36,6 @@ const RegisterFormDetail = () => {
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-  // const { success, getApprove } = useApproveReg();
   const { getApproveReg, success } = useApproveReg();
   const studentId = `/reg/form/${id}`;
   const approveLink = "/reg/form/approve";
@@ -65,10 +64,12 @@ const RegisterFormDetail = () => {
   const handleApprove = () => {
     console.log("you trigger approve");
     getApproveReg(id, { status: true }, approveLink);
+    navigate(-1);
   };
   const handleDisApprove = () => {
     console.log("you trigger disApprove");
     getApproveReg(id, { status: false }, approveLink);
+    navigate(-1);
   };
 
   if (loading) {

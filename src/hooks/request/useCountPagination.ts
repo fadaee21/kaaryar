@@ -17,6 +17,8 @@ const useCountPagination = (counting: string) => {
       }
     };
     getCountComment();
+    window.scroll(0, 0);
+    // eslint-disable-next-line
   }, []);
   return [loading, counterPage];
 };

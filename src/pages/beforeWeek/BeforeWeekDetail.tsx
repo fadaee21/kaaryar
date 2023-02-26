@@ -54,10 +54,12 @@ const BeforeWeekDetail = () => {
   const handleApprove = () => {
     console.log("you trigger approve Before Week");
     getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
+    navigate(-1)
   };
   const handleDisApprove = () => {
     console.log("you trigger disApprove Before Week");
     getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
+    navigate(-1)
   };
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));

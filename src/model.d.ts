@@ -181,6 +181,9 @@ export interface RegistrationForm {
   token?: string;
   highSchoolYear?: string;
   refer?: string;
+  createTime?: string;
+  highSchoolYear?: string;
+  refer?: string;
 }
 
 export interface BeforeWeekType {
@@ -263,9 +266,6 @@ export interface TableBodyAllType extends RegistrationForm {
   checkBoxDisplay?: boolean;
   roles: string;
   directNav: string;
-  //movaghat ta json dorost she
-  highSchoolYear?: string;
-  refer?: string;
 }
 
 export interface SeekerStudent {
@@ -277,4 +277,31 @@ export interface SeekerStudent {
   beforeWeekChecked: boolean;
   afterWeekForm: AfterWeekType;
   afterWeekChecked: true;
+}
+
+export interface Profile {
+  aboutMe: string;
+  birthday: string;
+  city: string;
+  country: string;
+  currentJob: string;
+  currentJobLocation: string;
+  custom: string;
+  email: string;
+  firstName: "test1";
+  gender: string;
+  github: string;
+  gitlab: string;
+  id: number;
+  imageAddress: string;
+  lastEduLevel: string;
+  lastEduLocation: string;
+  lastMajor: string;
+  lastName: string;
+  linkedin: string;
+  mobile: string;
+  researchgate: string;
+  role: string;
+  username: string;
+  website: string;
 }

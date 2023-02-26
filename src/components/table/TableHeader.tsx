@@ -20,6 +20,7 @@ const TableHeader = () => {
               نحوه آشنایی با کاریار
             </StyledTableCell>
             <StyledTableCell align="center">نام معرف یا موسسه</StyledTableCell>
+            <StyledTableCell align="center">تاریخ ارسال فرم</StyledTableCell>
           </>
         ) : (
           <>
