@@ -77,7 +77,7 @@ const useEditProfile = () => {
           gender: profileGender,
           github: github,
           gitlab: gitlab,
-          // imageAddress: profileImage,
+          imageAddress: profileImage,
           lastEduLevel: profileEduLevel,
           lastEduLocation: profileEduPlace,
           lastMajor: profileFieldStudy,
@@ -86,7 +86,6 @@ const useEditProfile = () => {
           mobile: profileMobile,
           researchgate: gate,
           role: profileRole,
-          username: "string",
           website: web,
         },
       });
@@ -99,7 +98,7 @@ const useEditProfile = () => {
     }
   };
 
-  return { editProfile };
+  return { editProfile, loadingProfile };
 };
 
 export default useEditProfile;

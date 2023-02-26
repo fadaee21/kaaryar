@@ -10,6 +10,7 @@ const useGetData = () => {
       setLoadingCall(true);
       const response = await getData(address);
       const result = await response.data;
+      console.log(result)
       setDataCall(result);
       setLoadingCall(false);
     } catch (error) {

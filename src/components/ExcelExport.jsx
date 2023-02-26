@@ -23,7 +23,7 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
       let response = await getData(linkAll);
       let allData = await response.data;
 
-      switch (useIn) { 
+      switch (useIn) {
         case "reg":
           exportToCSV(allData, fileName);
           break;
@@ -34,6 +34,14 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
         case "after":
           const b = allData.map((i) => i.beforeWeekForm?.registrationForm);
           exportToCSV(b, fileName);
+          break;
+        case "volunteer":
+          let e = [];
+          allData.forEach((i) => {
+            const { imageAddress, custom, ...rest } = i; //remove imageAddress,custom
+            e.push(rest);
+          });
+          exportToCSV(e, fileName);
           break;
         case "seeker":
           const c = allData.map(

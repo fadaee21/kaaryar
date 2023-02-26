@@ -48,7 +48,7 @@ const UserInfo = ({ profileData }: ProfileData) => {
   };
   //in desiredLink for handling the functionality i add "id" and "first" to object,notice that you shouldn't post these two items to server
   const [desiredLink, setDesiredLink] = useState<any[]>(
-    profileData
+    profileData?.custom
       ? JSON.parse(profileData.custom)
       : [{ id: Date.now(), address: "", title: "", first: true }]
   );
@@ -368,7 +368,7 @@ const UserInfo = ({ profileData }: ProfileData) => {
                 >
                   {item.first ? (
                     <Button
-                      sx={{ width: "10%" }}
+                      sx={{ width: "12%" }}
                       variant="outlined"
                       color="primary"
                       endIcon={<AddIcon />}
@@ -379,9 +379,9 @@ const UserInfo = ({ profileData }: ProfileData) => {
                     </Button>
                   ) : (
                     <Button
-                      sx={{ width: "10%" }}
+                      sx={{ width: "12%" }}
                       variant="outlined"
-                      color="inherit"
+                      color="error"
                       endIcon={<DeleteIcon />}
                       onClick={() => handleRemoveLink(item.id)}
                     >

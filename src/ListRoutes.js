@@ -110,7 +110,7 @@ const ListRoutes = [
     key: "ta10",
   },
   {
-    path: "ta/volunteer/:id",
+    path: "ta/volunteer/:username",
     name: "",
     // icon:<></>,
     component: VolunteerDetail,
@@ -199,7 +199,7 @@ const ListRoutes = [
     key: "mentor10",
   },
   {
-    path: "mentor/volunteer/:id",
+    path: "mentor/volunteer/:username",
     name: "",
     // icon:<></>,
     component: VolunteerDetail,
@@ -374,7 +374,7 @@ const ListRoutes = [
     key: "admin18",
   },
   {
-    path: "admin/volunteer/:id",
+    path: "admin/volunteer/:username",
     name: "",
     // icon:<></>,
     component: VolunteerDetail,

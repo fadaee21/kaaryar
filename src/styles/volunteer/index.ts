@@ -7,7 +7,7 @@ export const BorderBox = styled(Box)(({ theme }) => ({
   borderRadius: 8,
   padding: theme.spacing(2),
   margin: theme.spacing(2.5, 0),
-  height: 230,
+  minHeight: 240,
   overflow: "hidden",
 }));
 export const BorderBoxAbout = styled(Box)(({ theme }) => ({

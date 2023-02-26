@@ -48,7 +48,6 @@ const BeforeWeekTable = () => {
   const examFormCount = "/exam/before/week/form/count";
 
   const [, counterPage] = useCountPagination(examFormCount);
-  console.log(counterPage);
 
   const getListLearner = async () => {
     setLoading(true);

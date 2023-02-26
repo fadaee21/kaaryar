@@ -1,6 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import { postData } from "../../api/axios";
 
 const UploadProfileImage = ({ setUserProfile }: any) => {
@@ -12,7 +12,7 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
   const imageUploading = async (dataContent: FormData) => {
     setSuccess(false);
     try {
-      const response = await postData(`/user/profile/image/upload/`, {
+      const response = await postData(`/user/profile/image/upload/avatar`, {
         data: dataContent,
       });
       const data = await response.data;
@@ -25,14 +25,6 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
     }
     //error or success message handling
   };
-
-  useEffect(() => {
-    let dataContent = new FormData();
-    dataContent.append("file", profileImage);
-    console.log(dataContent);
-    dataContent && imageUploading(dataContent);
-    // eslint-disable-next-line
-  }, [profileImage]);
 
   const pickImage = (e: React.ChangeEvent<any>) => {
     const image = e.target.files[0];
@@ -47,6 +39,10 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
       setOpen(true);
       return;
     }
+    let dataContent = new FormData();
+    dataContent.append("file", image);
+    console.log(dataContent);
+    imageUploading(dataContent);
     setProfileImage(image);
   };
   const closeSnack = () => {

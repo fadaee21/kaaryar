@@ -1,5 +1,5 @@
 import {
-  AccordionDetails,
+  // AccordionDetails,
   Box,
   Container,
   Pagination,
@@ -9,22 +9,43 @@ import {
   TableContainer,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import TableHeader from "../../components/volunteer/table/TableHeader";
-import {
-  AccordionStyled,
-  AccordionSummaryStyled,
-} from "../../styles/search/accordion";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import style from "../../styles/search/searchChevron.module.css";
+// import {
+//   AccordionStyled,
+//   AccordionSummaryStyled,
+// } from "../../styles/search/accordion";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import style from "../../styles/search/searchChevron.module.css";
 import TableBodyVolunteer from "../../components/volunteer/table/TableBodyVolunteer";
+import useGetData from "../../hooks/request/useGetData";
+import { counterPagination } from "../../utils/counterPagination";
+import LoadingProgress from "../../components/LoadingProgress";
+import useCountPagination from "../../hooks/request/useCountPagination";
+import { Profile } from "../../model";
+import useEditProfile from "../../hooks/request/useEditProfile";
 
 const Volunteer = () => {
-  const [searchingVolunteer, setSearchingVolunteer] = useState([]);
-  const [volunteers, setvolunteers] = useState([]);
+  const pageSize = 10;
+  const addressLink = `/user/profile/all?pageNum=0&pageSize=${pageSize - 1}`;
+  const { dataCall, getAllData, loadingCall } = useGetData();
+
+  // const [searchingVolunteer, setSearchingVolunteer] = useState([]);
+  // const [volunteers, setvolunteers] = useState([]);
+  // const [chevronDir, setChevronDir] = useState(false);
   const [page, setPage] = useState(1);
-  const [chevronDir, setChevronDir] = useState(false);
+  const volunteerCount = "/user/profile/count";
+  const [, counterPage] = useCountPagination(volunteerCount);
+  const { loadingProfile } = useEditProfile();
+
+  useEffect(() => {
+    getAllData(addressLink);
+  }, []);
+
+  if (loadingCall || loadingProfile) {
+    return <LoadingProgress />;
+  }
 
   return (
     <Box sx={{ m: 2 }}>
@@ -36,15 +57,16 @@ const Volunteer = () => {
           >
             <Typography variant="h4"> فهرست پروفایل داوطلبان</Typography>
           </Box>
-          <AccordionStyled>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-              }}
-            >
-              <AccordionSummaryStyled
+          {/* <AccordionStyled> */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+              mb: 1.5,
+            }}
+          >
+            {/* <AccordionSummaryStyled
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
@@ -53,65 +75,74 @@ const Volunteer = () => {
                 <ExpandMoreIcon
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
-              </AccordionSummaryStyled>
-              <ExcelExport
-                fileName={"Applicant Info"}
-                linkAll=""
-                searchData={null}
-                useIn="volunteer"
-              />
-            </Box>
-            <AccordionDetails>
-              {/* //!component for searching student */}
-              <Box
+              </AccordionSummaryStyled> */}
+            <ExcelExport
+              fileName={"Applicant Info"}
+              linkAll="/user/profile/all?pageNum=0&pageSize=100"
+              searchData={null}
+              useIn="volunteer"
+            />
+          </Box>
+          {/* <AccordionDetails> */}
+          {/* //!component for searching student */}
+          {/* <Box
                 sx={{
                   width: "100%",
                   my: 3,
                 }}
               >
-                {/* <SearchAll
+                <SearchAll
                 setSearchingStudentSeeker={setSearchingStudentSeeker}
                 searchPage="seekerWeek"
                 chevronDir={chevronDir}
-              /> */}
+              />
               </Box>
-            </AccordionDetails>
-          </AccordionStyled>
+            </AccordionDetails> */}
+          {/* </AccordionStyled> */}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader />
               {/*//! while searching show the search content */}
-              {!searchingVolunteer && (
-                <TableBody>
+              {/* {!searchingVolunteer && ( */}
+              {/* <TableBody>
                   <TableBodyVolunteer />
-                </TableBody>
-              )}
+                </TableBody> */}
+              {/* )} */}
 
               <TableBody>
-                <TableBodyVolunteer />
+                {dataCall?.map((item: Profile) => (
+                  <TableBodyVolunteer
+                    key={item.id}
+                    firstName={item.firstName}
+                    lastName={item.lastName}
+                    username={item.username}
+                    role={item.role}
+                    id={item.id}
+                  />
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Container>
       </Box>
-      {!searchingVolunteer && (
-        <Pagination
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            my: 4,
-          }}
-          size="large"
-          // count={counterPagination(counterPage, 20)}
-          variant="outlined"
-          shape="rounded"
-          page={page}
-          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
-            setPage(value);
-          }}
-        />
-      )}
+      {/* {!searchingVolunteer && ( */}
+      <Pagination
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          my: 4,
+        }}
+        size="large"
+        count={counterPagination(counterPage, pageSize)}
+        variant="outlined"
+        shape="rounded"
+        page={page}
+        onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
+          setPage(value);
+        }}
+      />
+      {/* )} */}
     </Box>
   );
 };
