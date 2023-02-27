@@ -1,14 +1,16 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { postData } from "../../api/axios";
+import useGetImage from "../../hooks/request/useGetImage";
 
-const UploadProfileImage = ({ setUserProfile }: any) => {
+const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
   const [profileImage, setProfileImage] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = React.useState(false);
   const [success, setSuccess] = useState(false);
-
+  const [showImage, setShowImage] = useState(false); // handling showing image or not
+  const { getPicture, pic } = useGetImage();
   const imageUploading = async (dataContent: FormData) => {
     setSuccess(false);
     try {
@@ -26,6 +28,14 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
     //error or success message handling
   };
 
+  useEffect(() => {
+    imageServer.length > 5 && getPicture(imageServer);
+    // if one of the profileImage or serverImage exist show image otherwise let user to choose an image
+    if (profileImage || imageServer) {
+      setShowImage(true);
+    }
+  }, []);
+
   const pickImage = (e: React.ChangeEvent<any>) => {
     const image = e.target.files[0];
     if (image.size > 5000000) {
@@ -39,6 +49,7 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
       setOpen(true);
       return;
     }
+    setShowImage(true);
     let dataContent = new FormData();
     dataContent.append("file", image);
     console.log(dataContent);
@@ -67,32 +78,19 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
           alignItems: "flex-start",
         }}
       >
-        {!profileImage ? (
-          <Box>
-            <Button
-              variant="outlined"
-              component="label"
-              sx={{ display: "block", mb: 1, textAlign: "center" }}
-            >
-              فایل مورد نظر را انتخاب کنید
-              <input
-                name="ProfileImage"
-                type="file"
-                hidden
-                onChange={pickImage}
-              />
-            </Button>
-            <Typography variant="caption">
-              * لطفاً عکسی در اندازهٔ مربع و در یکی از فرمت‌های PNG, JPEG, JPG
-              انتخاب کنید. دقت کنید که حجم فایل بیشتر از ۵ مگابایت نباشد.{" "}
-            </Typography>
-          </Box>
-        ) : (
+        {showImage ? (
           <>
             <Button
               variant="outlined"
               color="inherit"
-              onClick={() => setProfileImage(null)}
+              onClick={() => {
+                setProfileImage(null);
+                setUserProfile((prev: any) => ({
+                  ...prev,
+                  profileImage: "",
+                }));
+                setShowImage(false);
+              }}
               sx={{ px: 4, mb: 1, height: "fit-content" }}
               endIcon={<DeleteIcon />}
             >
@@ -117,7 +115,7 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
                   borderRadius: 2,
                   mb: 1,
                 }}
-                src={URL.createObjectURL(profileImage)}
+                src={profileImage ? URL.createObjectURL(profileImage) : pic}
               />
               <Typography
                 variant="caption"
@@ -130,10 +128,30 @@ const UploadProfileImage = ({ setUserProfile }: any) => {
                   direction: "rtl",
                 }}
               >
-                {profileImage.name}
+                {profileImage?.name}
               </Typography>
             </Box>
           </>
+        ) : (
+          <Box>
+            <Button
+              variant="outlined"
+              component="label"
+              sx={{ display: "block", mb: 1, textAlign: "center" }}
+            >
+              فایل مورد نظر را انتخاب کنید
+              <input
+                name="ProfileImage"
+                type="file"
+                hidden
+                onChange={pickImage}
+              />
+            </Button>
+            <Typography variant="caption">
+              * لطفاً عکسی در اندازهٔ مربع و در یکی از فرمت‌های PNG, JPEG, JPG
+              انتخاب کنید. دقت کنید که حجم فایل بیشتر از ۵ مگابایت نباشد.{" "}
+            </Typography>
+          </Box>
         )}
       </Box>
       <Snackbar open={open} autoHideDuration={4000} onClose={closeSnack}>

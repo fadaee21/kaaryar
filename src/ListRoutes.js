@@ -120,7 +120,15 @@ const ListRoutes = [
     role: "ta",
     key: "ta11",
   },
-
+  {
+    path: "ta/all-comments",
+    name: "نظرات",
+    // icon: <CommentIcon />,
+    component: Comments,
+    showInNav: true,
+    role: "ta",
+    key: "ta5",
+  },
   // mentor____________________________________________
   {
     path: "mentor/dashboard",
@@ -149,15 +157,6 @@ const ListRoutes = [
     key: "mentor3",
   },
 
-  {
-    path: "mentor/all-comments",
-    name: "نظرات",
-    // icon: <CommentIcon />,
-    component: Comments,
-    showInNav: true,
-    role: "mentor",
-    key: "mentor5",
-  },
   {
     path: "mentor/student/:id/add-comment",
     name: "افزودن نظر جدید",
@@ -205,11 +204,19 @@ const ListRoutes = [
     name: "",
     // icon:<></>,
     component: VolunteerDetail,
-    showInNav: true,
+    showInNav: false,
     role: "mentor",
     key: "mentor11",
   },
-
+  {
+    path: "mentor/all-comments",
+    name: "نظرات",
+    // icon: <CommentIcon />,
+    component: Comments,
+    showInNav: true,
+    role: "mentor",
+    key: "mentor5",
+  },
   //! admin__________________________________________
   {
     path: "admin/dashboard",

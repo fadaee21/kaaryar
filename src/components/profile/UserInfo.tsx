@@ -97,7 +97,7 @@ const UserInfo = ({ profileData }: ProfileData) => {
         arrTest.push(false);
       }
     });
-    const result = arrTest.some((i) => i === true);
+    const result = arrTest.some((i) => i);
     setEmptyLink(result);
   }, [desiredLink]);
 
@@ -106,18 +106,24 @@ const UserInfo = ({ profileData }: ProfileData) => {
   }, [checkEmptyDesireLink]);
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ mb: 30 }}>
       <Container maxWidth="lg">
         <HeaderBox>
           <Typography variant="h5">پروفایل من</Typography>
-          <Button
-            onClick={() => navigate(-1)}
-            endIcon={<ArrowBackIcon />}
-            variant="outlined"
-            color="inherit"
-          >
-            بازگشت
-          </Button>
+          <ButtonBox>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              ذخیره
+            </Button>
+            <Button
+              onClick={() => navigate(-1)}
+              endIcon={<ArrowBackIcon />}
+              variant="outlined"
+              color="inherit"
+              fullWidth
+            >
+              بازگشت
+            </Button>
+          </ButtonBox>
         </HeaderBox>
         <Typography variant="body1">
           اینجا می‌توانید پروفایل عمومی خودتان را درست کنید. پروفایل شما برای
@@ -226,7 +232,10 @@ const UserInfo = ({ profileData }: ProfileData) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <UploadProfileImage setUserProfile={setUserProfile} />
+            <UploadProfileImage
+              imageServer={userProfile.profileImage}
+              setUserProfile={setUserProfile}
+            />
           </Grid>
         </Grid>
 
@@ -408,11 +417,6 @@ const UserInfo = ({ profileData }: ProfileData) => {
             />
           </Grid>
         </Grid>
-        <ButtonBox>
-          <Button variant="contained" color="primary" type="submit" fullWidth>
-            ذخیره
-          </Button>
-        </ButtonBox>
       </Container>
     </Box>
   );
