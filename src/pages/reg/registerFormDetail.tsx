@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
-// import { useApproveReg } from "../../hooks/request/useApprove";
 import { RegistrationForm } from "../../model";
 import { useApproveReg } from "../../hooks/request/useApprove";
 import { useAuth } from "../../context/AuthProvider";
@@ -36,7 +35,7 @@ const RegisterFormDetail = () => {
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-  const { getApproveReg, success } = useApproveReg();
+  const { getApproveReg, success, loadingRegApprove } = useApproveReg();
   const studentId = `/reg/form/${id}`;
   const approveLink = "/reg/form/approve";
   const getStudent = async () => {
@@ -62,17 +61,13 @@ const RegisterFormDetail = () => {
 
   //handle approve and disApprove trigger in modal
   const handleApprove = () => {
-    console.log("you trigger approve");
     getApproveReg(id, { status: true }, approveLink);
-    navigate(-1);
   };
   const handleDisApprove = () => {
-    console.log("you trigger disApprove");
     getApproveReg(id, { status: false }, approveLink);
-    navigate(-1);
   };
 
-  if (loading) {
+  if (loading || loadingRegApprove) {
     return <LoadingProgress />;
   }
 

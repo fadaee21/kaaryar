@@ -30,7 +30,6 @@ import {
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
 import { addComma } from "../../utils/addComma";
-import { useApproveReg } from "../../hooks/request/useApprove";
 
 const RegisterFormTable = () => {
   const [students, setStudents] = useState([]);
@@ -54,24 +53,24 @@ const RegisterFormTable = () => {
   }&pageSize=${pageSize}`;
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
-  const { getApproveMulti, successMulti } = useApproveMulti();
-  const { loadingRegApprove } = useApproveReg();
+  const { getApproveMulti, loadingMulti } = useApproveMulti();
+
   const getListLearner = async () => {
     setLoading(true);
     try {
       let response = await getData(allStudentReg);
-      setStudents(response.data);
-      setLoading(false);
+      let data = await response.data;
+      setStudents(data);
       //empty checkBox state if you have
       setIds([]);
     } catch (error) {
       //TODO:handle Error
       console.log("catch block of error");
       console.log(error);
-      setLoading(false);
       navigate("/");
       setIds([]);
     }
+    setLoading(false);
   };
 
   const { auth } = useAuth();
@@ -92,21 +91,22 @@ const RegisterFormTable = () => {
     []
   );
 
+
   useEffect(() => {
     getListLearner();
     window.scrollTo(0, 0);
     setChevronDir(false);
     // eslint-disable-next-line
-  }, [page]);
+  }, [page, loadingMulti]);
 
   useEffect(() => {
     setSearchingStudentRegister(null);
     setStateWaiting(null);
     setStatusState(null);
     setIds([]);
-  }, [successMulti]);
+  }, [loadingMulti]);
 
-  if (loading || loadingRegApprove) {
+  if (loading || loadingMulti) {
     return <LoadingProgress />;
   }
 

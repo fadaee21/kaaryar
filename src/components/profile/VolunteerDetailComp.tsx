@@ -76,7 +76,7 @@ const VolunteerDetailComp = ({
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            alignItems: "flex-start",
+            alignItems: "center",
             gap: 3,
             mb: 10,
             ...(matches
