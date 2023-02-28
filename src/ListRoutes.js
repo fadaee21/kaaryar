@@ -31,6 +31,7 @@ import Volunteer from "./pages/volunteer/Volunteer";
 import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
 import GraduateProfile from "./pages/graduate/GraduateProfile";
 import GraduateTable from "./pages/graduate/GraduateTable";
+import NotFound from "./pages/NotFound";
 
 const ListRoutes = [
   //! ta________________________________
@@ -412,7 +413,13 @@ const ListRoutes = [
   },
 
   {
-    path: "test",
+    path: "notfound",
+    component: NotFound,
+    showInNav: false,
+    key: "notFound",
+  },
+  {
+    path: "test123456789",
     name: "",
     // icon: <AddCommentIcon />,
     component: justTest,

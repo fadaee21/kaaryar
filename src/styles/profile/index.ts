@@ -1,8 +1,8 @@
-import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
-export const ProfileTitle = styled(Typography)(({ theme }) => ({
+export const StackTitle = styled(Stack)(({ theme }) => ({
   margin: theme.spacing(7.5, 0, 3, 0),
 }));
 export const DesireBox = styled(Box)(({ theme }) => ({
@@ -15,11 +15,6 @@ export const DesireBox = styled(Box)(({ theme }) => ({
   gap: 2,
 }));
 
-export const ButtonBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  gap: 8,
-  marginLeft: "auto",
-}));
 
 export const HeaderBox = styled(Box)(({ theme }) => ({
   display: "flex",

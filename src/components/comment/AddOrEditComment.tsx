@@ -69,9 +69,6 @@ const AddOrEditComment = ({
       studentPresent
     );
 
-  console.log("Date:", sessionDate);
-  console.log("algorithm:", zeroUTCOffset(sessionDate));
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     compType === "adding" && postComment();

@@ -71,7 +71,7 @@ const WatchComment = () => {
   };
 
   return (
-    <>
+    <Box sx={{mb:20}}>
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -209,7 +209,7 @@ const WatchComment = () => {
           <Button onClick={handleClose}>خیر</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Box>
   );
 };
 

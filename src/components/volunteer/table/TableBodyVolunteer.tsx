@@ -12,6 +12,7 @@ const TableBodyVolunteer = ({
   role,
 }: any) => {
   const navigate = useNavigate();
+  const handleNav = () => navigate(`/${roles}/volunteer/${username}`);
   const {
     auth: { roles },
   } = useAuth();
@@ -35,7 +36,9 @@ const TableBodyVolunteer = ({
         sx={{
           width: "30%",
           verticalAlign: "center",
+          cursor:"pointer"
         }}
+        onClick={handleNav}
       >
         <Typography variant="body2">{`${firstName} ${lastName}`}</Typography>
       </StyledTableCell>
@@ -53,7 +56,7 @@ const TableBodyVolunteer = ({
         align="center"
         sx={{ width: "10%", verticalAlign: "center" }}
       >
-        <IconButton onClick={() => navigate(`/${roles}/volunteer/${username}`)}>
+        <IconButton onClick={handleNav}>
           <VisibilityIcon fontSize="small" color="info" />
         </IconButton>
       </StyledTableCell>

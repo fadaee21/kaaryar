@@ -23,6 +23,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { Profile } from "../../model";
 import useGetImage from "../../hooks/request/useGetImage";
@@ -63,7 +64,8 @@ const VolunteerDetailComp = ({
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const arrCustom = custom && JSON.parse(custom);
-  const isArrCustom = arrCustom && arrCustom[0].address.length > 5;
+  const isArrCustom = arrCustom?.length > 0;
+
   const { pic, getPicture } = useGetImage();
   useEffect(() => {
     getPicture(imageAddress);
@@ -88,7 +90,7 @@ const VolunteerDetailComp = ({
 
           <Box sx={{ mr: "auto" }}>
             <Typography variant="h5" gutterBottom>
-              {`${firstName} ${lastName}`}
+              {`${firstName ? firstName : ""} ${lastName ? lastName : ""}`}
             </Typography>
             <Typography variant="h6" fontWeight={400}>
               {role} کاریار
@@ -118,7 +120,10 @@ const VolunteerDetailComp = ({
       <main>
         {aboutMe && (
           <>
-            <Typography variant="h6">درباره من</Typography>
+            <Stack  direction="row" alignItems="center" gap={1}>
+              <TextSnippetOutlinedIcon />
+              <Typography variant="h6">درباره من</Typography>
+            </Stack>
             <BorderBoxAbout>
               <Typography variant="body2">{aboutMe}</Typography>
             </BorderBoxAbout>

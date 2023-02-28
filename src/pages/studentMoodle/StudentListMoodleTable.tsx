@@ -1,8 +1,4 @@
 import {
-  // Button,
-  // ButtonGroup,
-  // ListItem,
-  // Pagination,
   Paper,
   Table,
   TableBody,
@@ -11,30 +7,18 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import SearchAll from "../../components/search/SearchAll";
-import TablePic, { TablePic2 } from "../../components/table/TablePic";
+import { TablePic2 } from "../../components/table/TablePic";
 import { useAuth } from "../../context/AuthProvider";
-import { MoodleUser, MoodleUserAssignee } from "../../model";
+import { MoodleUserAssignee } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  AccordionStyled,
-  AccordionSummaryStyled,
-} from "../../styles/search/accordion";
-import styleRot from "../../styles/search/searchChevron.module.css";
+import { AccordionStyled } from "../../styles/search/accordion";
 import useMoodle from "../../hooks/request/useMoodle";
 
 const StudentListMoodleTable = () => {
-  const [chevronDir, setChevronDir] = useState(false);
-  const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
-    MoodleUser[] | null
-  >(null);
-
   const { students, loading } = useMoodle("/moodle/user/assignee");
 
   const { auth } = useAuth();
@@ -46,7 +30,7 @@ const StudentListMoodleTable = () => {
   }
 
   return (
-    <Box sx={{ m: 2 }}>
+    <Box sx={{ m: 2, mb: 20 }}>
       <Box component={"article"}>
         <Container maxWidth="xl">
           <Box
@@ -62,42 +46,18 @@ const StudentListMoodleTable = () => {
                 display: "flex",
                 alignItems: "flex-start",
                 justifyContent: "flex-start",
+                mb: 1.5,
               }}
             >
-              <AccordionSummaryStyled
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                onClick={() => setChevronDir(!chevronDir)}
-              >
-                <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? styleRot.rotate180 : styleRot.rotate0}
-                />
+              {/* //! export excel */}
 
-                {/* //! export excel */}
-              </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"excel export"}
                 linkAll="/moodle/user/assignee"
-                searchData={searchingMoodleStudent}
+                searchData={null}
                 useIn="studentListMoodleTable"
               />
             </Box>
-            <AccordionDetails>
-              {/* //! export excel */}
-              <Box
-                sx={{
-                  width: "100%",
-                  my: 3,
-                }}
-              >
-                <SearchAll
-                  setSearchingMoodleStudent={setSearchingMoodleStudent}
-                  searchPage="moodle"
-                  chevronDir={chevronDir}
-                />
-              </Box>
-            </AccordionDetails>
           </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
@@ -113,151 +73,27 @@ const StudentListMoodleTable = () => {
                   <StyledTableCell align="left">ایمیل</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
-              {!searchingMoodleStudent && (
-                <TableBody>
-                  {students.map(
-                    (moodleUser: MoodleUserAssignee, i: React.Key) => {
-                      const {
-                        // id,
-                        studentId,
-                        // firstName,
-                        // lastName,
-                        // username,
-                        // email,
-                        // picture,
-                        // city,
-                        // mobile,
-                        studentName,
-                        studentFamily,
-                      } = moodleUser;
-                      return (
-                        <StyledTableRow
-                          //TODO: id from moodle Assignee is not unique for now insert index for key
-                          key={i}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <StyledTableCell
-                            align="left"
-                            sx={{ width: "5%", verticalAlign: "top" }}
-                          >
-                            <TablePic2
-                              studentId={studentId}
-                              lastName={studentFamily}
-                            />
-                            {/* <TablePic picture={picture} lastName={lastName} /> */}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="left"
-                            sx={{
-                              width: "25%",
-                              verticalAlign: "top",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              navigate(`/${roles}/student/${studentId}`)
-                            }
-                          >
-                            <Typography variant="body1">
-                              {studentName + " " + studentFamily}
-                              {/* {firstName + " " + lastName} */}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="left"
-                            sx={{
-                              width: "10%",
-                              verticalAlign: "top",
-                            }}
-                          >
-                            <Typography variant="body2" textAlign={"left"}>
-                              {/* {username} */}
-                            </Typography>
-                          </StyledTableCell>
 
-                          <StyledTableCell
-                            align="left"
-                            sx={{
-                              width: "30%",
-                              verticalAlign: "top",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              {/* {city} */}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="left"
-                            sx={{
-                              width: "30%",
-                              verticalAlign: "top",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              {/* {mobile} */}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="left"
-                            sx={{
-                              width: "30%",
-                              verticalAlign: "top",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              {/* {email} */}
-                            </Typography>
-                          </StyledTableCell>
-
-                          {/* <StyledTableCell
-                        align="left"
-                        sx={{ width: "30%", verticalAlign: "top" }}
-                      >
-                        <ListItem sx={{ pt: 0 }}> */}
-                          {/* <ButtonGroup
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            aria-label="small button group"
-                          >
-                            <Button
-                              onClick={() =>
-                                navigate(`/${roles}/student/${id}`)
-                              }
-                            >
-                              جزییات
-                            </Button>
-                            <Button>ویرایش</Button>
-                          </ButtonGroup> */}
-                          {/* </ListItem>
-                      </StyledTableCell> */}
-                        </StyledTableRow>
-                      );
-                    }
-                  )}
-                </TableBody>
-              )}
               <TableBody>
-                {searchingMoodleStudent?.map(
-                  (searchingMoodleStudent: MoodleUser) => {
+                {students.map(
+                  (moodleUser: MoodleUserAssignee, i: React.Key) => {
                     const {
-                      id,
-                      // studentId,
-                      firstName,
-                      lastName,
-                      username,
-                      email,
-                      picture,
-                      city,
-                      mobile,
-                      // studentName,
-                      // studentFamily,
-                    } = searchingMoodleStudent;
-
+                      // id,
+                      studentId,
+                      // firstName,
+                      // lastName,
+                      // username,
+                      // email,
+                      // picture,
+                      // city,
+                      // mobile,
+                      studentName,
+                      studentFamily,
+                    } = moodleUser;
                     return (
                       <StyledTableRow
-                        key={id}
+                        //TODO: id from moodle Assignee is not unique for now insert index for key
+                        key={i}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
@@ -266,7 +102,11 @@ const StudentListMoodleTable = () => {
                           align="left"
                           sx={{ width: "5%", verticalAlign: "top" }}
                         >
-                          <TablePic picture={picture} lastName={lastName} />
+                          <TablePic2
+                            studentId={studentId}
+                            lastName={studentFamily}
+                          />
+                          {/* <TablePic picture={picture} lastName={lastName} /> */}
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -275,11 +115,13 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                             cursor: "pointer",
                           }}
-                          onClick={() => navigate(`/${roles}/student/${id}`)}
+                          onClick={() =>
+                            navigate(`/${roles}/student/${studentId}`)
+                          }
                         >
                           <Typography variant="body1">
-                            {firstName + " " + lastName}
-                            {/* {studentName + " " + studentFamily} */}
+                            {studentName + " " + studentFamily}
+                            {/* {firstName + " " + lastName} */}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
@@ -290,7 +132,7 @@ const StudentListMoodleTable = () => {
                           }}
                         >
                           <Typography variant="body2" textAlign={"left"}>
-                            {username}
+                            {/* {username} */}
                           </Typography>
                         </StyledTableCell>
 
@@ -301,7 +143,9 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                           }}
                         >
-                          <Typography variant="body2">{city}</Typography>
+                          <Typography variant="body2">
+                            {/* {city} */}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -310,7 +154,9 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                           }}
                         >
-                          <Typography variant="body2">{mobile}</Typography>
+                          <Typography variant="body2">
+                            {/* {mobile} */}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -319,7 +165,9 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                           }}
                         >
-                          <Typography variant="body2">{email}</Typography>
+                          <Typography variant="body2">
+                            {/* {email} */}
+                          </Typography>
                         </StyledTableCell>
 
                         {/* <StyledTableCell

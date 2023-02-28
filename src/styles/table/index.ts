@@ -16,10 +16,10 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
-    padding: theme.spacing(1.5,1),
+    padding: theme.spacing(1.5,2),
   },
   [`&.${tableCellClasses.body}`]: {
-    padding: theme.spacing(1.5,1),
+    padding: theme.spacing(1.5,2),
     fontSize: 18,
   },
 }));

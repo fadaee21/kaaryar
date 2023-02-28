@@ -84,13 +84,13 @@ const Comments = () => {
   }
   return (
     <>
-      <Box component={"article"} sx={{ my: 10 }}>
+      <Box component={"article"} sx={{ m: 2 }}>
         <Container maxWidth="xl">
           <Box
             component={"div"}
-            sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+            sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h3"> فهرست نظرات</Typography>
+            <Typography variant="h4"> فهرست نظرات</Typography>
           </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -102,8 +102,7 @@ const Comments = () => {
                   </StyledTableCell>
                   <StyledTableCell align="left">نظر دهنده</StyledTableCell>
                   <StyledTableCell align="left">دوره آموزشی</StyledTableCell>
-                  {/* <StyledTableCell align="left">نظرات</StyledTableCell> */}
-                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="center">عملیات</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -112,7 +111,7 @@ const Comments = () => {
                     id,
                     course,
                     studentUser,
-                    // comment,
+
                     createTime,
                     commenterUser,
                   } = commentItem;
@@ -135,7 +134,14 @@ const Comments = () => {
                       </StyledTableCell>
                       <StyledTableCell
                         align="left"
-                        sx={{ width: "15%", verticalAlign: "center" }}
+                        sx={{
+                          width: "15%",
+                          verticalAlign: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={() =>
+                          navigate(`/${roleAuth}/all-comments/${id}`)
+                        }
                       >
                         <Typography variant="body1">
                           {studentUser.firstName + " " + studentUser.lastName}
@@ -160,21 +166,17 @@ const Comments = () => {
                         </Typography>
                       </StyledTableCell>
 
-                      {/* <StyledTableCell
-                        align="left"
+                      <StyledTableCell
+                        align="center"
                         sx={{
-                          width: "30%",
+                          width: "10%",
                           verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2">{comment}</Typography>
-                      </StyledTableCell> */}
-
-                      <StyledTableCell
-                        align="left"
-                        sx={{ width: "5%", verticalAlign: "center" }}
-                      >
-                        <ListItem sx={{ pt: 0 }}>
+                        <ListItem
+                          sx={{ pt: 0, justifyContent: "center" }}
+                          alignItems="center"
+                        >
                           <IconButton
                             onClick={() =>
                               navigate(`/${roleAuth}/all-comments/${id}`)

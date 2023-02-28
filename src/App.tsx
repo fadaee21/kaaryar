@@ -6,6 +6,7 @@ import ListRoutes from "./ListRoutes";
 import { PersistLogin } from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import Unauthorize from "./pages/Unauthorize";
+import NotFound from "./pages/NotFound";
 
 export enum Roles {
   ADMIN = "admin",
@@ -78,7 +79,7 @@ function App() {
               )}
             </Route> */}
           </Route>
-          <Route path="*" element={<h1>not found</h1>} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>

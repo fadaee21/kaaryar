@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Unauthorize = () => {
+const NotFound = () => {
   return (
     <div
       style={{
@@ -9,7 +9,8 @@ const Unauthorize = () => {
         height: "80vh",
       }}
     >
-      <p>متاسفیم، شما مجاز به دسترسی به این پنل نیستید</p>
+      <h3>متاسفیم، صفحه مورد نظر یافت نشد</h3>
+      <h1 style={{ textAlign: "center" }}>404</h1>
       <Link to="/" style={{ textAlign: "center" }}>
         بازگشت به داشبورد
       </Link>
@@ -17,4 +18,4 @@ const Unauthorize = () => {
   );
 };
 
-export default Unauthorize;
+export default NotFound;
