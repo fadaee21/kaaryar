@@ -18,7 +18,7 @@ const AfterWeekDetail = () => {
   const [alertType, setAlertType] = useState<
     "approve" | "disApprove" | undefined
   >(undefined);
-  const { successObject, getApproveWeek } = useApproveWeek();
+  const { successObject, getApproveWeek, loadingRegWeek } = useApproveWeek();
   const handleOpenAlert = (alert: "approve" | "disApprove") => {
     console.log(alert);
     setAlertType(alert);
@@ -52,19 +52,15 @@ const AfterWeekDetail = () => {
   }, []);
 
   const handleApprove = () => {
-    console.log("you trigger approve after Week");
     getApproveWeek(id, { afterWeekChecked: true }, approveLink);
-    navigate(-1)
   };
   const handleDisApprove = () => {
-    console.log("you trigger disApprove after Week");
     getApproveWeek(id, { afterWeekChecked: false }, approveLink);
-    navigate(-1)
   };
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
-  if (loading) {
+  if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
 

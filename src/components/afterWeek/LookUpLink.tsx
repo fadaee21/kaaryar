@@ -22,7 +22,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
   const [feedBackMessage, setFeedBackMessage] = useState("");
   const allStudentMoodle = `moodle/user/student/all?pageNum=0&pageSize=10000`;
   const oneStudentLink = `exam/after/week/form/${id}`;
-
+  const approvedStu = student?.afterWeekChecked !== null;
   //get all list
   const getListLearner = async () => {
     setLoading(true);
@@ -35,12 +35,11 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
       console.log("catch block of error");
       console.log(error);
       setLoading(false);
-      // navigate("/");
     }
   };
 
   useEffect(() => {
-    getListLearner();
+    !approvedStu && getListLearner();
   }, []);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -118,14 +117,22 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           id="close-on-select"
           sx={{ width: 300, mr: 5 }}
           onChange={(_event, newValue) => {
-            setStudentIdLink(newValue?.id);
+            setStudentIdLink(newValue?.moodleUser?.id);
           }}
           renderInput={(params) => (
-            <TextField {...params} label="لینک کردن کاربر" />
+            <TextField
+              {...params}
+              disabled={approvedStu}
+              label={
+                approvedStu ? "این مهارت آموز تایید شده است" : "لینک کردن کاربر"
+              }
+            />
           )}
+          readOnly={approvedStu}
         />
         <Button
           disabled={!studentIdLink}
+          sx={{ ...(approvedStu ? { display: "none" } : {}) }}
           variant="contained"
           color="secondary"
           onClick={handleLinkStudent}

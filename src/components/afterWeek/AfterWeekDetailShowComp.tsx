@@ -26,8 +26,8 @@ interface AfterWeekStudentShow {
   matches: boolean;
   id: string | undefined;
   typeComp: "exam" | "admission";
-  successObject: string;
-  handleOpenAlert: (alert: "approve" | "disApprove") => void;
+  successObject?: string;
+  handleOpenAlert?: (alert: "approve" | "disApprove") => void;
 }
 
 const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
@@ -41,7 +41,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   const navigate = useNavigate();
   // this component use for skill-seeker page also,in that page you don't need approve button.handling this by location
   const location = useLocation();
-  const seekerPage = location.pathname.includes("skill-seeker");
+  const seekerPage =
+    location.pathname.includes("skill-seeker") ||
+    location.pathname.includes("student");
   console.log(seekerPage);
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -85,13 +87,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </Button>
             <Button
               variant="contained"
-              onClick={() => handleOpenAlert("approve")}
+              onClick={() => handleOpenAlert?.("approve")}
             >
               تایید کردن
             </Button>
             <Button
               variant="contained"
-              onClick={() => handleOpenAlert("disApprove")}
+              onClick={() => handleOpenAlert?.("disApprove")}
             >
               رد کردن
             </Button>
@@ -450,13 +452,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </Button>
             <Button
               variant="contained"
-              onClick={() => handleOpenAlert("approve")}
+              onClick={() => handleOpenAlert?.("approve")}
             >
               تایید کردن
             </Button>
             <Button
               variant="contained"
-              onClick={() => handleOpenAlert("disApprove")}
+              onClick={() => handleOpenAlert?.("disApprove")}
             >
               رد کردن
             </Button>

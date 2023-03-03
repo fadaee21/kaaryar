@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { editAxios } from "../../api/axios";
+import { useAuth } from "../../context/AuthProvider";
 //TODO:look again maybe you don't need to use HOOK, just regular function is ok
 interface RelatedLink {
   web?: string;
@@ -35,6 +37,10 @@ type About = string;
 
 const useEditProfile = () => {
   const [loadingProfile, setLoadingProfile] = useState(false);
+  const {
+    auth: { roles },
+  } = useAuth();
+  const navigate = useNavigate();
   const editProfile = async (
     relatedLink: RelatedLink,
     desiredLink: DesiredLink[],
@@ -91,11 +97,11 @@ const useEditProfile = () => {
       });
       const data = res.data;
       console.log(data);
-      setLoadingProfile(false);
     } catch (error) {
       console.log(error);
-      setLoadingProfile(false);
     }
+    setLoadingProfile(false);
+    navigate(`/${roles}/volunteer`);
   };
 
   return { editProfile, loadingProfile };

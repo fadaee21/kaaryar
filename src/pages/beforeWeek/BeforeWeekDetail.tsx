@@ -17,7 +17,7 @@ const BeforeWeekDetail = () => {
   const [alertType, setAlertType] = useState<
     "approve" | "disApprove" | undefined
   >(undefined);
-  const { successObject, getApproveWeek } = useApproveWeek();
+  const { successObject, getApproveWeek, loadingRegWeek } = useApproveWeek();
   const handleOpenAlert = (alert: "approve" | "disApprove") => {
     console.log(alert);
     setAlertType(alert);
@@ -35,14 +35,13 @@ const BeforeWeekDetail = () => {
     try {
       let response = await getData(studentId);
       setStudent(response.data);
-      setLoading(false);
     } catch (error) {
       //TODO:handle Error
       console.log("catch block of error");
       console.log(error);
-      setLoading(false);
       navigate("/");
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -52,19 +51,15 @@ const BeforeWeekDetail = () => {
   }, []);
 
   const handleApprove = () => {
-    console.log("you trigger approve Before Week");
     getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
-    navigate(-1)
   };
   const handleDisApprove = () => {
-    console.log("you trigger disApprove Before Week");
     getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
-    navigate(-1)
   };
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
-  if (loading) {
+  if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
 

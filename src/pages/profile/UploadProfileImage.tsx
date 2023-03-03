@@ -82,7 +82,7 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
           <>
             <Button
               variant="outlined"
-              color="inherit"
+              color="error"
               onClick={() => {
                 setProfileImage(null);
                 setUserProfile((prev: any) => ({

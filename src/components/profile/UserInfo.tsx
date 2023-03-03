@@ -8,11 +8,10 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { useState } from "react";
 import UploadProfileImage from "../../pages/profile/UploadProfileImage";
 import { DesireBox, HeaderBox, StackTitle } from "../../styles/profile";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import AddLink, { DesireLink } from "../../pages/profile/AddLink";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Profile } from "../../model";
-import { useAuth } from "../../context/AuthProvider";
 
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
@@ -63,13 +62,10 @@ const UserInfo = ({ profileData }: ProfileData) => {
     setRelatedLink((prev: any) => ({ ...prev, [name]: value }));
   };
   const { editProfile } = useEditProfile();
-  const {
-    auth: { roles },
-  } = useAuth();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     editProfile(relatedLink, desiredLink, userProfile, about);
-    navigate(`/${roles}/volunteer`);
   };
 
   const navigate = useNavigate();
