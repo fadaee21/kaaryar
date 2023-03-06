@@ -143,13 +143,17 @@ export interface moodleJustStudent {
 }
 //this is for mentor/ta
 export interface MoodleUserAssignee {
-  id: number;
-  studentId: number;
   role: string;
+  studentUserName: string;
+  studentId: number;
   studentName: string;
   firstname: string;
+  studentMobile: string;
   lastname: string;
+  studentEmail: string;
+  studentCity: string;
   studentFamily: string;
+  id: number;
 }
 
 export interface LocalStorage {

@@ -114,20 +114,20 @@ const AfterWeekTable = () => {
                 >
                   تایید کردن گروهی
                 </Button>
-                {/* <Button
+                <Button
                   color="secondary"
                   variant="contained"
                   onClick={() =>
                     getApproveMulti(
                       ids.toString(),
-                      "/exam/before/week/form/multiple/approve"
+                      "/exam/after/week/form/multiple/disapprove"
                     )
                   }
                   disabled={ids.toString() === ""}
                   sx={{ mr: 0.5 }}
                 >
                   رد کردن گروهی
-                </Button> */}
+                </Button>
                 <ExcelExport
                   fileName={"Applicant Info"}
                   linkAll="/exam/after/week/form/all?pageNum=0&pageSize=100000"

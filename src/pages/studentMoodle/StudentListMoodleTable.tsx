@@ -79,14 +79,11 @@ const StudentListMoodleTable = () => {
                   (moodleUser: MoodleUserAssignee, i: React.Key) => {
                     const {
                       // id,
+                      studentMobile,
                       studentId,
-                      // firstName,
-                      // lastName,
-                      // username,
-                      // email,
-                      // picture,
-                      // city,
-                      // mobile,
+                      studentUserName,
+                      studentEmail,
+                      studentCity,
                       studentName,
                       studentFamily,
                     } = moodleUser;
@@ -121,7 +118,6 @@ const StudentListMoodleTable = () => {
                         >
                           <Typography variant="body1">
                             {studentName + " " + studentFamily}
-                            {/* {firstName + " " + lastName} */}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
@@ -132,7 +128,7 @@ const StudentListMoodleTable = () => {
                           }}
                         >
                           <Typography variant="body2" textAlign={"left"}>
-                            {/* {username} */}
+                            {studentUserName}
                           </Typography>
                         </StyledTableCell>
 
@@ -143,9 +139,7 @@ const StudentListMoodleTable = () => {
                             verticalAlign: "top",
                           }}
                         >
-                          <Typography variant="body2">
-                            {/* {city} */}
-                          </Typography>
+                          <Typography variant="body2">{studentCity}</Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -155,18 +149,18 @@ const StudentListMoodleTable = () => {
                           }}
                         >
                           <Typography variant="body2">
-                            {/* {mobile} */}
+                            {studentMobile}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="right"
                           sx={{
                             width: "30%",
                             verticalAlign: "top",
                           }}
                         >
                           <Typography variant="body2">
-                            {/* {email} */}
+                            {studentEmail}
                           </Typography>
                         </StyledTableCell>
 

@@ -125,6 +125,8 @@ const SearchAll: ({
       province: provincesState,
       mobile: mobileState,
       email: emailState,
+      education: eduLevel,
+      familiarity: acquaintance,
       // gender: outputGender,
       // codeMeli: codeMelliState,
     });
@@ -137,6 +139,7 @@ const SearchAll: ({
     setHighSchoolState(null);
     setAcquaintance(null);
     setEduLevel(null);
+    setRegisterCodeState(null);
     setMobileState("");
     setEmailState("");
     setProvincesState("");

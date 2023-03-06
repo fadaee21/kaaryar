@@ -25,7 +25,7 @@ const TableHeader = () => {
           </>
         ) : (
           <>
-            <StyledTableCell />
+            {!pathname.endsWith("skill-seeker") && <StyledTableCell />} {/* this cell is for checkbox...in skill-seeker page  not have been used yet  */}
             <StyledTableCell align="center">وضعیت</StyledTableCell>
             <StyledTableCell align="center">کد متقاضی</StyledTableCell>
             <StyledTableCell align="left">نام و نام خانوادگی</StyledTableCell>

@@ -70,7 +70,7 @@ const SkillSeeker = () => {
     return <LoadingProgress />;
   }
 
-  console.log(seekerStudents);
+  // console.log(seekerStudents);
 
   return (
     <Box sx={{ m: 2 }}>
@@ -132,7 +132,7 @@ const SkillSeeker = () => {
               {!searchingStudentSeeker && (
                 <TableBody>
                   {seekerStudents?.map((seekerStudent: SeekerStudent) => {
-                    console.log(seekerStudent.regForm);
+                    console.log(seekerStudent);
                     const {
                       id,
                       regForm,
