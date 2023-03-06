@@ -184,6 +184,7 @@ export interface RegistrationForm {
   createTime?: string;
   highSchoolYear?: string;
   refer?: string;
+  course?: string;
 }
 
 export interface BeforeWeekType {
@@ -264,7 +265,8 @@ export interface TableBodyAllType extends RegistrationForm {
   handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
   resultStatus?: string;
   checkBoxDisplay?: boolean;
-  roles: string;
+  idMulti?: number;
+  // roles: string;
   directNav: string;
 }
 

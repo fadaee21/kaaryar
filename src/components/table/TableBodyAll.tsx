@@ -1,29 +1,50 @@
-import { Typography } from "@mui/material";
+import { Checkbox, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
 const TableBodyAll = ({
   id,
+  idMulti,
   birthDate,
   family,
   firstName,
   registrationCode,
   mobile,
   email,
-  roles,
   directNav,
   checked,
   resultStatus,
+  handleCheckBox,
+  checkBoxDisplay,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { auth } = useAuth();
+  const roles = auth.roles.toString();
   return (
     <StyledTableRow
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
+      {/* checkbox only show in registration table */}
+      {handleCheckBox && (
+        <StyledTableCell
+          align="left"
+          sx={{ width: "2%", verticalAlign: "center" }}
+        >
+          {/* show check box only if search for null(awaiting to confirm person) */}
+          {checked === null && checkBoxDisplay && (
+            <Checkbox
+              size="small"
+              onChange={(e) => handleCheckBox(e, idMulti!.toString())}
+            />
+          )}
+        </StyledTableCell>
+      )}
+
       <StyledTableCell
         align="left"
         sx={{ width: "10%", verticalAlign: "center" }}

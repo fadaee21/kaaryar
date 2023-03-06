@@ -13,6 +13,7 @@ const TableHeader = () => {
             <StyledTableCell align="center">وضعیت</StyledTableCell>
             <StyledTableCell align="center">کد متقاضی</StyledTableCell>
             <StyledTableCell align="left">نام و نام خانوادگی</StyledTableCell>
+            <StyledTableCell align="center">دوره</StyledTableCell>
             <StyledTableCell align="center">میزان تحصیلات</StyledTableCell>
             <StyledTableCell align="center">سال دبیرستان</StyledTableCell>
             <StyledTableCell align="center">استان</StyledTableCell>
@@ -24,6 +25,7 @@ const TableHeader = () => {
           </>
         ) : (
           <>
+            <StyledTableCell />
             <StyledTableCell align="center">وضعیت</StyledTableCell>
             <StyledTableCell align="center">کد متقاضی</StyledTableCell>
             <StyledTableCell align="left">نام و نام خانوادگی</StyledTableCell>

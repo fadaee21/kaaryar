@@ -20,6 +20,8 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
   handleChange,
   handleChangeBefore,
 }) => {
+  //TODO so IMPORTANT:
+  //  - workshopCont, notifyAcceptWeek, mbtiTest, comLevelResult, firstSelectJobRoad, algoLevelResult all these items are for beforeWeek and while you approve student in before week you can not edit their property
   return (
     <>
       <Grid container rowGap={5} sx={{ my: 2 }}>
@@ -292,7 +294,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 />
               </FormControl>
             </ListItem>
-            <ListItem>
+            {/* <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="comAccessStatus">
                   دسترسی به کامپیوتر و اینترنت
@@ -304,7 +306,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                   name="comAccessStatus"
                 />
               </FormControl>
-            </ListItem>
+            </ListItem> */}
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="ethics">اخلاق فردی و حرفه ای</InputLabel>

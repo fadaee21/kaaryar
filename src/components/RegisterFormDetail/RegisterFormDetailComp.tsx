@@ -49,11 +49,9 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
               <ListItemText primary="شهر :" secondary={student?.city} />
             </ListItem>
             <ListItem>
-              <ListItemText
-                primary="نام معرف یا موسسه :"
-                secondary={student?.refer}
-              />
+              <ListItemText primary="دوره :" secondary={student?.course} />
             </ListItem>
+
             <ListItem>
               <ListItemText
                 primary="سال دبیرستان :"
@@ -70,6 +68,12 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <List>
+            <ListItem>
+              <ListItemText
+                primary="نام معرف یا موسسه :"
+                secondary={student?.refer}
+              />
+            </ListItem>
             <ListItem>
               <ListItemText
                 primary="شماره همراه :"

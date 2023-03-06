@@ -28,7 +28,7 @@ export const useApproveWeek = () => {
       console.log(error);
     }
     navigate(-1);
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 500));
     setLoadingRegWeek(false);
   };
 
@@ -61,7 +61,7 @@ export const useApproveReg = () => {
         const obj = Object.keys(approveObj)[0];
         setSuccessObject(obj);
         navigate(-1);
-        await new Promise((r) => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 500));
         setLoadingRegApprove(false);
         return setSuccess(true);
       }
@@ -72,7 +72,7 @@ export const useApproveReg = () => {
       setSuccess(false);
     }
     navigate(-1);
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 500));
     setLoadingRegApprove(false);
   };
   return { success, successObject, getApproveReg, loadingRegApprove };

@@ -152,14 +152,16 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="فیش واریزی" />
-                <ListItemAvatar>
-                  <Box
-                    component={"img"}
-                    alt="avatar"
-                    src={pic}
-                    sx={{ width: 150, height: "100%", borderRadius: 2 }}
-                  />
-                </ListItemAvatar>
+                {student?.beforeWeekForm.paymentImageAddress && (
+                  <ListItemAvatar>
+                    <Box
+                      component={"img"}
+                      alt="avatar"
+                      src={pic}
+                      sx={{ width: 150, height: "100%", borderRadius: 2 }}
+                    />
+                  </ListItemAvatar>
+                )}
               </ListItem>
               {/* <ListItem>
                 <UploadImage
@@ -340,12 +342,12 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                   secondary={student?.consistTime}
                 />
               </ListItem>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="دسترسی به کامپیوتر و اینترنت"
                   secondary={student?.comAccessStatus}
                 />
-              </ListItem>
+              </ListItem> */}
               <ListItem>
                 <ListItemText
                   primary="اخلاق فردی و حرفه ای"

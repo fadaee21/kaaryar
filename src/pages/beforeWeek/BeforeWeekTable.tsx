@@ -1,4 +1,5 @@
 import {
+  Button,
   Pagination,
   Paper,
   Table,
@@ -8,14 +9,12 @@ import {
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
-import { useAuth } from "../../context/AuthProvider";
+import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { BeforeWeekType } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
@@ -27,11 +26,10 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
-import { useApproveWeek } from "../../hooks/request/useApprove";
+import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
+import useGetListLearner from "../../hooks/request/useGetListLearner";
 
 const BeforeWeekTable = () => {
-  const [students, setStudents] = useState<BeforeWeekType[]>([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
   // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
@@ -40,7 +38,7 @@ const BeforeWeekTable = () => {
   const [searchingStudentBefore, setSearchingStudentBefore] = useState<
     BeforeWeekType[] | null
   >(null);
-  const navigate = useNavigate();
+
   const pageSize = 20;
   const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${
     page - 1
@@ -48,35 +46,29 @@ const BeforeWeekTable = () => {
   const examFormCount = "/exam/before/week/form/count";
 
   const [, counterPage] = useCountPagination(examFormCount);
-
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(studentBeforeWeek);
-      setStudents(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
-
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  const { getApproveMulti, loadingMulti } = useApproveMulti();
+  const { students, getListLearner, loading } = useGetListLearner(
+    studentBeforeWeek,
+    loadingMulti,
+    page
+  );
 
   useEffect(() => {
     getListLearner();
     window.scrollTo(0, 0);
     setChevronDir(false); //after changing the page close search bar
+  }, [getListLearner]);
+  //handle multi selected checkbox
+  const { handleCheckBox, ids, setIds } = useHandleCheckBox();
+  useEffect(() => {
+    setSearchingStudentBefore(null);
+    setStateWaiting(null);
+    setStatusState(null);
+    setIds([]);
     // eslint-disable-next-line
-  }, [page]);
+  }, [loadingMulti]);
 
-  const { loadingRegWeek } = useApproveWeek();
-
-  if (loading || loadingRegWeek) {
+  if (loading || loadingMulti) {
     return <LoadingProgress />;
   }
 
@@ -108,14 +100,44 @@ const BeforeWeekTable = () => {
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
               </AccordionSummaryStyled>
-              <ExcelExport
-                fileName={"Applicant Info"}
-                linkAll="/exam/before/week/form/all?pageNum=0&pageSize=10000000"
-                useIn="before"
-                searchData={searchingStudentBefore?.map(
-                  (i) => i.registrationForm
-                )}
-              />
+              <Box sx={{ ml: "auto" }}>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    getApproveMulti(
+                      ids.toString(),
+                      "/exam/before/week/form/multiple/approve"
+                    );
+                  }}
+                  disabled={ids.toString() === ""}
+                  sx={{ mr: 0.5 }}
+                >
+                  تایید کردن گروهی
+                </Button>
+                {/* <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() =>
+                    getApproveMulti(
+                      ids.toString(),
+                      "/exam/before/week/form/multiple/approve"
+                    )
+                  }
+                  disabled={ids.toString() === ""}
+                  sx={{ mr: 0.5 }}
+                >
+                  رد کردن گروهی
+                </Button> */}
+                <ExcelExport
+                  fileName={"Applicant Info"}
+                  linkAll="/exam/before/week/form/all?pageNum=0&pageSize=10000000"
+                  useIn="before"
+                  searchData={searchingStudentBefore?.map(
+                    (i) => i.registrationForm
+                  )}
+                />
+              </Box>
             </Box>
             <AccordionDetails>
               {/* //!component for searching student */}
@@ -168,7 +190,6 @@ const BeforeWeekTable = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        roles={roles}
                         birthDate={birthDate}
                         family={family}
                         firstName={firstName}
@@ -179,6 +200,8 @@ const BeforeWeekTable = () => {
                         gender={gender}
                         directNav="before-week"
                         checked={acceptWeekChecked}
+                        handleCheckBox={handleCheckBox}
+                        checkBoxDisplay={false}
                       />
                     );
                   })}
@@ -189,9 +212,9 @@ const BeforeWeekTable = () => {
                 {searchingStudentBefore?.map((searchingStudentBefore: any) => {
                   return (
                     <TableBodyAll
-                      key={searchingStudentBefore.registrationForm.id}
-                      roles={roles}
-                      id={searchingStudentBefore.registrationForm.id}
+                      key={searchingStudentBefore.id}
+                      id={searchingStudentBefore.id}
+                      idMulti={searchingStudentBefore.id}
                       birthDate={
                         searchingStudentBefore.registrationForm.birthDate
                       }
@@ -210,6 +233,8 @@ const BeforeWeekTable = () => {
                       gender={searchingStudentBefore.registrationForm.gender}
                       checked={searchingStudentBefore.acceptWeekChecked}
                       directNav="before-week"
+                      handleCheckBox={handleCheckBox}
+                      checkBoxDisplay={true}
                     />
                   );
                 })}

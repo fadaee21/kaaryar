@@ -8,15 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
+import React, { useEffect, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
 import RegTableBodyAll from "../../components/table/RegTableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
-import { useAuth } from "../../context/AuthProvider";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { RegistrationForm } from "../../model";
@@ -30,12 +27,10 @@ import {
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
 import { addComma } from "../../utils/addComma";
+import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
+import useGetListLearner from "../../hooks/request/useGetListLearner";
 
 const RegisterFormTable = () => {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  // const [checkStateIds, setCheckStateIds] = useState<string>("");
-  const [ids, setIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
   // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
@@ -46,7 +41,6 @@ const RegisterFormTable = () => {
     RegistrationForm[] | null
   >(null);
 
-  const navigate = useNavigate();
   const pageSize = 20;
   const allStudentReg = `/reg/form/all?pageNum=${
     page - 1
@@ -55,42 +49,11 @@ const RegisterFormTable = () => {
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
 
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(allStudentReg);
-      let data = await response.data;
-      setStudents(data);
-      //empty checkBox state if you have
-      setIds([]);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      navigate("/");
-      setIds([]);
-    }
-    setLoading(false);
-  };
-
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
-
-  //handle multi selected checkbox
-  const handleCheckBox = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-      if (e.target.checked) {
-        setIds((old) => [...old, id]);
-      }
-      if (!e.target.checked) {
-        setIds((current) => {
-          return current.filter((item) => item !== id);
-        });
-      }
-    },
-    []
+  const { students, getListLearner, loading } = useGetListLearner(
+    allStudentReg,
+    loadingMulti,
+    page
   );
-
 
   useEffect(() => {
     getListLearner();
@@ -98,12 +61,14 @@ const RegisterFormTable = () => {
     setChevronDir(false);
     // eslint-disable-next-line
   }, [page, loadingMulti]);
-
+  //handle multi selected checkbox
+  const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
     setSearchingStudentRegister(null);
     setStateWaiting(null);
     setStatusState(null);
     setIds([]);
+    // eslint-disable-next-line
   }, [loadingMulti]);
 
   if (loading || loadingMulti) {
@@ -211,7 +176,6 @@ const RegisterFormTable = () => {
                       <RegTableBodyAll
                         key={RegisterUser.id}
                         id={RegisterUser.id}
-                        roles={roles}
                         family={RegisterUser.family}
                         firstName={RegisterUser.firstName}
                         registrationCode={RegisterUser.registrationCode}
@@ -225,6 +189,7 @@ const RegisterFormTable = () => {
                         familiarity={addComma(RegisterUser.familiarity)}
                         province={RegisterUser.province}
                         createTime={RegisterUser.createTime}
+                        course={RegisterUser.course}
                       />
                     );
                   })}
@@ -236,7 +201,6 @@ const RegisterFormTable = () => {
                   (searchingStudentRegister: any) => {
                     return (
                       <RegTableBodyAll
-                        roles={roles}
                         key={searchingStudentRegister?.id}
                         id={searchingStudentRegister?.id}
                         family={searchingStudentRegister?.family}
@@ -257,6 +221,7 @@ const RegisterFormTable = () => {
                         )}
                         province={searchingStudentRegister?.province}
                         createTime={searchingStudentRegister?.createTime}
+                        course={searchingStudentRegister?.course}
                       />
                     );
                   }

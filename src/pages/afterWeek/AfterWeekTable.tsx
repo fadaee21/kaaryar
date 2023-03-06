@@ -1,4 +1,5 @@
 import {
+  Button,
   Pagination,
   Paper,
   Table,
@@ -8,14 +9,11 @@ import {
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
-import { useAuth } from "../../context/AuthProvider";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { AfterWeekType } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
@@ -27,14 +25,11 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
-import { useApproveWeek } from "../../hooks/request/useApprove";
+import useApproveMulti from "../../hooks/request/useApproveMulti";
+import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
+import useGetListLearner from "../../hooks/request/useGetListLearner";
 
 const AfterWeekTable = () => {
-  const [afterWeekStudents, setAfterWeekStudents] = useState<AfterWeekType[]>(
-    []
-  );
-
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
   // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
@@ -44,41 +39,35 @@ const AfterWeekTable = () => {
     AfterWeekType[] | null
   >(null);
 
-  const navigate = useNavigate();
   const pageSize = 20;
   const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${
     page - 1
   }&pageSize=${pageSize}`;
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
-
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(allStudentAfterWeek);
-      setAfterWeekStudents(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
-
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  const { getApproveMulti, loadingMulti } = useApproveMulti();
+  const { students, getListLearner, loading } = useGetListLearner(
+    allStudentAfterWeek,
+    loadingMulti,
+    page
+  );
 
   useEffect(() => {
     getListLearner();
     window.scrollTo(0, 0);
     setChevronDir(false); //after changing the page close search bar
+  }, [getListLearner]);
+  //handle multi selected checkbox
+  const { handleCheckBox, ids, setIds } = useHandleCheckBox();
+  useEffect(() => {
+    setSearchingStudentAfter(null);
+    setStateWaiting(null);
+    setStatusState(null);
+    setIds([]);
     // eslint-disable-next-line
-  }, [page]);
-  const { loadingRegWeek } = useApproveWeek();
+  }, [loadingMulti]);
 
-  if (loading || loadingRegWeek) {
+  if (loading || loadingMulti) {
     return <LoadingProgress />;
   }
 
@@ -110,14 +99,44 @@ const AfterWeekTable = () => {
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
               </AccordionSummaryStyled>
-              <ExcelExport
-                fileName={"Applicant Info"}
-                linkAll="/exam/after/week/form/all?pageNum=0&pageSize=100000"
-                searchData={searchingStudentAfter?.map(
-                  (i) => i.beforeWeekForm.registrationForm
-                )}
-                useIn="after"
-              />
+              <Box sx={{ ml: "auto" }}>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    getApproveMulti(
+                      ids.toString(),
+                      "/exam/after/week/form/multiple/approve"
+                    );
+                  }}
+                  disabled={ids.toString() === ""}
+                  sx={{ mr: 0.5 }}
+                >
+                  تایید کردن گروهی
+                </Button>
+                {/* <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() =>
+                    getApproveMulti(
+                      ids.toString(),
+                      "/exam/before/week/form/multiple/approve"
+                    )
+                  }
+                  disabled={ids.toString() === ""}
+                  sx={{ mr: 0.5 }}
+                >
+                  رد کردن گروهی
+                </Button> */}
+                <ExcelExport
+                  fileName={"Applicant Info"}
+                  linkAll="/exam/after/week/form/all?pageNum=0&pageSize=100000"
+                  searchData={searchingStudentAfter?.map(
+                    (i) => i.beforeWeekForm.registrationForm
+                  )}
+                  useIn="after"
+                />
+              </Box>
             </Box>
             <AccordionDetails>
               {/* //!component for searching student */}
@@ -149,7 +168,7 @@ const AfterWeekTable = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentAfter && (
                 <TableBody>
-                  {afterWeekStudents.map((afterWeekStudent: AfterWeekType) => {
+                  {students?.map((afterWeekStudent: AfterWeekType) => {
                     const {
                       id,
                       beforeWeekForm: {
@@ -171,7 +190,6 @@ const AfterWeekTable = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        roles={roles}
                         birthDate={birthDate}
                         family={family}
                         firstName={firstName}
@@ -182,6 +200,8 @@ const AfterWeekTable = () => {
                         directNav="after-week"
                         gender={gender}
                         checked={afterWeekChecked}
+                        handleCheckBox={handleCheckBox}
+                        checkBoxDisplay={false}
                       />
                     );
                   })}
@@ -190,16 +210,11 @@ const AfterWeekTable = () => {
 
               <TableBody>
                 {searchingStudentAfter?.map((searchingStudentAfter: any) => {
-                  console.log(searchingStudentAfter);
                   return (
                     <TableBodyAll
-                      roles={roles}
-                      key={
-                        searchingStudentAfter.beforeWeekForm.registrationForm.id
-                      }
-                      id={
-                        searchingStudentAfter.beforeWeekForm.registrationForm.id
-                      }
+                      key={searchingStudentAfter.id}
+                      id={searchingStudentAfter.id}
+                      idMulti={searchingStudentAfter.id}
                       birthDate={
                         searchingStudentAfter.beforeWeekForm.registrationForm
                           .birthDate
@@ -234,6 +249,8 @@ const AfterWeekTable = () => {
                       }
                       checked={searchingStudentAfter.afterWeekChecked}
                       directNav="after-week"
+                      handleCheckBox={handleCheckBox}
+                      checkBoxDisplay={true}
                     />
                   );
                 })}

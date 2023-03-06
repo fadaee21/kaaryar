@@ -15,7 +15,6 @@ import LoadingProgress from "../../components/LoadingProgress";
 // import SearchAll from "../../components/search/SearchAll";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
-import { useAuth } from "../../context/AuthProvider";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { SeekerStudent } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
@@ -62,8 +61,6 @@ const SkillSeeker = () => {
     }
   };
 
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
   useEffect(() => {
     getListLearner();
     // eslint-disable-next-line
@@ -148,7 +145,7 @@ const SkillSeeker = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        roles={roles}
+                        // roles={roles}
                         birthDate={regForm?.birthDate}
                         family={regForm?.family}
                         firstName={regForm?.firstName}
@@ -185,7 +182,6 @@ const SkillSeeker = () => {
                     } = searchingStudentSeeker;
                     return (
                       <TableBodyAll
-                        roles={roles}
                         key={id}
                         id={id}
                         birthDate={regForm?.birthDate}
