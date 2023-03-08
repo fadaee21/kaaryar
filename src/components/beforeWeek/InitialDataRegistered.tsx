@@ -60,13 +60,14 @@ const InitialDataRegistered: React.FC<ExamStudent> = ({ student }) => {
                 secondary={student?.registrationForm.city}
               />
             </ListItem>
-
             <ListItem>
               <ListItemText
-                primary="نام معرف یا موسسه :"
-                secondary={student?.registrationForm.refer}
+                primary="دوره :"
+                secondary={student?.registrationForm.course}
               />
             </ListItem>
+
+           
             <ListItem>
               <ListItemText
                 primary="سال دبیرستان :"
@@ -84,6 +85,13 @@ const InitialDataRegistered: React.FC<ExamStudent> = ({ student }) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <List>
+          <ListItem>
+              <ListItemText
+                primary="نام معرف یا موسسه :"
+                secondary={student?.registrationForm.refer}
+              />
+            </ListItem>
+            
             <ListItem>
               <ListItemText
                 primary="شماره همراه :"

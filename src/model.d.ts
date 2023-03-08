@@ -263,6 +263,7 @@ interface AfterWeekType {
   scholar: boolean;
   scholarPercentage: number;
   workCommit: string;
+  moodleUser?:MoodleUser //i'm not sure yet is possibly exist for all or not
 }
 
 export interface TableBodyAllType extends RegistrationForm {

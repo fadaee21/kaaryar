@@ -138,7 +138,7 @@ const SearchAll: ({
     setReferState(null);
     setHighSchoolState(null);
     setAcquaintance(null);
-    setEduLevel(null);
+    setEduLevel("");
     setRegisterCodeState(null);
     setMobileState("");
     setEmailState("");

@@ -222,6 +222,7 @@ const RegisterFormTable = () => {
                         province={searchingStudentRegister?.province}
                         createTime={searchingStudentRegister?.createTime}
                         course={searchingStudentRegister?.course}
+                        education={searchingStudentRegister?.education}
                       />
                     );
                   }

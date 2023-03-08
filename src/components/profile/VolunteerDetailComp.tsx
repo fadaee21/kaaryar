@@ -20,6 +20,14 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import LanguageIcon from "@mui/icons-material/Language";
+import CorporateFareIcon from "@mui/icons-material/CorporateFare";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+
+
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -120,7 +128,7 @@ const VolunteerDetailComp = ({
       <main>
         {aboutMe && (
           <>
-            <Stack  direction="row" alignItems="center" gap={1}>
+            <Stack direction="row" alignItems="center" gap={1}>
               <TextSnippetOutlinedIcon />
               <Typography variant="h6">درباره من</Typography>
             </Stack>
@@ -146,21 +154,33 @@ const VolunteerDetailComp = ({
                 <List>
                   {birthday && (
                     <ListItem>
+                        <ListIcon>
+                        <CalendarTodayIcon sx={{ fontSize: 16 }} />
+                      </ListIcon>
                       <ListText primary={`متولد ${birthday}`} />
                     </ListItem>
                   )}
                   {(city || country) && (
                     <ListItem>
+                        <ListIcon>
+                        <LocationOnOutlinedIcon sx={{ fontSize: 16 }} />
+                      </ListIcon>
                       <ListText primary={`ساکن ${country}، ${city}`} />
                     </ListItem>
                   )}
                   {mobile && (
                     <ListItem>
+                        <ListIcon>
+                        <PhoneEnabledIcon sx={{ fontSize: 16 }} />
+                      </ListIcon>
                       <ListText primary={mobile} />
                     </ListItem>
                   )}
                   {email && (
                     <ListItem>
+                        <ListIcon>
+                        <EmailOutlinedIcon sx={{ fontSize: 16 }} />
+                      </ListIcon>
                       <ListText primary={email} />
                     </ListItem>
                   )}
@@ -188,16 +208,25 @@ const VolunteerDetailComp = ({
                 <List>
                   {(lastMajor || lastEduLevel) && (
                     <ListItem>
+                      <ListIcon>
+                        <SchoolOutlinedIcon sx={{ fontSize: 16 }} />
+                      </ListIcon>
                       <ListText primary={`${lastEduLevel} ${lastMajor}`} />
                     </ListItem>
                   )}
                   {lastEduLocation && (
                     <ListItem>
+                      <ListIcon>
+                        <CorporateFareIcon sx={{ fontSize: 16 }} />
+                      </ListIcon>
                       <ListText primary={lastEduLocation} />
                     </ListItem>
                   )}
                   {(currentJob || currentJobLocation) && (
                     <ListItem>
+                      <ListIcon>
+                        <WorkOutlineIcon sx={{ fontSize: 16 }} />
+                      </ListIcon>
                       <ListText
                         primary={`${currentJob} در شرکت ${currentJobLocation}`}
                       />
@@ -230,7 +259,7 @@ const VolunteerDetailComp = ({
                         sx={{ ":hover": { backgroundColor: "transparent" } }}
                       >
                         <ListIcon>
-                          <LanguageIcon sx={{ fontSize: 20 }} />
+                          <LanguageIcon sx={{ fontSize: 16 }} />
                         </ListIcon>
                         <ListText primary="وب‌سایت" />
                       </ListItemButton>
@@ -244,7 +273,7 @@ const VolunteerDetailComp = ({
                         sx={{ ":hover": { backgroundColor: "transparent" } }}
                       >
                         <ListIcon>
-                          <GitHubIcon sx={{ fontSize: 20 }} />
+                          <GitHubIcon sx={{ fontSize: 16 }} />
                         </ListIcon>
                         <ListText primary="GitHub" />
                       </ListItemButton>
@@ -258,7 +287,7 @@ const VolunteerDetailComp = ({
                         sx={{ ":hover": { backgroundColor: "transparent" } }}
                       >
                         <ListIcon>
-                          <LinkIcon sx={{ fontSize: 20 }} />
+                          <LinkIcon sx={{ fontSize: 16 }} />
                         </ListIcon>
                         <ListText primary="GitLab" />
                       </ListItemButton>
@@ -274,7 +303,7 @@ const VolunteerDetailComp = ({
                         sx={{ ":hover": { backgroundColor: "transparent" } }}
                       >
                         <ListIcon>
-                          <LinkIcon sx={{ fontSize: 20 }} />
+                          <LinkIcon sx={{ fontSize: 16 }} />
                         </ListIcon>
                         <ListText primary="Research Gate" />
                       </ListItemButton>
@@ -289,7 +318,7 @@ const VolunteerDetailComp = ({
                         sx={{ ":hover": { backgroundColor: "transparent" } }}
                       >
                         <ListIcon>
-                          <LinkedInIcon sx={{ fontSize: 20 }} />
+                          <LinkedInIcon sx={{ fontSize: 16 }} />
                         </ListIcon>
                         <ListText primary="LinkedIn" />
                       </ListItemButton>
@@ -304,7 +333,7 @@ const VolunteerDetailComp = ({
                           sx={{ ":hover": { backgroundColor: "transparent" } }}
                         >
                           <ListIcon>
-                            <LinkIcon sx={{ fontSize: 20 }} />
+                            <LinkIcon sx={{ fontSize: 16 }} />
                           </ListIcon>
                           <ListText primary={item.title} />
                         </ListItemButton>

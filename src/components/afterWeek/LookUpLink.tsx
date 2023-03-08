@@ -14,15 +14,18 @@ interface LookUpLinkType {
   id: string | undefined;
 }
 
+//^in this component there is complexity about type! type of oneStudent (show as primary value if exist) is afterWeekType
+//^but after selecting new value from combo box type will change to the moodleJustStudent...
+//^it cause problem for getOptionLabel and value...it force me to change them as conditional value and define type as any for oneStudent and getOptionLabel
+
 const LookUpLink = ({ student, id }: LookUpLinkType) => {
-  const [oneStudent, setOneStudent] = useState(student); // get One student from after week
-  const [students, setStudents] = useState([]); //get All Student in moodle
-  const [studentIdLink, setStudentIdLink] = useState<number | undefined>(); // get id student from moodle
+  const [students, setStudents] = useState<moodleJustStudent[]>([]); //get All Student in moodle
+  const [oneStudent, setOneStudent] = useState<any>(student); // get One student from after week
   const [loading, setLoading] = useState(true);
   const [feedBackMessage, setFeedBackMessage] = useState("");
   const allStudentMoodle = `moodle/user/student/all?pageNum=0&pageSize=10000`;
   const oneStudentLink = `exam/after/week/form/${id}`;
-  const approvedStu = student?.afterWeekChecked !== null;
+  const approvedStu = student?.afterWeekChecked; // approvedStu help: false:don't show this component.true: just show whose link and related message. null: show whose link and let choose or edit it again!
   //get all list
   const getListLearner = async () => {
     setLoading(true);
@@ -37,25 +40,18 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
-    !approvedStu && getListLearner();
+    approvedStu ?? getListLearner();
   }, []);
   useEffect(() => {
     const timer = setTimeout(() => {
       setFeedBackMessage(" ");
-    }, 3000);
+    }, 4000);
 
     return () => {
       clearTimeout(timer);
     };
   }, [feedBackMessage]);
-
-  // const tt = students.filter(
-  //   (i: moodleJustStudent) =>
-  //     i.moodleUser.lastName === "امامی" && i.moodleUser.firstName === "زهرا"
-  // );
-  // console.log("پیدا کردن نفرات تکراری مثلا زهرا امامی:", tt);
 
   //edit user
   const handleLinkStudent = async (e: React.FormEvent) => {
@@ -79,29 +75,22 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
     }
   };
 
-  const handleClick2 = () => {
-    // only change the id of moodle user in after week state
-    setOneStudent((old: any) => ({
-      ...old,
-      moodleUser: { ...old.moodleUser, id: studentIdLink },
-    }));
-  };
-
   const defaultProps = {
     options: students,
-    getOptionLabel: (option: moodleJustStudent) =>
-      +option.id +
-      "_" +
-      option.moodleUser.firstName +
-      " " +
-      option.moodleUser.lastName,
+    getOptionLabel: (option: any) =>
+      option?.moodleUser
+        ? option.id +
+          "_" +
+          option?.moodleUser?.firstName +
+          " " +
+          option?.moodleUser?.lastName
+        : option?.firstName + " " + option?.lastName,
   };
-  useEffect(() => {
-    handleClick2();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentIdLink]);
-
-  console.log(students.length);
+  console.log(approvedStu);
+  //if user disApproved,don't show anything
+  if (approvedStu === false) {
+    return <></>;
+  }
 
   return (
     <>
@@ -116,23 +105,20 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           {...defaultProps}
           id="close-on-select"
           sx={{ width: 300, mr: 5 }}
+          value={oneStudent ? oneStudent?.moodleUser : null}
+          isOptionEqualToValue={(option, value) =>
+            option.moodleUser === value.moodleUser
+          }
           onChange={(_event, newValue) => {
-            setStudentIdLink(newValue?.moodleUser?.id);
+            setOneStudent(newValue);
           }}
           renderInput={(params) => (
-            <TextField
-              {...params}
-              disabled={approvedStu}
-              label={
-                approvedStu ? "این مهارت آموز تایید شده است" : "لینک کردن کاربر"
-              }
-            />
+            <TextField {...params} label={"لینک کردن کاربر"} />
           )}
           readOnly={approvedStu}
         />
         <Button
-          disabled={!studentIdLink}
-          sx={{ ...(approvedStu ? { display: "none" } : {}) }}
+          sx={{ ...(approvedStu === true ? { display: "none" } : {}) }}
           variant="contained"
           color="secondary"
           onClick={handleLinkStudent}
@@ -141,6 +127,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
         </Button>
       </Box>
       <Typography sx={{ m: 1 }} variant="subtitle2">
+        {approvedStu && "این مهارت‌آموز تایید شده است و قابلیت ویرایش ندارد"}
         {feedBackMessage}
       </Typography>
     </>
@@ -148,3 +135,5 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
 };
 
 export default LookUpLink;
+
+// این مهارت‌آموز تایید شده است و قابلیت ویرایش ندارد

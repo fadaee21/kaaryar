@@ -44,7 +44,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   const seekerPage =
     location.pathname.includes("skill-seeker") ||
     location.pathname.includes("student");
-  console.log(seekerPage);
+  
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
