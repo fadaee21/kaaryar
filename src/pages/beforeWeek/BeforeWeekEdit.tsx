@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { BeforeWeekType } from "../../model";
+import { BeforeWeekType, RegistrationForm } from "../../model";
 import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InitialDataRegistered from "../../components/beforeWeek/InitialDataRegistered";
 import BeforeWeekEditComp from "../../components/beforeWeek/BeforeWeekEditComp";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 // import ExamFormDetailEditComp2 from "../../components/ExamFormDetail/ExamFormDetailEditComp2";
 
 const BeforeWeekDetailEdit = () => {
@@ -89,7 +89,9 @@ const BeforeWeekDetailEdit = () => {
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <InitialDataRegistered student={student} />
+        <RegisterFormDetailComp
+          student={student?.registrationForm as RegistrationForm }
+        />
         <Divider />
         <Box
           component="form"

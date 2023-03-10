@@ -86,7 +86,6 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           option?.moodleUser?.lastName
         : option?.firstName + " " + option?.lastName,
   };
-  console.log(approvedStu);
   //if user disApproved,don't show anything
   if (approvedStu === false) {
     return <></>;

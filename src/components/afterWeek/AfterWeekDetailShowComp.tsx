@@ -44,13 +44,16 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   const seekerPage =
     location.pathname.includes("skill-seeker") ||
     location.pathname.includes("student");
-  
+
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
   const { pic, getPicture } = useGetImage();
 
   React.useEffect(() => {
+    if (!student?.beforeWeekForm.paymentImageAddress) {
+      return;
+    }
     getPicture(student?.beforeWeekForm.paymentImageAddress);
     // eslint-disable-next-line
   }, []);

@@ -17,8 +17,8 @@ import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 // import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 // import HowToRegIcon from "@mui/icons-material/HowToReg";
 // import PortraitIcon from "@mui/icons-material/Portrait";
-import AdmissionFormDetail from "./pages/afterWeek/AfterWeekDetail";
-import AdmissionFormDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
+import AfterWeekDetail from "./pages/afterWeek/AfterWeekDetail";
+import AfterWeekDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import justTest from "./pages/justTest";
 import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
@@ -32,6 +32,7 @@ import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
 import GraduateProfile from "./pages/graduate/GraduateProfile";
 import GraduateTable from "./pages/graduate/GraduateTable";
 import NotFound from "./pages/NotFound";
+import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
 
 const ListRoutes = [
   //! ta________________________________
@@ -300,7 +301,7 @@ const ListRoutes = [
   {
     path: "admin/after-week/:id",
     name: " ",
-    component: AdmissionFormDetail,
+    component: AfterWeekDetail,
     showInNav: false,
     role: "admin",
     key: "admin9",
@@ -308,7 +309,7 @@ const ListRoutes = [
   {
     path: "admin/after-week-edit/:id",
     name: " ",
-    component: AdmissionFormDetailEdit,
+    component: AfterWeekDetailEdit,
     showInNav: false,
     role: "admin",
     key: "admin10",
@@ -387,7 +388,7 @@ const ListRoutes = [
     name: "",
     // icon: <AddCommentIcon />,
     //for this address,using afterWeekDetail, may someday need to change
-    component: AdmissionFormDetail,
+    component: skillSeekerDetail,
     showInNav: false,
     role: "admin",
     key: "admin18",

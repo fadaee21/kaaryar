@@ -7,9 +7,9 @@ import { AfterWeekType, MoodleUser } from "../../model";
 import StudentDetailMore from "../../components/student/StudentDetailMore";
 import { Container, Divider, useMediaQuery } from "@mui/material";
 
-import ExamFormDetailComp from "../../components/beforeWeek/InitialDataRegistered";
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
 import AfterWeekDetailShowComp from "../../components/afterWeek/AfterWeekDetailShowComp";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const StudentPage = () => {
   const [student, setStudent] = useState<MoodleUser | null>(null);
@@ -88,7 +88,9 @@ const StudentPage = () => {
       {afterInfo && (
         <>
           <Divider variant="middle" />
-          <ExamFormDetailComp student={afterInfo?.beforeWeekForm} />
+          <RegisterFormDetailComp
+            student={afterInfo?.beforeWeekForm?.registrationForm}
+          />
           <Divider />
           <BeforeWeekDetailShowComp
             typeComp="admission"

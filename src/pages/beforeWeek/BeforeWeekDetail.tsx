@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { BeforeWeekType } from "../../model";
+import { BeforeWeekType, RegistrationForm } from "../../model";
 import { Box, Button, Container, Divider, useMediaQuery } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InitialDataRegistered from "../../components/beforeWeek/InitialDataRegistered";
+
 import BeforeWeekDetailShow from "../../components/beforeWeek/BeforeWeekDetailShowComp";
 import AlertDialog from "../../components/modal/AlertDialog";
 import { useApproveWeek } from "../../hooks/request/useApprove";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const BeforeWeekDetail = () => {
   const [student, setStudent] = useState<BeforeWeekType | null>(null);
@@ -84,7 +85,7 @@ const BeforeWeekDetail = () => {
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <InitialDataRegistered student={student} />
+        <RegisterFormDetailComp student={student?.registrationForm as RegistrationForm} />
         <Divider />
         <BeforeWeekDetailShow
           typeComp="exam"

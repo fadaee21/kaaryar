@@ -5,8 +5,8 @@ import LoadingProgress from "../../components/LoadingProgress";
 import { AfterWeekType, BeforeWeekType } from "../../model";
 import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InitialDataRegistered from "../../components/beforeWeek/InitialDataRegistered";
 import AfterWeekDetailEditComp from "../../components/afterWeek/AfterWeekDetailEditComp";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const AfterWeekDetailEdit = () => {
   const [student, setStudent] = useState<AfterWeekType | null>(null);
@@ -97,8 +97,8 @@ const AfterWeekDetailEdit = () => {
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <InitialDataRegistered
-          student={student?.beforeWeekForm as BeforeWeekType | null}
+        <RegisterFormDetailComp
+          student={student?.beforeWeekForm?.registrationForm}
         />
         <Divider />
         <Box
