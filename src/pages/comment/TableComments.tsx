@@ -144,7 +144,7 @@ const Comments = () => {
                         }
                       >
                         <Typography variant="body1">
-                          {studentUser.firstName + " " + studentUser.lastName}
+                          {studentUser.firstName + " " + studentUser.family}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -154,7 +154,7 @@ const Comments = () => {
                         <Typography variant="body2">
                           {commenterUser.firstName +
                             " " +
-                            commenterUser.lastName}
+                            commenterUser.family}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell

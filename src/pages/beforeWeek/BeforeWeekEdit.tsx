@@ -38,7 +38,9 @@ const BeforeWeekDetailEdit = () => {
     e.preventDefault();
     try {
       const response = await editAxios(studentId, {
-        data: student,
+        data: {
+          form: student,
+        },
       });
       if (response.status === 200) {
         navigate(-1);
@@ -90,7 +92,7 @@ const BeforeWeekDetailEdit = () => {
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp
-          student={student?.registrationForm as RegistrationForm }
+          student={student?.registrationForm as RegistrationForm}
         />
         <Divider />
         <Box

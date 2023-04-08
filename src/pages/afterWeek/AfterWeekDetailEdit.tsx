@@ -38,7 +38,7 @@ const AfterWeekDetailEdit = () => {
     e.preventDefault();
     try {
       const response = await editAxios(studentIdAfterWeek, {
-        data: student,
+        data: { form: student },
       });
       if (response.status === 200) {
         navigate(-1);

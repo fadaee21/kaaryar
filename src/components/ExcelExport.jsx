@@ -53,11 +53,14 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
           exportToCSV(c, fileName);
           break;
         case "studentListMoodleTable":
-          exportToCSV(allData, fileName);
+          const g = allData.map((i) => i.assigneeContext?.student);
+          exportToCSV(g, fileName);
           break;
         case "studentOfAdmin":
-          const d = allData.map((i) => i.moodleUser);
+          const d = allData.map((i) => i);
           exportToCSV(d, fileName);
+          console.log(d);
+
           break;
         default:
           break;

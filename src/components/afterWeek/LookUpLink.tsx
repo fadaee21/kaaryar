@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
-import { AfterWeekType, moodleJustStudent } from "../../model";
+import { AfterWeekType, MoodleUser, moodleJustStudent } from "../../model";
 
 interface LookUpLinkType {
   student: AfterWeekType | null;
@@ -19,11 +19,11 @@ interface LookUpLinkType {
 //^it cause problem for getOptionLabel and value...it force me to change them as conditional value and define type as any for oneStudent and getOptionLabel
 
 const LookUpLink = ({ student, id }: LookUpLinkType) => {
-  const [students, setStudents] = useState<moodleJustStudent[]>([]); //get All Student in moodle
+  const [students, setStudents] = useState<MoodleUser[]>([]); //get All Student in moodle
   const [oneStudent, setOneStudent] = useState<any>(student); // get One student from after week
   const [loading, setLoading] = useState(true);
   const [feedBackMessage, setFeedBackMessage] = useState("");
-  const allStudentMoodle = `moodle/user/student/all?pageNum=0&pageSize=10000`;
+  const allStudentMoodle = `moodle/user/student/all?pageNum=1&pageSize=10000`;
   const oneStudentLink = `exam/after/week/form/${id}`;
   const approvedStu = student?.afterWeekChecked; // approvedStu help: false:don't show this component.true: just show whose link and related message. null: show whose link and let choose or edit it again!
   //get all list
@@ -59,7 +59,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
     e.preventDefault();
     try {
       const response = await editAxios(oneStudentLink, {
-        data: oneStudent,
+        data: { form: oneStudent },
       });
       if (response.status === 200) {
         setFeedBackMessage("درخواست با موفقیت انجام شد");
@@ -84,7 +84,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           option?.moodleUser?.firstName +
           " " +
           option?.moodleUser?.lastName
-        : option?.firstName + " " + option?.lastName,
+        : option.id + "_" + option?.firstName + " " + option?.lastName,
   };
   //if user disApproved,don't show anything
   if (approvedStu === false) {
@@ -104,10 +104,14 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           {...defaultProps}
           id="close-on-select"
           sx={{ width: 300, mr: 5 }}
-          value={oneStudent ? oneStudent?.moodleUser : null}
-          isOptionEqualToValue={(option, value) =>
-            option.moodleUser === value.moodleUser
+          value={
+            oneStudent?.moodleUser //if you have been linked user and data comes from after week, so show that info
+              ? oneStudent?.moodleUser
+              : oneStudent?.firstName //if you want to select new moodle student so change the value of the input (there is 2 conditional because the data from after week comes or data selected from moodle is different)
+              ? oneStudent
+              : null
           }
+          isOptionEqualToValue={(option, value) => option.moodleUser === value}
           onChange={(_event, newValue) => {
             setOneStudent(newValue);
           }}

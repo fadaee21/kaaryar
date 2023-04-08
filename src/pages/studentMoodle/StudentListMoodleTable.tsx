@@ -78,14 +78,17 @@ const StudentListMoodleTable = () => {
                 {students.map(
                   (moodleUser: MoodleUserAssignee, i: React.Key) => {
                     const {
-                      // id,
-                      studentMobile,
-                      studentId,
-                      studentUserName,
-                      studentEmail,
-                      studentCity,
-                      studentName,
-                      studentFamily,
+                      assigneeContext: {
+                        student: {
+                          studentMobile,
+                          studentId,
+                          studentUserName,
+                          studentEmail,
+                          studentCity,
+                          studentFirstName,
+                          studentLastName,
+                        },
+                      },
                     } = moodleUser;
                     return (
                       <StyledTableRow
@@ -101,7 +104,7 @@ const StudentListMoodleTable = () => {
                         >
                           <TablePic2
                             studentId={studentId}
-                            lastName={studentFamily}
+                            lastName={studentLastName}
                           />
                           {/* <TablePic picture={picture} lastName={lastName} /> */}
                         </StyledTableCell>
@@ -117,7 +120,7 @@ const StudentListMoodleTable = () => {
                           }
                         >
                           <Typography variant="body1">
-                            {studentName + " " + studentFamily}
+                            {studentFirstName + " " + studentLastName}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell

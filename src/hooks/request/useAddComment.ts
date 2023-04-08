@@ -22,7 +22,7 @@ export const useAddComment = (
   const [allCourse, setAllCourse] = useState([]);
 
   const postCommentLink = `/${roles}/survey/new`;
-  const allCourseLink = `/${roles}/course/all?pageNum=0&pageSize=100`;
+  const allCourseLink = `/${roles}/course/all?pageNum=1&pageSize=100`;
 
   // there is a problem for selecting null as value, handle by this function
   const StPresentBoolean = () => {
@@ -71,14 +71,16 @@ export const useAddComment = (
     try {
       const response = await postData(postCommentLink, {
         data: {
-          studentUser: studentId,
-          course: course,
-          comment: comment,
-          sessionDate: sessionDate,
-          studentContribute: studentContribute,
-          studentTask: studentTask,
-          sessionProblem: sessionProblem,
-          isStudentPresent: StPresentBoolean(),
+          form: {
+            studentId: studentId?.id,
+            courseID: course?.id,
+            comment: comment,
+            sessionDate: sessionDate,
+            studentContribute: studentContribute,
+            studentTask: studentTask,
+            sessionProblem: sessionProblem,
+            isStudentPresent: StPresentBoolean(),
+          },
         },
       });
 

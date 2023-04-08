@@ -32,17 +32,12 @@ import useGetListLearner from "../../hooks/request/useGetListLearner";
 const BeforeWeekTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
-  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
-  const [statusState, setStatusState] = useState<boolean | null>(null);
   const [searchingStudentBefore, setSearchingStudentBefore] = useState<
     BeforeWeekType[] | null
   >(null);
 
   const pageSize = 20;
-  const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${
-    page - 1
-  }&pageSize=${pageSize}`;
+  const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/exam/before/week/form/count";
 
   const [, counterPage] = useCountPagination(examFormCount);
@@ -62,8 +57,6 @@ const BeforeWeekTable = () => {
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
     setSearchingStudentBefore(null);
-    setStateWaiting(null);
-    setStatusState(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
@@ -131,7 +124,7 @@ const BeforeWeekTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"Applicant Info"}
-                  linkAll="/exam/before/week/form/all?pageNum=0&pageSize=10000000"
+                  linkAll="/exam/before/week/form/all?pageNum=1&pageSize=100000"
                   useIn="before"
                   searchData={searchingStudentBefore?.map(
                     (i) => i.registrationForm
@@ -151,10 +144,6 @@ const BeforeWeekTable = () => {
                   setSearchingStudentBefore={setSearchingStudentBefore}
                   searchPage="beforeWeek"
                   chevronDir={chevronDir}
-                  stateWaiting={stateWaiting}
-                  setStateWaiting={setStateWaiting}
-                  statusState={statusState}
-                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>

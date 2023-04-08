@@ -102,7 +102,7 @@ const StudentDetail = ({ student }: Student) => {
               </DetailTypography>
               <DetailTypography variant="body1">
                 <b> نام خانوادگی : </b>
-                {student?.lastName}
+                {student?.family}
               </DetailTypography>
               <DetailTypography variant="body1">
                 <b> نام کاربری : </b>

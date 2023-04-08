@@ -1,8 +1,6 @@
 import { Button, Grid } from "@mui/material";
 import { useState } from "react";
 import { getData } from "../../api/axios";
-// import CodeMelli from "./CodeMelli";
-// import SearchGender from "./SearchGender";
 import { SearchFirstName } from "./SearchFirstName";
 import { SearchFamily } from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
@@ -16,6 +14,7 @@ import {
   highSchoolOptions2,
   provinceOptions,
 } from "./searchOptions";
+import { ApprovalStatus } from "../../model";
 interface SearchAllType {
   setSearchingStudentBefore?: any;
   setSearchingStudentAfter?: any;
@@ -23,10 +22,6 @@ interface SearchAllType {
   setSearchingMoodleStudent?: any;
   searchPage: string;
   chevronDir: boolean;
-  stateWaiting?: any;
-  setStateWaiting?: any;
-  statusState?: any;
-  setStatusState?: any;
 }
 
 const SearchAll: ({
@@ -36,10 +31,6 @@ const SearchAll: ({
   setSearchingMoodleStudent,
   searchPage,
   chevronDir,
-  stateWaiting,
-  setStateWaiting,
-  statusState,
-  setStatusState,
 }: SearchAllType) => JSX.Element = ({
   setSearchingStudentBefore,
   setSearchingStudentAfter,
@@ -47,10 +38,6 @@ const SearchAll: ({
   setSearchingMoodleStudent,
   searchPage,
   chevronDir,
-  stateWaiting,
-  setStateWaiting,
-  statusState,
-  setStatusState,
 }) => {
   const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
   const [outputFamily, setOutputFamily] = useState<string | null>(null);
@@ -59,14 +46,11 @@ const SearchAll: ({
   const [registerCodeState, setRegisterCodeState] = useState<string | null>(
     null
   );
-  const [mobileState, setMobileState] = useState<string | null>("");
-  const [emailState, setEmailState] = useState<string | null>("");
+  const [mobileState, setMobileState] = useState<string | null>(null);
+  const [emailState, setEmailState] = useState<string | null>(null);
   const [provincesState, setProvincesState] = useState<string | null>(null);
-  const [cityState, setCityState] = useState<string | null>("");
-  // const [codeMelliState, setCodeMelliState] = useState<string>("");
-  // const [outputGender, setOutputGender] = useState<string>("");
-  // const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
-  // const [statusState, setStatusState] = useState<boolean | null>(null);
+  const [cityState, setCityState] = useState<string | null>(null);
+  const [approvalStatus, setApprovalStatus] = useState<ApprovalStatus>(null);
   const [acquaintance, setAcquaintance] = useState<string | null>(null);
   const [eduLevel, setEduLevel] = useState<string | null>(null);
   const beforeWeekSearch = "/exam/before/week/search/param";
@@ -119,16 +103,13 @@ const SearchAll: ({
       refer: referState,
       highSchoolYear: highSchoolState,
       registrationCode: registerCodeState,
-      status: statusState,
-      state: stateWaiting, //add state for handling status===null
       city: cityState,
       province: provincesState,
       mobile: mobileState,
       email: emailState,
       education: eduLevel,
       familiarity: acquaintance,
-      // gender: outputGender,
-      // codeMeli: codeMelliState,
+      approvalStatus:approvalStatus
     });
   };
 
@@ -138,14 +119,14 @@ const SearchAll: ({
     setReferState(null);
     setHighSchoolState(null);
     setAcquaintance(null);
-    setEduLevel("");
+    setEduLevel(null);
     setRegisterCodeState(null);
-    setMobileState("");
-    setEmailState("");
-    setProvincesState("");
-    setCityState("");
-    searchPage !== "moodle" && setStateWaiting(null);
-    searchPage !== "moodle" && setStatusState(null);
+    setMobileState(null);
+    setEmailState(null);
+    setProvincesState(null);
+    setCityState(null);
+    setApprovalStatus(null)
+    // searchPage !== "moodle" && setApprovalStatus(null);
     searchPage === "moodle" && setSearchingMoodleStudent(null);
     searchPage === "beforeWeek" && setSearchingStudentBefore(null);
     searchPage === "afterWeek" && setSearchingStudentAfter(null);
@@ -251,10 +232,8 @@ const SearchAll: ({
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
           <StatusSearch
-            statusState={statusState}
-            setStatusState={setStatusState}
-            stateWaiting={stateWaiting}
-            setStateWaiting={setStateWaiting}
+            setApprovalStatus={setApprovalStatus}
+            approvalStatus={approvalStatus}
           />
         </Grid>
       )}

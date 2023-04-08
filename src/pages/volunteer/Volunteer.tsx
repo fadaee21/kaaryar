@@ -28,7 +28,7 @@ import useEditProfile from "../../hooks/request/useEditProfile";
 
 const Volunteer = () => {
   const pageSize = 10;
-  const addressLink = `/user/profile/all?pageNum=0&pageSize=${pageSize - 1}`;
+  const addressLink = `/user/profile/all?pageNum=1&pageSize=${pageSize}`;
   const { dataCall, getAllData, loadingCall } = useGetData();
 
   // const [searchingVolunteer, setSearchingVolunteer] = useState([]);
@@ -78,7 +78,7 @@ const Volunteer = () => {
               </AccordionSummaryStyled> */}
             <ExcelExport
               fileName={"Applicant Info"}
-              linkAll="/user/profile/all?pageNum=0&pageSize=100"
+              linkAll="/user/profile/all?pageNum=1&pageSize=100"
               searchData={null}
               useIn="volunteer"
             />
@@ -115,7 +115,7 @@ const Volunteer = () => {
                     key={item.id}
                     firstName={item.firstName}
                     lastName={item.lastName}
-                    username={item.username}
+                    username={item.user.username}
                     role={item.role}
                     id={item.id}
                   />

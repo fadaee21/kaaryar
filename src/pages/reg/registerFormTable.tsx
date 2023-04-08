@@ -33,18 +33,14 @@ import useGetListLearner from "../../hooks/request/useGetListLearner";
 const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
-  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
-  const [statusState, setStatusState] = useState<boolean | null>(null);
+
 
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
 
   const pageSize = 20;
-  const allStudentReg = `/reg/form/all?pageNum=${
-    page - 1
-  }&pageSize=${pageSize}`;
+  const allStudentReg = `/reg/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
@@ -65,8 +61,6 @@ const RegisterFormTable = () => {
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
     setSearchingStudentRegister(null);
-    setStateWaiting(null);
-    setStatusState(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
@@ -136,7 +130,7 @@ const RegisterFormTable = () => {
                 <ExcelExport
                   fileName={"Applicant Info"}
                   searchData={searchingStudentRegister?.map((i) => i)}
-                  linkAll="/reg/form/all?pageNum=0&pageSize=1000000"
+                  linkAll="/reg/form/all?pageNum=1&pageSize=100000"
                   useIn="reg"
                 />
               </Box>
@@ -153,10 +147,6 @@ const RegisterFormTable = () => {
                   setSearchingStudentRegister={setSearchingStudentRegister}
                   searchPage="reg"
                   chevronDir={chevronDir}
-                  stateWaiting={stateWaiting}
-                  setStateWaiting={setStateWaiting}
-                  statusState={statusState}
-                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>
@@ -245,7 +235,7 @@ const RegisterFormTable = () => {
           variant="outlined"
           shape="rounded"
           page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
             setPage(value);
           }}
         />

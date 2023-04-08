@@ -24,7 +24,7 @@ const EditComments = () => {
       >
         <Typography variant="h5" gutterBottom sx={{ width: "100% !important" }}>
           ویرایش گزارش برای {allComment?.studentUser?.firstName}{" "}
-          {allComment?.studentUser?.lastName}
+          {allComment?.studentUser?.family}
         </Typography>
         <Button
           onClick={() => navigate(-1)}

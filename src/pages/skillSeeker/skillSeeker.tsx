@@ -36,12 +36,12 @@ const SkillSeeker = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
 
-  const [searchingStudentSeeker, setSearchingStudentSeeker] = useState<
+  const [searchingStudentSeeker, ] = useState<
     SeekerStudent[] | null
   >(null);
 
   const navigate = useNavigate();
-  const allStudentSeeker = `/status/form/all?pageNum=${page - 1}&pageSize=20`;
+  const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=20`;
   const examFormCount = "/status/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
@@ -102,7 +102,7 @@ const SkillSeeker = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"Applicant Info"}
-                linkAll="/status/form/all?pageNum=0&pageSize=100000"
+                linkAll="/status/form/all?pageNum=1&pageSize=100000"
                 searchData={searchingStudentSeeker?.map(
                   (i) => i.beforeWeekForm?.registrationForm
                 )}

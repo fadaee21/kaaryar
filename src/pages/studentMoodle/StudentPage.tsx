@@ -35,7 +35,7 @@ const StudentPage = () => {
       console.log("catch block of error");
       console.log(error);
       setLoading(false);
-      navigate("/");
+      // navigate("/");
     }
   };
   const getStudentMoreDetail = async () => {
@@ -49,22 +49,24 @@ const StudentPage = () => {
       console.log("catch block of error");
       console.log(error);
       setLoadingDetail(false);
-      navigate("/");
+      // navigate("/");
     }
   };
   const getStudentAfterDetail = async () => {
     setLoadingAfter(true);
     try {
       let response = await getData(afterBeforeInfo);
-      setAfterInfo(response.data);
-      setLoadingAfter(false);
+      if (response.status === 200) {
+        setAfterInfo(response.data);
+      }
+      console.log(response);
     } catch (error) {
       //TODO:handle Error
       console.log("catch block of error");
       console.log(error);
-      setLoadingAfter(false);
-      navigate("/");
+      // navigate("/");
     }
+    setLoadingAfter(false);
   };
 
   useEffect(() => {
@@ -76,16 +78,20 @@ const StudentPage = () => {
   }, []);
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
-  if (loading || loadingDetail || loadingAfter) {
+  if (
+    loading 
+    || loadingDetail
+    || loadingAfter
+  ) {
     return <LoadingProgress />;
   }
-
+console.log(afterInfo)
   return (
     <Container maxWidth="lg">
       <StudentDetail student={student} />
       <Divider variant="middle" />
       <StudentDetailMore studentDetail={studentDetail} />
-      {afterInfo && (
+      {/* {afterInfo && (
         <>
           <Divider variant="middle" />
           <RegisterFormDetailComp
@@ -106,7 +112,7 @@ const StudentPage = () => {
             id={id}
           />
         </>
-      )}
+      )} */}
     </Container>
   );
 };

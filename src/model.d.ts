@@ -33,7 +33,7 @@ export interface StudentUser {
   id: number;
   username: string;
   firstName: string;
-  lastName: string;
+  family: string;
   roles: RolesStudent[];
   city: string;
   email: string;
@@ -53,7 +53,7 @@ export interface StudentProp {
 
 export interface Course {
   id: number;
-  courseName: string;
+  fullname: string;
 }
 
 export interface MentorUser {
@@ -61,7 +61,7 @@ export interface MentorUser {
   email: string;
   firstName: string;
   id: number;
-  lastName: string;
+  family: string;
   mobile: string;
   phone: string;
   roles: Array;
@@ -95,10 +95,6 @@ export interface CommentTable {
   updateTime: string;
 }
 
-export interface Course {
-  courseName: string;
-  id: number;
-}
 
 export interface editCommentProp {
   // editId: number | null;
@@ -112,7 +108,7 @@ export interface MoodleUser {
   email: string;
   firstName: string;
   id: number;
-  lastName: string;
+  family: string;
   roles: Array;
   username: string;
   idNumber: string;
@@ -143,16 +139,24 @@ export interface moodleJustStudent {
 }
 //this is for mentor/ta
 export interface MoodleUserAssignee {
-  role: string;
-  studentUserName: string;
-  studentId: number;
-  studentName: string;
-  firstname: string;
-  studentMobile: string;
-  lastname: string;
-  studentEmail: string;
-  studentCity: string;
-  studentFamily: string;
+  user_id: number;
+  role: {
+    name: string;
+    userRole: string;
+    roleId: number;
+  };
+  assigneeContext: {
+    student: {
+      studentUserName: string;
+      studentEmail: string;
+      studentFirstName: string;
+      studentLastName: string;
+      studentCity: string;
+      studentPhone: string;
+      studentMobile: string;
+      studentId: number;
+    };
+  };
   id: number;
 }
 
@@ -263,7 +267,7 @@ interface AfterWeekType {
   scholar: boolean;
   scholarPercentage: number;
   workCommit: string;
-  moodleUser?:MoodleUser //i'm not sure yet is possibly exist for all or not
+  moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
 }
 
 export interface TableBodyAllType extends RegistrationForm {
@@ -287,28 +291,51 @@ export interface SeekerStudent {
 }
 
 export interface Profile {
-  aboutMe: string;
-  birthday: string;
-  city: string;
-  country: string;
-  currentJob: string;
-  currentJobLocation: string;
-  custom: string;
-  email: string;
-  firstName: "test1";
+  firstName: string;
+  lastName: string;
   gender: string;
-  github: string;
-  gitlab: string;
-  id: number;
+  birthday: string;
+  country: string;
+  city: string;
+  mobile: string;
+  email: string;
+  role: string;
   imageAddress: string;
   lastEduLevel: string;
-  lastEduLocation: string;
   lastMajor: string;
-  lastName: string;
-  linkedin: string;
-  mobile: string;
-  researchgate: string;
-  role: string;
-  username: string;
+  lastEduLocation: string;
+  currentJob: string;
+  currentJobLocation: string;
   website: string;
+  linkedin: string;
+  gitlab: string;
+  github: string;
+  researchgate: string;
+  custom: string;
+  aboutMe: string;
+  id: number;
+  createTime: string | null;
+  updateTime: string | null;
+  deleteTime: string | null;
+  deleted: boolean;
+  user: {
+    username: string;
+    idnumber: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    mobile: string;
+    institution: string;
+    department: string;
+    address: string;
+    city: string;
+    country: string;
+    lang: string;
+    timezone: string;
+    calendarType: string;
+    id: number;
+  };
 }
+
+export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;

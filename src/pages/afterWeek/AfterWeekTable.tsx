@@ -32,17 +32,12 @@ import useGetListLearner from "../../hooks/request/useGetListLearner";
 const AfterWeekTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
-  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
-  const [statusState, setStatusState] = useState<boolean | null>(null);
   const [searchingStudentAfter, setSearchingStudentAfter] = useState<
     AfterWeekType[] | null
   >(null);
 
   const pageSize = 20;
-  const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${
-    page - 1
-  }&pageSize=${pageSize}`;
+  const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
@@ -61,8 +56,6 @@ const AfterWeekTable = () => {
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
     setSearchingStudentAfter(null);
-    setStateWaiting(null);
-    setStatusState(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
@@ -130,7 +123,7 @@ const AfterWeekTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"Applicant Info"}
-                  linkAll="/exam/after/week/form/all?pageNum=0&pageSize=100000"
+                  linkAll="/exam/after/week/form/all?pageNum=1&pageSize=100000"
                   searchData={searchingStudentAfter?.map(
                     (i) => i.beforeWeekForm.registrationForm
                   )}
@@ -150,10 +143,6 @@ const AfterWeekTable = () => {
                   setSearchingStudentAfter={setSearchingStudentAfter}
                   searchPage="afterWeek"
                   chevronDir={chevronDir}
-                  stateWaiting={stateWaiting}
-                  setStateWaiting={setStateWaiting}
-                  statusState={statusState}
-                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>
