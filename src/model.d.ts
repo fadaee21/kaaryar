@@ -33,7 +33,7 @@ export interface StudentUser {
   id: number;
   username: string;
   firstName: string;
-  lastName: string;
+  family: string;
   roles: RolesStudent[];
   city: string;
   email: string;
@@ -53,7 +53,7 @@ export interface StudentProp {
 
 export interface Course {
   id: number;
-  courseName: string;
+  fullname: string;
 }
 
 export interface MentorUser {
@@ -61,7 +61,7 @@ export interface MentorUser {
   email: string;
   firstName: string;
   id: number;
-  lastName: string;
+  family: string;
   mobile: string;
   phone: string;
   roles: Array;
@@ -83,21 +83,43 @@ export interface Comment {
   commenterUser: MentorUser;
 }
 
-export interface CommentTable {
-  comment: string;
-  commenterUser: MoodleUser;
-  course: MoodleCourse;
-  createTime: string;
-  id: number;
-  isChecked: boolean;
-  role: string;
-  studentUser: MoodleUser;
-  updateTime: string;
-}
+// export interface Comment {
+//   checked: unknown;
+//   comment: string;
+//   sessionDate: string;
+//   isStudentPresent: boolean;
+//   studentContribute: string;
+//   studentTask: string;
+//   sessionProblem: string;
+//   studentId: number;
+//   courseId: unknown;
+//   commenterId: number;
+//   createTime: string;
+//   updateTime: string;
+//   deleted: false;
+//   id: number;
+//   deleteTime: unknown;
+// }
 
-export interface Course {
-  courseName: string;
+export interface CommentTable {
+  checked: boolean | null;
+  comment: string;
+  sessionDate: string;
+  isStudentPresent: boolean;
+  studentContribute: string;
+  studentTask: string;
+  sessionProblem: string;
+  studentId: number;
+  courseId: number;
+  mentorId: number;
+  createTime: string;
+  updateTime: null;
+  deleted: false;
   id: number;
+  deleteTime: string | null;
+  studentUser: MoodleUser;
+  commenterUser: MoodleUser;
+  course: Course;
 }
 
 export interface editCommentProp {
@@ -112,7 +134,7 @@ export interface MoodleUser {
   email: string;
   firstName: string;
   id: number;
-  lastName: string;
+  family: string;
   roles: Array;
   username: string;
   idNumber: string;
@@ -128,7 +150,7 @@ export interface MoodleUser {
   calendarType: string;
   description: string;
   picture: {
-    address: string;
+    imageAddress: string;
   };
 }
 //this is just for admin
@@ -143,16 +165,24 @@ export interface moodleJustStudent {
 }
 //this is for mentor/ta
 export interface MoodleUserAssignee {
-  role: string;
-  studentUserName: string;
-  studentId: number;
-  studentName: string;
-  firstname: string;
-  studentMobile: string;
-  lastname: string;
-  studentEmail: string;
-  studentCity: string;
-  studentFamily: string;
+  user_id: number;
+  role: {
+    name: string;
+    userRole: string;
+    roleId: number;
+  };
+  assigneeContext: {
+    student: {
+      studentUserName: string;
+      studentEmail: string;
+      studentFirstName: string;
+      studentLastName: string;
+      studentCity: string;
+      studentPhone: string;
+      studentMobile: string;
+      studentId: number;
+    };
+  };
   id: number;
 }
 
@@ -166,7 +196,7 @@ export interface LocalStorage {
 
 export interface RegistrationForm {
   id: number;
-  checked: boolean;
+  checked: boolean | null;
   registrationCode: string;
   codeMeli?: string;
   firstName: string;
@@ -193,28 +223,23 @@ export interface RegistrationForm {
 
 export interface BeforeWeekType {
   registrationForm: RegistrationForm;
-  id: number;
-  acceptWeekChecked: boolean;
+  acceptWeekChecked: boolean | null;
   accessTime: string;
-  algoLevelResult: string;
   avgSalary: string;
   beforeAcceptDesc: string;
+  cgpa?: string;
   charity: string;
-  comLevelResult: string;
+  codingKnowledge: ?string;
   computerAccess: string;
-  computerFamiliarity: boolean;
+  computerFamiliarity: string;
   contCourseApproach: string;
   courseDescription: string;
-  createTime: string;
   currentField: string;
   currentInstName: string;
-  currentInstType: string;
-  deleteTime: string;
-  deleted: boolean;
+  instituteCurrentType: string;
   eduLevel: string;
   eduStatus: string;
   familiar: string;
-  firstSelectJobRoad: string;
   freeDailyTime: string;
   instituteType: string;
   internetAccess: string;
@@ -226,18 +251,26 @@ export interface BeforeWeekType {
   jobVision: string;
   lastInstitute: string;
   limitTime: string;
-  mbtiTest: string;
   motivation: string;
-  noneJobActivation: string;
-  notifyAcceptWeek: string;
   paymentImageAddress: string;
   programmingCoursePassed: boolean;
+  questionCity?: string;
+  questionStudents?: string;
+  questionNumbers?: string;
+  questionDiameters?: string;
+  questionMultiplication?: string;
+  questionWords?: string;
+  questionMaths?: string;
+  questionEnglishFamiliarity?: string;
+  engPara?: string;
+  skills?: string;
   stuSemester: string;
   stuYear: string;
-  updateTime: string;
-  webDevFamiliarity: boolean;
+  transcriptImageAddress?: string;
+  noneJobActivation?: string;
+  webDevFamiliarity: string;
   workTime: string;
-  workshopCont: string;
+  id: 1;
 }
 
 interface AfterWeekType {
@@ -263,16 +296,28 @@ interface AfterWeekType {
   scholar: boolean;
   scholarPercentage: number;
   workCommit: string;
-  moodleUser?:MoodleUser //i'm not sure yet is possibly exist for all or not
+  algoLevelResult: string;
+  comLevelResult: string;
+  firstSelectJobRoad: string;
+  mbtiTest: string;
+  notifyAcceptWeek: string;
+  workshopCont: string;
+  moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
 }
 
 export interface TableBodyAllType extends RegistrationForm {
-  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: number) => void;
   resultStatus?: string;
   checkBoxDisplay?: boolean;
   idMulti?: number;
   // roles: string;
   directNav: string;
+  contCourseApproach?: string;
+  finalField?: string;
+  jobStandby?: boolean;
+  scholar?: boolean;
+  finalResult?: string;
+  cgpa?:string;
 }
 
 export interface SeekerStudent {
@@ -287,28 +332,51 @@ export interface SeekerStudent {
 }
 
 export interface Profile {
-  aboutMe: string;
-  birthday: string;
-  city: string;
-  country: string;
-  currentJob: string;
-  currentJobLocation: string;
-  custom: string;
-  email: string;
-  firstName: "test1";
+  firstName: string;
+  lastName: string;
   gender: string;
-  github: string;
-  gitlab: string;
-  id: number;
+  birthday: string;
+  country: string;
+  city: string;
+  mobile: string;
+  email: string;
+  role: string;
   imageAddress: string;
   lastEduLevel: string;
-  lastEduLocation: string;
   lastMajor: string;
-  lastName: string;
-  linkedin: string;
-  mobile: string;
-  researchgate: string;
-  role: string;
-  username: string;
+  lastEduLocation: string;
+  currentJob: string;
+  currentJobLocation: string;
   website: string;
+  linkedin: string;
+  gitlab: string;
+  github: string;
+  researchgate: string;
+  custom: string;
+  aboutMe: string;
+  id: number;
+  createTime: string | null;
+  updateTime: string | null;
+  deleteTime: string | null;
+  deleted: boolean;
+  user: {
+    username: string;
+    idnumber: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    mobile: string;
+    institution: string;
+    department: string;
+    address: string;
+    city: string;
+    country: string;
+    lang: string;
+    timezone: string;
+    calendarType: string;
+    id: number;
+  };
 }
+
+export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;

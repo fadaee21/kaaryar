@@ -1,51 +1,31 @@
+import { ApprovalStatus } from "../../model";
 import Select from "react-select";
-interface StatusSearchType {
-  setStatusState: React.Dispatch<React.SetStateAction<any>>;
-  statusState?: any;
-  stateWaiting: boolean | null;
-  setStateWaiting: any;
+interface Prop {
+  approvalStatus: ApprovalStatus;
+  setApprovalStatus: React.Dispatch<React.SetStateAction<ApprovalStatus>>;
 }
-const StatusSearch = ({
-  setStatusState,
-  statusState,
-  stateWaiting,
-  setStateWaiting
-}: StatusSearchType) => {
-  const options = [
-    { value: true, label: "تایید شده" },
-    { value: false, label: "رد شده" },
-    { value: null, label: "در انتظار تایید" },
-  ];
 
-  function labelFunc(val: boolean | null) {
-    switch (val) {
-      case true:
-        return "تایید شده";
-      case false:
-        return "رد شده";
-      case null:
-        return "در انتظار تایید";
-    }
-  }
+const StatusSearch = ({ approvalStatus, setApprovalStatus }: Prop) => {
+  const options = [
+    { value: "approved", label: "تایید شده" },
+    { value: "rejected", label: "رد شده" },
+    { value: "pending", label: "در انتظار تایید" },
+  ];
 
   return (
     <Select
       value={
-        stateWaiting
-          ? { label: labelFunc(statusState), value: statusState }
-          : null
+        approvalStatus ? options.find((i) => i.value === approvalStatus) : null
       }
       options={options}
+      onChange={(selectedValue: any) => setApprovalStatus(selectedValue.value)}
       placeholder="وضعیت"
-      onChange={(e: any) => {
-        setStatusState(e.value);
-        setStateWaiting(true);
-      }}
       styles={{
         control: (baseStyles) => ({
           ...baseStyles,
           height: "3rem",
         }),
+        menu: (provided) => ({ ...provided, zIndex: 2 }),
       }}
     />
   );

@@ -13,48 +13,56 @@ export default function StudentCard({
 }: {
   moodleUser: MoodleUserAssignee;
 }) {
-  const { studentId, studentFamily, studentName } = moodleUser;
+  const {
+    assigneeContext: {
+      student: {
+        studentFirstName,
+        studentLastName,
+        studentId,
+        studentCity,
+        studentEmail,
+        studentMobile,
+        studentPhone,
+      },
+    },
+  } = moodleUser;
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
   //for adding comment i use state as below structure, so i change the name before insert into state navigation, it's necessary for AddComment page
   const student = {
-    firstName: studentName,
-    lastName: studentFamily,
+    firstName: studentFirstName,
+    lastName: studentLastName,
     id: studentId,
   };
 
   return (
     <Card sx={{ minWidth: 345, pb: 1 }}>
       <CardHeader
-        avatar={<TablePic2 studentId={studentId} lastName={studentFamily} />}
-        title={studentName + " " + studentFamily}
+        avatar={<TablePic2 studentId={studentId} lastName={studentLastName} />}
+        title={studentFirstName + " " + studentLastName}
       />
       <CardContent>
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              phone
-              {/* {email} */}
+              تلفن: {studentMobile ?? studentPhone}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              email
-              {/* {username} */}
+              ایمیل: {studentEmail}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              location
-              {/* {username} */}
+              شهر: {studentCity}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
               course
-              {/* {username} */}
             </Typography>
           </Grid>
         </Grid>

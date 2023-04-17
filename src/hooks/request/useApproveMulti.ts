@@ -5,13 +5,19 @@ const useApproveMulti = () => {
   const [loadingMulti, setLoadingMulti] = useState(false);
 
   const getApproveMulti = async (
-    id: string | undefined,
-    approveLink: string
+    ids: number[] | undefined,
+    approveLink: string,
+    setApproved: boolean
   ) => {
     setLoadingMulti(true);
     try {
-      const response = await editAxios(`${approveLink}/${id}`);
-      console.log(response.data.state, `${approveLink}/${id}}`);
+      const response = await editAxios(approveLink, {
+        data: {
+          setApproved,
+          ids,
+        },
+      });
+      console.log(response.data.state, approveLink);
       if (response.status === 200) {
         console.log(response.data);
       }

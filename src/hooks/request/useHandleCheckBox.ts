@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from "react";
 
 export const useHandleCheckBox = () => {
-  const [ids, setIds] = useState<string[]>([]);
+  const [ids, setIds] = useState<number[]>([]);
 
   const handleCheckBox = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
       console.log(id);
       if (e.target.checked) {
         setIds((old) => [...old, id]);
@@ -18,5 +18,5 @@ export const useHandleCheckBox = () => {
     []
   );
 
-  return { ids, handleCheckBox,setIds };
+  return { ids, handleCheckBox, setIds };
 };

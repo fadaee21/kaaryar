@@ -7,7 +7,7 @@ import { CommentTable } from "../../model";
 import { BoxDashboard, PaperDashboard } from "../../styles/dashboard";
 import { dateConverter } from "../../utils/dateConverter";
 import LoadingProgress from "../LoadingProgress";
-const allCommentLink = `total/all?pageNum=0&pageSize=3`;
+const allCommentLink = `total/all?pageNum=1&pageSize=3`;
 
 const LastOpinionDash = () => {
   const {
@@ -47,8 +47,8 @@ const LastOpinionDash = () => {
           key={item.id}
         >
           <Typography variant="body2">
-            {item.commenterUser.firstName} {item.commenterUser.lastName} برای{" "}
-            {item.studentUser.firstName} {item.studentUser.lastName}
+            {item.commenterUser?.firstName} {item.commenterUser?.family} برای{" "}
+            {item.studentUser.firstName} {item.studentUser.family}
             {item.createTime && ` در ${dateConverter(item.createTime)}`}
           </Typography>
           <Button

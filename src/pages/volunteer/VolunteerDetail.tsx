@@ -10,11 +10,10 @@ const VolunteerDetail = () => {
   const { dataCall, getAllData, loadingCall } = useGetData();
   const { username } = useParams();
 
-  const person = `/user/profile/username/${username}`;
-
   useEffect(() => {
+    const person = `/user/profile/username/${username}`;
     getAllData(person);
-  }, []);
+  }, [username]);
 
   if (loadingCall) {
     return <LoadingProgress />;

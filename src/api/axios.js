@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
 axios.defaults.headers.common["Content-Type"] = "application/json";
-axios.defaults.baseURL = "https://api.pm.kaaryar.ir/";
+axios.defaults.baseURL = "https://kaaryar.hossein.codes/";
 
 export const userLogin = axios.create({
   method: "POST",

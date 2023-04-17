@@ -14,12 +14,12 @@ interface Student {
 }
 
 const StudentDetail = ({ student }: Student) => {
-  const { pic, getPicture } = useGetImage();
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   const navigate = useNavigate();
 
   React.useEffect(() => {
     if (student?.picture !== null) {
-      getPicture(student!.picture?.address);
+      getPicture(student!.picture?.imageAddress);
     }
   }, []);
   const { auth } = useAuth();
@@ -102,7 +102,7 @@ const StudentDetail = ({ student }: Student) => {
               </DetailTypography>
               <DetailTypography variant="body1">
                 <b> نام خانوادگی : </b>
-                {student?.lastName}
+                {student?.family}
               </DetailTypography>
               <DetailTypography variant="body1">
                 <b> نام کاربری : </b>

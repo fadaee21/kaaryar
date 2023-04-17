@@ -52,10 +52,10 @@ const BeforeWeekDetail = () => {
   }, []);
 
   const handleApprove = () => {
-    getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
+    getApproveWeek(id, { setApproved: true }, approveLink);
   };
   const handleDisApprove = () => {
-    getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
+    getApproveWeek(id, { setApproved: false }, approveLink);
   };
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));

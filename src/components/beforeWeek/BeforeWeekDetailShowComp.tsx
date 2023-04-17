@@ -86,7 +86,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          وضعیت تحصیلی
+          اطلاعات تحصیلی
         </DetailTypography>
         <Divider
           variant="middle"
@@ -133,7 +133,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="نوع موسسه آموزشی که در حال حاضر درآن تحصیل می کنید"
-                  secondary={student?.currentInstType}
+                  secondary={student?.instituteType}
                 />
               </ListItem>
               <ListItem>
@@ -235,7 +235,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
       </BoxExamDetail>
       <BoxExamDetail colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          وضعیت اشتغال
+          دسترسی به کامپیوتر
         </DetailTypography>
         <Divider
           variant="middle"
@@ -263,7 +263,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="آیا تا به حال  دوره آموزشی  در ارتباط با مهارت های کامپیوتریا کدنویسی گذرانده اید؟"
+                  primary="آیا تا به حال  دوره آموزشی  در ارتباط با مهارت های کامپیوتر یا کدنویسی گذرانده اید؟"
                   secondary={student?.programmingCoursePassed ? "بله" : "خیر"}
                 />
               </ListItem>
@@ -315,6 +315,85 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                 <ListItemText
                   primary="انگیزه ورود به کاریار"
                   secondary={student?.motivation}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+        </Grid>
+      </BoxExamDetail>
+      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
+          مهارت های پایه
+        </DetailTypography>
+        <Divider
+          variant="middle"
+          flexItem
+          orientation={matches ? "vertical" : "horizontal"}
+        />
+
+        <Grid container>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="آتشنشان در شهر خیالی"
+                  secondary={student?.questionCity}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="تعداد یک بین 100 تا 200"
+                  secondary={student?.questionNumbers}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="تعداد صفر حاصل ضرب یک تا 50"
+                  secondary={student?.questionMultiplication}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="میزان آشنایی با سرفصل های ریاضی"
+                  secondary={student?.questionMaths}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="محاسبه نرخ اشتغال"
+                  secondary={student?.questionStudents}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="تعداد قطر هفت ضلعی"
+                  secondary={student?.questionDiameters}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="حرف ایجادی از اشکال"
+                  secondary={student?.questionWords}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="میزان آشنایی با زبان انگلیسی"
+                  secondary={student?.questionEnglishFamiliarity}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={8}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="یک پاراگراف درباره خود به انگلیسی"
+                  secondary={student?.engPara}
                 />
               </ListItem>
             </List>

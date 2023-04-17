@@ -22,7 +22,7 @@ export const useAddComment = (
   const [allCourse, setAllCourse] = useState([]);
 
   const postCommentLink = `/${roles}/survey/new`;
-  const allCourseLink = `/${roles}/course/all?pageNum=0&pageSize=100`;
+  const allCourseLink = `/${roles}/course/all?pageNum=1&pageSize=100`;
 
   // there is a problem for selecting null as value, handle by this function
   const StPresentBoolean = () => {
@@ -71,23 +71,26 @@ export const useAddComment = (
     try {
       const response = await postData(postCommentLink, {
         data: {
-          studentUser: studentId,
-          course: course,
-          comment: comment,
-          sessionDate: sessionDate,
-          studentContribute: studentContribute,
-          studentTask: studentTask,
-          sessionProblem: sessionProblem,
-          isStudentPresent: StPresentBoolean(),
+          form: {
+            studentId: studentId?.id,
+            courseId: course?.id,
+            comment: comment,
+            sessionDate: sessionDate,
+            studentContribute: studentContribute,
+            studentTask: studentTask,
+            sessionProblem: sessionProblem,
+            isStudentPresent: StPresentBoolean(),
+          },
         },
       });
-
+      if (response.status === 201) {
+        navigate(`/${roles}/all-comments`);
+        return;
+      }
       if (response.data.state === "exist") {
         setErrMsg("این نظر قبلا ثبت شده است");
       }
-      if (response.data.state === "success") {
-        navigate(`/${roles}/all-comments`);
-      }
+
       setErrMsg(" نظر شما ثبت نشد");
     } catch (error) {
       const err = error as AxiosError;
@@ -106,44 +109,47 @@ export const useAddComment = (
     id: number | undefined,
     studentUser: StudentUser | undefined
   ) => {
-    console.log(
-      "course:",
-      course,
-      "studentUser:",
-      studentUser,
-      "comment:",
-      comment,
-      "sessionDate:",
-      sessionDate,
-      "sessionProblem:",
-      sessionProblem,
-      "studentTask:",
-      studentTask,
-      "studentContribute:",
-      studentContribute,
-      "studentPresent:",
-      studentPresent
-    );
+    // console.log(
+    //   "course:",
+    //   course,
+    //   "studentUser:",
+    //   studentUser,
+    //   "comment:",
+    //   comment,
+    //   "sessionDate:",
+    //   sessionDate,
+    //   "sessionProblem:",
+    //   sessionProblem,
+    //   "studentTask:",
+    //   studentTask,
+    //   "studentContribute:",
+    //   studentContribute,
+    //   "studentPresent:",
+    //   studentPresent
+    // );
     try {
       const response = await editAxios(`${roles}/survey/${id}`, {
         data: {
-          studentUser: studentUser,
-          course: course,
-          comment: comment,
-          sessionDate: sessionDate,
-          studentContribute: studentContribute,
-          studentTask: studentTask,
-          sessionProblem: sessionProblem,
-          isStudentPresent: StPresentBoolean(),
+          form: {
+            studentId: studentUser?.id,
+            courseId: course?.id,
+            comment: comment,
+            sessionDate: sessionDate,
+            studentContribute: studentContribute,
+            studentTask: studentTask,
+            sessionProblem: sessionProblem,
+            isStudentPresent: StPresentBoolean(),
+          },
         },
       });
       const data = await response.data;
       console.log(data);
+      if (response.status === 200) {
+        navigate(`/${roles}/all-comments`);
+        return;
+      }
       if (response.data.state === "exist") {
         setErrMsg("این نظر قبلا ثبت شده است");
-      }
-      if (response.data.state === "success") {
-        navigate(`/${roles}/all-comments`);
       }
       setErrMsg(" نظر شما ثبت نشد");
     } catch (error) {

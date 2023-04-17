@@ -32,17 +32,12 @@ import useGetListLearner from "../../hooks/request/useGetListLearner";
 const AfterWeekTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
-  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
-  const [statusState, setStatusState] = useState<boolean | null>(null);
   const [searchingStudentAfter, setSearchingStudentAfter] = useState<
     AfterWeekType[] | null
   >(null);
 
   const pageSize = 20;
-  const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${
-    page - 1
-  }&pageSize=${pageSize}`;
+  const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
@@ -61,8 +56,6 @@ const AfterWeekTable = () => {
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
     setSearchingStudentAfter(null);
-    setStateWaiting(null);
-    setStatusState(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
@@ -105,11 +98,12 @@ const AfterWeekTable = () => {
                   variant="contained"
                   onClick={() => {
                     getApproveMulti(
-                      ids.toString(),
-                      "/exam/after/week/form/multiple/approve"
+                      ids,
+                      "/exam/after/week/form/multiple",
+                      true
                     );
                   }}
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   تایید کردن گروهی
@@ -119,18 +113,19 @@ const AfterWeekTable = () => {
                   variant="contained"
                   onClick={() =>
                     getApproveMulti(
-                      ids.toString(),
-                      "/exam/after/week/form/multiple/disapprove"
+                      ids,
+                      "/exam/after/week/form/multiple",
+                      false
                     )
                   }
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   رد کردن گروهی
                 </Button>
                 <ExcelExport
                   fileName={"Applicant Info"}
-                  linkAll="/exam/after/week/form/all?pageNum=0&pageSize=100000"
+                  linkAll="/exam/after/week/form/all?pageNum=1&pageSize=100000"
                   searchData={searchingStudentAfter?.map(
                     (i) => i.beforeWeekForm.registrationForm
                   )}
@@ -150,10 +145,6 @@ const AfterWeekTable = () => {
                   setSearchingStudentAfter={setSearchingStudentAfter}
                   searchPage="afterWeek"
                   chevronDir={chevronDir}
-                  stateWaiting={stateWaiting}
-                  setStateWaiting={setStateWaiting}
-                  statusState={statusState}
-                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>
@@ -171,16 +162,21 @@ const AfterWeekTable = () => {
                   {students?.map((afterWeekStudent: AfterWeekType) => {
                     const {
                       id,
+                      finalField,
+                      scholar,
+                      finalResult,
                       beforeWeekForm: {
                         registrationForm: {
-                          birthDate,
+                          province,
+                          city,
                           family,
                           firstName,
                           registrationCode,
                           codeMeli,
                           mobile,
                           email,
-                          gender,
+                          // gender,
+                          studyField,
                         },
                       },
                       afterWeekChecked,
@@ -190,7 +186,12 @@ const AfterWeekTable = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        birthDate={birthDate}
+                        province={province}
+                        city={city}
+                        studyField={studyField}
+                        scholar={scholar}
+                        finalField={finalField}
+                        finalResult={finalResult}
                         family={family}
                         firstName={firstName}
                         registrationCode={registrationCode}
@@ -198,7 +199,7 @@ const AfterWeekTable = () => {
                         mobile={mobile}
                         email={email}
                         directNav="after-week"
-                        gender={gender}
+                        // gender={gender}
                         checked={afterWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
@@ -215,10 +216,21 @@ const AfterWeekTable = () => {
                       key={searchingStudentAfter.id}
                       id={searchingStudentAfter.id}
                       idMulti={searchingStudentAfter.id}
-                      birthDate={
+                      province={
                         searchingStudentAfter.beforeWeekForm.registrationForm
-                          .birthDate
+                          .province
                       }
+                      city={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .city
+                      }
+                      studyField={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .studyField
+                      }
+                      finalField={searchingStudentAfter.finalField}
+                      scholar={searchingStudentAfter.scholar}
+                      finalResult={searchingStudentAfter.finalResult}
                       family={
                         searchingStudentAfter.beforeWeekForm.registrationForm
                           .family
@@ -243,10 +255,10 @@ const AfterWeekTable = () => {
                         searchingStudentAfter.beforeWeekForm.registrationForm
                           .email
                       }
-                      gender={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .gender
-                      }
+                      // gender={
+                      //   searchingStudentAfter.beforeWeekForm.registrationForm
+                      //     .gender
+                      // }
                       checked={searchingStudentAfter.afterWeekChecked}
                       directNav="after-week"
                       handleCheckBox={handleCheckBox}

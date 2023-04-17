@@ -9,7 +9,7 @@ export const useApproveWeek = () => {
 
   const getApproveWeek = async (
     id: string | undefined,
-    approveObj: { acceptWeekChecked: boolean } | { afterWeekChecked: boolean },
+    approveObj: { setApproved: boolean },
     approveLink: string
   ) => {
     setLoadingRegWeek(true);

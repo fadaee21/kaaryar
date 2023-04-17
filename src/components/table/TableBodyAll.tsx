@@ -7,7 +7,16 @@ import { StyledTableCell, StyledTableRow } from "../../styles/table";
 const TableBodyAll = ({
   id,
   idMulti,
-  birthDate,
+  province,
+  city,
+  // gender,
+  studyField,
+  finalField,
+  jobStandby,
+  contCourseApproach,
+  scholar,
+  finalResult,
+  selectedField,
   family,
   firstName,
   registrationCode,
@@ -16,6 +25,7 @@ const TableBodyAll = ({
   directNav,
   checked,
   resultStatus,
+  cgpa,
   handleCheckBox,
   checkBoxDisplay,
 }: TableBodyAllType) => {
@@ -39,12 +49,11 @@ const TableBodyAll = ({
           {checked === null && checkBoxDisplay && (
             <Checkbox
               size="small"
-              onChange={(e) => handleCheckBox(e, idMulti!.toString())}
+              onChange={(e) => handleCheckBox(e, idMulti!)}
             />
           )}
         </StyledTableCell>
       )}
-
       <StyledTableCell
         align="left"
         sx={{ width: "10%", verticalAlign: "center" }}
@@ -81,7 +90,6 @@ const TableBodyAll = ({
           </Typography>
         )}
       </StyledTableCell>
-
       <StyledTableCell
         align="center"
         sx={{
@@ -91,10 +99,9 @@ const TableBodyAll = ({
       >
         <Typography variant="body2">{registrationCode}</Typography>
       </StyledTableCell>
-
       <StyledTableCell
-        align="left"
-        sx={{ width: "20%", verticalAlign: "center", cursor: "pointer" }}
+        align="center"
+        sx={{ width: "15%", verticalAlign: "center", cursor: "pointer" }}
         onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
       >
         <Typography variant="body1">{firstName + " " + family}</Typography>
@@ -106,26 +113,88 @@ const TableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{birthDate}</Typography>
+        <Typography variant="body2">{province}</Typography>
       </StyledTableCell>
-
       <StyledTableCell
         align="center"
         sx={{
-          width: "15%",
+          width: "10%",
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">{city}</Typography>
+      </StyledTableCell>
+      {/* <StyledTableCell
+        align="center"
+        sx={{
+          width:"10%",
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">{gender}</Typography>
+      </StyledTableCell> */}
+      <StyledTableCell
+        align="center"
+        sx={{
+          width: "10%",
           verticalAlign: "center",
         }}
       >
         <Typography variant="body2">{mobile}</Typography>
       </StyledTableCell>
       <StyledTableCell
-        align="right"
+        align="center"
         sx={{
-          width: "25%",
+          width: "10%",
           verticalAlign: "center",
         }}
       >
         <Typography variant="body2">{email}</Typography>
+      </StyledTableCell>
+      {/* <StyledTableCell
+        align="right"
+        sx={{
+          width:"10%",
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">{studyField}</Typography>
+      </StyledTableCell> */}
+
+      <StyledTableCell
+        align="center"
+        sx={{
+          width: "10%",
+          verticalAlign: "center",
+        }}
+      >
+        {(directNav === "before-week" && cgpa) ||
+          (directNav === "after-week" && finalResult ? finalResult : "-") ||
+          (directNav === "skill-seeker" && selectedField)}
+      </StyledTableCell>
+      <StyledTableCell
+        align="center"
+        sx={{
+          width: "8%",
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">
+          {(directNav === "before-week" && (jobStandby ? "بله" : "خیر")) ||
+            (directNav === "after-week" && (scholar ? "دارد" : "ندارد"))}
+        </Typography>
+      </StyledTableCell>
+      <StyledTableCell
+        align="center"
+        sx={{
+          width: "8%",
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">
+          {(directNav === "before-week" && contCourseApproach) ||
+            (directNav === "after-week" && finalField)}
+        </Typography>
       </StyledTableCell>
     </StyledTableRow>
   );

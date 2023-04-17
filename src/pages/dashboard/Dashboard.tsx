@@ -16,7 +16,7 @@ const Dashboard = () => {
     <Container maxWidth={"lg"}>
       <Grid container spacing={4}>
         {students.map((student: MoodleUserAssignee) => (
-          <Grid item sm={12} md={6} key={student.studentId}>
+          <Grid item sm={12} md={6} key={student.id}>
             <StudentCard moodleUser={student} />
           </Grid>
         ))}

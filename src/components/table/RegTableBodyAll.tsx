@@ -12,7 +12,7 @@ const RegTableBodyAll = ({
   family,
   firstName,
   registrationCode,
-  province,  
+  province,
   directNav,
   familiarity,
   checked,
@@ -39,10 +39,7 @@ const RegTableBodyAll = ({
         >
           {/* show check box only if search for null(awaiting to confirm person) */}
           {checked === null && checkBoxDisplay && (
-            <Checkbox
-              size="small"
-              onChange={(e) => handleCheckBox(e, id.toString())}
-            />
+            <Checkbox size="small" onChange={(e) => handleCheckBox(e, id)} />
           )}
         </StyledTableCell>
       )}

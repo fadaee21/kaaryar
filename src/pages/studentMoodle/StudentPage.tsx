@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import StudentDetail from "../../components/student/StudentDetail";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,73 +21,85 @@ const StudentPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const studentId = `/moodle/user/${id}`;
-  const studentIdDetail = `/moodle/user/detail/${id}`;
-  const afterBeforeInfo = `/exam/after/week/form/moodle/${id}`;
-  const getStudent = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(studentId);
-      setStudent(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
-  const getStudentMoreDetail = async () => {
-    setLoadingDetail(true);
-    try {
-      let response = await getData(studentIdDetail);
-      setStudentDetail(response.data);
-      setLoadingDetail(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoadingDetail(false);
-      navigate("/");
-    }
-  };
-  const getStudentAfterDetail = async () => {
-    setLoadingAfter(true);
-    try {
-      let response = await getData(afterBeforeInfo);
-      setAfterInfo(response.data);
-      setLoadingAfter(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoadingAfter(false);
-      navigate("/");
-    }
-  };
-
   useEffect(() => {
+    const studentId = `/moodle/user/${id}`;
+    const studentIdDetail = `/moodle/user/detail/${id}`;
+    const afterBeforeInfo = `/exam/after/week/form/moodle/${id}`;
+    let mounted = true;
+    const getStudentAfterDetail = async () => {
+      setLoadingAfter(true);
+      try {
+        let response = await getData(afterBeforeInfo);
+        if (response.status === 200 && mounted) {
+          setAfterInfo(response.data);
+        }
+        console.log(response);
+      } catch (error: any) {
+        //TODO:handle Error
+        if (error.response.status === 404) {
+          console.log("no moodle information for this student");
+        } else {
+          console.log(error);
+        }
+      }
+      setLoadingAfter(false);
+    };
+    const getStudent = async () => {
+      setLoading(true);
+      try {
+        let response = await getData(studentId);
+        if (response.status === 200 && mounted) {
+          setStudent(response.data);
+        }
+      } catch (error: any) {
+        //TODO:handle Error
+
+        console.log(error);
+        navigate("/");
+      }
+      setLoading(false);
+    };
+    const getStudentMoreDetail = async () => {
+      setLoadingDetail(true);
+      try {
+        let response = await getData(studentIdDetail);
+        if (response.status === 200 && mounted) {
+          setStudentDetail(response.data);
+        }
+      } catch (error: any) {
+        //TODO:handle Error
+        if (error.response.status === 404) {
+          console.log("no information for this student");
+        } else {
+          console.log(error);
+        }
+      }
+      setLoadingDetail(false);
+    };
     getStudent();
     getStudentMoreDetail();
     getStudentAfterDetail();
     window.scrollTo(0, 0);
-    // eslint-disable-next-line
-  }, []);
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
+  }, [id]);
 
-  if (loading || loadingDetail || loadingAfter) {
-    return <LoadingProgress />;
-  }
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
   return (
     <Container maxWidth="lg">
-      <StudentDetail student={student} />
-      <Divider variant="middle" />
-      <StudentDetailMore studentDetail={studentDetail} />
-      {afterInfo && (
+      {!loading && student ? (
+        <StudentDetail student={student} />
+      ) : (
+        <LoadingProgress />
+      )}
+      {!loadingDetail && studentDetail && (
         <>
-          <Divider variant="middle" />
+          <Divider variant="middle" sx={{ my: 8 }} />
+          <StudentDetailMore studentDetail={studentDetail} />
+        </>
+      )}
+      {!loadingAfter && afterInfo && (
+        <>
+          <Divider variant="middle" sx={{ my: 8 }} />
           <RegisterFormDetailComp
             student={afterInfo?.beforeWeekForm?.registrationForm}
           />

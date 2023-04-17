@@ -36,12 +36,10 @@ const SkillSeeker = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
 
-  const [searchingStudentSeeker, setSearchingStudentSeeker] = useState<
-    SeekerStudent[] | null
-  >(null);
+  const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
 
   const navigate = useNavigate();
-  const allStudentSeeker = `/status/form/all?pageNum=${page - 1}&pageSize=20`;
+  const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=20`;
   const examFormCount = "/status/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
@@ -102,7 +100,7 @@ const SkillSeeker = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"Applicant Info"}
-                linkAll="/status/form/all?pageNum=0&pageSize=100000"
+                linkAll="/status/form/all?pageNum=1&pageSize=100000"
                 searchData={searchingStudentSeeker?.map(
                   (i) => i.beforeWeekForm?.registrationForm
                 )}
@@ -132,7 +130,7 @@ const SkillSeeker = () => {
               {!searchingStudentSeeker && (
                 <TableBody>
                   {seekerStudents?.map((seekerStudent: SeekerStudent) => {
-                    console.log(seekerStudent);
+                    // console.log(seekerStudent);
                     const {
                       id,
                       regForm,
@@ -145,7 +143,6 @@ const SkillSeeker = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        // roles={roles}
                         birthDate={regForm?.birthDate}
                         family={regForm?.family}
                         firstName={regForm?.firstName}
@@ -154,7 +151,11 @@ const SkillSeeker = () => {
                         mobile={regForm?.mobile}
                         email={regForm?.email}
                         directNav="skill-seeker"
-                        // gender={regForm?.gender}
+                        gender={regForm?.gender}
+                        province={regForm?.province}
+                        city={regForm?.city}
+                        studyField={regForm?.studyField}
+                        selectedField={regForm?.selectedField}
                         // just send checked prop due to tableBodyAll need this prob,
                         //in this case does't any effect
                         //all state affair will handle in resultStatus
@@ -188,10 +189,13 @@ const SkillSeeker = () => {
                         family={regForm?.family}
                         firstName={regForm?.firstName}
                         registrationCode={regForm?.registrationCode}
-                        // codeMeli={regForm?.codeMeli}
                         mobile={regForm?.mobile}
                         email={regForm?.email}
-                        // gender={regForm?.gender}
+                        gender={regForm?.gender}
+                        province={regForm?.province}
+                        city={regForm?.city}
+                        studyField={regForm?.studyField}
+                        selectedField={regForm?.selectedField}
                         checked={searchingStudentSeeker.afterWeekChecked}
                         directNav="skill-seeker"
                         resultStatus={seekerStateFinder(

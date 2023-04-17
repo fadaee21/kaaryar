@@ -18,14 +18,14 @@ export const useGetComments = (page: number, pageSize: number) => {
     roles === "admin" ? "/total/count" : `/${roles}/survey/count`;
   const allCommentLink =
     roles === "admin"
-      ? `total/all?pageNum=${page - 1}&pageSize=${pageSize}`
-      : `${roles}/survey/all?pageNum=${page - 1}&pageSize=${pageSize}`;
+      ? `total/all?pageNum=${page}&pageSize=${pageSize}`
+      : `${roles}/survey/all?pageNum=${page}&pageSize=${pageSize}`;
 
   useEffect(() => {
     const getCountComment = async () => {
       try {
         let { data } = await getData(countComment);
-        setCommentCounter(data.message);
+        setCommentCounter(data.count);
       } catch (error) {
         console.log("comment Counter", error);
       }

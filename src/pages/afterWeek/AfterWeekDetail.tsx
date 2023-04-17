@@ -19,6 +19,8 @@ const AfterWeekDetail = () => {
   const [alertType, setAlertType] = useState<
     "approve" | "disApprove" | undefined
   >(undefined);
+  const [refreshPage, setRefreshPage] = useState(1); // after linking moodle user to after week, refresh page to get payment image
+  const refreshingPage = () => setRefreshPage((t) => t + 1);
   const { successObject, getApproveWeek, loadingRegWeek } = useApproveWeek();
   const handleOpenAlert = (alert: "approve" | "disApprove") => {
     console.log(alert);
@@ -29,34 +31,34 @@ const AfterWeekDetail = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
-  const studentIdAfterWeek = `/exam/after/week/form/${id}`;
-  const approveLink = "/exam/after/week/form/approve";
-  const getStudent = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(studentIdAfterWeek);
-      setStudent(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
 
+  const approveLink = "/exam/after/week/form/approve";
   useEffect(() => {
+    const studentIdAfterWeek = `/exam/after/week/form/${id}`;
+    const getStudent = async () => {
+      setLoading(true);
+      try {
+        let response = await getData(studentIdAfterWeek);
+        setStudent(response.data);
+        setLoading(false);
+      } catch (error) {
+        //TODO:handle Error
+        console.log("catch block of error");
+        console.log(error);
+        setLoading(false);
+        navigate("/");
+      }
+    };
+
     getStudent();
     window.scrollTo(0, 0);
-    // eslint-disable-next-line
-  }, []);
+  }, [refreshPage, id, navigate]);
 
   const handleApprove = () => {
-    getApproveWeek(id, { afterWeekChecked: true }, approveLink);
+    getApproveWeek(id, { setApproved: true }, approveLink);
   };
   const handleDisApprove = () => {
-    getApproveWeek(id, { afterWeekChecked: false }, approveLink);
+    getApproveWeek(id, { setApproved: false }, approveLink);
   };
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
@@ -87,7 +89,9 @@ const AfterWeekDetail = () => {
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp
-          student={student?.beforeWeekForm?.registrationForm as RegistrationForm}
+          student={
+            student?.beforeWeekForm?.registrationForm as RegistrationForm
+          }
         />
         <Divider />
         <BeforeWeekDetailShowComp
@@ -104,6 +108,7 @@ const AfterWeekDetail = () => {
           id={id}
           successObject={successObject}
           handleOpenAlert={handleOpenAlert}
+          refreshingPage={refreshingPage}
         />
       </Container>
       <AlertDialog

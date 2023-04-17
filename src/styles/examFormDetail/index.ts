@@ -2,7 +2,7 @@ import { Box,BoxProps } from "@mui/material";
 import { styled } from "@mui/system";
 
 interface BoxExamDetailProps extends BoxProps {
-  colorActive?: boolean;
+  colorActive?: boolean | null;
 }
 
 export const BoxExamDetail = styled(Box,{

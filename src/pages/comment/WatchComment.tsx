@@ -46,7 +46,7 @@ const WatchComment = () => {
     studentContribute,
     studentTask,
     sessionProblem,
-    studentUser: { firstName, lastName },
+    studentUser: { firstName, family },
     commenterUser,
   } = allComment as Comment;
 
@@ -81,7 +81,7 @@ const WatchComment = () => {
           }}
         >
           <Typography variant="h6">
-            مشاهده نظر برای {`${firstName} ${lastName}`}
+            {/* مشاهده نظر برای {`${firstName} ${family}`} */}
           </Typography>
           <Button
             endIcon={<DeleteIcon />}
@@ -120,13 +120,13 @@ const WatchComment = () => {
           <Grid item xs={3}>
             <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">نام منتور</Typography>
-              <Typography variant="body1">{`${commenterUser.firstName} ${commenterUser.lastName}`}</Typography>
+              <Typography variant="body1">{`${commenterUser.firstName} ${commenterUser.family}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
             <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">نام مهارت آموز</Typography>
-              <Typography variant="body1">{`${firstName} ${lastName}`}</Typography>
+              <Typography variant="body1">{`${firstName} ${family}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>

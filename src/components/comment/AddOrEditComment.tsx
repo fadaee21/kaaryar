@@ -19,7 +19,7 @@ import {
   allStudentPresent,
   descComment,
 } from "./commentOptions";
-import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
+// import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
 
 interface AddCommentType {
   studentId: StudentId | null; //this prop just for adding
@@ -82,7 +82,7 @@ const AddOrEditComment = ({
 
   const defaultProps1 = {
     options: allCourse,
-    getOptionLabel: (option: Course) => option.courseName,
+    getOptionLabel: (option: Course) => option.fullname,
   };
 
   return (
@@ -102,7 +102,7 @@ const AddOrEditComment = ({
           }}
           value={course}
           isOptionEqualToValue={(option, value) =>
-            option.courseName === value.courseName
+            option.fullname === value.fullname
           }
         />
       </SelectBox>

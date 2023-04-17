@@ -9,7 +9,7 @@ const useCountPagination = (counting: string) => {
       setLoading(true);
       try {
         let { data } = await getData(counting);
-        setCounterPage(data.message);
+        setCounterPage(data.count);
         setLoading(false);
       } catch (error) {
         console.log("Page Counter", error);

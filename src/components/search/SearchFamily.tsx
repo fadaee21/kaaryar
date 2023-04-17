@@ -116,12 +116,12 @@ export const SearchFamily = ({
       )}
       {searchPage === "moodle" && (
         <AsyncSelect
-          value={outputFamily ? { lastName: outputFamily } : null}
+          value={outputFamily ? { family: outputFamily } : null}
           defaultOptions={true}
-          getOptionLabel={(e: any) => e.lastName}
-          getOptionValue={(e: any) => e.lastName}
+          getOptionLabel={(e: any) => e.family}
+          getOptionValue={(e: any) => e.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFamily(e.lastName)}
+          onChange={(e: any) => setOutputFamily(e.family)}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"

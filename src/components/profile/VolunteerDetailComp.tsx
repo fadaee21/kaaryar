@@ -74,10 +74,10 @@ const VolunteerDetailComp = ({
   const arrCustom = custom && JSON.parse(custom);
   const isArrCustom = arrCustom?.length > 0;
 
-  const { pic, getPicture } = useGetImage();
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   useEffect(() => {
     getPicture(imageAddress);
-  }, []);
+  }, [getPicture, imageAddress]);
 
   return (
     <>
