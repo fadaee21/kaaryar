@@ -69,3 +69,17 @@ export const eduLevelOptions = [
   { label: "دانشجوی دکتری", value: "دانشجوی دکتری" },
   { label: "دکتری و بالاتر", value: "دکتری و بالاتر" },
 ];
+
+export const finalResults = [
+  { label: "تأیید از سمت کاریار", value: "تأیید از سمت کاریار" },
+  { label: "عدم تأیید از سمت کاریار", value: "عدم تأیید از سمت کاریار" },
+  {
+    label: "عدم تمایل شخص به شرکت در دوره",
+    value: "عدم تمایل شخص به شرکت در دوره",
+  },
+];
+
+export const scholarOptions = [
+  { label: "دارد", value: true },
+  { label: "ندارد", value: false },
+];

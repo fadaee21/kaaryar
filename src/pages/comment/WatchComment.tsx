@@ -81,7 +81,7 @@ const WatchComment = () => {
           }}
         >
           <Typography variant="h6">
-            مشاهده نظر برای {`${firstName} ${family}`}
+            {/* مشاهده نظر برای {`${firstName} ${family}`} */}
           </Typography>
           <Button
             endIcon={<DeleteIcon />}

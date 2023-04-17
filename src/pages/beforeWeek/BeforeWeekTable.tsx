@@ -99,11 +99,12 @@ const BeforeWeekTable = () => {
                   variant="contained"
                   onClick={() => {
                     getApproveMulti(
-                      ids.toString(),
-                      "/exam/before/week/form/multiple/approve"
+                      ids,
+                      "/exam/before/week/form/multiple",
+                      true
                     );
                   }}
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   تایید کردن گروهی
@@ -113,11 +114,12 @@ const BeforeWeekTable = () => {
                   variant="contained"
                   onClick={() =>
                     getApproveMulti(
-                      ids.toString(),
-                      "/exam/before/week/form/multiple/disapprove"
+                      ids,
+                      "/exam/before/week/form/multiple",
+                      false
                     )
                   }
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   رد کردن گروهی
@@ -162,8 +164,12 @@ const BeforeWeekTable = () => {
                   {students?.map((examRegisterUser: BeforeWeekType) => {
                     const {
                       id,
+                      contCourseApproach,
+                      jobStandby,
+                      cgpa,
                       registrationForm: {
-                        birthDate,
+                        province,
+                        city,
                         family,
                         firstName,
                         registrationCode,
@@ -171,6 +177,7 @@ const BeforeWeekTable = () => {
                         mobile,
                         email,
                         gender,
+                        studyField
                       },
                       acceptWeekChecked,
                     } = examRegisterUser;
@@ -179,7 +186,11 @@ const BeforeWeekTable = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        birthDate={birthDate}
+                        province={province}
+                        city={city}
+                        studyField={studyField}
+                        contCourseApproach={contCourseApproach}
+                        jobStandby={jobStandby}
                         family={family}
                         firstName={firstName}
                         registrationCode={registrationCode}
@@ -188,6 +199,7 @@ const BeforeWeekTable = () => {
                         email={email}
                         gender={gender}
                         directNav="before-week"
+                        cgpa={cgpa}
                         checked={acceptWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
@@ -204,8 +216,23 @@ const BeforeWeekTable = () => {
                       key={searchingStudentBefore.id}
                       id={searchingStudentBefore.id}
                       idMulti={searchingStudentBefore.id}
-                      birthDate={
-                        searchingStudentBefore.registrationForm.birthDate
+                      province={
+                        searchingStudentBefore.registrationForm.province
+                      }
+                      city={
+                        searchingStudentBefore.registrationForm.city
+                      }
+                      studyField={
+                        searchingStudentBefore.registrationForm.studyField
+                      }
+                      contCourseApproach={
+                        searchingStudentBefore.contCourseApproach
+                      }
+                      jobStandby={
+                        searchingStudentBefore.jobStandby
+                      }
+                      cgpa={
+                        searchingStudentBefore.cgpa
                       }
                       family={searchingStudentBefore.registrationForm.family}
                       firstName={

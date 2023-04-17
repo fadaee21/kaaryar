@@ -47,7 +47,7 @@ const LastOpinionDash = () => {
           key={item.id}
         >
           <Typography variant="body2">
-            {item.commenterUser.firstName} {item.commenterUser.family} برای{" "}
+            {item.commenterUser?.firstName} {item.commenterUser?.family} برای{" "}
             {item.studentUser.firstName} {item.studentUser.family}
             {item.createTime && ` در ${dateConverter(item.createTime)}`}
           </Typography>

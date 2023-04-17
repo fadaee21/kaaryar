@@ -21,10 +21,11 @@ const StatusSearch = ({ approvalStatus, setApprovalStatus }: Prop) => {
       onChange={(selectedValue: any) => setApprovalStatus(selectedValue.value)}
       placeholder="وضعیت"
       styles={{
-        control: (baseStyles: any) => ({
+        control: (baseStyles) => ({
           ...baseStyles,
           height: "3rem",
         }),
+        menu: (provided) => ({ ...provided, zIndex: 2 }),
       }}
     />
   );

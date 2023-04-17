@@ -58,13 +58,13 @@ const AfterWeekDetailEdit = () => {
     setStudent((prev: any) => ({ ...prev, [name]: value }));
   };
   //some properties of beforeWeek must be change in afterWeek
-  const handleChangeBefore = (e: any) => {
-    const { name, value } = e.target;
-    setStudent((prev: any) => ({
-      ...prev,
-      beforeWeekForm: { ...prev.beforeWeekForm, [name]: value },
-    }));
-  };
+  // const handleChangeBefore = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setStudent((prev: any) => ({
+  //     ...prev,
+  //     beforeWeekForm: { ...prev.beforeWeekForm, [name]: value },
+  //   }));
+  // };
 
   useEffect(() => {
     getStudent();
@@ -128,7 +128,7 @@ const AfterWeekDetailEdit = () => {
           <AfterWeekDetailEditComp
             student={student}
             handleChange={handleChange}
-            handleChangeBefore={handleChangeBefore}
+            // handleChangeBefore={handleChangeBefore}
           />
         </Box>
       </Container>

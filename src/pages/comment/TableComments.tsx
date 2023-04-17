@@ -152,9 +152,7 @@ const Comments = () => {
                         sx={{ width: "15%", verticalAlign: "center" }}
                       >
                         <Typography variant="body2">
-                          {commenterUser.firstName +
-                            " " +
-                            commenterUser.family}
+                          {commenterUser.firstName + " " + commenterUser.family}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -162,7 +160,7 @@ const Comments = () => {
                         sx={{ width: "15%", verticalAlign: "center" }}
                       >
                         <Typography variant="body2">
-                          {course.courseName}
+                          {course?.fullname}
                         </Typography>
                       </StyledTableCell>
 

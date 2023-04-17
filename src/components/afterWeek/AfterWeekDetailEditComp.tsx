@@ -6,22 +6,22 @@ import {
   InputLabel,
   List,
   ListItem,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import { AfterWeekType } from "../../model";
 
 interface AfterWeekStudentEdit {
   student: AfterWeekType | null;
   handleChange: (e: any) => void;
-  handleChangeBefore: (e: any) => void;
+  // handleChange: (e: any) => void;
 }
 
 const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
   student,
   handleChange,
-  handleChangeBefore,
+  // handleChange,
 }) => {
-  //TODO so IMPORTANT:
-  //  - workshopCont, notifyAcceptWeek, mbtiTest, comLevelResult, firstSelectJobRoad, algoLevelResult all these items are for beforeWeek and while you approve student in before week you can not edit their property
   return (
     <>
       <Grid container rowGap={5} sx={{ my: 2 }}>
@@ -34,8 +34,8 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 </InputLabel>
                 <Input
                   id="workshopCont"
-                  value={student?.beforeWeekForm.workshopCont || ""}
-                  onChange={handleChangeBefore}
+                  value={student?.workshopCont || ""}
+                  onChange={handleChange}
                   name="workshopCont"
                 />
               </FormControl>
@@ -48,8 +48,8 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 </InputLabel>
                 <Input
                   id="notifyAcceptWeek"
-                  value={student?.beforeWeekForm.notifyAcceptWeek || ""}
-                  onChange={handleChangeBefore}
+                  value={student?.notifyAcceptWeek || ""}
+                  onChange={handleChange}
                   name="notifyAcceptWeek"
                 />
               </FormControl>
@@ -60,8 +60,8 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 <InputLabel htmlFor="mbtiTest">نتیجه تست MBTI</InputLabel>
                 <Input
                   id="mbtiTest"
-                  value={student?.beforeWeekForm.mbtiTest || ""}
-                  onChange={handleChangeBefore}
+                  value={student?.mbtiTest || ""}
+                  onChange={handleChange}
                   name="mbtiTest"
                 />
               </FormControl>
@@ -74,8 +74,8 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 </InputLabel>
                 <Input
                   id="comLevelResult"
-                  value={student?.beforeWeekForm.comLevelResult || ""}
-                  onChange={handleChangeBefore}
+                  value={student?.comLevelResult || ""}
+                  onChange={handleChange}
                   name="comLevelResult"
                 />
               </FormControl>
@@ -91,8 +91,8 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 </InputLabel>
                 <Input
                   id="firstSelectJobRoad"
-                  value={student?.beforeWeekForm.firstSelectJobRoad || ""}
-                  onChange={handleChangeBefore}
+                  value={student?.firstSelectJobRoad || ""}
+                  onChange={handleChange}
                   name="firstSelectJobRoad"
                 />
               </FormControl>
@@ -105,8 +105,8 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 </InputLabel>
                 <Input
                   id="algoLevelResult"
-                  value={student?.beforeWeekForm.algoLevelResult || ""}
-                  onChange={handleChangeBefore}
+                  value={student?.algoLevelResult || ""}
+                  onChange={handleChange}
                   name="algoLevelResult"
                 />
               </FormControl>
@@ -315,6 +315,61 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                   value={student?.ethics || ""}
                   onChange={handleChange}
                   name="ethics"
+                />
+              </FormControl>
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
+
+      <Grid container rowGap={5} sx={{ my: 2 }}>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="scholar">
+                بورسیه دارد؟
+                </InputLabel>
+                <Input
+                  id="scholar"
+                  value={student?.scholar || ""}
+                  onChange={handleChange}
+                  name="scholar"
+                />
+              </FormControl> */}
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel id="scholar">بورسیه دارد؟</InputLabel>
+                <Select
+                  labelId="scholar"
+                  id="scholar"
+                  onChange={handleChange}
+                  name="scholar"
+                  value={student?.scholar ?? ""}
+                >
+                  <MenuItem value={true as any}>بله</MenuItem>
+                  <MenuItem value={false as any}>خیر</MenuItem>
+                </Select>
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="scholarPercentage">درصد بورسیه</InputLabel>
+                <Input
+                  id="scholarPercentage"
+                  value={student?.scholarPercentage || ""}
+                  onChange={handleChange}
+                  name="scholarPercentage"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="finalField">رشته نهایی</InputLabel>
+                <Input
+                  id="finalField"
+                  value={student?.finalField || ""}
+                  onChange={handleChange}
+                  name="finalField"
                 />
               </FormControl>
             </ListItem>

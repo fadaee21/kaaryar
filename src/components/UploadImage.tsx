@@ -10,7 +10,7 @@ const UploadImage: React.FC<any> = ({ id, disableProp }) => {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
   //get url and render the image:
-  const { pic, getPicture } = useGetImage();
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   const imageUploading = async () => {
     setSuccess(false);
     try {

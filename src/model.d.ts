@@ -83,18 +83,44 @@ export interface Comment {
   commenterUser: MentorUser;
 }
 
-export interface CommentTable {
-  comment: string;
-  commenterUser: MoodleUser;
-  course: MoodleCourse;
-  createTime: string;
-  id: number;
-  isChecked: boolean;
-  role: string;
-  studentUser: MoodleUser;
-  updateTime: string;
-}
+// export interface Comment {
+//   checked: unknown;
+//   comment: string;
+//   sessionDate: string;
+//   isStudentPresent: boolean;
+//   studentContribute: string;
+//   studentTask: string;
+//   sessionProblem: string;
+//   studentId: number;
+//   courseId: unknown;
+//   commenterId: number;
+//   createTime: string;
+//   updateTime: string;
+//   deleted: false;
+//   id: number;
+//   deleteTime: unknown;
+// }
 
+export interface CommentTable {
+  checked: boolean | null;
+  comment: string;
+  sessionDate: string;
+  isStudentPresent: boolean;
+  studentContribute: string;
+  studentTask: string;
+  sessionProblem: string;
+  studentId: number;
+  courseId: number;
+  mentorId: number;
+  createTime: string;
+  updateTime: null;
+  deleted: false;
+  id: number;
+  deleteTime: string | null;
+  studentUser: MoodleUser;
+  commenterUser: MoodleUser;
+  course: Course;
+}
 
 export interface editCommentProp {
   // editId: number | null;
@@ -124,7 +150,7 @@ export interface MoodleUser {
   calendarType: string;
   description: string;
   picture: {
-    address: string;
+    imageAddress: string;
   };
 }
 //this is just for admin
@@ -170,7 +196,7 @@ export interface LocalStorage {
 
 export interface RegistrationForm {
   id: number;
-  checked: boolean;
+  checked: boolean | null;
   registrationCode: string;
   codeMeli?: string;
   firstName: string;
@@ -197,28 +223,23 @@ export interface RegistrationForm {
 
 export interface BeforeWeekType {
   registrationForm: RegistrationForm;
-  id: number;
-  acceptWeekChecked: boolean;
+  acceptWeekChecked: boolean | null;
   accessTime: string;
-  algoLevelResult: string;
   avgSalary: string;
   beforeAcceptDesc: string;
+  cgpa?: string;
   charity: string;
-  comLevelResult: string;
+  codingKnowledge: ?string;
   computerAccess: string;
-  computerFamiliarity: boolean;
+  computerFamiliarity: string;
   contCourseApproach: string;
   courseDescription: string;
-  createTime: string;
   currentField: string;
   currentInstName: string;
-  currentInstType: string;
-  deleteTime: string;
-  deleted: boolean;
+  instituteCurrentType: string;
   eduLevel: string;
   eduStatus: string;
   familiar: string;
-  firstSelectJobRoad: string;
   freeDailyTime: string;
   instituteType: string;
   internetAccess: string;
@@ -230,18 +251,26 @@ export interface BeforeWeekType {
   jobVision: string;
   lastInstitute: string;
   limitTime: string;
-  mbtiTest: string;
   motivation: string;
-  noneJobActivation: string;
-  notifyAcceptWeek: string;
   paymentImageAddress: string;
   programmingCoursePassed: boolean;
+  questionCity?: string;
+  questionStudents?: string;
+  questionNumbers?: string;
+  questionDiameters?: string;
+  questionMultiplication?: string;
+  questionWords?: string;
+  questionMaths?: string;
+  questionEnglishFamiliarity?: string;
+  engPara?: string;
+  skills?: string;
   stuSemester: string;
   stuYear: string;
-  updateTime: string;
-  webDevFamiliarity: boolean;
+  transcriptImageAddress?: string;
+  noneJobActivation?: string;
+  webDevFamiliarity: string;
   workTime: string;
-  workshopCont: string;
+  id: 1;
 }
 
 interface AfterWeekType {
@@ -267,16 +296,28 @@ interface AfterWeekType {
   scholar: boolean;
   scholarPercentage: number;
   workCommit: string;
+  algoLevelResult: string;
+  comLevelResult: string;
+  firstSelectJobRoad: string;
+  mbtiTest: string;
+  notifyAcceptWeek: string;
+  workshopCont: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
 }
 
 export interface TableBodyAllType extends RegistrationForm {
-  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: number) => void;
   resultStatus?: string;
   checkBoxDisplay?: boolean;
   idMulti?: number;
   // roles: string;
   directNav: string;
+  contCourseApproach?: string;
+  finalField?: string;
+  jobStandby?: boolean;
+  scholar?: boolean;
+  finalResult?: string;
+  cgpa?:string;
 }
 
 export interface SeekerStudent {

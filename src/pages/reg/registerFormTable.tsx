@@ -34,7 +34,6 @@ const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
 
-
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
@@ -103,12 +102,9 @@ const RegisterFormTable = () => {
                   color="secondary"
                   variant="contained"
                   onClick={() => {
-                    getApproveMulti(
-                      ids.toString(),
-                      "/reg/form/multiple/approve"
-                    );
+                    getApproveMulti(ids, "/reg/form/multiple", true);
                   }}
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   تایید کردن گروهی
@@ -117,12 +113,9 @@ const RegisterFormTable = () => {
                   color="secondary"
                   variant="contained"
                   onClick={() =>
-                    getApproveMulti(
-                      ids.toString(),
-                      "/reg/form/multiple/disapprove"
-                    )
+                    getApproveMulti(ids, "/reg/form/multiple", false)
                   }
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   رد کردن گروهی

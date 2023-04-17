@@ -11,10 +11,14 @@ import { GreyButton } from "../../styles/Button";
 import {
   acquaintanceOptions,
   eduLevelOptions,
+  finalResults,
   highSchoolOptions2,
   provinceOptions,
 } from "./searchOptions";
 import { ApprovalStatus } from "../../model";
+import SearchScholar from "./SearchScholar";
+// import SearchGender from "./SearchGender";
+
 interface SearchAllType {
   setSearchingStudentBefore?: any;
   setSearchingStudentAfter?: any;
@@ -48,11 +52,24 @@ const SearchAll: ({
   );
   const [mobileState, setMobileState] = useState<string | null>(null);
   const [emailState, setEmailState] = useState<string | null>(null);
+
   const [provincesState, setProvincesState] = useState<string | null>(null);
   const [cityState, setCityState] = useState<string | null>(null);
   const [approvalStatus, setApprovalStatus] = useState<ApprovalStatus>(null);
   const [acquaintance, setAcquaintance] = useState<string | null>(null);
   const [eduLevel, setEduLevel] = useState<string | null>(null);
+
+  // const [gender, setGender] = useState<"مرد" | "زن" | null>(null);
+  // const [studyField, setStudyField] = useState<string | null>(null);
+  const [finalResult, setFinalResult] = useState<string | null>(null);
+  const [scholar, setScholar] = useState<{label:string,value:boolean} | null>(null);
+  const [finalField, setFinalField] = useState<string | null>(null);
+  const [contCourseApproach, setContCourseApproach] = useState<string | null>(
+    null
+  );
+  const [jobStandby, setJobStandby] = useState<string | null>(null);
+  const [cgpa, setCgpa] = useState<string | null>(null);
+
   const beforeWeekSearch = "/exam/before/week/search/param";
   const afterWeekSearch = "/exam/after/week/search/param";
   const regSearch = "/reg/search/param";
@@ -109,7 +126,15 @@ const SearchAll: ({
       email: emailState,
       education: eduLevel,
       familiarity: acquaintance,
-      approvalStatus:approvalStatus
+      approvalStatus,
+      // gender,
+      // studyField,
+      finalResult,
+      scholarshipStatus: scholar?.value,
+      finalField,
+      contCourseApproach,
+      jobStandby,
+      cgpa,
     });
   };
 
@@ -125,7 +150,15 @@ const SearchAll: ({
     setEmailState(null);
     setProvincesState(null);
     setCityState(null);
-    setApprovalStatus(null)
+    setApprovalStatus(null);
+    // setGender(null);
+    // setStudyField(null);
+    setFinalResult(null);
+    setScholar(null);
+    setFinalField(null);
+    setContCourseApproach(null);
+    setJobStandby(null);
+    setCgpa(null);
     // searchPage !== "moodle" && setApprovalStatus(null);
     searchPage === "moodle" && setSearchingMoodleStudent(null);
     searchPage === "beforeWeek" && setSearchingStudentBefore(null);
@@ -203,15 +236,19 @@ const SearchAll: ({
         <SearchString
           setState={setMobileState}
           state={mobileState}
-          label="شماره موبایل"
+          label="شماره همراه"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <SearchString
+          state={emailState}
+          setState={setEmailState}
+          label="ایمیل"
         />
       </Grid>
       {/* {searchPage !== "moodle" && (
         <Grid item xs={3}>
-          <SearchGender
-            outputGender={outputGender}
-            setOutputGender={setOutputGender}
-          />
+          <SearchGender gender={gender} setGender={setGender} />
         </Grid>
       )} */}
       {searchPage !== "moodle" && (
@@ -224,27 +261,87 @@ const SearchAll: ({
           />
         </Grid>
       )}
-      {searchPage === "moodle" && (
-        <Grid item xs={3}>
-          <SearchString state={cityState} setState={setCityState} label="شهر" />
-        </Grid>
-      )}
-      {searchPage !== "moodle" && (
-        <Grid item xs={3}>
-          <StatusSearch
-            setApprovalStatus={setApprovalStatus}
-            approvalStatus={approvalStatus}
-          />
-        </Grid>
-      )}
+
       <Grid item xs={3}>
-        <SearchString
-          state={emailState}
-          setState={setEmailState}
-          label="ایمیل"
-        />
+        <SearchString state={cityState} setState={setCityState} label="شهر" />
       </Grid>
-      {/* <Grid item xs={12}></Grid> */}
+
+      {searchPage !== "moodle" && (
+        <>
+          <Grid item xs={3}>
+            <StatusSearch
+              setApprovalStatus={setApprovalStatus}
+              approvalStatus={approvalStatus}
+            />
+          </Grid>
+          {/* {searchPage !== "reg" && (
+            <Grid item xs={3}>
+              <SearchString
+                state={studyField}
+                setState={setStudyField}
+                label="رشته تحصیلی"
+              />
+            </Grid>
+          )} */}
+        </>
+      )}
+      {searchPage === "beforeWeek" && (
+        <>
+          <Grid item xs={3}>
+            <SearchString
+              state={contCourseApproach}
+              setState={setContCourseApproach}
+              label="نمره آزمون"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <SearchString
+              state={jobStandby}
+              setState={setJobStandby}
+              label="آمادگی به کار"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <SearchString
+              state={contCourseApproach}
+              setState={setContCourseApproach}
+              label="هدف از شرکت"
+            />
+          </Grid>
+        </>
+      )}
+      {searchPage === "afterWeek" && (
+        <>
+          <Grid item xs={3}>
+            <SearchSelect
+              state={finalResult}
+              setState={setFinalResult}
+              options={finalResults}
+              placeholder="نتیجه نهایی"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            {/* <SearchString
+              state={scholar}
+              setState={setScholar}
+              label="وضعیت بورسیه"
+            /> */}
+            <SearchScholar
+              state={scholar}
+              setState={setScholar}
+              placeholder="وضعیت بورسیه"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <SearchString
+              state={finalField}
+              setState={setFinalField}
+              label="رشته نهایی"
+            />
+          </Grid>
+        </>
+      )}
+
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
           sx={{ width: "100%" }}

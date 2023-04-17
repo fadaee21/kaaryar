@@ -7,18 +7,19 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
-import { AfterWeekType, MoodleUser, moodleJustStudent } from "../../model";
+import { AfterWeekType, MoodleUser } from "../../model";
 
 interface LookUpLinkType {
   student: AfterWeekType | null;
   id: string | undefined;
+  refreshingPage?: () => void;
 }
 
 //^in this component there is complexity about type! type of oneStudent (show as primary value if exist) is afterWeekType
 //^but after selecting new value from combo box type will change to the moodleJustStudent...
 //^it cause problem for getOptionLabel and value...it force me to change them as conditional value and define type as any for oneStudent and getOptionLabel
 
-const LookUpLink = ({ student, id }: LookUpLinkType) => {
+const LookUpLink = ({ student, id, refreshingPage }: LookUpLinkType) => {
   const [students, setStudents] = useState<MoodleUser[]>([]); //get All Student in moodle
   const [oneStudent, setOneStudent] = useState<any>(student); // get One student from after week
   const [loading, setLoading] = useState(true);
@@ -27,31 +28,33 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
   const oneStudentLink = `exam/after/week/form/${id}`;
   const approvedStu = student?.afterWeekChecked; // approvedStu help: false:don't show this component.true: just show whose link and related message. null: show whose link and let choose or edit it again!
   //get all list
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(allStudentMoodle);
-      setStudents(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-    }
-  };
   useEffect(() => {
-    approvedStu ?? getListLearner();
-  }, []);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setFeedBackMessage(" ");
-    }, 4000);
-
-    return () => {
-      clearTimeout(timer);
+    const getListLearner = async () => {
+      setLoading(true);
+      try {
+        let response = await getData(allStudentMoodle);
+        setStudents(response.data);
+        setLoading(false);
+      } catch (error) {
+        //TODO:handle Error
+        console.log("catch block of error");
+        console.log(error);
+        setLoading(false);
+      }
     };
-  }, [feedBackMessage]);
+    approvedStu ?? getListLearner();
+  }, [allStudentMoodle, approvedStu]);
+
+  //clear the feedBackMessage
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setFeedBackMessage(" ");
+  //   }, 4000);
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [feedBackMessage]);
 
   //edit user
   const handleLinkStudent = async (e: React.FormEvent) => {
@@ -59,10 +62,11 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
     e.preventDefault();
     try {
       const response = await editAxios(oneStudentLink, {
-        data: { form: oneStudent },
+        data: { form: { moodleUserId: oneStudent?.id } },
       });
       if (response.status === 200) {
         setFeedBackMessage("درخواست با موفقیت انجام شد");
+        refreshingPage?.();
         console.log(response.data);
       } else {
         setFeedBackMessage("درخواست انجام نشد");
@@ -75,18 +79,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
     }
   };
 
-  const defaultProps = {
-    options: students,
-    getOptionLabel: (option: any) =>
-      option?.moodleUser
-        ? option.id +
-          "_" +
-          option?.moodleUser?.firstName +
-          " " +
-          option?.moodleUser?.lastName
-        : option.id + "_" + option?.firstName + " " + option?.lastName,
-  };
-  //if user disApproved,don't show anything
+  //if user not disApproved,don't show anything
   if (approvedStu === false) {
     return <></>;
   }
@@ -98,12 +91,21 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           display: "flex",
           justifyContent: "flex-start",
           width: "100%",
+          mt: 5,
         }}
       >
         <Autocomplete
-          {...defaultProps}
+          options={students}
+          getOptionLabel={(option) => {
+            return (
+              option?.firstName +
+              " " +
+              (option?.family ? option.family : option?.lastName)
+            );
+          }}
           id="close-on-select"
-          sx={{ width: 300, mr: 5 }}
+          sx={{ mr: 10 }}
+          fullWidth
           value={
             oneStudent?.moodleUser //if you have been linked user and data comes from after week, so show that info
               ? oneStudent?.moodleUser
@@ -126,7 +128,7 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
           color="secondary"
           onClick={handleLinkStudent}
         >
-          {loading ? "بارگذاری..." : "تایید"}
+          {loading ? "بارگذاری..." : "ثبت"}
         </Button>
       </Box>
       <Typography sx={{ m: 1 }} variant="subtitle2">
@@ -138,5 +140,3 @@ const LookUpLink = ({ student, id }: LookUpLinkType) => {
 };
 
 export default LookUpLink;
-
-// این مهارت‌آموز تایید شده است و قابلیت ویرایش ندارد

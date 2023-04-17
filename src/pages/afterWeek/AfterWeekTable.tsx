@@ -98,11 +98,12 @@ const AfterWeekTable = () => {
                   variant="contained"
                   onClick={() => {
                     getApproveMulti(
-                      ids.toString(),
-                      "/exam/after/week/form/multiple/approve"
+                      ids,
+                      "/exam/after/week/form/multiple",
+                      true
                     );
                   }}
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   تایید کردن گروهی
@@ -112,11 +113,12 @@ const AfterWeekTable = () => {
                   variant="contained"
                   onClick={() =>
                     getApproveMulti(
-                      ids.toString(),
-                      "/exam/after/week/form/multiple/disapprove"
+                      ids,
+                      "/exam/after/week/form/multiple",
+                      false
                     )
                   }
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   رد کردن گروهی
@@ -160,16 +162,21 @@ const AfterWeekTable = () => {
                   {students?.map((afterWeekStudent: AfterWeekType) => {
                     const {
                       id,
+                      finalField,
+                      scholar,
+                      finalResult,
                       beforeWeekForm: {
                         registrationForm: {
-                          birthDate,
+                          province,
+                          city,
                           family,
                           firstName,
                           registrationCode,
                           codeMeli,
                           mobile,
                           email,
-                          gender,
+                          // gender,
+                          studyField,
                         },
                       },
                       afterWeekChecked,
@@ -179,7 +186,12 @@ const AfterWeekTable = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        birthDate={birthDate}
+                        province={province}
+                        city={city}
+                        studyField={studyField}
+                        scholar={scholar}
+                        finalField={finalField}
+                        finalResult={finalResult}
                         family={family}
                         firstName={firstName}
                         registrationCode={registrationCode}
@@ -187,7 +199,7 @@ const AfterWeekTable = () => {
                         mobile={mobile}
                         email={email}
                         directNav="after-week"
-                        gender={gender}
+                        // gender={gender}
                         checked={afterWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
@@ -204,10 +216,21 @@ const AfterWeekTable = () => {
                       key={searchingStudentAfter.id}
                       id={searchingStudentAfter.id}
                       idMulti={searchingStudentAfter.id}
-                      birthDate={
+                      province={
                         searchingStudentAfter.beforeWeekForm.registrationForm
-                          .birthDate
+                          .province
                       }
+                      city={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .city
+                      }
+                      studyField={
+                        searchingStudentAfter.beforeWeekForm.registrationForm
+                          .studyField
+                      }
+                      finalField={searchingStudentAfter.finalField}
+                      scholar={searchingStudentAfter.scholar}
+                      finalResult={searchingStudentAfter.finalResult}
                       family={
                         searchingStudentAfter.beforeWeekForm.registrationForm
                           .family
@@ -232,10 +255,10 @@ const AfterWeekTable = () => {
                         searchingStudentAfter.beforeWeekForm.registrationForm
                           .email
                       }
-                      gender={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .gender
-                      }
+                      // gender={
+                      //   searchingStudentAfter.beforeWeekForm.registrationForm
+                      //     .gender
+                      // }
                       checked={searchingStudentAfter.afterWeekChecked}
                       directNav="after-week"
                       handleCheckBox={handleCheckBox}

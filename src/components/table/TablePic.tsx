@@ -5,7 +5,7 @@ import useGetImage from "../../hooks/request/useGetImage";
 import { stringAvatar } from "../../utils/avatarColor";
 
 const TablePic = ({ picture, lastName }: any) => {
-  const { pic, getPicture } = useGetImage();
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   React.useEffect(() => {
     if (picture !== null) {
       getPicture(picture?.address);
@@ -27,7 +27,7 @@ const TablePic = ({ picture, lastName }: any) => {
 export default TablePic;
 
 export const TablePic2 = ({ studentId, lastName }: any) => {
-  const { pic, getPicture } = useGetImage();
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   React.useEffect(() => {
     const getLink = async () => {
       try {

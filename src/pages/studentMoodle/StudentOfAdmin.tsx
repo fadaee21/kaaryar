@@ -152,7 +152,7 @@ const StudentOfAdmin = () => {
                           sx={{ width: "5%", verticalAlign: "top" }}
                         >
                           {/* //TODO: add picture */}
-                          {/* <TablePic picture={picture} lastName={family} /> */}
+                          <TablePic picture={picture?.imageAddress} lastName={family} />
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
@@ -259,7 +259,7 @@ const StudentOfAdmin = () => {
                           align="left"
                           sx={{ width: "5%", verticalAlign: "top" }}
                         >
-                          {/* <TablePic picture={picture} lastName={family} /> */}
+                          <TablePic picture={picture} lastName={family} />
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"

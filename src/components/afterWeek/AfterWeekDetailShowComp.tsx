@@ -18,6 +18,7 @@ import useGetImage from "../../hooks/request/useGetImage";
 import { AfterWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
+import FinalResult from "./FinalResult";
 const LookUpLink = React.lazy(() => import("./LookUpLink"));
 // import UploadImage from "../UploadImage";
 
@@ -28,6 +29,7 @@ interface AfterWeekStudentShow {
   typeComp: "exam" | "admission";
   successObject?: string;
   handleOpenAlert?: (alert: "approve" | "disApprove") => void;
+  refreshingPage?: () => void;
 }
 
 const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
@@ -37,6 +39,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   typeComp,
   successObject,
   handleOpenAlert,
+  refreshingPage,
 }) => {
   const navigate = useNavigate();
   // this component use for skill-seeker page also,in that page you don't need approve button.handling this by location
@@ -48,18 +51,20 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
-  const { pic, getPicture } = useGetImage();
+  const { pic, getPicture } = useGetImage("/moodle/payment/img/user/");
 
   React.useEffect(() => {
-    if (!student?.beforeWeekForm.paymentImageAddress) {
+    if (!student?.moodleUser) {
       return;
     }
-    getPicture(student?.beforeWeekForm.paymentImageAddress);
-    // eslint-disable-next-line
-  }, []);
+    getPicture(student.moodleUser.id.toString());
+  }, [getPicture, student?.moodleUser]);
 
   return (
     <>
+      {!seekerPage && (
+        <LookUpLink student={student} id={id} refreshingPage={refreshingPage} />
+      )}
       <Box
         sx={{
           display: "flex",
@@ -120,25 +125,25 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="وضعیت شرکت در کارگاه معارفه"
-                  secondary={student?.beforeWeekForm.workshopCont}
+                  secondary={student?.workshopCont}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
-                  secondary={student?.beforeWeekForm.notifyAcceptWeek}
+                  secondary={student?.notifyAcceptWeek}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نتیجه تست MBTI"
-                  secondary={student?.beforeWeekForm.mbtiTest}
+                  secondary={student?.mbtiTest}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نتیجه تعیین سطح کامپیوتر"
-                  secondary={student?.beforeWeekForm.comLevelResult}
+                  secondary={student?.comLevelResult}
                 />
               </ListItem>
             </List>
@@ -148,14 +153,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="انتخاب اولیه مسیر شغلی"
-                  secondary={student?.beforeWeekForm.firstSelectJobRoad}
+                  secondary={student?.firstSelectJobRoad}
                 />
               </ListItem>
               <ListItem
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="فیش واریزی" />
-                {student?.beforeWeekForm.paymentImageAddress && (
+                {student?.moodleUser?.id && (
                   <ListItemAvatar>
                     <Box
                       component={"img"}
@@ -178,7 +183,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="نتیجه تعیین سطح الگوریتم"
-                  secondary={student?.beforeWeekForm.algoLevelResult}
+                  secondary={student?.algoLevelResult}
                 />
               </ListItem>
             </List>
@@ -361,10 +366,17 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </Grid>
         </Grid>
       </BoxExamDetail>
-      {/* link after week student to moodle student */}
-      {!seekerPage && <LookUpLink student={student} id={id} />}
 
-      <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
+      {/* link after week student to moodle student */}
+      {!seekerPage && (
+        <FinalResult
+          approvedStu={student?.afterWeekChecked}
+          finalResult={student?.finalResult}
+          id={id}
+        />
+      )}
+
+      {/* <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
       </Typography>
       <BoxExamDetail>
@@ -380,11 +392,12 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             <List>
               <ListItem>
                 <ListItemText secondary={student?.finalResult} />
+                
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </BoxExamDetail> */}
 
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         ثبت نام نهایی

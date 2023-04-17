@@ -95,14 +95,14 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         <Grid item xs={12} md={6}>
           <ListItem>
             <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-              <InputLabel htmlFor="currentInstType">
+              <InputLabel htmlFor="instituteType">
                 نوع موسسه آموزشی که در حال حاضر درآن تحصیل می کنید
               </InputLabel>
               <Input
-                id="currentInstType"
-                value={student?.currentInstType || ""}
+                id="instituteType"
+                value={student?.instituteType || ""}
                 onChange={handleChange}
-                name="currentInstType"
+                name="instituteType"
               />
             </FormControl>
           </ListItem>
@@ -388,6 +388,129 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   value={student?.motivation || ""}
                   onChange={handleChange}
                   name="motivation"
+                />
+              </FormControl>
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
+      <Grid container rowGap={5} sx={{ my: 2 }}>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionCity">
+                  {" "}
+                  آتشنشان در شهر خیالی
+                </InputLabel>
+                <Input
+                  id="questionCity"
+                  value={student?.questionCity || ""}
+                  onChange={handleChange}
+                  name="questionCity"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionNumbers">
+                  {" "}
+                  تعداد یک بین 100 تا 200
+                </InputLabel>
+                <Input
+                  id="questionNumbers"
+                  value={student?.questionNumbers || ""}
+                  onChange={handleChange}
+                  name="questionNumbers"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionMultiplication">
+                  {" "}
+                  تعداد صفر حاصل ضرب یک تا 50
+                </InputLabel>
+                <Input
+                  id="questionMultiplication"
+                  value={student?.questionMultiplication || ""}
+                  onChange={handleChange}
+                  name="questionMultiplication"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionMaths">
+                  {" "}
+                  میزان آشنایی با سرفصل های ریاضی
+                </InputLabel>
+                <Input
+                  id="questionMaths"
+                  value={student?.questionMaths || ""}
+                  onChange={handleChange}
+                  name="questionMaths"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="engPara">
+                  یک پاراگراف درباره خود به انگلیسی
+                </InputLabel>
+                <Input
+                  id="engPara"
+                  value={student?.engPara || ""}
+                  onChange={handleChange}
+                  name="engPara"
+                />
+              </FormControl>
+            </ListItem>
+          </List>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionStudents">محاسبه نرخ اشتغال </InputLabel>
+                <Input
+                  id="questionStudents"
+                  value={student?.questionStudents || ""}
+                  onChange={handleChange}
+                  name="questionStudents"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionDiameters">تعداد قطر هفت ضلعی </InputLabel>
+                <Input
+                  id="questionDiameters"
+                  value={student?.questionDiameters || ""}
+                  onChange={handleChange}
+                  name="questionDiameters"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionWords">حرف ایجادی از اشکال </InputLabel>
+                <Input
+                  id="questionWords"
+                  value={student?.questionWords || ""}
+                  onChange={handleChange}
+                  name="questionWords"
+                />
+              </FormControl>
+            </ListItem>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="questionEnglishFamiliarity">میزان آشنایی با زبان انگلیسی </InputLabel>
+                <Input
+                  id="questionEnglishFamiliarity"
+                  value={student?.questionEnglishFamiliarity || ""}
+                  onChange={handleChange}
+                  name="questionEnglishFamiliarity"
                 />
               </FormControl>
             </ListItem>
