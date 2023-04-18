@@ -113,7 +113,7 @@ const TableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{province}</Typography>
+        <Typography variant="body2">{province || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -122,7 +122,7 @@ const TableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{city}</Typography>
+        <Typography variant="body2">{city || "-"}</Typography>
       </StyledTableCell>
       {/* <StyledTableCell
         align="center"
@@ -140,7 +140,7 @@ const TableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{mobile}</Typography>
+        <Typography variant="body2">{mobile || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -149,7 +149,7 @@ const TableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{email}</Typography>
+        <Typography variant="body2">{email || "-"}</Typography>
       </StyledTableCell>
       {/* <StyledTableCell
         align="right"
@@ -168,9 +168,9 @@ const TableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        {(directNav === "before-week" && cgpa) ||
-          (directNav === "after-week" && finalResult ? finalResult : "-") ||
-          (directNav === "skill-seeker" && selectedField)}
+        {(directNav === "before-week" && (cgpa || "-")) ||
+          (directNav === "after-week" && (finalResult || "-")) ||
+          (directNav === "skill-seeker" && (selectedField || "-"))}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -192,8 +192,8 @@ const TableBodyAll = ({
         }}
       >
         <Typography variant="body2">
-          {(directNav === "before-week" && contCourseApproach) ||
-            (directNav === "after-week" && finalField)}
+          {(directNav === "before-week" && (contCourseApproach || "-")) ||
+            (directNav === "after-week" && (finalField || "-"))}
         </Typography>
       </StyledTableCell>
     </StyledTableRow>

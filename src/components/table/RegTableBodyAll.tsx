@@ -91,7 +91,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{course}</Typography>
+        <Typography variant="body2">{course || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -100,7 +100,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{education}</Typography>
+        <Typography variant="body2">{education || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -109,7 +109,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{highSchoolYear}</Typography>
+        <Typography variant="body2">{highSchoolYear || "-"}</Typography>
       </StyledTableCell>
 
       <StyledTableCell
@@ -119,7 +119,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{province}</Typography>
+        <Typography variant="body2">{province || "-"}</Typography>
       </StyledTableCell>
 
       <StyledTableCell
@@ -129,7 +129,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{familiarity}</Typography>
+        <Typography variant="body2">{familiarity || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -138,7 +138,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{refer}</Typography>
+        <Typography variant="body2">{refer || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"

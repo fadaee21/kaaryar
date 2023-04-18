@@ -1,7 +1,6 @@
 export const provinceOptions = [
   { value: "آذربایجان شرقی", label: "آذربایجان شرقی" },
   { value: "آذربایجان غربی", label: "آذربایجان غربی" },
-  // { value: "اردبيل", label: "اردبيل" },
   { value: "اردبیل", label: "اردبیل" },
   { value: "اصفهان", label: "اصفهان" },
   { value: "البرز", label: "البرز" },
@@ -46,11 +45,11 @@ export const highSchoolOptions2 = [
 ];
 
 export const acquaintanceOptions = [
-  { label: "شبکه های اجتماعی", value: "شبکه های اجتماعی" },
+  { label: "شبکه‌های اجتماعی", value: "شبکه‌های اجتماعی" },
   { label: "موسسات نیکوکاری", value: "موسسات نیکوکاری" },
   { label: "دانشگاه", value: "دانشگاه" },
   { label: "معرف", value: "معرف" },
-  { label: "شرکت در کارگاه های آموزشی", value: "شرکت در کارگاه های آموزشی" },
+  { label: "شرکت در کارگاه‌های آموزشی", value: "شرکت در کارگاه‌های آموزشی" },
   { label: "پونیشا", value: "پونیشا" },
   { label: "کوئرا", value: "کوئرا" },
   { label: "سایر", value: "سایر" },
@@ -79,7 +78,31 @@ export const finalResults = [
   },
 ];
 
+export const statusOptions = [
+  { value: "approved", label: "تایید شده" },
+  { value: "rejected", label: "رد شده" },
+  { value: "pending", label: "در انتظار تایید" },
+];
+
 export const scholarOptions = [
-  { label: "دارد", value: true },
-  { label: "ندارد", value: false },
+  { value: "granted", label: "دارد" },
+  { value: "rejected", label: "ندارد" },
+];
+export const fieldOptions = [
+  {
+    value: "مسیر آموزش و اشتغال طراحی وب سایت",
+    label: "مسیر آموزش و اشتغال طراحی وب سایت",
+  },
+  {
+    value: "مسیر آموزش و اشتغال برنامه‌نویسی",
+    label: "مسیر آموزش و اشتغال برنامه‌نویسی",
+  },
+  {
+    value: "مسیر آموزش و اشتغال تحلیل داده",
+    label: "مسیر آموزش و اشتغال تحلیل داده",
+  },
+  {
+    value: "مسیر آموزش و اشتغال اموراداری",
+    label: "مسیر آموزش و اشتغال اموراداری",
+  },
 ];

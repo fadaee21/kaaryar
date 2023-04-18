@@ -115,14 +115,14 @@ const StudentOfAdmin = () => {
               {searchingMoodleStudent?.length !== 0 && (
                 <TableHead>
                   <StyledTableRow>
-                    <StyledTableCell align="left"></StyledTableCell>
-                    <StyledTableCell align="left">
+                    <StyledTableCell align="center"></StyledTableCell>
+                    <StyledTableCell align="center">
                       نام و نام خانوادگی
                     </StyledTableCell>
-                    <StyledTableCell align="left">نام کاربری</StyledTableCell>
-                    <StyledTableCell align="left">شهر</StyledTableCell>
-                    <StyledTableCell align="left">موبایل</StyledTableCell>
-                    <StyledTableCell align="left">ایمیل</StyledTableCell>
+                    <StyledTableCell align="center">نام کاربری</StyledTableCell>
+                    <StyledTableCell align="center">شهر</StyledTableCell>
+                    <StyledTableCell align="center">موبایل</StyledTableCell>
+                    <StyledTableCell align="center">ایمیل</StyledTableCell>
                   </StyledTableRow>
                 </TableHead>
               )}
@@ -148,17 +148,20 @@ const StudentOfAdmin = () => {
                         }}
                       >
                         <StyledTableCell
-                          align="left"
-                          sx={{ width: "5%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "5%", verticalAlign: "center" }}
                         >
                           {/* //TODO: add picture */}
-                          <TablePic picture={picture?.imageAddress} lastName={family} />
+                          <TablePic
+                            picture={picture?.imageAddress}
+                            lastName={family}
+                          />
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "25%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                             cursor: "pointer",
                           }}
                           onClick={() => navigate(`/${roles}/student/${id}`)}
@@ -168,48 +171,52 @@ const StudentOfAdmin = () => {
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "10%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2" textAlign={"left"}>
+                          <Typography variant="body2" textAlign={"center"}>
                             {username}
                           </Typography>
                         </StyledTableCell>
 
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{city}</Typography>
+                          <Typography variant="body2">{city || "-"}</Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{mobile}</Typography>
+                          <Typography variant="body2">
+                            {mobile || "-"}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{email}</Typography>
+                          <Typography variant="body2">
+                            {email || "-"}
+                          </Typography>
                         </StyledTableCell>
 
                         {/* <StyledTableCell
-                          align="left"
-                          sx={{ width: "30%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "30%", verticalAlign: "center" }}
                         >
                           <ListItem sx={{ pt: 0 }}> */}
                         {/* <ButtonGroup
@@ -256,16 +263,16 @@ const StudentOfAdmin = () => {
                         }}
                       >
                         <StyledTableCell
-                          align="left"
-                          sx={{ width: "5%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "5%", verticalAlign: "center" }}
                         >
                           <TablePic picture={picture} lastName={family} />
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "25%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                             cursor: "pointer",
                           }}
                           onClick={() => navigate(`/${roles}/student/${id}`)}
@@ -275,48 +282,52 @@ const StudentOfAdmin = () => {
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "10%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2" textAlign={"left"}>
-                            {username}
+                          <Typography variant="body2" textAlign={"center"}>
+                            {username || "-"}
                           </Typography>
                         </StyledTableCell>
 
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{city}</Typography>
+                          <Typography variant="body2">{city || "-"}</Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{mobile}</Typography>
+                          <Typography variant="body2">
+                            {mobile || "-"}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{email}</Typography>
+                          <Typography variant="body2">
+                            {email || "-"}
+                          </Typography>
                         </StyledTableCell>
 
                         {/* <StyledTableCell
-                          align="left"
-                          sx={{ width: "30%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "30%", verticalAlign: "center" }}
                         >
                           <ListItem sx={{ pt: 0 }}> */}
                         {/* <ButtonGroup

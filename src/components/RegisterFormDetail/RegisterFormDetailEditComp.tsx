@@ -29,6 +29,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
 }) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
   console.log(student)
+  console.log("سیستان و بلوچستان ")
   return (
     <BoxExamDetail>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
@@ -70,7 +71,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             <ListItem>
               <EditingSelective
                 handleChange={handleChange}
-                state={student?.province || ""}
+                state={student?.province?.trimEnd() || ""}
                 placeholder="استان"
                 options={provinceOptions}
                 name="province"
@@ -135,7 +136,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 options={acquaintanceOptions}
                 placeholder="نحوه آشنایی"
                 handleChange={handleChange}
-                state={student?.familiarity || ""}
+                state={student?.familiarity?.trim() || ""}
                 name="familiarity"
               />
             </ListItem>

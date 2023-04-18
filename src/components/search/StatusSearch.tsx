@@ -1,25 +1,25 @@
-import { ApprovalStatus } from "../../model";
+// import { ApprovalStatus } from "../../model";
 import Select from "react-select";
+// import { statusOptions } from "./searchOptions";
 interface Prop {
-  approvalStatus: ApprovalStatus;
-  setApprovalStatus: React.Dispatch<React.SetStateAction<ApprovalStatus>>;
+  statusOptions: { label: string; value: string }[];
+  state: string | null;
+  setState: React.Dispatch<React.SetStateAction<string | null>>;
+  placeholder: string;
 }
 
-const StatusSearch = ({ approvalStatus, setApprovalStatus }: Prop) => {
-  const options = [
-    { value: "approved", label: "تایید شده" },
-    { value: "rejected", label: "رد شده" },
-    { value: "pending", label: "در انتظار تایید" },
-  ];
-
+const StatusSearch = ({
+  state,
+  setState,
+  statusOptions,
+  placeholder,
+}: Prop) => {
   return (
     <Select
-      value={
-        approvalStatus ? options.find((i) => i.value === approvalStatus) : null
-      }
-      options={options}
-      onChange={(selectedValue: any) => setApprovalStatus(selectedValue.value)}
-      placeholder="وضعیت"
+      value={state ? statusOptions.find((i) => i.value === state) : null}
+      options={statusOptions}
+      onChange={(selectedValue: any) => setState(selectedValue.value)}
+      placeholder={placeholder}
       styles={{
         control: (baseStyles) => ({
           ...baseStyles,

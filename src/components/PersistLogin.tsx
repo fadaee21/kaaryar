@@ -17,7 +17,7 @@ export const PersistLogin = () => {
       </Box>
     );
   }
-
+  //if token is valid,all page can be opened with sidebar
   return tokenValidation ? (
     <>
       <Sidebar listRoutes={ListRoutes} />

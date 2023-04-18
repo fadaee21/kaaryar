@@ -10,7 +10,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
@@ -19,6 +19,7 @@ import { AfterWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 import FinalResult from "./FinalResult";
+import ImageModal from "../ImageModal";
 const LookUpLink = React.lazy(() => import("./LookUpLink"));
 // import UploadImage from "../UploadImage";
 
@@ -53,12 +54,17 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
 
   const { pic, getPicture } = useGetImage("/moodle/payment/img/user/");
 
+  const st = student?.moodleUser;
   React.useEffect(() => {
-    if (!student?.moodleUser) {
+    if (!st) {
       return;
     }
-    getPicture(student.moodleUser.id.toString());
-  }, [getPicture, student?.moodleUser]);
+    getPicture(st.id.toString());
+  }, [getPicture, st]);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -160,11 +166,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="فیش واریزی" />
-                {student?.moodleUser?.id && (
-                  <ListItemAvatar>
+                {st?.id && (
+                  <ListItemAvatar
+                    onClick={handleOpen}
+                    sx={{ cursor: "pointer" }}
+                  >
                     <Box
                       component={"img"}
-                      alt="avatar"
+                      alt="payment image"
                       src={pic}
                       sx={{ width: 150, height: "100%", borderRadius: 2 }}
                     />
@@ -483,6 +492,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </ButtonGroup>
         )}
       </Box>
+      <ImageModal pic={pic} open={open} handleClose={handleClose} />
     </>
   );
 };

@@ -133,7 +133,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="نوع موسسه آموزشی که در حال حاضر درآن تحصیل می کنید"
-                  secondary={student?.instituteType}
+                  secondary={student?.instituteCurrentType}
                 />
               </ListItem>
               <ListItem>

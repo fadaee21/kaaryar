@@ -26,17 +26,13 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="instituteType">
-                  نوع موسسه آموزشی آخرین مقطع تحصیلی
-                </InputLabel>
-                <Input
-                  id="instituteType"
-                  value={student?.instituteType || ""}
-                  onChange={handleChange}
-                  name="instituteType"
-                />
-              </FormControl>
+              <EditCombo
+                placeholder="نوع موسسه آموزشی آخرین مقطع تحصیلی"
+                identifier="instituteType"
+                options={instituteTypeOpt}
+                value={student?.instituteType}
+                handleChange={handleChange}
+              />
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
@@ -94,17 +90,24 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <ListItem>
-            <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-              <InputLabel htmlFor="instituteType">
+            {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+              <InputLabel htmlFor="instituteCurrentType">
                 نوع موسسه آموزشی که در حال حاضر درآن تحصیل می کنید
               </InputLabel>
               <Input
-                id="instituteType"
-                value={student?.instituteType || ""}
+                id="instituteCurrentType"
+                value={student?.instituteCurrentType || ""}
                 onChange={handleChange}
-                name="instituteType"
+                name="instituteCurrentType"
               />
-            </FormControl>
+            </FormControl> */}
+            <EditCombo
+              placeholder="نوع موسسه آموزشی که در حال حاضر درآن تحصیل می کنید"
+              identifier="instituteCurrentType"
+              options={instituteTypeCurrentOpt}
+              value={student?.instituteCurrentType}
+              handleChange={handleChange}
+            />
           </ListItem>
           <ListItem>
             <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
@@ -136,15 +139,13 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="jobStatus">وضعیت فعلی اشتغال</InputLabel>
-                <Input
-                  id="jobStatus"
-                  value={student?.jobStatus || ""}
-                  onChange={handleChange}
-                  name="jobStatus"
-                />
-              </FormControl>
+              <EditCombo
+                placeholder="وضعیت فعلی اشتغال"
+                identifier="jobStatus"
+                options={jobStatusOpt}
+                value={student?.jobStatus}
+                handleChange={handleChange}
+              />
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
@@ -231,18 +232,23 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               </FormControl>
             </ListItem>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="avgSalary">متوسط حقوق ماهیانه</InputLabel>
-                <Input
-                  id="avgSalary"
-                  value={student?.avgSalary || ""}
-                  onChange={handleChange}
-                  name="avgSalary"
-                />
-              </FormControl>
+              <EditCombo
+                placeholder="متوسط حقوق ماهیانه"
+                identifier="avgSalary"
+                options={avgSalaryOpt}
+                value={student?.avgSalary}
+                handleChange={handleChange}
+              />
             </ListItem>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+              <EditCombo
+                placeholder="وقت آزاد روزانه"
+                identifier="freeDailyTime"
+                options={freeDailyTimeOpt}
+                value={student?.freeDailyTime}
+                handleChange={handleChange}
+              />
+              {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="freeDailyTime">وقت آزاد روزانه</InputLabel>
                 <Input
                   id="freeDailyTime"
@@ -250,7 +256,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   onChange={handleChange}
                   name="freeDailyTime"
                 />
-              </FormControl>
+              </FormControl> */}
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
@@ -272,7 +278,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+              {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel id="computerFamiliarityLabel">
                   آشنایی کار با کامپیوتر
                 </InputLabel>
@@ -286,10 +292,17 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   <MenuItem value={true as any}>بله</MenuItem>
                   <MenuItem value={false as any}>خیر</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
+              <EditCombo
+                placeholder="آشنایی کار با کامپیوتر"
+                identifier="computerFamiliarity"
+                options={computerFamiliarityOpt}
+                value={student?.computerFamiliarity}
+                handleChange={handleChange}
+              />
             </ListItem>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+              {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="computerAccess">
                   میزان دسترسی به کامپیوتر
                 </InputLabel>
@@ -299,7 +312,14 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   onChange={handleChange}
                   name="computerAccess"
                 />
-              </FormControl>
+              </FormControl>computerAccessOpt */}
+              <EditCombo
+                placeholder="میزان دسترسی به کامپیوتر"
+                identifier="computerAccess"
+                options={computerAccessOpt}
+                value={student?.computerAccess}
+                handleChange={handleChange}
+              />
             </ListItem>
           </List>
         </Grid>
@@ -364,7 +384,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+              {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="limitTime"> محدودیت زمانی</InputLabel>
                 <Input
                   id="limitTime"
@@ -372,14 +392,21 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   onChange={handleChange}
                   name="limitTime"
                 />
-              </FormControl>
+              </FormControl> */}
+              <EditCombo
+                placeholder="محدودیت زمانی"
+                identifier="limitTime"
+                options={limitTimeOpt}
+                value={student?.limitTime}
+                handleChange={handleChange}
+              />
             </ListItem>
           </List>
         </Grid>
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+              {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
                 <InputLabel htmlFor="motivation">
                   انگیزه ورود به کاریار
                 </InputLabel>
@@ -389,7 +416,14 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   onChange={handleChange}
                   name="motivation"
                 />
-              </FormControl>
+              </FormControl> */}
+              <EditCombo
+                placeholder="انگیزه ورود به کاریار"
+                identifier="motivation"
+                options={motivationOpt}
+                value={student?.motivation}
+                handleChange={handleChange}
+              />
             </ListItem>
           </List>
         </Grid>
@@ -472,7 +506,9 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
           <List>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="questionStudents">محاسبه نرخ اشتغال </InputLabel>
+                <InputLabel htmlFor="questionStudents">
+                  محاسبه نرخ اشتغال{" "}
+                </InputLabel>
                 <Input
                   id="questionStudents"
                   value={student?.questionStudents || ""}
@@ -483,7 +519,9 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="questionDiameters">تعداد قطر هفت ضلعی </InputLabel>
+                <InputLabel htmlFor="questionDiameters">
+                  تعداد قطر هفت ضلعی{" "}
+                </InputLabel>
                 <Input
                   id="questionDiameters"
                   value={student?.questionDiameters || ""}
@@ -494,7 +532,9 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="questionWords">حرف ایجادی از اشکال </InputLabel>
+                <InputLabel htmlFor="questionWords">
+                  حرف ایجادی از اشکال{" "}
+                </InputLabel>
                 <Input
                   id="questionWords"
                   value={student?.questionWords || ""}
@@ -505,7 +545,9 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             </ListItem>
             <ListItem>
               <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="questionEnglishFamiliarity">میزان آشنایی با زبان انگلیسی </InputLabel>
+                <InputLabel htmlFor="questionEnglishFamiliarity">
+                  میزان آشنایی با زبان انگلیسی{" "}
+                </InputLabel>
                 <Input
                   id="questionEnglishFamiliarity"
                   value={student?.questionEnglishFamiliarity || ""}
@@ -632,3 +674,203 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
 };
 
 export default BeforeWeekEditComp;
+
+const EditCombo = ({
+  placeholder,
+  identifier,
+  value,
+  handleChange,
+  options,
+}: any) => {
+  const content = (
+    <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+      <InputLabel id={identifier}>{placeholder}</InputLabel>
+      <Select
+        labelId={identifier}
+        id={identifier}
+        onChange={handleChange}
+        name={identifier}
+        value={value}
+      >
+        {options.map((option: any, i: any) => (
+          <MenuItem key={i} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+
+  return content;
+};
+
+const instituteTypeOpt = [
+  { value: "دبیرستان / پیش دانشگاهی", label: "دبیرستان / پیش دانشگاهی" },
+  {
+    value: "هنرستان (فنی حرفه ای/کاردانش)",
+    label: "هنرستان (فنی حرفه ای/کاردانش)",
+  },
+  { value: "دانشگاه آزاد", label: "دانشگاه آزاد" },
+  { value: "دانشگاه دولتی", label: "دانشگاه دولتی" },
+  {
+    value: "موسسه آموزش عالی فنی حرفه ای",
+    label: "موسسه آموزش عالی فنی حرفه ای",
+  },
+  {
+    value: "دانشگاه پیام نور یا غیرانتفاعی یا پردیس",
+    label: "دانشگاه پیام نور یا غیرانتفاعی یا پردیس",
+  },
+];
+const instituteTypeCurrentOpt = [
+  { value: "دبیرستان / پیش دانشگاهی", label: "دبیرستان / پیش دانشگاهی" },
+  {
+    value: "هنرستان (فنی حرفه ای/کاردانش)",
+    label: "هنرستان (فنی حرفه ای/کاردانش)",
+  },
+  { value: "دانشگاه آزاد", label: "دانشگاه آزاد" },
+  { value: "دانشگاه دولتی", label: "دانشگاه دولتی" },
+  {
+    value: "موسسه آموزش عالی فنی حرفه ای",
+    label: "موسسه آموزش عالی فنی حرفه ای",
+  },
+  {
+    value: "دانشگاه پیام نور یا غیرانتفاعی یا پردیس",
+    label: "دانشگاه پیام نور یا غیرانتفاعی یا پردیس",
+  },
+  {
+    value: "در حال حاضر مشغول به تحصیل نیستم",
+    label: "در حال حاضر مشغول به تحصیل نیستم",
+  },
+];
+
+const jobStatusOpt = [
+  {
+    value: "مشغول کار منجر به درآمد هستم",
+    label: "مشغول کار منجر به درآمد هستم",
+  },
+  {
+    value: "مشغول کار منجر به درآمد نیستم",
+    label: "مشغول کار منجر به درآمد نیستم",
+  },
+];
+
+const avgSalaryOpt = [
+  {
+    value: "کمتر ازسه میلیون تومان",
+    label: "کمتر ازسه میلیون تومان",
+  },
+  {
+    value: "بین سه تا شش میلیون تومان",
+    label: "بین سه تا شش میلیون تومان",
+  },
+  {
+    value: "بیشتر از شش میلیون تومان",
+    label: "بیشتر از شش میلیون تومان",
+  },
+];
+
+const freeDailyTimeOpt = [
+  {
+    value: "کمتر از دو ساعت",
+    label: "کمتر از دو ساعت",
+  },
+  {
+    value: "بین یک تا سه ساعت",
+    label: "بین یک تا سه ساعت",
+  },
+  {
+    value: "بین سه تا پنج ساعت",
+    label: "بین سه تا پنج ساعت",
+  },
+  {
+    value: "بین پنج تا هفت ساعت",
+    label: "بین پنج تا هفت ساعت",
+  },
+  {
+    value: "بیشتر از هفت ساعت",
+    label: "بیشتر از هفت ساعت",
+  },
+];
+
+const computerAccessOpt = [
+  {
+    value: "عدم دسترسی",
+    label: "عدم دسترسی",
+  },
+  {
+    value: "دسترسی در مکان عمومی (کافی نت، سایت دانشگاه)",
+    label: "دسترسی در مکان عمومی (کافی نت، سایت دانشگاه)",
+  },
+  {
+    value: "دسترسی شخصی و اشتراکی (با اعضای خانواده، دوستان)",
+    label: "دسترسی شخصی و اشتراکی (با اعضای خانواده، دوستان)",
+  },
+];
+
+const limitTimeOpt = [
+  {
+    value: "بله محدودیت دارم",
+    label: "بله محدودیت دارم",
+  },
+  {
+    value: "خیر محدودیت ندارم",
+    label: "خیر محدودیت ندارم",
+  },
+  {
+    value: "بله محدودیت دارم ولی می توانم آن را مدیریت کنم",
+    label: "بله محدودیت دارم ولی می توانم آن را مدیریت کنم",
+  },
+];
+
+const motivationOpt = [
+  {
+    value: "کسب آمادگی برای ورود به بازار کار",
+    label: "کسب آمادگی برای ورود به بازار کار",
+  },
+  {
+    value: "ارتقاء شغلی",
+    label: "ارتقاء شغلی",
+  },
+  {
+    value: "افزایش دانش",
+    label: "افزایش دانش",
+  },
+];
+const computerFamiliarityOpt = [
+  {
+    value:
+      "هر کامپیوتر یا لپتاپ جدیدی را می توانم روشن کنم و با آن شروع به کار کنم.",
+    label:
+      "هر کامپیوتر یا لپتاپ جدیدی را می توانم روشن کنم و با آن شروع به کار کنم.",
+  },
+  {
+    value:
+      "می توانم در ویندوز، پوشه (Folder) جدید ایجاد کنم و فایل های خودم را در آن کپی (Copy-Paste) کنم.",
+    label:
+      "می توانم در ویندوز، پوشه (Folder) جدید ایجاد کنم و فایل های خودم را در آن کپی (Copy-Paste) کنم.",
+  },
+  {
+    value:
+      "می توانم اطلاعات را با استفاده از فلش (USB Flash Disk) از یک کامپیوتر به کامپیوتر دیگر انتقال دهم.",
+    label:
+      "می توانم اطلاعات را با استفاده از فلش (USB Flash Disk) از یک کامپیوتر به کامپیوتر دیگر انتقال دهم.",
+  },
+  {
+    value:
+      "می توانم از نرم افزار Word برای تایپ نامه، از Powerpoint برای تهیه ارائه ها و از Excel برای حسابداری شخصی استفاده کنم",
+    label:
+      "می توانم از نرم افزار Word برای تایپ نامه، از Powerpoint برای تهیه ارائه ها و از Excel برای حسابداری شخصی استفاده کنم",
+  },
+  {
+    value:
+      "از برنامه های Skype، Zoom یا Google Meet برای تماس های تصویری استفاده  می کنم.",
+    label:
+      "از برنامه های Skype، Zoom یا Google Meet برای تماس های تصویری استفاده  می کنم.",
+  },
+  {
+    value:
+      "می توانم حین یک تماس تصویری، صفحه نمایش کامپیوترم را به طور زنده با دیگران به اشتراک بگذارم.",
+    label:
+      "می توانم حین یک تماس تصویری، صفحه نمایش کامپیوترم را به طور زنده با دیگران به اشتراک بگذارم.",
+  },
+];
