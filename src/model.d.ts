@@ -233,19 +233,18 @@ export interface BeforeWeekType {
   computerAccess: string;
   computerFamiliarity: string;
   contCourseApproach: string;
-  courseDescription: string;
   currentField: string;
   currentInstName: string;
   instituteCurrentType: string;
   eduLevel: string;
   eduStatus: string;
   familiar: string;
-  freeDailyTime: string;
+  accessTime: string;
   instituteType: string;
   internetAccess: string;
   jobReady: boolean;
   jobStandby: boolean;
-  jobStatus: string;
+  jobStatus: boolean;
   jobTitle: string;
   jobType: string;
   jobVision: string;
@@ -253,7 +252,7 @@ export interface BeforeWeekType {
   limitTime: string;
   motivation: string;
   paymentImageAddress: string;
-  programmingCoursePassed: boolean;
+  codingKnowledge: string;
   questionCity?: string;
   questionStudents?: string;
   questionNumbers?: string;
@@ -271,6 +270,18 @@ export interface BeforeWeekType {
   webDevFamiliarity: string;
   workTime: string;
   id: 1;
+  levelAlgorithms: number | undefined;
+  levelDataStructures: number | undefined;
+  levelDiscreteMath: number | undefined;
+  levelFlowDiagrams: number | undefined;
+  levelLinearAlgebra: number | undefined;
+  levelLogics: number | undefined;
+  levelProbabilities: number | undefined;
+  isCurrentlyStudent: boolean;
+  employmentTimeCommitment: string;
+  employmentType: string;
+  administrativeComments: string;
+  freeDailyTime: string;
 }
 
 interface AfterWeekType {
@@ -317,7 +328,7 @@ export interface TableBodyAllType extends RegistrationForm {
   jobStandby?: boolean;
   scholar?: boolean;
   finalResult?: string;
-  cgpa?:string;
+  cgpa?: string;
 }
 
 export interface SeekerStudent {
@@ -380,3 +391,5 @@ export interface Profile {
 }
 
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;
+
+export type OptionsString = { label: string; value: string };

@@ -199,7 +199,8 @@ const BeforeWeekTable = () => {
                         email={email}
                         gender={gender}
                         directNav="before-week"
-                        cgpa={cgpa}
+                        // cgpa={cgpa}
+                        cgpa="-" //TODO:cgpa is not correct it must be change
                         checked={acceptWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
@@ -232,7 +233,8 @@ const BeforeWeekTable = () => {
                         searchingStudentBefore.jobStandby
                       }
                       cgpa={
-                        searchingStudentBefore.cgpa
+                        // searchingStudentBefore.cgpa
+                        "-"
                       }
                       family={searchingStudentBefore.registrationForm.family}
                       firstName={

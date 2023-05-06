@@ -10,7 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import { AfterWeekType } from "../../model";
-import { fieldOptions } from "../search/searchOptions";
+import { fieldOptions, finalResults } from "../search/searchOptions";
 
 interface AfterWeekStudentEdit {
   student: AfterWeekType | null;
@@ -321,6 +321,31 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
         </Grid>
       </Grid>
 
+      <Grid container rowGap={5} sx={{ my: 2 }}>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+                <InputLabel htmlFor="finalResult">نتیجه نهایی</InputLabel>
+                <Select
+                  labelId="finalResult"
+                  id="finalResult"
+                  name="finalResult"
+                  value={student?.finalResult || ""}
+                  label="نتیجه نهایی"
+                  onChange={handleChange}
+                >
+                  {finalResults.map((finalResult) => (
+                    <MenuItem key={finalResult.label} value={finalResult.value}>
+                      {finalResult.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
       <Grid container rowGap={5} sx={{ my: 2 }}>
         <Grid item xs={12} md={6}>
           <List>

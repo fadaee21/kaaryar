@@ -153,7 +153,7 @@ const StudentOfAdmin = () => {
                         >
                           {/* //TODO: add picture */}
                           <TablePic
-                            picture={picture?.imageAddress}
+                            picture={picture}
                             lastName={family}
                           />
                         </StyledTableCell>

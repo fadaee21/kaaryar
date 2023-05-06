@@ -18,7 +18,7 @@ import useGetImage from "../../hooks/request/useGetImage";
 import { AfterWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
-import FinalResult from "./FinalResult";
+// import FinalResult from "./FinalResult";
 import ImageModal from "../ImageModal";
 const LookUpLink = React.lazy(() => import("./LookUpLink"));
 // import UploadImage from "../UploadImage";
@@ -166,7 +166,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="فیش واریزی" />
-                {st?.id && (
+                {pic && (
                   <ListItemAvatar
                     onClick={handleOpen}
                     sx={{ cursor: "pointer" }}
@@ -377,15 +377,15 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       </BoxExamDetail>
 
       {/* link after week student to moodle student */}
-      {!seekerPage && (
+      {/* {!seekerPage && (
         <FinalResult
           approvedStu={student?.afterWeekChecked}
           finalResult={student?.finalResult}
           id={id}
         />
-      )}
+      )} */}
 
-      {/* <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
+      <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
       </Typography>
       <BoxExamDetail>
@@ -401,12 +401,11 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             <List>
               <ListItem>
                 <ListItemText secondary={student?.finalResult} />
-                
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail> */}
+      </BoxExamDetail>
 
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         ثبت نام نهایی
