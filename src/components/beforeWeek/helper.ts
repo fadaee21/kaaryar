@@ -9,29 +9,8 @@ export interface ExamStudent {
       | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
 }
-export interface PropEditString {
-  placeholder: string;
-  identifier: string;
-  value: string;
-  handleChange: (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => void;
-}
-export interface PropEditBool {
-  placeholder: string;
-  identifier: string;
-  value: any;
-  handleChange: (e: SelectChangeEvent<string | boolean>) => void;
-}
-export interface PropEditCombo {
-  placeholder: string;
-  identifier: string;
-  value: any;
-  options: {
-    value: any;
-    label: string;
-  }[];
-  handleChange: (e: SelectChangeEvent<string>) => void;
+interface ObjEnum {
+  [key: number]: string;
 }
 
 enum Level {
@@ -42,38 +21,26 @@ enum Level {
   Teacher,
 }
 
-export function getMath(mathCode: number | undefined): string | undefined {
-  switch (mathCode) {
-    case Level.None:
-      return "اصلا آشنایی ندارم";
-    case Level.Beginner:
-      return "کمی آشنایی دارم";
-    case Level.Intermediate:
-      return "تا اندازه‌ای بلد هستم";
-    case Level.Advanced:
-      return "به خوبی بلد هستم";
-    case Level.Teacher:
-      return "میتوانم آموزش دهم";
-    default:
-      return undefined;
-  }
+export function getMath(mathCode: number | undefined): string {
+  const MathLevels: ObjEnum = {
+    [Level.None]: "اصلا آشنایی ندارم",
+    [Level.Beginner]: "کمی آشنایی دارم",
+    [Level.Intermediate]: "تا اندازه‌ای بلد هستم",
+    [Level.Advanced]: "به خوبی بلد هستم",
+    [Level.Teacher]: "میتوانم آموزش دهم",
+  };
+  return mathCode !== undefined ? MathLevels[mathCode] : "";
 }
 
-export function getEng(engCode: number | undefined): string | undefined {
-  switch (engCode) {
-    case Level.None:
-      return "1 (در حد دبیرستان)";
-    case Level.Beginner:
-      return "2";
-    case Level.Intermediate:
-      return "3";
-    case Level.Advanced:
-      return "4";
-    case Level.Teacher:
-      return "5 (در حد آیلتس یا تافل)";
-    default:
-      return undefined;
-  }
+export function getEng(engCode: number | undefined): string {
+  const EnglishLevels: ObjEnum = {
+    [Level.None]: "1 (در حد دبیرستان)",
+    [Level.Beginner]: "2",
+    [Level.Intermediate]: "3",
+    [Level.Advanced]: "4",
+    [Level.Teacher]: "5 (در حد آیلتس یا تافل)",
+  };
+  return engCode !== undefined ? EnglishLevels[engCode] : "";
 }
 
 export const instituteTypeOpt = [
@@ -94,23 +61,23 @@ export const instituteTypeOpt = [
   },
 ];
 export const instituteTypeCurrentOpt = [
-  { value: "دبیرستان / پیش‌دانشگاهی", label: "دبیرستان / پیش‌دانشگاهی" },
+  { value: "دبیرستان/پیش‌دانشگاهی", label: "دبیرستان / پیش‌دانشگاهی" },
   {
-    value: "هنرستان (فنی حرفه ای/کاردانش)",
+    value: "هنرستان",
     label: "هنرستان (فنی حرفه ای/کاردانش)",
   },
   { value: "دانشگاه آزاد", label: "دانشگاه آزاد" },
   { value: "دانشگاه دولتی", label: "دانشگاه دولتی" },
   {
-    value: "موسسه آموزش عالی فنی حرفه ای",
+    value: "فنی",
     label: "موسسه آموزش عالی فنی حرفه ای",
   },
   {
-    value: "دانشگاه پیام‌نور یا غیرانتفاعی یا پردیس",
+    value: "پیام‌نور",
     label: "دانشگاه پیام‌نور یا غیرانتفاعی یا پردیس",
   },
   {
-    value: "در حال حاضر مشغول به تحصیل نیستم",
+    value: "تحصیل نمیکنم",
     label: "در حال حاضر مشغول به تحصیل نیستم",
   },
 ];
@@ -128,38 +95,38 @@ export const jobStatusOpt = [
 
 export const avgSalaryOpt = [
   {
-    value: "کمتر از دو میلیون تومان",
+    value: "کمتر از دومیلیون تومان",
     label: "کمتر از دو میلیون تومان",
   },
   {
-    value: "بین دو تا پنج میلیون تومان",
+    value: "بین۲تا۵ میلیون تومان",
     label: "بین دو تا پنج میلیون تومان",
   },
   {
-    value: "بیشتر از پنج میلیون تومان",
+    value: "بیشتراز5میلیون تومان",
     label: "بیشتر از پنج میلیون تومان",
   },
 ];
 
 export const accessTimeOpt = [
   {
-    value: "-2",
+    value: "کمتراز۲ساعت",
     label: "کمتر از دو ساعت",
   },
   {
-    value: "1-3",
+    value: "بین۱تا۳ساعت",
     label: "بین یک تا سه ساعت",
   },
   {
-    value: "3-5",
+    value: "بین۳تا۵ساعت",
     label: "بین سه تا پنج ساعت",
   },
   {
-    value: "5-7",
+    value: "بین۵تا۷ساعت",
     label: "بین پنج تا هفت ساعت",
   },
   {
-    value: "+7",
+    value: "بیشتراز۷ساعت",
     label: "بیشتر از هفت ساعت",
   },
 ];
@@ -173,15 +140,15 @@ export const freeDailyTimeOpt = [
 ];
 export const computerAccessOpt = [
   {
-    value: "دسترسی در مکان عمومی (کافی نت/سایت دانشگاه)",
+    value: "در مکان عمومی",
     label: "دسترسی در مکان عمومی (کافی نت/سایت دانشگاه)",
   },
   {
-    value: "دسترسی اشتراکی (با اعضای خانواده/دوستان)",
+    value: "دسترسی اشتراکی",
     label: "دسترسی اشتراکی (با اعضای خانواده/دوستان)",
   },
   {
-    value: "کامپیوتر شخصی (تمام وقت)",
+    value: "کامپیوتر شخصی",
     label: "کامپیوتر شخصی (تمام وقت)",
   },
   {
@@ -192,26 +159,26 @@ export const computerAccessOpt = [
 
 export const limitTimeOpt = [
   {
-    value: "بله محدودیت دارم",
+    value: "محدودیت دارم",
     label: "بله محدودیت دارم",
   },
   {
-    value: "خیر محدودیت ندارم",
+    value: "محدودیت ندارم",
     label: "خیر محدودیت ندارم",
   },
   {
-    value: "بله محدودیت دارم ولی می توانم آن را مدیریت کنم",
+    value: "محدودیت دارم ولی میتوانم آنرا کنترل کنم",
     label: "بله محدودیت دارم ولی می توانم آن را مدیریت کنم",
   },
 ];
 
 export const motivationOpt = [
   {
-    value: "کسب آمادگی برای ورود به بازار کار",
+    value: "آمادگی برای ورود به مار",
     label: "کسب آمادگی برای ورود به بازار کار",
   },
   {
-    value: "ارتقاء شغلی",
+    value: "ارتقا شغلی",
     label: "ارتقاء شغلی",
   },
   {
@@ -380,8 +347,26 @@ export const internetAccessOpt = [
     label: "با کامپیوتر",
   },
   {
-    value: "با موبایل و کامپیوتر هردو",
+    value: "هردو",
     label: "با موبایل و کامپیوتر هردو",
+  },
+  {
+    value: "دسترسی ندارم",
+    label: "دسترسی ندارم",
+  },
+];
+export const internetAccessTimingOpt = [
+  {
+    value: "تا2ساعت",
+    label: "تا ۲ ساعت",
+  },
+  {
+    value: "تا6ساعت",
+    label: "تا ۶ ساعت",
+  },
+  {
+    value: "تمام وقت",
+    label: "تمام وقت",
   },
   {
     value: "دسترسی ندارم",
@@ -391,19 +376,19 @@ export const internetAccessOpt = [
 
 export const cgpaOpt = [
   {
-    value: "۱۸ تا ۲۰",
+    value: "18تا20",
     label: "۱۸ تا ۲۰",
   },
   {
-    value: "۱۵ تا ۱۷",
+    value: "15تا17",
     label: "۱۵ تا ۱۷",
   },
   {
-    value: "۱۲ تا ۱۵",
+    value: "12تا15",
     label: "۱۲ تا ۱۵",
   },
   {
-    value: "زیر ۱۲",
+    value: "زیر12",
     label: "زیر ۱۲",
   },
 ];
@@ -449,5 +434,39 @@ export const mathOpt = [
   {
     value: 5,
     label: "میتوانم آموزش دهم",
+  },
+];
+
+export const employmentTypeOpt = [
+  {
+    value: "رسمی",
+    label: "استخدام رسمی",
+  },
+  {
+    value: "غیره",
+    label: "غیره",
+  },
+];
+
+export const employmentTimeCommitmentOpt = [
+  {
+    value: "1تا3",
+    label: "۱ تا ۳ ساعت",
+  },
+  {
+    value: "3تا5",
+    label: "۳ تا ۵ ساعت",
+  },
+  {
+    value: "5تا7",
+    label: "۵ تا ۷ ساعت",
+  },
+  {
+    value: "7تا9",
+    label: "۷ تا ۹ ساعت",
+  },
+  {
+    value: "بیشتراز۹ساعت",
+    label: "بیشتر از ۹ ساعت",
   },
 ];

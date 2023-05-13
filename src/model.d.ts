@@ -212,7 +212,7 @@ export interface RegistrationForm {
   studyField?: string;
   selectedField?: string;
   description?: string;
-  token?: string;
+  
   highSchoolYear?: string;
   refer?: string;
   createTime?: string;
@@ -253,20 +253,20 @@ export interface BeforeWeekType {
   motivation: string;
   paymentImageAddress: string;
   codingKnowledge: string;
-  questionCity?: string;
-  questionStudents?: string;
-  questionNumbers?: string;
-  questionDiameters?: string;
-  questionMultiplication?: string;
-  questionWords?: string;
-  questionMaths?: string;
-  questionEnglishFamiliarity?: string;
-  engPara?: string;
-  skills?: string;
+  questionCity: string;
+  questionStudents: string;
+  questionNumbers: string;
+  questionDiameters: string;
+  questionMultiplication: string;
+  questionWords: string;
+  questionMaths: string;
+  questionEnglishFamiliarity: string;
+  engPara: string;
+  skills: string;
   stuSemester: string;
   stuYear: string;
-  transcriptImageAddress?: string;
-  noneJobActivation?: string;
+  transcriptImageAddress: string;
+  noneJobActivation: string;
   webDevFamiliarity: string;
   workTime: string;
   id: 1;
@@ -282,16 +282,17 @@ export interface BeforeWeekType {
   employmentType: string;
   administrativeComments: string;
   freeDailyTime: string;
+  internetAccessTiming:string;
 }
 
 interface AfterWeekType {
   beforeWeekForm: BeforeWeek;
   id: number;
   afterWeekChecked: boolean;
-  algoScore: number;
+  algoScore: string;
   comAccess: string;
   comAccessStatus: string;
-  comScore: number;
+  comScore: string;
   consistCompleteTime: string;
   consistTime: string;
   etcDesc: string;
@@ -299,18 +300,18 @@ interface AfterWeekType {
   finalField: string;
   finalResult: string;
   jobCommit: string;
-  langScore: number;
+  langScore: string;
   limitAndRisk: string;
   predict: string;
   presentStatus: string;
   recommendField: string;
+  recommendFieldMentor:String;
   scholar: boolean;
-  scholarPercentage: number;
+  scholarPercentage: string;
   workCommit: string;
   algoLevelResult: string;
   comLevelResult: string;
   firstSelectJobRoad: string;
-  mbtiTest: string;
   notifyAcceptWeek: string;
   workshopCont: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
@@ -393,3 +394,29 @@ export interface Profile {
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;
 
 export type OptionsString = { label: string; value: string };
+
+
+export interface PropEditString {
+  placeholder: string;
+  identifier: string;
+  value: string;
+  handleChange: (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+}
+export interface PropEditBool {
+  placeholder: string;
+  identifier: string;
+  value: any;
+  handleChange: (e: SelectChangeEvent<string | boolean>) => void;
+}
+export interface PropEditCombo {
+  placeholder: string;
+  identifier: string;
+  value: any;
+  options: {
+    value: any;
+    label: string;
+  }[];
+  handleChange: (e: SelectChangeEvent<string>) => void;
+}

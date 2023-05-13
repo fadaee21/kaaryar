@@ -12,9 +12,6 @@ import Select from "@mui/material/Select";
 
 import {
   ExamStudent,
-  PropEditBool,
-  PropEditCombo,
-  PropEditString,
   instituteTypeOpt,
   instituteTypeCurrentOpt,
   jobStatusOpt,
@@ -34,8 +31,10 @@ import {
   questionEnglishFamiliarityOpt,
   mathOpt,
   internetAccessOpt,
-  freeDailyTimeOpt,
+  employmentTypeOpt,
+  employmentTimeCommitmentOpt,
 } from "./helper";
+import { PropEditBool, PropEditCombo, PropEditString } from "../../model";
 
 const BeforeWeekEditComp: React.FC<ExamStudent> = ({
   student,
@@ -115,11 +114,12 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             />
             {student?.jobStatus ? (
               <>
-                <EditString
+                <EditCombo
+                  options={employmentTypeOpt}
                   handleChange={handleChange}
-                  identifier="jobType"
-                  placeholder="نوع اشتغال"
-                  value={student?.jobType || ""}
+                  identifier="employmentType"
+                  placeholder="نوع کار"
+                  value={student?.employmentType}
                 />
                 <EditCombo
                   placeholder="متوسط حقوق ماهیانه"
@@ -128,11 +128,12 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   value={student?.avgSalary}
                   handleChange={handleChange}
                 />
-                <EditString
+                <EditCombo
+                  options={employmentTimeCommitmentOpt}
                   handleChange={handleChange}
                   identifier="employmentTimeCommitment"
                   value={student?.employmentTimeCommitment || ""}
-                  placeholder="تعداد ساعت کاری"
+                  placeholder="زمان صرف شده برای کار"
                 />
                 <EditString
                   handleChange={handleChange}
@@ -173,13 +174,21 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               placeholder="چشم انداز شغلی دوسال آینده"
               value={student?.jobVision || ""}
             />
+
             <EditCombo
+              options={accessTimeOpt}
+              value={student?.accessTime || ""}
+              handleChange={handleChange}
+              identifier="accessTime"
+              placeholder="وقت آزاد برای مطالعه و تمرین های کاریار"
+            />
+            {/* <EditCombo
               placeholder="وقت آزاد روزانه"
               identifier="freeDailyTime"
               options={freeDailyTimeOpt}
               value={student?.freeDailyTime}
               handleChange={handleChange}
-            />
+            /> */}
           </List>
         </Grid>
       </Grid>
@@ -218,14 +227,6 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               handleChange={handleChange}
               identifier="internetAccess"
               placeholder="ابزار دسترسی به اینترنت"
-            />
-
-            <EditCombo
-              options={accessTimeOpt}
-              value={student?.accessTime || ""}
-              handleChange={handleChange}
-              identifier="accessTime"
-              placeholder="ساعات دسترسی"
             />
           </List>
         </Grid>

@@ -5,18 +5,30 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { BeforeWeekType } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
-import { accessTimeOpt, getEng, getMath, questionCityOpt } from "./helper";
+import {
+  accessTimeOpt,
+  employmentTimeCommitmentOpt,
+  getEng,
+  getMath,
+  internetAccessOpt,
+  internetAccessTimingOpt,
+  motivationOpt,
+  questionCityOpt,
+} from "./helper";
 import { getLabel } from "../../utils/getLabel";
+import ImageModal from "../ImageModal";
+import useGetImage from "../../hooks/request/useGetImage";
 
 interface ExamStudent {
   student: BeforeWeekType | null;
@@ -39,6 +51,20 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
+
+  const transcript = student?.transcriptImageAddress;
+  React.useEffect(() => {
+    if (!transcript) {
+      return;
+    }
+    getPicture(transcript);
+  }, [getPicture, transcript]);
 
   return (
     <>
@@ -158,6 +184,24 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   </ListItem>
                 </>
               )}
+              <ListItem
+                sx={{ flexDirection: "column", alignItems: "flex-start" }}
+              >
+                <ListItemText primary="کارنامه تحصیلی" />
+                {pic && (
+                  <ListItemAvatar
+                    onClick={handleOpen}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <Box
+                      component={"img"}
+                      alt="payment image"
+                      src={pic}
+                      sx={{ width: 150, height: "100%", borderRadius: 2 }}
+                    />
+                  </ListItemAvatar>
+                )}
+              </ListItem>
             </List>
           </Grid>
         </Grid>
@@ -190,7 +234,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                 <>
                   <ListItem>
                     <ListItemText
-                      primary="نوع اشتغال"
+                      primary="نوع کار"
                       secondary={student?.employmentType}
                     />
                   </ListItem>
@@ -203,7 +247,10 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   <ListItem>
                     <ListItemText
                       primary="زمان صرف شده برای کار"
-                      secondary={student?.employmentTimeCommitment}
+                      secondary={getLabel(
+                        student?.employmentTimeCommitment,
+                        employmentTimeCommitmentOpt
+                      )}
                     />
                   </ListItem>
                   <ListItem>
@@ -228,10 +275,10 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
-                <ListItemText
+                {/* <ListItemText
                   primary="وقت آزاد روزانه"
                   secondary={student?.freeDailyTime}
-                />
+                /> */}
               </ListItem>
               <ListItem>
                 <ListItemText
@@ -239,6 +286,13 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   secondary={student?.jobVision}
                 />
               </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="وقت آزاد برای مطالعه و تمرین های کاریار"
+                  secondary={getLabel(student?.accessTime, accessTimeOpt)}
+                />
+              </ListItem>
+
               <ListItem>
                 <ListItemText
                   primary="آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب"
@@ -293,13 +347,19 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="ابزار دسترسی به اینترنت"
-                  secondary={student?.internetAccess}
+                  secondary={getLabel(
+                    student?.internetAccess,
+                    internetAccessOpt
+                  )}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="ساعات دسترسی"
-                  secondary={getLabel(student?.accessTime,accessTimeOpt)}
+                  primary="ساعات دسترسی به اینترنت"
+                  secondary={getLabel(
+                    student?.internetAccessTiming,
+                    internetAccessTimingOpt
+                  )}
                 />
               </ListItem>
             </List>
@@ -332,7 +392,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="انگیزه ورود به کاریار"
-                  secondary={student?.motivation}
+                  secondary={getLabel(student?.motivation, motivationOpt)}
                 />
               </ListItem>
             </List>
@@ -356,7 +416,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="آتشنشان در شهر خیالی"
-                  secondary={getLabel(student?.questionCity,questionCityOpt)}
+                  secondary={getLabel(student?.questionCity, questionCityOpt)}
                 />
               </ListItem>
               <ListItem>
@@ -617,6 +677,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Button>
         </ButtonGroup>
       </Box>
+      <ImageModal pic={pic} open={open} handleClose={handleClose} />
     </>
   );
 };

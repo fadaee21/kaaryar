@@ -49,7 +49,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 handleChange={handleChange}
                 name="token"
                 placeholder="کد متقاضی"
-                state={student?.token || ""}
+                state={student?.registrationCode || ""}
               />
             </ListItem>
             <ListItem>

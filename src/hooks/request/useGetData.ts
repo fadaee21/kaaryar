@@ -1,23 +1,23 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { getData } from "../../api/axios";
 
 const useGetData = () => {
   const [dataCall, setDataCall] = useState<any>();
   const [loadingCall, setLoadingCall] = useState(true);
 
-  const getAllData = async (address: string) => {
+  const getAllData = useCallback(async (address: string) => {
     try {
       setLoadingCall(true);
       const response = await getData(address);
       const result = await response.data;
-      console.log(result)
+      console.log(result);
       setDataCall(result);
       setLoadingCall(false);
     } catch (error) {
       console.log(error);
       setLoadingCall(false);
     }
-  };
+  }, []);
 
   return { getAllData, dataCall, loadingCall };
 };

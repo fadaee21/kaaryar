@@ -31,7 +31,7 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              <ListItemText primary="کد متقاضی :" secondary={student?.token} />
+              <ListItemText primary="کد متقاضی :" secondary={student?.registrationCode} />
             </ListItem>
             <ListItem>
               <ListItemText primary="نام :" secondary={student?.firstName} />

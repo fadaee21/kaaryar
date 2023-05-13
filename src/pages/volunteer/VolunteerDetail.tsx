@@ -13,7 +13,7 @@ const VolunteerDetail = () => {
   useEffect(() => {
     const person = `/user/profile/username/${username}`;
     getAllData(person);
-  }, [username]);
+  }, [getAllData, username]);
 
   if (loadingCall) {
     return <LoadingProgress />;

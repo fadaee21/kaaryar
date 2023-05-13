@@ -9,8 +9,18 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { AfterWeekType } from "../../model";
+import { AfterWeekType, PropEditCombo, PropEditString } from "../../model";
 import { fieldOptions, finalResults } from "../search/searchOptions";
+import {
+  comAccessStatusOpt,
+  notifyAcceptWeekOpt,
+  presentStatusOpt,
+  recommendFieldOpt,
+  recommendFieldMentorOpt,
+  scholarOpt,
+  workshopContOpt,
+  yesOrNo
+} from "./helper";
 
 interface AfterWeekStudentEdit {
   student: AfterWeekType | null;
@@ -23,387 +33,213 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
 }) => {
   return (
     <>
+      {/* فرم ثبت نام هفته پذیرش */}
       <Grid container rowGap={5} sx={{ my: 2 }}>
         <Grid item xs={12} md={6}>
           <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="workshopCont">
-                  وضعیت شرکت در کارگاه معارفه
-                </InputLabel>
-                <Input
-                  id="workshopCont"
-                  value={student?.workshopCont || ""}
-                  onChange={handleChange}
-                  name="workshopCont"
-                />
-              </FormControl>
-            </ListItem>
-
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="notifyAcceptWeek">
-                  اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن
-                </InputLabel>
-                <Input
-                  id="notifyAcceptWeek"
-                  value={student?.notifyAcceptWeek || ""}
-                  onChange={handleChange}
-                  name="notifyAcceptWeek"
-                />
-              </FormControl>
-            </ListItem>
-
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="mbtiTest">نتیجه تست MBTI</InputLabel>
-                <Input
-                  id="mbtiTest"
-                  value={student?.mbtiTest || ""}
-                  onChange={handleChange}
-                  name="mbtiTest"
-                />
-              </FormControl>
-            </ListItem>
-
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="comLevelResult">
-                  نتیجه تعیین سطح کامپیوتر
-                </InputLabel>
-                <Input
-                  id="comLevelResult"
-                  value={student?.comLevelResult || ""}
-                  onChange={handleChange}
-                  name="comLevelResult"
-                />
-              </FormControl>
-            </ListItem>
+            <EditCombo
+              handleChange={handleChange}
+              identifier="workshopCont"
+              options={workshopContOpt}
+              placeholder="وضعیت شرکت در کارگاه معارفه"
+              value={student?.workshopCont}
+            />
+            <EditCombo
+              handleChange={handleChange}
+              identifier="notifyAcceptWeek"
+              options={notifyAcceptWeekOpt}
+              placeholder="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
+              value={student?.notifyAcceptWeek}
+            />
+            <EditString
+              handleChange={handleChange}
+              identifier="firstSelectJobRoad"
+              placeholder="انتخاب اولیه مسیر شغلی"
+              value={student?.firstSelectJobRoad || ""}
+            />
           </List>
         </Grid>
         <Grid item xs={12} md={6}>
           <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="firstSelectJobRoad">
-                  انتخاب اولیه مسیر شغلی
-                </InputLabel>
-                <Input
-                  id="firstSelectJobRoad"
-                  value={student?.firstSelectJobRoad || ""}
-                  onChange={handleChange}
-                  name="firstSelectJobRoad"
-                />
-              </FormControl>
-            </ListItem>
-
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="algoLevelResult">
-                  نتیجه تعیین سطح الگوریتم
-                </InputLabel>
-                <Input
-                  id="algoLevelResult"
-                  value={student?.algoLevelResult || ""}
-                  onChange={handleChange}
-                  name="algoLevelResult"
-                />
-              </FormControl>
-            </ListItem>
+            <EditString
+              handleChange={handleChange}
+              identifier="comLevelResult"
+              placeholder="نتیجه تعیین سطح کامپیوتر"
+              value={student?.comLevelResult || ""}
+            />
+            <EditString
+              handleChange={handleChange}
+              identifier="langScore"
+              placeholder="نتیجه تعیین سطح زبان انگلیسی"
+              value={student?.langScore || ""}
+            />
+            <EditString
+              handleChange={handleChange}
+              identifier="algoScore"
+              placeholder="تعیین سطح الگوریتم و ریاضی"
+              value={student?.algoScore || ""}
+            />
+            <EditString
+              handleChange={handleChange}
+              identifier="comLevelResult"
+              placeholder="نمره مهارت‌های پایه--"
+              value={student?.comLevelResult || ""}
+            />
+          </List>
+        </Grid>
+      </Grid>
+      {/* کارنامه هفته پذیرش */}
+      <Grid container rowGap={5} sx={{ my: 2 }}>
+        <Grid item xs={12} md={6}>
+          <List>
+            <EditString
+              handleChange={handleChange}
+              identifier="algoLevelResult"
+              placeholder="نتیجه تعیین سطح الگوریتم"
+              value={student?.algoLevelResult || ""}
+            />
+            <EditCombo
+              options={presentStatusOpt}
+              handleChange={handleChange}
+              identifier="presentStatus"
+              placeholder="وضعیت حضور و غیاب"
+              value={student?.presentStatus || ""}
+            />
+          </List>
+        </Grid>
+        {/* <Grid item xs={12} md={6}>
+          <List></List>
+        </Grid> */}
+      </Grid>
+      {/* نظرات سرگروه */}
+      <Grid container rowGap={5} sx={{ my: 2 }}>
+        <Grid item xs={12} md={6}>
+          <List>
+            <EditCombo
+              placeholder="اختصاص زمان کافی به کاریار - سرگروه"
+              handleChange={handleChange}
+              identifier="consistCompleteTime"
+              value={student?.consistCompleteTime}
+              options={yesOrNo}
+            />
+            <EditCombo
+              placeholder="وضعیت دسترسی به کامپیوتر و اینترنت"
+              handleChange={handleChange}
+              identifier="comAccessStatus"
+              value={student?.comAccessStatus}
+              options={comAccessStatusOpt}
+            />
+            <EditString
+              placeholder="پیش بینی ریزش"
+              handleChange={handleChange}
+              identifier="predict"
+              value={student?.predict || ""}
+            />
+          </List>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <List>
+            <EditCombo
+              placeholder="تعهد به کار- سرگروه"
+              handleChange={handleChange}
+              identifier="jobCommit"
+              value={student?.jobCommit}
+              options={yesOrNo}
+            />
+            <EditCombo
+              placeholder="رشته پیشنهادی سرگروه"
+              handleChange={handleChange}
+              identifier="recommendField"
+              value={student?.recommendField}
+              options={recommendFieldOpt}
+            />
+            <EditString
+              placeholder="سایر ریسک‌ها و محدودیت‌ها - سرگروه"
+              handleChange={handleChange}
+              identifier="etcDesc"
+              value={student?.etcDesc || ""}
+            />
+          </List>
+        </Grid>
+      </Grid>
+      {/* نظرات منتور */}
+      <Grid container rowGap={5} sx={{ my: 2 }}>
+        <Grid item xs={12} md={6}>
+          <List>
+            <EditCombo
+              handleChange={handleChange}
+              value={student?.consistTime}
+              placeholder="اختصاص زمان کافی به کاریار"
+              options={yesOrNo}
+              identifier="consistTime"
+            />
+            <EditCombo
+              handleChange={handleChange}
+              value={student?.recommendFieldMentor}
+              placeholder="رشته پیشنهادی منتور"
+              options={recommendFieldMentorOpt}
+              identifier="recommendFieldMentor"
+            />
+          </List>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <List>
+            <EditCombo
+              handleChange={handleChange}
+              value={student?.workCommit}
+              placeholder="تعهد به کار"
+              identifier="workCommit"
+              options={yesOrNo}
+            />
+            <EditString
+              handleChange={handleChange}
+              value={student?.limitAndRisk || ""}
+              placeholder="سایر ریسک‌ها و محدودیت‌ها"
+              identifier="limitAndRisk"
+            />
+          </List>
+        </Grid>
+      </Grid>
+      {/* نهایی */}
+      <Grid container rowGap={5} sx={{ my: 2 }}>
+        <Grid item xs={12} md={6}>
+          <List>
+            <EditCombo
+              handleChange={handleChange}
+              placeholder="نتیجه نهایی"
+              options={finalResults}
+              value={student?.finalResult}
+              identifier="finalResult"
+            />
           </List>
         </Grid>
       </Grid>
       <Grid container rowGap={5} sx={{ my: 2 }}>
         <Grid item xs={12} md={6}>
           <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="langScore">نمره تعیین سطح زیان</InputLabel>
-                <Input
-                  id="langScore"
-                  value={student?.langScore}
-                  onChange={handleChange}
-                  name="langScore"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="algoScore">نمره آزمون الگوریتم</InputLabel>
-                <Input
-                  id="algoScore"
-                  value={student?.algoScore}
-                  onChange={handleChange}
-                  name="algoScore"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="comScore">نمره آزمون کامپیوتر</InputLabel>
-                <Input
-                  id="comScore"
-                  value={student?.comScore}
-                  onChange={handleChange}
-                  name="comScore"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="presentStatus">
-                  وضعیت حضور و غیاب
-                </InputLabel>
-                <Input
-                  id="presentStatus"
-                  value={student?.presentStatus || ""}
-                  onChange={handleChange}
-                  name="presentStatus"
-                />
-              </FormControl>
-            </ListItem>
-          </List>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="comAccessStatus">
-                  وضعیت دسترسی به کامپیوتر و اینترنت
-                </InputLabel>
-                <Input
-                  id="comAccessStatus"
-                  value={student?.comAccessStatus || ""}
-                  onChange={handleChange}
-                  name="comAccessStatus"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="predict">پیش بینی ریزش</InputLabel>
-                <Input
-                  id="predict"
-                  value={student?.predict || ""}
-                  onChange={handleChange}
-                  name="predict"
-                />
-              </FormControl>
-            </ListItem>
-          </List>
-        </Grid>
-      </Grid>
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="recommendField">
-                  رشته پیشنهادی سرگروه
-                </InputLabel>
-                <Input
-                  id="recommendField"
-                  value={student?.recommendField || ""}
-                  onChange={handleChange}
-                  name="recommendField"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="limitAndRisk">
-                  ریسک ها و محدودیت ها
-                </InputLabel>
-                <Input
-                  id="limitAndRisk"
-                  value={student?.limitAndRisk || ""}
-                  onChange={handleChange}
-                  name="limitAndRisk"
-                />
-              </FormControl>
-            </ListItem>
-          </List>
-        </Grid>
-      </Grid>
+            <EditCombo
+              handleChange={handleChange}
+              identifier="scholar"
+              value={student?.scholar ?? ""}
+              placeholder="بورسیه دارد؟"
+              options={scholarOpt}
+            />
+            {student?.scholar  && (
+              <EditString
+                handleChange={handleChange}
+                value={student?.scholarPercentage || ""}
+                placeholder="درصد بورسیه"
+                identifier="scholarPercentage"
+              />
+            )}
 
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="consistCompleteTime">
-                  اختصاص وقت کافی به کاریار
-                </InputLabel>
-                <Input
-                  id="consistCompleteTime"
-                  value={student?.consistCompleteTime || ""}
-                  onChange={handleChange}
-                  name="consistCompleteTime"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="jobCommit">تعهد به اشتغال</InputLabel>
-                <Input
-                  id="jobCommit"
-                  value={student?.jobCommit || ""}
-                  onChange={handleChange}
-                  name="jobCommit"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="etcDesc">سایر ملاحظات</InputLabel>
-                <Input
-                  id="etcDesc"
-                  value={student?.etcDesc || ""}
-                  onChange={handleChange}
-                  name="etcDesc"
-                />
-              </FormControl>
-            </ListItem>
-          </List>
-        </Grid>
-      </Grid>
-
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="workCommit">تعهد به کار</InputLabel>
-                <Input
-                  id="workCommit"
-                  value={student?.workCommit || ""}
-                  onChange={handleChange}
-                  name="workCommit"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="consistTime">اختصاص زمان کافی</InputLabel>
-                <Input
-                  id="consistTime"
-                  value={student?.consistTime || ""}
-                  onChange={handleChange}
-                  name="consistTime"
-                />
-              </FormControl>
-            </ListItem>
-            {/* <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="comAccessStatus">
-                  دسترسی به کامپیوتر و اینترنت
-                </InputLabel>
-                <Input
-                  id="comAccessStatus"
-                  value={student?.comAccessStatus || ""}
-                  onChange={handleChange}
-                  name="comAccessStatus"
-                />
-              </FormControl>
-            </ListItem> */}
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="ethics">اخلاق فردی و حرفه ای</InputLabel>
-                <Input
-                  id="ethics"
-                  value={student?.ethics || ""}
-                  onChange={handleChange}
-                  name="ethics"
-                />
-              </FormControl>
-            </ListItem>
-          </List>
-        </Grid>
-      </Grid>
-
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="finalResult">نتیجه نهایی</InputLabel>
-                <Select
-                  labelId="finalResult"
-                  id="finalResult"
-                  name="finalResult"
-                  value={student?.finalResult || ""}
-                  label="نتیجه نهایی"
-                  onChange={handleChange}
-                >
-                  {finalResults.map((finalResult) => (
-                    <MenuItem key={finalResult.label} value={finalResult.value}>
-                      {finalResult.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </ListItem>
-          </List>
-        </Grid>
-      </Grid>
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <ListItem>
-              {/* <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="scholar">
-                بورسیه دارد؟
-                </InputLabel>
-                <Input
-                  id="scholar"
-                  value={student?.scholar || ""}
-                  onChange={handleChange}
-                  name="scholar"
-                />
-              </FormControl> */}
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel id="scholar">بورسیه دارد؟</InputLabel>
-                <Select
-                  labelId="scholar"
-                  id="scholar"
-                  onChange={handleChange}
-                  name="scholar"
-                  value={student?.scholar ?? ""}
-                >
-                  <MenuItem value={true as any}>بله</MenuItem>
-                  <MenuItem value={false as any}>خیر</MenuItem>
-                </Select>
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel htmlFor="scholarPercentage">درصد بورسیه</InputLabel>
-                <Input
-                  id="scholarPercentage"
-                  value={student?.scholarPercentage || ""}
-                  onChange={handleChange}
-                  name="scholarPercentage"
-                />
-              </FormControl>
-            </ListItem>
-            <ListItem>
-              <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-                <InputLabel id="finalField">رشته نهایی</InputLabel>
-                <Select
-                  labelId="finalField"
-                  id="finalField"
-                  onChange={handleChange}
-                  name="finalField"
-                  value={student?.finalField ?? ""}
-                >
-                  {fieldOptions.map((fieldOption, i) => (
-                    <MenuItem key={i} value={fieldOption.value}>
-                      {fieldOption.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </ListItem>
+            <EditCombo
+              handleChange={handleChange}
+              identifier="finalField"
+              value={student?.finalField ?? ""}
+              options={fieldOptions}
+              placeholder="رشته نهایی"
+            />
           </List>
         </Grid>
       </Grid>
@@ -412,3 +248,82 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
 };
 
 export default AfterWeekDetailEditComp;
+
+const EditString = ({
+  placeholder,
+  identifier,
+  value,
+  handleChange,
+}: PropEditString) => {
+  const content = (
+    <ListItem>
+      <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+        <InputLabel htmlFor={identifier}>{placeholder}</InputLabel>
+        <Input
+          id={identifier}
+          value={value}
+          onChange={handleChange}
+          name={identifier}
+        />
+      </FormControl>
+    </ListItem>
+  );
+  return content;
+};
+
+const EditCombo = ({
+  placeholder,
+  identifier,
+  value,
+  handleChange,
+  options,
+}: PropEditCombo) => {
+  const content = (
+    <ListItem>
+      <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+        <InputLabel id={identifier}>{placeholder}</InputLabel>
+        <Select
+          labelId={identifier}
+          id={identifier}
+          onChange={handleChange}
+          name={identifier}
+          value={value}
+        >
+          {options.map((option: any, i: any) => (
+            <MenuItem key={i} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </ListItem>
+  );
+
+  return content;
+};
+
+// const EditBoolean = ({
+//   placeholder,
+//   handleChange,
+//   identifier,
+//   value,
+// }: PropEditBool) => {
+//   const content = (
+//     <ListItem>
+//       <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
+//         <InputLabel htmlFor={identifier}>{placeholder}</InputLabel>
+//         <Select
+//           labelId={identifier}
+//           id={identifier}
+//           onChange={handleChange}
+//           name={identifier}
+//           value={value}
+//         >
+//           <MenuItem value={true as any}>بله</MenuItem>
+//           <MenuItem value={false as any}>خیر</MenuItem>
+//         </Select>
+//       </FormControl>
+//     </ListItem>
+//   );
+//   return content;
+// };

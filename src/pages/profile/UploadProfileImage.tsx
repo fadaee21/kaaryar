@@ -34,7 +34,7 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
     if (profileImage || imageServer) {
       setShowImage(true);
     }
-  }, []);
+  }, [getPicture, imageServer, profileImage]);
 
   const pickImage = (e: React.ChangeEvent<any>) => {
     const image = e.target.files[0];
