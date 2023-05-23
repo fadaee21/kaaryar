@@ -26,6 +26,7 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import { seekerStateFinder } from "../../utils/seekerStateFinder";
+import { afterTableSkillSeeker } from "../../components/table/helper-header";
 
 const SkillSeeker = () => {
   const [seekerStudents, setSeekerStudents] = useState<SeekerStudent[] | null>(
@@ -125,7 +126,7 @@ const SkillSeeker = () => {
           </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              <TableHeader headerItems={afterTableSkillSeeker} />
               {/*//! while searching show the search content */}
               {!searchingStudentSeeker && (
                 <TableBody>

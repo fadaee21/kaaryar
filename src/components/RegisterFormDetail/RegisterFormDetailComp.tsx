@@ -9,10 +9,11 @@ import {
 import { RegistrationForm } from "../../model";
 import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
-import { addComma } from "../../utils/addComma";
-
+// import { addComma } from "../../utils/addComma";
+import { getLabel } from "../../utils/getLabel";
+import { SelectedFieldOpt } from "../search/searchOptions";
 interface RegStudent {
-  student: RegistrationForm | null;
+  student: RegistrationForm | undefined;
 }
 
 const RegisterFormDetailComp = ({ student }: RegStudent) => {
@@ -31,7 +32,10 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
-              <ListItemText primary="کد متقاضی :" secondary={student?.registrationCode} />
+              <ListItemText
+                primary="کد متقاضی :"
+                secondary={student?.registrationCode}
+              />
             </ListItem>
             <ListItem>
               <ListItemText primary="نام :" secondary={student?.firstName} />
@@ -68,12 +72,14 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <List>
-            <ListItem>
-              <ListItemText
-                primary="نام معرف یا موسسه :"
-                secondary={student?.refer}
-              />
-            </ListItem>
+            {student?.refer && (
+              <ListItem>
+                <ListItemText
+                  primary="نام معرف یا موسسه :"
+                  secondary={student?.refer}
+                />
+              </ListItem>
+            )}
             <ListItem>
               <ListItemText
                 primary="شماره همراه :"
@@ -86,7 +92,12 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
             <ListItem>
               <ListItemText
                 primary="نحوه آشنایی :"
-                secondary={addComma(student?.familiarity)}
+                secondary={
+                  student?.familiarity?.trim() === "other"
+                    ? "سایر"
+                    : student?.familiarity
+                }
+                // secondary={addComma(student?.familiarity)}
               />
             </ListItem>
             <ListItem>
@@ -104,7 +115,11 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
             <ListItem>
               <ListItemText
                 primary="رشته انتخابی در کاریار :"
-                secondary={student?.selectedField}
+                secondary={
+                  student?.selectedField?.trim() === "other"
+                    ? "سایر"
+                    : getLabel(student?.selectedField, SelectedFieldOpt)
+                }
               />
             </ListItem>
             <ListItem>

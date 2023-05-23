@@ -2,12 +2,13 @@ import { SelectChangeEvent } from "@mui/material";
 import { BeforeWeekType } from "../../model";
 
 export interface ExamStudent {
-  student: BeforeWeekType | null;
+  student: BeforeWeekType | undefined;
   handleChange: (
     e:
       | SelectChangeEvent<string | boolean>
       | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
+  setCompFamCheckBox: React.Dispatch<React.SetStateAction<string[]>>;
 }
 interface ObjEnum {
   [key: number]: string;
@@ -192,40 +193,17 @@ export const motivationOpt = [
 ];
 
 export const computerFamiliarityOpt = [
-  {
-    value: "turn-on-off",
-    label:
-      "هر کامپیوتر یا لپتاپ جدیدی را می توانم روشن کنم و با آن شروع به کار کنم.",
-  },
-  {
-    value: "copy-paste",
-    label:
-      "می توانم در ویندوز، پوشه (Folder) جدید ایجاد کنم و فایل های خودم را در آن کپی (Copy-Paste) کنم.",
-  },
-  {
-    value: "usb",
-    label:
-      "می توانم اطلاعات را با استفاده از فلش (USB Flash Disk) از یک کامپیوتر به کامپیوتر دیگر انتقال دهم.",
-  },
-  {
-    value: "office",
-    label:
-      "می توانم از نرم افزار Word برای تایپ نامه، از Powerpoint برای تهیه ارائه ها و از Excel برای حسابداری شخصی استفاده کنم",
-  },
-  {
-    value: "google",
-    label:
-      "از برنامه های Skype، Zoom یا Google Meet برای تماس های تصویری استفاده  می کنم.",
-  },
-  {
-    value: "screen-share",
-    label:
-      "می توانم حین یک تماس تصویری، صفحه نمایش کامپیوترم را به طور زنده با دیگران به اشتراک بگذارم.",
-  },
-  {
-    value: "all-of-them",
-    label: "همه موارد",
-  },
+  "هر کامپیوتر یا لپتاپ جدیدی را می توانم روشن کنم و با آن شروع به کار کنم.",
+
+  "می توانم در ویندوز، پوشه (Folder) جدید ایجاد کنم و فایل های خودم را در آن کپی (Copy-Paste) کنم.",
+
+  "می توانم اطلاعات را با استفاده از فلش (USB Flash Disk) از یک کامپیوتر به کامپیوتر دیگر انتقال دهم.",
+
+  "می توانم از نرم افزار Word برای تایپ نامه، از Powerpoint برای تهیه ارائه ها و از Excel برای حسابداری شخصی استفاده کنم",
+
+  "از برنامه های Skype، Zoom یا Google Meet برای تماس های تصویری استفاده  می کنم.",
+
+  "می توانم حین یک تماس تصویری، صفحه نمایش کامپیوترم را به طور زنده با دیگران به اشتراک بگذارم.",
 ];
 
 export const questionCityOpt = [

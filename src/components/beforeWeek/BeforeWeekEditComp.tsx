@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Checkbox,
   FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
   Grid,
   Input,
   InputLabel,
@@ -39,7 +43,23 @@ import { PropEditBool, PropEditCombo, PropEditString } from "../../model";
 const BeforeWeekEditComp: React.FC<ExamStudent> = ({
   student,
   handleChange,
+  setCompFamCheckBox,
 }) => {
+  const [checkBoxVal, setCheckBoxVal] = useState<string[]>(
+    student?.computerFamiliarity || []
+  );
+  const handleChangeCheckBox = (value: any) => () => {
+    const currentIndex = checkBoxVal.indexOf(value);
+    const newChecked = [...checkBoxVal];
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+    setCheckBoxVal(newChecked);
+    setCompFamCheckBox(newChecked);
+  };
+
   return (
     <>
       {/*اطلاعات تحصیلی*/}
@@ -194,21 +214,54 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
       </Grid>
       {/*دسترسی به کامپیوتر*/}
       <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
+        <Grid item md={12}>
           <List>
-            <EditCombo
+            {/* <EditCombo
               placeholder="----آشنایی کار با کامپیوتر"
               identifier="computerFamiliarity"
               options={computerFamiliarityOpt}
               value={student?.computerFamiliarity}
               handleChange={handleChange}
-            />
+            /> */}
+
+            <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+              <FormLabel htmlFor="computerFamiliarity">
+                آشنایی کار با کامپیوتر
+              </FormLabel>
+              <FormGroup>
+                {computerFamiliarityOpt.map((item, index) => (
+                  <FormControlLabel
+                    key={index}
+                    control={
+                      <Checkbox
+                        checked={checkBoxVal.includes(item)}
+                        onChange={handleChangeCheckBox(item)}
+                      />
+                    }
+                    label={item}
+                    id={"computerFamiliarity"}
+                  />
+                ))}
+              </FormGroup>
+            </FormControl>
+          </List>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <List>
             <EditCombo
               placeholder="میزان دسترسی به کامپیوتر"
               identifier="computerAccess"
               options={computerAccessOpt}
               value={student?.computerAccess}
               handleChange={handleChange}
+            />
+
+            <EditCombo
+              options={internetAccessOpt}
+              value={student?.internetAccess || ""}
+              handleChange={handleChange}
+              identifier="internetAccess"
+              placeholder="ابزار دسترسی به اینترنت"
             />
           </List>
         </Grid>
@@ -219,14 +272,6 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               identifier="programmingCoursePassed"
               value={student?.codingKnowledge ?? ""}
               placeholder="گذراندن دوره آموزشی در ارتباط با مهارت های کامپیوتر یا کدنویسی"
-            />
-
-            <EditCombo
-              options={internetAccessOpt}
-              value={student?.internetAccess || ""}
-              handleChange={handleChange}
-              identifier="internetAccess"
-              placeholder="ابزار دسترسی به اینترنت"
             />
           </List>
         </Grid>

@@ -29,6 +29,7 @@ import TableEmpty from "../../components/table/TableEmpty";
 import { addComma } from "../../utils/addComma";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import useGetListLearner from "../../hooks/request/useGetListLearner";
+import { registerTableHeader } from "../../components/table/helper-header";
 
 const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
@@ -149,7 +150,7 @@ const RegisterFormTable = () => {
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentRegister?.length !== 0 && <TableHeader />}
+              {searchingStudentRegister?.length !== 0 && <TableHeader headerItems={registerTableHeader} />}
 
               {/*//! while searching show the search content */}
               {!searchingStudentRegister && (

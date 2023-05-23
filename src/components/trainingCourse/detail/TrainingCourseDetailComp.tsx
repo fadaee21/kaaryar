@@ -1,0 +1,90 @@
+import {
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+} from "@mui/material";
+import { BoxExamDetail } from "../../../styles/examFormDetail";
+import { DetailTypography } from "../../../styles/studentDetail";
+
+const TrainingCourseDetailComp = () => {
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
+  return (
+    <BoxExamDetail>
+      <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
+        دوره آموزشی
+      </DetailTypography>
+      <Divider
+        variant="middle"
+        flexItem
+        orientation={matches ? "vertical" : "horizontal"}
+      />
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <ListItemText primary="نام دوره آموزشی" secondary={"ری‌اکت"} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="گروه مرتبط" secondary={"05"} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="نام مدرس" secondary={"هادی طباطبایی"} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="تاریخ پایان" secondary={"-"} />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="تعداد مربیان حل تمرین فعال این دوره"
+                secondary={"12"}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="محتوای دوره" secondary={""} />
+            </ListItem>
+
+            <ListItem>
+              <ListItemText primary="توضیحات" secondary={""} />
+            </ListItem>
+          </List>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <ListItemText primary="مسیر مرتبط" secondary={"فرانت-اند"} />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="وضعیت آموزش دوره"
+                secondary={"در حال برگزاری"}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="تاریخ شروع" secondary={"1402/02/01"} />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="تعداد مهارت‌آموزان این دوره"
+                secondary={"31"}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="تعداد منتورهای فعال این دوره"
+                secondary={"12"}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="پروژه پایانی" secondary={""} />
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
+    </BoxExamDetail>
+  );
+};
+
+export default TrainingCourseDetailComp;

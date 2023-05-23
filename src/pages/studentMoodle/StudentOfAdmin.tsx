@@ -4,7 +4,6 @@ import {
   Table,
   TableBody,
   TableContainer,
-  TableHead,
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -31,6 +30,8 @@ import useMoodle from "../../hooks/request/useMoodle";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
+import TableHeader from "../../components/table/TableHeader";
+import { studentTableHeader } from "../../components/table/helper-header";
 
 const StudentOfAdmin = () => {
   const [page, setPage] = useState(1);
@@ -113,18 +114,7 @@ const StudentOfAdmin = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
               {searchingMoodleStudent?.length !== 0 && (
-                <TableHead>
-                  <StyledTableRow>
-                    <StyledTableCell align="center"></StyledTableCell>
-                    <StyledTableCell align="center">
-                      نام و نام خانوادگی
-                    </StyledTableCell>
-                    <StyledTableCell align="center">نام کاربری</StyledTableCell>
-                    <StyledTableCell align="center">شهر</StyledTableCell>
-                    <StyledTableCell align="center">موبایل</StyledTableCell>
-                    <StyledTableCell align="center">ایمیل</StyledTableCell>
-                  </StyledTableRow>
-                </TableHead>
+                <TableHeader headerItems={studentTableHeader} />
               )}
               {!searchingMoodleStudent && (
                 <TableBody>
@@ -152,10 +142,7 @@ const StudentOfAdmin = () => {
                           sx={{ width: "5%", verticalAlign: "center" }}
                         >
                           {/* //TODO: add picture */}
-                          <TablePic
-                            picture={picture}
-                            lastName={family}
-                          />
+                          <TablePic picture={picture} lastName={family} />
                         </StyledTableCell>
                         <StyledTableCell
                           align="center"

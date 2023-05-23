@@ -21,7 +21,7 @@ const StudentDetail = ({ student }: Student) => {
     if (student?.picture !== null) {
       getPicture(student!.picture?.imageAddress);
     }
-  }, []);
+  }, [getPicture, student]);
   const { auth } = useAuth();
   const roles = auth.roles.toString();
   return (

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import useGetData from "../../hooks/request/useGetData";
 import { CommentTable } from "../../model";
 import { BoxDashboard, PaperDashboard } from "../../styles/dashboard";
-import { dateConverter } from "../../utils/dateConverter";
 import LoadingProgress from "../LoadingProgress";
 const allCommentLink = `total/all?pageNum=1&pageSize=3`;
 
@@ -22,7 +21,7 @@ const LastOpinionDash = () => {
   const navigate = useNavigate();
   useEffect(() => {
     getAllData(allCommentLink);
-  }, []);
+  }, [getAllData]);
 
   if (loadingCall) {
     return (
@@ -49,7 +48,13 @@ const LastOpinionDash = () => {
           <Typography variant="body2">
             {item.commenterUser?.firstName} {item.commenterUser?.family} برای{" "}
             {item.studentUser.firstName} {item.studentUser.family}
-            {item.createTime && ` در ${dateConverter(item.createTime)}`}
+            {item.createTime &&
+              ` در ${new Intl.DateTimeFormat("fa-iran", { dateStyle: "full" })
+                .format(new Date(item.createTime))
+                .replace(",", "")
+                .split(" ")
+                .reverse()
+                .join(" ")}`}
           </Typography>
           <Button
             size="small"

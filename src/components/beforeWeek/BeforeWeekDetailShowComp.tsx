@@ -66,6 +66,8 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
     getPicture(transcript);
   }, [getPicture, transcript]);
 
+  console.log(student?.computerFamiliarity);
+
   return (
     <>
       {/* header */}
@@ -323,9 +325,34 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
+                {/* <ListItemText
+                  primary="آشنایی کار با کامپیوتر"
+                  secondary={student?.computerFamiliarity.map((item2) => (
+                    <Typography
+                      sx={{ display: "inline-block" }}
+                      component="span"
+                      variant="subtitle2"
+                    >
+                      {
+                        computerFamiliarityOpt.find(
+                          (item) => item.value === item2
+                        )?.label
+                      }
+                    </Typography>
+                  ))}
+                /> */}
                 <ListItemText
-                  primary="----آشنایی کار با کامپیوتر"
-                  secondary={student?.computerFamiliarity}
+                  primary="آشنایی کار با کامپیوتر"
+                  secondary={student?.computerFamiliarity.map((item, index) => (
+                    <Typography
+                      sx={{ display: "inline-block" }}
+                      component="span"
+                      variant="subtitle2"
+                      key={index}
+                    >
+                      {item}
+                    </Typography>
+                  ))}
                 />
               </ListItem>
               <ListItem>

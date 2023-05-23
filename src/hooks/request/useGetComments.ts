@@ -31,7 +31,7 @@ export const useGetComments = (page: number, pageSize: number) => {
       }
     };
     getCountComment();
-  }, []);
+  }, [countComment]);
 
   const getListComments = async () => {
     try {

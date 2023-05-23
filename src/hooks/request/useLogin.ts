@@ -30,6 +30,7 @@ export const useSubmitLogin = (username: string, password: string) => {
           maxAge: 3600 * 12,
           sameSite: "strict",
         });
+
         const res = response.data.profile.roles;
         const roleResponseServer: RoleType =
           res.indexOf("manager") >= 0

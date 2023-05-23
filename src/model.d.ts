@@ -212,7 +212,7 @@ export interface RegistrationForm {
   studyField?: string;
   selectedField?: string;
   description?: string;
-  
+
   highSchoolYear?: string;
   refer?: string;
   createTime?: string;
@@ -231,7 +231,7 @@ export interface BeforeWeekType {
   charity: string;
   codingKnowledge: ?string;
   computerAccess: string;
-  computerFamiliarity: string;
+  computerFamiliarity: string[];
   contCourseApproach: string;
   currentField: string;
   currentInstName: string;
@@ -282,11 +282,11 @@ export interface BeforeWeekType {
   employmentType: string;
   administrativeComments: string;
   freeDailyTime: string;
-  internetAccessTiming:string;
+  internetAccessTiming: string;
 }
 
 interface AfterWeekType {
-  beforeWeekForm: BeforeWeek;
+  beforeWeekForm: BeforeWeekType;
   id: number;
   afterWeekChecked: boolean;
   algoScore: string;
@@ -305,7 +305,7 @@ interface AfterWeekType {
   predict: string;
   presentStatus: string;
   recommendField: string;
-  recommendFieldMentor:String;
+  recommendFieldMentor: String;
   scholar: boolean;
   scholarPercentage: string;
   workCommit: string;
@@ -395,7 +395,6 @@ export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;
 
 export type OptionsString = { label: string; value: string };
 
-
 export interface PropEditString {
   placeholder: string;
   identifier: string;
@@ -420,3 +419,5 @@ export interface PropEditCombo {
   }[];
   handleChange: (e: SelectChangeEvent<string>) => void;
 }
+
+export type TableHeaderProps = { headerItems: string[] };

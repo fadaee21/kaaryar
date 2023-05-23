@@ -33,7 +33,7 @@ export const provinceOptions = [
 ];
 
 export const highSchoolOptions = [
-  { label: "-", value: "" },
+  { label: "-", value: "انتخاب کنید" },
   { label: "سال دهم", value: "سال دهم" },
   { label: "سال یازدهم", value: "سال یازدهم" },
   { label: "سال دوازدهم", value: "سال دوازدهم" },
@@ -45,15 +45,17 @@ export const highSchoolOptions2 = [
 ];
 
 export const acquaintanceOptions = [
+  { label: "شرکت در کارگاه‌های آموزشی", value: "شرکت در کارگاه‌های آموزشی"},
   { label: "شبکه‌های اجتماعی", value: "شبکه‌های اجتماعی" },
   { label: "موسسات نیکوکاری", value: "موسسات نیکوکاری" },
   { label: "دانشگاه", value: "دانشگاه" },
   { label: "معرف", value: "معرف" },
-  { label: " شرکت در کارگاه‌های آموزشی ", value: " شرکت در کارگاه‌های آموزشی " },
   { label: "پونیشا", value: "پونیشا" },
   { label: "کوئرا", value: "کوئرا" },
-  { label: "سایر", value: "سایر" },
+  { label: "سایر", value: "other" },
 ];
+
+
 
 export const eduLevelOptions = [
   { label: "زیر دیپلم", value: "زیر دیپلم" },
@@ -127,4 +129,10 @@ export const fieldOptions = [
   },
 ];
 
-
+export const SelectedFieldOpt = [
+  { label: "مسیر آموزش و اشتغال برنامه‌نویسی", value: "backEnd" },
+  { label: "مسیر آموزش و اشتغال تحلیل داده", value: "DB" },
+  { label: "مسیر آموزش و اشتغال اموراداری", value: "icdl" },
+  { label: "مسیر آموزش و اشتغال طراحی وب  سایت", value: "frontEnd" },
+  { label: "سایر", value: "other" },
+];

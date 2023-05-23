@@ -17,13 +17,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { descComment } from "../../components/comment/commentOptions";
-import { dateConverter } from "../../utils/dateConverter";
 import { PaperW } from "../../styles/addComment/formBox";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useState } from "react";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
-import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
 
 const WatchComment = () => {
   const [open, setOpen] = useState(false);
@@ -134,7 +132,8 @@ const WatchComment = () => {
               <Typography variant="body2">تاریخ جلسه</Typography>
               <Typography variant="body1">
                 {/* in post Date of comment i must change type toISOstring,when fetch Date,it response with one day false! zero utc help to improve this fault */}
-                {dateConverter(zeroUTCOffset(new Date(sessionDate)))}
+                {/* {dateConverter(zeroUTCOffset(new Date(sessionDate)))} */}
+                {new Intl.DateTimeFormat("fa",{dateStyle:"full"}).format(new Date(sessionDate)).replace(',', '').split(' ').reverse().join(' ')}
               </Typography>
             </PaperW>
           </Grid>

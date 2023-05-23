@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { AfterWeekType, BeforeWeekType } from "../../model";
+import { AfterWeekType } from "../../model";
 import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AfterWeekDetailEditComp from "../../components/afterWeek/AfterWeekDetailEditComp";

@@ -18,7 +18,7 @@ import { useAuth } from "../../context/AuthProvider";
 import AlertDialog from "../../components/modal/AlertDialog";
 
 const RegisterFormDetail = () => {
-  const [student, setStudent] = useState<RegistrationForm | null>(null);
+  const [student, setStudent] = useState<RegistrationForm | undefined>();
   const [loading, setLoading] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertType, setAlertType] = useState<

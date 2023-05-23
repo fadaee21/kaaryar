@@ -33,6 +33,14 @@ import GraduateProfile from "./pages/graduate/GraduateProfile";
 import GraduateTable from "./pages/graduate/GraduateTable";
 import NotFound from "./pages/NotFound";
 import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
+import GroupsTable from "./pages/groups/GroupsTable";
+import GroupsDetail from "./pages/groups/GroupsDetail";
+import TrainingCoursesTable from "./pages/trainingCourse/TrainingCoursesTable";
+import TrainingCoursesDetail from "./pages/trainingCourse/TrainingCoursesDetail";
+import LanguageTable from "./pages/language/LanguageTable";
+import LanguageDetail from "./pages/language/LanguageDetail";
+import Workshops from "./pages/workshops/workshopsTable";
+import WorkshopsDetail from "./pages/workshops/workshopsDetail";
 
 const ListRoutes = [
   //! ta________________________________
@@ -411,6 +419,78 @@ const ListRoutes = [
     showInNav: false,
     role: "admin",
     key: "admin21",
+  },
+  {
+    path: "admin/groups",
+    name: "فهرست گروه‌ها",
+    // icon:<></>,
+    component: GroupsTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin22",
+  },
+  {
+    path: "admin/groups/1",
+    name: "",
+    // icon:<></>,
+    component: GroupsDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-d",
+  },
+  {
+    path: "admin/training-course",
+    name: "فهرست دوره‌های آموزشی",
+    // icon:<></>,
+    component: TrainingCoursesTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin23",
+  },
+  {
+    path: "admin/training-course/1",
+    name: "",
+    // icon:<></>,
+    component: TrainingCoursesDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-d",
+  },
+  {
+    path: "admin/language-course",
+    name: "فهرست دوره‌های زبان انگلیسی",
+    // icon:<></>,
+    component: LanguageTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin24",
+  },
+  {
+    path: "admin/language-course/1",
+    name: "",
+    // icon:<></>,
+    component: LanguageDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-d",
+  },
+  {
+    path: "admin/workshops",
+    name: "فهرست کارگاه‌های جانبی",
+    // icon:<></>,
+    component: Workshops,
+    showInNav: true,
+    role: "admin",
+    key: "admin25",
+  },
+  {
+    path: "admin/workshops/1",
+    name: "",
+    // icon:<></>,
+    component: WorkshopsDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin25-d",
   },
 
   {

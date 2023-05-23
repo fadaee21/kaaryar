@@ -10,9 +10,11 @@ import RegisterFormDetailComp from "../../components/RegisterFormDetail/Register
 // import ExamFormDetailEditComp2 from "../../components/ExamFormDetail/ExamFormDetailEditComp2";
 
 const BeforeWeekDetailEdit = () => {
-  const [student, setStudent] = useState<BeforeWeekType | null>(null);
+  const [student, setStudent] = useState<BeforeWeekType | undefined>();
   const [loadingGet, setLoadingGet] = useState(true);
   const [loadingPut, setLoadingPut] = useState(false);
+  //lift up the state to be able to send as computerFamiliarity
+  const [compFamCheckBox, setCompFamCheckBox] = useState<string[]>([]);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -57,8 +59,20 @@ const BeforeWeekDetailEdit = () => {
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setStudent((prev: any) => ({ ...prev, [name]: value }));
+    setStudent((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
+  //in the beginning of project, it was only input and all properties handle by above handleChange,
+  //but now we have a checkbox and it was not possible to handle by that,
+  //so we have to do it this way:
+  useEffect(() => {
+    setStudent((prev: any) => ({
+      ...prev,
+      computerFamiliarity: compFamCheckBox,
+    }));
+  }, [compFamCheckBox]);
 
   useEffect(() => {
     getStudent();
@@ -119,7 +133,11 @@ const BeforeWeekDetailEdit = () => {
               ذخیره اطلاعات
             </Button>
           </Box>
-          <BeforeWeekEditComp student={student} handleChange={handleChange} />
+          <BeforeWeekEditComp
+            student={student}
+            handleChange={handleChange}
+            setCompFamCheckBox={setCompFamCheckBox}
+          />
         </Box>
       </Container>
     </>

@@ -12,6 +12,7 @@ import { DetailTypography } from "../../styles/studentDetail";
 import { RegistrationForm } from "../../model";
 import { EditingSelective } from "./EditingSelective";
 import {
+  SelectedFieldOpt,
   acquaintanceOptions,
   eduLevelOptions,
   highSchoolOptions,
@@ -28,8 +29,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   handleChange,
 }) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
-  console.log(student)
-  console.log("سیستان و بلوچستان ")
+
   return (
     <BoxExamDetail>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
@@ -88,21 +88,23 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
 
             <ListItem>
               <EditingSelective
-                options={highSchoolOptions}
-                placeholder="سال دبیرستان"
+                options={acquaintanceOptions}
+                placeholder="نحوه آشنایی"
                 handleChange={handleChange}
-                state={student?.highSchoolYear || ""}
-                name="highSchoolYear"
+                state={student?.familiarity?.trim() || ""}
+                name="familiarity"
               />
             </ListItem>
-            <ListItem>
-              <EditingInput
-                placeholder="نام معرف یا موسسه"
-                handleChange={handleChange}
-                state={student?.refer || ""}
-                name="refer"
-              />
-            </ListItem>
+            {student?.familiarity?.trim() === "other" && (
+              <ListItem>
+                <EditingInput
+                  placeholder="نام معرف یا موسسه"
+                  handleChange={handleChange}
+                  state={student?.refer || ""}
+                  name="refer"
+                />
+              </ListItem>
+            )}
             <ListItem>
               <EditingInput
                 placeholder="سال تولد"
@@ -131,15 +133,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 name="email"
               />
             </ListItem>
-            <ListItem>
-              <EditingSelective
-                options={acquaintanceOptions}
-                placeholder="نحوه آشنایی"
-                handleChange={handleChange}
-                state={student?.familiarity?.trim() || ""}
-                name="familiarity"
-              />
-            </ListItem>
+
             <ListItem>
               <EditingSelective
                 options={eduLevelOptions}
@@ -150,6 +144,16 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               />
             </ListItem>
             <ListItem>
+              <EditingSelective
+                options={highSchoolOptions}
+                placeholder="سال دبیرستان"
+                handleChange={handleChange}
+                state={student?.highSchoolYear || ""}
+                name="highSchoolYear"
+              />
+            </ListItem>
+
+            <ListItem>
               <EditingInput
                 placeholder="رشته تحصیلی"
                 handleChange={handleChange}
@@ -158,7 +162,8 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               />
             </ListItem>
             <ListItem>
-              <EditingInput
+              <EditingSelective
+                options={SelectedFieldOpt}
                 placeholder="رشته انتخابی در کاریار"
                 handleChange={handleChange}
                 state={student?.selectedField || ""}

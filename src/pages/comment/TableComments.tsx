@@ -3,7 +3,6 @@ import LoadingProgress from "../../components/LoadingProgress";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
 import { CommentTable } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
@@ -26,11 +25,12 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
-import { dateConverter } from "../../utils/dateConverter";
 import { counterPagination } from "../../utils/counterPagination";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "../../context/AuthProvider";
+import TableHeader from "../../components/table/TableHeader";
+import { commentsTableHeader } from "../../components/table/helper-header";
 
 const Comments = () => {
   const [page, setPage] = useState(1);
@@ -94,17 +94,7 @@ const Comments = () => {
           </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell align="left">تاریخ</StyledTableCell>
-                  <StyledTableCell align="left">
-                    نام و نام خانوادگی
-                  </StyledTableCell>
-                  <StyledTableCell align="left">نظر دهنده</StyledTableCell>
-                  <StyledTableCell align="left">دوره آموزشی</StyledTableCell>
-                  <StyledTableCell align="center">عملیات</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
+              <TableHeader headerItems={commentsTableHeader} />
               <TableBody>
                 {commentsTable?.map((commentItem: CommentTable) => {
                   const {
@@ -126,14 +116,18 @@ const Comments = () => {
                       <StyledTableCell
                         component="th"
                         scope="row"
+                        align="center"
                         sx={{ width: "10%", verticalAlign: "center" }}
                       >
-                        <Typography variant="body2">
-                          {createTime && dateConverter(createTime)}
-                        </Typography>
+                        {/* <Typography variant="body2"> */}
+                        {createTime &&
+                          new Intl.DateTimeFormat("fa").format(
+                            new Date(createTime)
+                          )}
+                        {/* </Typography> */}
                       </StyledTableCell>
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{
                           width: "15%",
                           verticalAlign: "center",
@@ -148,7 +142,7 @@ const Comments = () => {
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{ width: "15%", verticalAlign: "center" }}
                       >
                         <Typography variant="body2">
@@ -156,7 +150,7 @@ const Comments = () => {
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{ width: "15%", verticalAlign: "center" }}
                       >
                         <Typography variant="body2">

@@ -28,6 +28,7 @@ import TableEmpty from "../../components/table/TableEmpty";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import useGetListLearner from "../../hooks/request/useGetListLearner";
+import { afterTableHeader } from "../../components/table/helper-header";
 
 const AfterWeekTable = () => {
   const [page, setPage] = useState(1);
@@ -154,7 +155,9 @@ const AfterWeekTable = () => {
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentAfter?.length !== 0 && <TableHeader />}
+              {searchingStudentAfter?.length !== 0 && (
+                <TableHeader headerItems={afterTableHeader} />
+              )}
 
               {/*//! while searching show the search content */}
               {!searchingStudentAfter && (

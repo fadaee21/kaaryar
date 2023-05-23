@@ -18,7 +18,7 @@ import {
   scholarOptions,
   statusOptions,
 } from "./searchOptions";
-import { ApprovalStatus } from "../../model";
+// import { ApprovalStatus } from "../../model";
 // import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
 

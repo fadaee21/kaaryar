@@ -20,6 +20,8 @@ import { BoxExamDetail } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 // import FinalResult from "./FinalResult";
 import ImageModal from "../ImageModal";
+import { getLabel } from "../../utils/getLabel";
+import { SelectedFieldOpt } from "../search/searchOptions";
 const LookUpLink = React.lazy(() => import("./LookUpLink"));
 // import UploadImage from "../UploadImage";
 
@@ -54,18 +56,15 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
 
   const { pic, getPicture } = useGetImage("/moodle/payment/img/user/");
 
+  const sField = student?.beforeWeekForm?.registrationForm?.selectedField;
   const st = student?.moodleUser;
   React.useEffect(() => {
-    if (!st) {
-      return;
-    }
-    getPicture(st.id.toString());
+    st && getPicture(st.id.toString());
   }, [getPicture, st]);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   return (
     <>
       {!seekerPage && (
@@ -144,7 +143,11 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="انتخاب اولیه مسیر شغلی"
-                  secondary={student?.beforeWeekForm?.selectedField}
+                  secondary={
+                    sField?.trim() === "other"
+                      ? "سایر"
+                      : getLabel(sField, SelectedFieldOpt)
+                  }
                 />
               </ListItem>
             </List>

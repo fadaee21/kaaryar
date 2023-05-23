@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
-import { dateConverter } from "../../utils/dateConverter";
 
 const RegTableBodyAll = ({
   id,
@@ -129,7 +128,9 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{familiarity || "-"}</Typography>
+        <Typography variant="body2">
+          {familiarity === "other" ? "سایر" : familiarity || "-"}
+        </Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -148,7 +149,8 @@ const RegTableBodyAll = ({
         }}
       >
         <Typography variant="body2">
-          {createTime && dateConverter(createTime)}
+          {createTime &&
+            new Intl.DateTimeFormat("fa").format(new Date(createTime))}
         </Typography>
       </StyledTableCell>
     </StyledTableRow>
