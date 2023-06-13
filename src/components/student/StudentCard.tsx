@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { TablePic2 } from "../table/TablePic";
 
-export default function StudentCard({
-  moodleUser,
-}: {
+interface Props {
   moodleUser: MoodleUserAssignee;
-}) {
+}
+
+export default function StudentCard({ moodleUser }: Props) {
   const {
     assigneeContext: {
       student: {

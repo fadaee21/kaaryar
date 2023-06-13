@@ -212,7 +212,7 @@ export interface RegistrationForm {
   studyField?: string;
   selectedField?: string;
   description?: string;
-
+  careerPathwayOther?: string;
   highSchoolYear?: string;
   refer?: string;
   createTime?: string;
@@ -226,12 +226,12 @@ export interface BeforeWeekType {
   acceptWeekChecked: boolean | null;
   accessTime: string;
   avgSalary: string;
-  beforeAcceptDesc: string;
+  applicantAdditionalComments: string;
   cgpa?: string;
   charity: string;
   codingKnowledge: ?string;
   computerAccess: string;
-  computerFamiliarity: string[];
+  computerFamiliarity: string[] | null;
   contCourseApproach: string;
   currentField: string;
   currentInstName: string;
@@ -241,7 +241,7 @@ export interface BeforeWeekType {
   familiar: string;
   accessTime: string;
   instituteType: string;
-  internetAccess: string;
+  internetAccessDevice: string;
   jobReady: boolean;
   jobStandby: boolean;
   jobStatus: boolean;
@@ -421,3 +421,265 @@ export interface PropEditCombo {
 }
 
 export type TableHeaderProps = { headerItems: string[] };
+
+//!Education
+// /modules/categories/all
+export interface Instructor {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface TeachingAssistant {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface Mentor {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface StudentEdu {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface ModuleGroup {
+  name: string;
+  description: any;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: any;
+  levelName: any;
+  startDate: any;
+  endDate: any;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+export interface Group {
+  name: string;
+  groupCode: string;
+  description: any;
+  isActive: boolean;
+  startDate: any;
+  endDate: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  modules: ModuleGroup[];
+  instructors: Instructor[];
+  teachingAssistants: TeachingAssistant[];
+  mentors: Mentor[];
+  students: Student[];
+}
+
+export type GroupArray = Group[];
+
+// short Group
+export interface ShortGroup {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  groupCode: string;
+  description: string;
+  isActive: boolean;
+  startDate: string;
+  endDate: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+// /modules/all
+export interface CareerPathway {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: any;
+  isActive: boolean;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+export interface Category {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  groupCode: string;
+  description: string;
+  isActive: boolean;
+  startDate: string;
+  endDate: string;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+
+export interface ModuleAll {
+  name: string;
+  description: any;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: any;
+  levelName?: string;
+  startDate: any;
+  endDate: any;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+  teachingAssistants: TeachingAssistant[];
+  mentors: Mentor[];
+  students: Student[];
+}
+
+export type ModuleAllArray = ModuleAll[];
+
+//short detail for module core
+export interface ShortCoreModule {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string;
+  weblinkFinalProject: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+}
+
+export interface WorkshopShort {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: any;
+  startDate: string;
+  endDate?: string;
+  weblinkFeedbackForm?: string;
+  weblinkFinalProject?: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+}
+
+export interface EnglishShort {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: string;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string;
+  weblinkFinalProject: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+}

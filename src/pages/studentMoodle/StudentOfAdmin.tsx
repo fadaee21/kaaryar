@@ -26,12 +26,13 @@ import {
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
 import styleRot from "../../styles/search/searchChevron.module.css";
-import useMoodle from "../../hooks/request/useMoodle";
+
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
 import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
+import useGetMoodleStudents from "../../hooks/request/useGetMoodleStudents";
 
 const StudentOfAdmin = () => {
   const [page, setPage] = useState(1);
@@ -45,7 +46,7 @@ const StudentOfAdmin = () => {
     MoodleUser[] | null
   >(null);
 
-  const { students, loading } = useMoodle(adminStudent, page);
+  const { students, loading, error } = useGetMoodleStudents(adminStudent, page);
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -53,6 +54,9 @@ const StudentOfAdmin = () => {
 
   if (loading) {
     return <LoadingProgress />;
+  }
+  if (error) {
+    navigate("/");
   }
   return (
     <Box sx={{ m: 2 }}>

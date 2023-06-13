@@ -31,6 +31,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
 import { commentsTableHeader } from "../../components/table/helper-header";
+import { persianDate } from "../../utils/persianDate";
 
 const Comments = () => {
   const [page, setPage] = useState(1);
@@ -120,10 +121,7 @@ const Comments = () => {
                         sx={{ width: "10%", verticalAlign: "center" }}
                       >
                         {/* <Typography variant="body2"> */}
-                        {createTime &&
-                          new Intl.DateTimeFormat("fa").format(
-                            new Date(createTime)
-                          )}
+                        {persianDate(createTime)}
                         {/* </Typography> */}
                       </StyledTableCell>
                       <StyledTableCell

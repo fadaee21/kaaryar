@@ -1,6 +1,6 @@
 import {
-  AccordionDetails,
   Box,
+  Button,
   Container,
   Paper,
   Table,
@@ -8,21 +8,32 @@ import {
   TableContainer,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-//   import { ExcelExport } from "../../components/ExcelExport";
-import {
-  AccordionStyled,
-  AccordionSummaryStyled,
-} from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import useSWR from "swr";
 import TableHeader from "../../components/table/TableHeader";
 import { groupsTableHeader } from "../../components/table/helper-header";
-import TableBodyDummyGroups from "../../components/group/table/TableBodyDummyGroups";
+import TableBodyGroups from "../../components/group/table/TableBodyGroups";
+import { fetcherGet } from "../../api/axios";
+import { ShortGroup } from "../../model";
+import LoadingProgress from "../../components/LoadingProgress";
+import { useNavigate } from "react-router-dom";
 
 const Groups = () => {
-  const [chevronDir, setChevronDir] = useState(false);
+  const GROUP_ALL =
+    "/modules/categories/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id";
+
+  const navigate = useNavigate();
+  const { data, error, isLoading } = useSWR<ShortGroup[]>(
+    GROUP_ALL,
+    fetcherGet
+  );
+
+  if (isLoading) {
+    return <LoadingProgress />;
+  }
+  if (error) {
+    console.log(error);
+    return <Typography sx={{ mx: "auto" }}>Error Loading Page</Typography>;
+  }
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -32,60 +43,22 @@ const Groups = () => {
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
             <Typography variant="h4"> فهرست گروه‌ها</Typography>
-          </Box>
-
-          <AccordionStyled>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-              }}
+            <Button
+              variant="outlined"
+              sx={{ px: 4 }}
+              onClick={() => navigate("add-group")}
             >
-              <AccordionSummaryStyled
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                onClick={() => setChevronDir(!chevronDir)}
-              >
-                <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
-              </AccordionSummaryStyled>
-
-              {/* <ExcelExport
-                  fileName={"Applicant Info"}
-                  searchData={[]}
-                  linkAll=""
-                  useIn="reg"
-                /> */}
-            </Box>
-            <AccordionDetails>
-              <Box
-                sx={{
-                  width: "100%",
-                  my: 3,
-                }}
-              >
-                {/* //!component for searching student */}
-                {/* <SearchAll
-                    setSearchingStudentRegister={setSearchingStudentRegister}
-                    searchPage="reg"
-                    chevronDir={chevronDir}
-                    stateWaiting={stateWaiting}
-                    setStateWaiting={setStateWaiting}
-                    statusState={statusState}
-                    setStatusState={setStatusState}
-                  /> */}
-              </Box>
-            </AccordionDetails>
-          </AccordionStyled>
+              افزودن گروه جدید
+            </Button>
+          </Box>
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader headerItems={groupsTableHeader} />
               <TableBody>
-                <TableBodyDummyGroups />
+                {data?.map((groupAll) => (
+                  <TableBodyGroups key={groupAll.id} groupAll={groupAll} />
+                ))}
               </TableBody>
             </Table>
           </TableContainer>

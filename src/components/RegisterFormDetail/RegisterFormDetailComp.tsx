@@ -7,7 +7,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { RegistrationForm } from "../../model";
-import { BoxExamDetail } from "../../styles/examFormDetail";
+import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 // import { addComma } from "../../utils/addComma";
 import { getLabel } from "../../utils/getLabel";
@@ -19,7 +19,7 @@ interface RegStudent {
 const RegisterFormDetailComp = ({ student }: RegStudent) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
   return (
-    <BoxExamDetail>
+    <ContentBox>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
         فرم ثبت اطلاعات اولیه
       </DetailTypography>
@@ -58,36 +58,9 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
 
             <ListItem>
               <ListItemText
-                primary="سال دبیرستان :"
-                secondary={student?.highSchoolYear}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
                 primary="سال تولد :"
                 secondary={student?.birthDate}
               />
-            </ListItem>
-          </List>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <List>
-            {student?.refer && (
-              <ListItem>
-                <ListItemText
-                  primary="نام معرف یا موسسه :"
-                  secondary={student?.refer}
-                />
-              </ListItem>
-            )}
-            <ListItem>
-              <ListItemText
-                primary="شماره همراه :"
-                secondary={student?.mobile}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="ایمیل :" secondary={student?.email} />
             </ListItem>
             <ListItem>
               <ListItemText
@@ -97,13 +70,40 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
                     ? "سایر"
                     : student?.familiarity
                 }
-                // secondary={addComma(student?.familiarity)}
               />
             </ListItem>
+            {student?.refer && (
+              <ListItem>
+                <ListItemText
+                  primary="نام معرف یا موسسه :"
+                  secondary={student?.refer}
+                />
+              </ListItem>
+            )}
+          </List>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <List>
+            <ListItem>
+              <ListItemText
+                primary="شماره همراه :"
+                secondary={student?.mobile}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="ایمیل :" secondary={student?.email} />
+            </ListItem>
+
             <ListItem>
               <ListItemText
                 primary="میزان تحصیلات :"
                 secondary={student?.education}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="سال دبیرستان :"
+                secondary={student?.highSchoolYear}
               />
             </ListItem>
             <ListItem>
@@ -122,6 +122,16 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
                 }
               />
             </ListItem>
+
+            {student?.careerPathwayOther && (
+              <ListItem>
+                <ListItemText
+                  primary="مسیر مورد نظر متقاضی:"
+                  secondary={student?.careerPathwayOther}
+                />
+              </ListItem>
+            )}
+
             <ListItem>
               <ListItemText
                 primary="توضیحات سایر :"
@@ -131,7 +141,7 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
           </List>
         </Grid>
       </Grid>
-    </BoxExamDetail>
+    </ContentBox>
   );
 };
 

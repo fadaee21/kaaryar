@@ -34,13 +34,17 @@ import GraduateTable from "./pages/graduate/GraduateTable";
 import NotFound from "./pages/NotFound";
 import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
 import GroupsTable from "./pages/groups/GroupsTable";
-import GroupsDetail from "./pages/groups/GroupsDetail";
+import GroupDetail from "./pages/groups/GroupDetail";
 import TrainingCoursesTable from "./pages/trainingCourse/TrainingCoursesTable";
 import TrainingCoursesDetail from "./pages/trainingCourse/TrainingCoursesDetail";
-import LanguageTable from "./pages/language/LanguageTable";
-import LanguageDetail from "./pages/language/LanguageDetail";
-import Workshops from "./pages/workshops/workshopsTable";
+// import LanguageTable from "./pages/generalEducation/GeneralEducationTable";
+import LanguageDetail from "./pages/generalEducation/LanguageDetail";
+// import Workshops from "./pages/workshops/workshopsTable";
 import WorkshopsDetail from "./pages/workshops/workshopsDetail";
+import GeneralEducationTable from "./pages/generalEducation/GeneralEducationTable";
+import AddGroup from "./pages/groups/AddGroup";
+import GroupEdit from "./pages/groups/GroupEdit";
+import AddNewCourse from "./pages/addNewcourse/AddNewCourse";
 
 const ListRoutes = [
   //! ta________________________________
@@ -130,15 +134,7 @@ const ListRoutes = [
     role: "ta",
     key: "ta11",
   },
-  {
-    path: "ta/all-comments",
-    name: "نظرات",
-    // icon: <CommentIcon />,
-    component: Comments,
-    showInNav: true,
-    role: "ta",
-    key: "ta5",
-  },
+
   // mentor____________________________________________
   {
     path: "mentor/dashboard",
@@ -430,17 +426,35 @@ const ListRoutes = [
     key: "admin22",
   },
   {
-    path: "admin/groups/1",
+    path: "admin/groups/:groupId",
     name: "",
     // icon:<></>,
-    component: GroupsDetail,
+    component: GroupDetail,
     showInNav: false,
     role: "admin",
     key: "admin22-d",
   },
   {
+    path: "admin/groups/edit/:groupId",
+    name: "",
+    // icon:<></>,
+    component: GroupEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-e",
+  },
+  {
+    path: "admin/groups/add-group",
+    name: "",
+    // icon:<></>,
+    component: AddGroup,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-a",
+  },
+  {
     path: "admin/training-course",
-    name: "فهرست دوره‌های آموزشی",
+    name: "فهرست دوره‌های تخصصی",
     // icon:<></>,
     component: TrainingCoursesTable,
     showInNav: true,
@@ -457,10 +471,10 @@ const ListRoutes = [
     key: "admin23-d",
   },
   {
-    path: "admin/language-course",
-    name: "فهرست دوره‌های زبان انگلیسی",
+    path: "admin/general-course",
+    name: "فهرست آموزش‌های عمومی",
     // icon:<></>,
-    component: LanguageTable,
+    component: GeneralEducationTable,
     showInNav: true,
     role: "admin",
     key: "admin24",
@@ -475,14 +489,23 @@ const ListRoutes = [
     key: "admin24-d",
   },
   {
-    path: "admin/workshops",
-    name: "فهرست کارگاه‌های جانبی",
+    path: "admin/add-new-course",
+    name: "افزودن دوره جدید",
     // icon:<></>,
-    component: Workshops,
+    component: AddNewCourse,
     showInNav: true,
     role: "admin",
     key: "admin25",
   },
+  // {
+  //   path: "admin/workshops",
+  //   name: "فهرست کارگاه‌های جانبی",
+  //   // icon:<></>,
+  //   component: Workshops,
+  //   showInNav: true,
+  //   role: "admin",
+  //   key: "admin25",
+  // },
   {
     path: "admin/workshops/1",
     name: "",

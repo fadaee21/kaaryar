@@ -68,10 +68,18 @@ const BeforeWeekDetailEdit = () => {
   //but now we have a checkbox and it was not possible to handle by that,
   //so we have to do it this way:
   useEffect(() => {
-    setStudent((prev: any) => ({
-      ...prev,
-      computerFamiliarity: compFamCheckBox,
-    }));
+    //if you select all or select "همه موارد" instead sending of all items,only send "همه موارد"
+    if (compFamCheckBox.includes("همه موارد") || compFamCheckBox.length >= 6) {
+      setStudent((prev: any) => ({
+        ...prev,
+        computerFamiliarity: ["همه موارد"],
+      }));
+    } else {
+      setStudent((prev: any) => ({
+        ...prev,
+        computerFamiliarity: compFamCheckBox,
+      }));
+    }
   }, [compFamCheckBox]);
 
   useEffect(() => {

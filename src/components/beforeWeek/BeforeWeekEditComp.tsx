@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Checkbox,
   FormControl,
@@ -48,17 +48,32 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
   const [checkBoxVal, setCheckBoxVal] = useState<string[]>(
     student?.computerFamiliarity || []
   );
-  const handleChangeCheckBox = (value: any) => () => {
-    const currentIndex = checkBoxVal.indexOf(value);
-    const newChecked = [...checkBoxVal];
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
+
+  useEffect(() => {
+    if (checkBoxVal.includes("همه موارد") || checkBoxVal.length === 6) {
+      setCheckBoxVal(computerFamiliarityOpt);
     }
-    setCheckBoxVal(newChecked);
-    setCompFamCheckBox(newChecked);
-  };
+  }, [checkBoxVal]);
+
+  const handleChangeCheckBox = useCallback(
+    (value: string) => () => {
+      const currentIndex = checkBoxVal.indexOf(value);
+      const newChecked = [...checkBoxVal];
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        if (checkBoxVal.includes("همه موارد")) {
+          const i = newChecked.indexOf("همه موارد");
+          newChecked.splice(i, 1);
+        }
+
+        newChecked.splice(currentIndex, 1);
+      }
+      setCheckBoxVal(newChecked);
+      setCompFamCheckBox(newChecked);
+    },
+    [checkBoxVal, setCompFamCheckBox]
+  );
 
   return (
     <>
@@ -258,9 +273,9 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
 
             <EditCombo
               options={internetAccessOpt}
-              value={student?.internetAccess || ""}
+              value={student?.internetAccessDevice || ""}
               handleChange={handleChange}
-              identifier="internetAccess"
+              identifier="internetAccessDevice"
               placeholder="ابزار دسترسی به اینترنت"
             />
           </List>
@@ -269,8 +284,8 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
           <List>
             <EditString
               handleChange={handleChange}
-              identifier="programmingCoursePassed"
-              value={student?.codingKnowledge ?? ""}
+              identifier="codingKnowledge"
+              value={student?.codingKnowledge || ""}
               placeholder="گذراندن دوره آموزشی در ارتباط با مهارت های کامپیوتر یا کدنویسی"
             />
           </List>
@@ -457,8 +472,8 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
           <List>
             <EditString
               handleChange={handleChange}
-              value={student?.beforeAcceptDesc || ""}
-              identifier="beforeAcceptDesc"
+              value={student?.applicantAdditionalComments || ""}
+              identifier="applicantAdditionalComments"
               placeholder="توضیحات"
             />
           </List>

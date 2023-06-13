@@ -19,11 +19,28 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import TableHeader from "../../components/table/TableHeader";
 import { trainingCourseHeader } from "../../components/table/helper-header";
-import TableBodyDummyTrainingCourse from "../../components/trainingCourse/table/TableBodyDummyTrainingCourse";
-
+import TableBodyTrainingCourse from "../../components/trainingCourse/table/TableBodyTrainingCourse";
+import useSWR from "swr";
+import { fetcherGet } from "../../api/axios";
+import LoadingProgress from "../../components/LoadingProgress";
+import { ShortCoreModule } from "../../model";
 
 const TrainingCourseTable = () => {
+  const MODULES_ALL_CORE = "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id&moduleType=core";
   const [chevronDir, setChevronDir] = useState(false);
+
+  const { data, error, isLoading } = useSWR<ShortCoreModule[]>(
+    MODULES_ALL_CORE,
+    fetcherGet
+  );
+
+  if (isLoading) {
+    return <LoadingProgress />;
+  }
+  if (error) {
+    console.log(error);
+  }
+
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -32,7 +49,7 @@ const TrainingCourseTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4">فهرست دوره‌های آموزشی</Typography>
+            <Typography variant="h4">فهرست دوره‌های تخصصی</Typography>
           </Box>
 
           <AccordionStyled>
@@ -86,7 +103,9 @@ const TrainingCourseTable = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader headerItems={trainingCourseHeader} />
               <TableBody>
-                <TableBodyDummyTrainingCourse />
+                {data?.map((moduleAll) => (
+                  <TableBodyTrainingCourse key={moduleAll.id} moduleAll={moduleAll} />
+                ))}
               </TableBody>
             </Table>
           </TableContainer>

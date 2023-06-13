@@ -150,7 +150,9 @@ const RegisterFormTable = () => {
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentRegister?.length !== 0 && <TableHeader headerItems={registerTableHeader} />}
+              {searchingStudentRegister?.length !== 0 && (
+                <TableHeader headerItems={registerTableHeader} />
+              )}
 
               {/*//! while searching show the search content */}
               {!searchingStudentRegister && (
@@ -170,7 +172,7 @@ const RegisterFormTable = () => {
                         education={RegisterUser.education}
                         refer={RegisterUser.refer}
                         highSchoolYear={RegisterUser.highSchoolYear}
-                        familiarity={addComma(RegisterUser.familiarity)}
+                        familiarity={RegisterUser.familiarity}
                         province={RegisterUser.province}
                         createTime={RegisterUser.createTime}
                         course={RegisterUser.course}
@@ -200,9 +202,7 @@ const RegisterFormTable = () => {
                         highSchoolYear={
                           searchingStudentRegister?.highSchoolYear
                         }
-                        familiarity={addComma(
-                          searchingStudentRegister?.familiarity
-                        )}
+                        familiarity={searchingStudentRegister?.familiarity}
                         province={searchingStudentRegister?.province}
                         createTime={searchingStudentRegister?.createTime}
                         course={searchingStudentRegister?.course}

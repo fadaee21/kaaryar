@@ -6,13 +6,13 @@ import {
   ListItemText,
   useMediaQuery,
 } from "@mui/material";
-import { BoxExamDetail } from "../../../styles/examFormDetail";
+import { ContentBox } from "../../../styles/examFormDetail";
 import { DetailTypography } from "../../../styles/studentDetail";
 
 const WorkshopsDetailComp = () => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
   return (
-    <BoxExamDetail>
+    <ContentBox>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
         کارگاه جانبی
       </DetailTypography>
@@ -53,7 +53,7 @@ const WorkshopsDetailComp = () => {
           </List>
         </Grid>
       </Grid>
-    </BoxExamDetail>
+    </ContentBox>
   );
 };
 

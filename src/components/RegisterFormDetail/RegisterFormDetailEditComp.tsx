@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Grid,
-  List,
-  ListItem,
-  Divider,
-  useMediaQuery,
-  Box,
-} from "@mui/material";
-import { BoxExamDetail } from "../../styles/examFormDetail";
+import { Grid, List, ListItem, Divider, useMediaQuery } from "@mui/material";
+import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 import { RegistrationForm } from "../../model";
 import { EditingSelective } from "./EditingSelective";
@@ -31,7 +24,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
   return (
-    <BoxExamDetail>
+    <ContentBox>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
         فرم ثبت اطلاعات اولیه
       </DetailTypography>
@@ -170,6 +163,16 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 name="selectedField"
               />
             </ListItem>
+            {student?.selectedField?.trim() === "other" && (
+              <ListItem>
+                <EditingInput
+                  placeholder="مسیر مورد نظر متقاضی"
+                  handleChange={handleChange}
+                  state={student?.careerPathwayOther || ""}
+                  name="careerPathwayOther"
+                />
+              </ListItem>
+            )}
             <ListItem>
               <EditingInput
                 placeholder="توضیحات سایر"
@@ -180,16 +183,16 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             </ListItem>
           </List>
         </Grid>
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "flex-start",
             marginRight: 5,
           }}
-        ></Box>
+        ></Box> */}
       </Grid>
-    </BoxExamDetail>
+    </ContentBox>
   );
 };
 

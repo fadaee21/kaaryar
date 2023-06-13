@@ -16,7 +16,7 @@ import { useAuth } from "../../context/AuthProvider";
 
 import useGetImage from "../../hooks/request/useGetImage";
 import { AfterWeekType } from "../../model";
-import { BoxExamDetail } from "../../styles/examFormDetail";
+import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 // import FinalResult from "./FinalResult";
 import ImageModal from "../ImageModal";
@@ -57,6 +57,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   const { pic, getPicture } = useGetImage("/moodle/payment/img/user/");
 
   const sField = student?.beforeWeekForm?.registrationForm?.selectedField;
+  const cField = student?.beforeWeekForm?.registrationForm?.careerPathwayOther;
   const st = student?.moodleUser;
   React.useEffect(() => {
     st && getPicture(st.id.toString());
@@ -114,7 +115,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         )}
       </Box>
       {/* فرم ثبت نام هفته پذیرش */}
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -150,6 +151,15 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                   }
                 />
               </ListItem>
+
+              {cField && (
+                <ListItem>
+                  <ListItemText
+                    primary="مسیر مورد نظر متقاضی"
+                    secondary={cField}
+                  />
+                </ListItem>
+              )}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -210,9 +220,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/* کارنامه هفته پذیرش */}
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -243,9 +253,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/* نظرات سرگروه */}
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -304,9 +314,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/* نظرات منتور */}
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -353,8 +363,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      {/* <BoxExamDetail
+      </ContentBox>
+      {/* <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -379,7 +389,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail> */}
+      </ContentBox> */}
 
       {/* link after week student to moodle student */}
       {/* {!seekerPage && (
@@ -393,7 +403,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
       </Typography>
-      <BoxExamDetail>
+      <ContentBox>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
 
         <Divider
@@ -410,12 +420,12 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
 
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         ثبت نام نهایی
       </Typography>
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -457,7 +467,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       <Box
         sx={{
           display: "flex",

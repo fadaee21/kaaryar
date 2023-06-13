@@ -25,6 +25,7 @@
     "sheetjs-style": "^0.15.8",
     "stylis": "^4.1.1",
     "stylis-plugin-rtl": "^2.0.2",
+    "swr": "^2.1.5",
     "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.4"
   },

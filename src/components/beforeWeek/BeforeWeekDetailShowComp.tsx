@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { BeforeWeekType } from "../../model";
-import { BoxExamDetail } from "../../styles/examFormDetail";
+import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 import {
   accessTimeOpt,
@@ -66,8 +66,6 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
     getPicture(transcript);
   }, [getPicture, transcript]);
 
-  console.log(student?.computerFamiliarity);
-
   return (
     <>
       {/* header */}
@@ -114,7 +112,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
         </ButtonGroup>
       </Box>
       {/*اطلاعات تحصیلی*/}
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
@@ -207,9 +205,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/*وضعیت اشتغال*/}
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت اشتغال
         </DetailTypography>
@@ -310,9 +308,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/*دسترسی به کامپیوتر*/}
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           دسترسی به کامپیوتر
         </DetailTypography>
@@ -343,16 +341,26 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                 /> */}
                 <ListItemText
                   primary="آشنایی کار با کامپیوتر"
-                  secondary={student?.computerFamiliarity.map((item, index) => (
-                    <Typography
-                      sx={{ display: "inline-block" }}
-                      component="span"
-                      variant="subtitle2"
-                      key={index}
-                    >
-                      {item}
-                    </Typography>
-                  ))}
+                  secondary={student?.computerFamiliarity?.map((item, index) =>
+                    !item.includes("همه موارد") ? (
+                      <Typography
+                        sx={{ display: "inline-block" }}
+                        component="span"
+                        variant="subtitle2"
+                        key={index}
+                      >
+                        {item}
+                      </Typography>
+                    ) : (
+                      <Typography
+                        sx={{ display: "inline-block" }}
+                        component="span"
+                        variant="subtitle2"
+                      >
+                        همه موارد
+                      </Typography>
+                    )
+                  )}
                 />
               </ListItem>
               <ListItem>
@@ -375,7 +383,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                 <ListItemText
                   primary="ابزار دسترسی به اینترنت"
                   secondary={getLabel(
-                    student?.internetAccess,
+                    student?.internetAccessDevice,
                     internetAccessOpt
                   )}
                 />
@@ -392,9 +400,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/*مدیریت زمان*/}
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           مدیریت زمان
         </DetailTypography>
@@ -425,9 +433,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/*مهارت های پایه*/}
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           مهارت های پایه
         </DetailTypography>
@@ -502,9 +510,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/*سرفصل های ریاضی*/}
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           سرفصل های ریاضی
         </DetailTypography>
@@ -565,9 +573,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/*توضیحات*/}
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography
           variant="h6"
           sx={{ minWidth: "14rem" }}
@@ -578,18 +586,18 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           orientation={matches ? "vertical" : "horizontal"}
         />
         <Grid container>
-          <Grid item xs={12}>
+          <Grid item xs={9}>
             <List>
               <ListItem>
                 <ListItemText
                   primary="توضیحات"
-                  secondary={student?.beforeAcceptDesc}
+                  secondary={student?.applicantAdditionalComments}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/*ارزیابی قبل از پذیرش*/}
       <Box
         sx={{
@@ -602,7 +610,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           ارزیابی قبل از پذیرش
         </Typography>
       </Box>
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
@@ -655,14 +663,14 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="آمادگی به کار بعد از اتمام دوره"
-                  secondary={student?.jobReady ? "بله" : "خیر"}
+                  primary="آمادگی به کار بعد از اتمام دوره--"
+                  secondary={student?.jobStandby ? "بله" : "خیر"}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       {/* ButtonGroup */}
       <Box
         sx={{

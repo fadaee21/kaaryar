@@ -12,9 +12,9 @@ const useGetData = () => {
       const result = await response.data;
       console.log(result);
       setDataCall(result);
-      setLoadingCall(false);
     } catch (error) {
       console.log(error);
+    } finally {
       setLoadingCall(false);
     }
   }, []);

@@ -1,13 +1,18 @@
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
-
-const TableBodyDummyLanguage = () => {
+import { WorkshopShort } from "../../../model";
+import { persianDate } from "../../../utils/persianDate";
+interface Prop {
+  workshops: WorkshopShort;
+}
+const TableBodyWorksShops = ({ workshops }: Prop) => {
   const navigate = useNavigate();
+  const { id, name, startDate, endDate, studentCount, instructors } = workshops;
   return (
     <StyledTableRow
       onClick={() => {
-        navigate("/admin/language-course/1");
+        navigate("/admin/workshops/1");
       }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
@@ -15,35 +20,30 @@ const TableBodyDummyLanguage = () => {
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">22</Typography>
+        <Typography variant="body2">{id}</Typography>
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">Elementary</Typography>
+        <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">Elementary-1</Typography>
+        <Typography variant="body2">
+          {instructors.length
+            ? instructors[0].firstName + " " + instructors[0].family
+            : "-"}
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">06</Typography>
+        <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">در حال آموزش</Typography>
+        <Typography variant="body2">{persianDate(endDate)}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">نوید سلیمانی</Typography>
-      </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">1402/02/01</Typography>
-      </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">-</Typography>
-      </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">21</Typography>
+        <Typography variant="body2">{studentCount}</Typography>
       </StyledTableCell>
     </StyledTableRow>
   );
 };
 
-export default TableBodyDummyLanguage;
+export default TableBodyWorksShops;
