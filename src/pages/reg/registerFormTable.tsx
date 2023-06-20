@@ -26,7 +26,6 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
-import { addComma } from "../../utils/addComma";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import useGetListLearner from "../../hooks/request/useGetListLearner";
 import { registerTableHeader } from "../../components/table/helper-header";

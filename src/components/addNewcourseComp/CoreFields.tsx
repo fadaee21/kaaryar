@@ -1,63 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { FormControl, InputLabel, OutlinedInput, Grid } from "@mui/material";
-import { ComboBoxAddCourse } from "../../pages/addNewcourse/AddNewCourse";
+import {
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  Grid,
+  Select,
+  MenuItem,
+} from "@mui/material";
+
+import useSWR from "swr";
+import { fetcherGet } from "../../api/axios";
+
 type LiftUpStateType = {
   [index: string]: string;
 };
 interface Prop {
   setLiftUpState: React.Dispatch<React.SetStateAction<LiftUpStateType>>;
+  errMsg: string;
 }
-
-const CoreFields = ({ setLiftUpState }: Prop) => {
+interface RelatedPath {
+  name: string;
+  id: number;
+}
+export const RELATED_PATH =
+  "/modules/career-pathways/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id";
+const CoreFields = ({ setLiftUpState, errMsg }: Prop) => {
   const [careerPathwayId, setCareerPathwayId] = useState(""); //related path
   const [weblinkLmsCourse, setWeblinkLmsCourse] = useState("");
   const [weblinkFinalProject, setWeblinkFinalProject] = useState("");
-  const [teachingStatus, setTeachingStatus] = useState("");
 
   useEffect(() => {
     setLiftUpState({
       careerPathwayId,
       weblinkLmsCourse,
-      teachingStatus,
       weblinkFinalProject,
     });
-  }, [
-    weblinkLmsCourse,
-    weblinkFinalProject,
-    careerPathwayId,
-    teachingStatus,
-    setLiftUpState,
-  ]);
+  }, [weblinkLmsCourse, weblinkFinalProject, careerPathwayId, setLiftUpState]);
+
+  const { data, isLoading } = useSWR<RelatedPath[]>(RELATED_PATH, fetcherGet);
 
   return (
     <>
       <Grid item xs={12} md={6}>
-        <ComboBoxAddCourse
-          label="مسیر مرتبط"
-          identifier="careerPathwayId"
-          options={[
-            {
-              value: "CareerPathwayId...",
-              label: "waiting for value of CareerPathwayId",
-            },
-          ]}
-          handleChange={(e) => setCareerPathwayId(e.target.value)}
-          val={careerPathwayId}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <ComboBoxAddCourse
-          label="وضعیت دوره"
-          identifier="statusCourse"
-          options={[
-            {
-              value: "TeachingStatus...",
-              label: "waiting for value of TeachingStatus",
-            },
-          ]}
-          handleChange={(e) => setTeachingStatus(e.target.value)}
-          val={teachingStatus}
-        />
+        <FormControl
+          disabled={!data && isLoading}
+          fullWidth
+          error={!careerPathwayId && !!errMsg}
+        >
+          <InputLabel id="careerPathwayId-label">مسیر مرتبط</InputLabel>
+          <Select
+            labelId="careerPathwayId-label"
+            id="careerPathwayId"
+            value={careerPathwayId}
+            label="مسیر مرتبط"
+            onChange={(e) => setCareerPathwayId(e.target.value.toString())}
+          >
+            {data?.map((item) => (
+              <MenuItem key={item.id} value={`${item.id} + ${item.name}`}>
+                {/*the reason of scheme of value: i need both name and id while MenuItem just let me send a single string or number */}
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Grid>
 
       <Grid item xs={12} md={6}>
@@ -70,6 +75,7 @@ const CoreFields = ({ setLiftUpState }: Prop) => {
             label="محتوای دوره (لینک به دوره در LMS)"
             value={weblinkLmsCourse}
             onChange={(e) => setWeblinkLmsCourse(e.target.value)}
+            placeholder="example.com"
           />
         </FormControl>
       </Grid>
@@ -83,6 +89,7 @@ const CoreFields = ({ setLiftUpState }: Prop) => {
             label="پروژه پایانی (لینک به پروژه در LMS)"
             value={weblinkFinalProject}
             onChange={(e) => setWeblinkFinalProject(e.target.value)}
+            placeholder="example.com"
           />
         </FormControl>
       </Grid>

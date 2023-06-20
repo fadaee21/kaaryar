@@ -632,6 +632,7 @@ export interface ShortCoreModule {
   category: Category;
   careerPathway: CareerPathway;
   instructors: Instructor[];
+  numberOfHours: undefined | string;
 }
 
 export interface WorkshopShort {

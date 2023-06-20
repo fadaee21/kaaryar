@@ -15,7 +15,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useEffect, useState } from "react";
 import { OptionsString, Instructor } from "../../model";
 import useSWR from "swr";
-import { fetcherGet, postData } from "../../api/axios";
+import { editAxios, fetcherGet, postData } from "../../api/axios";
 import CoreFields from "../../components/addNewcourseComp/CoreFields";
 import WorkshopFields from "../../components/addNewcourseComp/WorkshopFields";
 // import EnglishFields from "../../components/addNewcourseComp/EnglishFields";
@@ -24,10 +24,15 @@ import InterpersonalFieldsAndEnglish from "../../components/addNewcourseComp/Int
 import { JalaliDatePicker } from "../../components/comment/JalaliDatePicker";
 import RelatedGroup from "../../components/addNewcourseComp/RelatedGroup";
 import { Alert, Slide, Snackbar } from "@mui/material";
+import {
+  convertArrToStr,
+  getNameAndId,
+  getTypeAndSubtype,
+} from "../../utils/courseMethod";
 
 interface ComboBoxProp {
   options: OptionsString[];
-  val: string;
+  val: string | undefined;
   identifier: string;
   label: string;
   handleChange: (event: SelectChangeEvent) => void;
@@ -42,6 +47,7 @@ interface courseNameResponse {
 type LiftUpStateType = {
   [index: string]: string;
 };
+
 const AddNewCourse = () => {
   const navigate = useNavigate();
   const [courseType, setCourseType] = useState("");
@@ -57,40 +63,42 @@ const AddNewCourse = () => {
   const [numberOfHours, setNumberOfHours] = useState<undefined | string>(
     undefined
   );
+  const [teachingStatus, setTeachingStatus] = useState("");
+
   const [errMsg, setErrMsg] = useState("");
-  // const [open, setOpen] = useState(false);
 
-  function TransitionLeft(props: any) {
-    return <Slide {...props} direction="left" />;
-  }
+  const [courseIdVal, courseNameVal] = getNameAndId(courseNameId); //destruct name and id from courseNameId string
+  const [moduleType, subType] = getTypeAndSubtype(courseType); //destruct type and subType value
 
-  useEffect(() => {
-    setCourseNameId("");
-  }, [courseType]);
+  useEffect(() => setCourseNameId(""), [courseType]);
 
   //finding the LINK of request:for english remove hasCategory=false and else set null to disable SWR
   useEffect(() => {
-    if (courseType.includes("english")) {
+    if (subType === "english_module") {
       setKeyTypeCourse(
-        `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id&${courseType}`
+        `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=true&orderBy=name&${courseType}`
+      );
+    } else if (subType === "workshop") {
+      setKeyTypeCourse(
+        `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=true&orderBy=name&hasCategory=false&isImported=false&${courseType}`
       );
     } else if (courseType) {
       setKeyTypeCourse(
-        `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id&hasCategory=false&${courseType}`
+        `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=true&orderBy=name&hasCategory=false&${courseType}`
       );
     } else {
       setKeyTypeCourse(null);
     }
-  }, [courseType]);
+  }, [courseType, subType]);
 
+  //give type of course and get all course name
   const { data: dataTypeCourse, isLoading: loadingTypeCourse } = useSWR<
     courseTypeProp[]
   >(keyTypeCourse, fetcherGet);
 
   const keyNameCourse =
-    courseNameId && dataTypeCourse
-      ? `/modules/details/${getNameAndId(courseNameId)[0]}`
-      : null;
+    courseNameId && dataTypeCourse ? `/modules/details/${courseIdVal}` : null;
+  //give course id and get all course information
   const { data: dataNameCourse } = useSWR<courseNameResponse>(
     keyNameCourse,
     fetcherGet
@@ -103,48 +111,87 @@ const AddNewCourse = () => {
       setErrMsg("نوع دوره و نام دوره پر شود");
       return;
     }
-    if (!courseType.includes("workshop") && !moduleCategoryId) {
+    if (subType !== "workshop" && !moduleCategoryId) {
       setErrMsg("گروه مرتبط پر شود");
       return;
     }
-    if (
-      !courseType.includes("vocational") &&
-      !courseType.includes("workshop") &&
-      !liftUpState.teachingStatus
-    ) {
+    if (subType !== "workshop" && !teachingStatus) {
       setErrMsg("وضعیت دوره پر شود");
       return;
     }
-    if (courseType.includes("core") && !liftUpState.careerPathwayId) {
+    let careerPathwayId;
+    if (moduleType === "core" && !liftUpState.careerPathwayId) {
       setErrMsg("مسیر مرتبط پر شود");
       return;
+    } else {
+      careerPathwayId = getNameAndId(liftUpState.careerPathwayId)[0]; //destruct name and id from careerPathwayId string
     }
     setErrMsg("");
 
     try {
-      const res = await postData("/modules/new", {
-        data: {
-          name: getNameAndId(courseNameId)[1],
-          description,
-          numberOfHours,
-          moduleType: getTypeAndSubtype(courseType)[0],
-          subType: getTypeAndSubtype(courseType)[1],
-          startDate: startDate ?? liftUpState.startDate,
-          endDate: endDate ?? liftUpState.endDate,
-          weblinkFinalProject: liftUpState.weblinkFinalProject,
-          moduleCategoryId,
-          careerPathwayId: 8, //liftUpState.careerPathwayId
-          weblinkLmsCourse: liftUpState.weblinkLmsCourse,
-          teachingStatus: liftUpState.teachingStatus,
-        },
-      });
-      if (res.status === 200) {
-        getTypeAndSubtype(courseType).includes("core")
-          ? navigate("/admin/training-course")
-          : navigate("/admin/general-course");
+      let res;
+      if (courseType.includes("english")) {
+        res = await postData("/modules/new", {
+          data: {
+            name: courseNameVal,
+            description,
+            numberOfHours,
+            moduleType,
+            subType,
+            startDate: startDate ?? liftUpState.startDate,
+            endDate: endDate ?? liftUpState.endDate,
+            moduleCategoryId,
+            careerPathwayId,
+            weblinkLmsCourse: liftUpState.weblinkLmsCourse,
+            teachingStatus,
+          },
+        });
+      } else {
+        res = await editAxios(`/modules/${courseIdVal}`, {
+          data: {
+            name: courseNameVal,
+            description,
+            numberOfHours,
+            moduleType,
+            subType,
+            startDate: startDate ?? liftUpState.startDate,
+            endDate: endDate ?? liftUpState.endDate,
+            weblinkFinalProject: liftUpState.weblinkFinalProject,
+            moduleCategoryId,
+            careerPathwayId,
+            weblinkLmsCourse: liftUpState.weblinkLmsCourse,
+            teachingStatus,
+            isImported: subType === "workshop" ? true : null,
+          },
+        });
       }
       console.log(res);
-      setErrMsg("دوره جدید ایجاد نشد");
+      console.log(getTypeAndSubtype(courseType));
+      if (res.status === 200) {
+        if (moduleType === "core") {
+          navigate("/admin/core-course");
+          return;
+        }
+        if (subType === "workshop") {
+          navigate("/admin/general-course?tab=0");
+          return;
+        }
+        if (subType === "english_module") {
+          navigate("/admin/general-course?tab=1");
+          return;
+        }
+        if (subType === "vocational_skills") {
+          navigate("/admin/general-course?tab=3");
+          return;
+        }
+        if (subType === "interpersonal_skills") {
+          navigate("/admin/general-course?tab=2");
+          return;
+        }
+      } else {
+        console.log(res);
+        setErrMsg("دوره جدید ایجاد نشد");
+      }
     } catch (error) {
       console.log(error);
       setErrMsg("دوره جدید ایجاد نشد");
@@ -153,7 +200,7 @@ const AddNewCourse = () => {
 
   return (
     <>
-      <Container maxWidth="lg" sx={{mb:10}}>
+      <Container maxWidth="lg" sx={{ mb: 10 }}>
         <form onSubmit={handleSubmit}>
           <header>
             <Stack direction="row" sx={{ alignItems: "flex-start", mb: 10 }}>
@@ -245,23 +292,38 @@ const AddNewCourse = () => {
                     />
                   </FormControl>
                 </Grid>
-                {courseType.includes("core") && (
-                  <CoreFields setLiftUpState={setLiftUpState} />
+                {moduleType === "core" && (
+                  <CoreFields setLiftUpState={setLiftUpState} errMsg={errMsg} />
                 )}
-                {courseType.includes("workshop") && (
+                {subType === "workshop" && (
                   <WorkshopFields setLiftUpState={setLiftUpState} />
                 )}
-                {/* {courseType.includes("english") && <EnglishFields />} */}
-                {/* {courseType.includes("vocational") && <VocationalFields />} */}
+                {/* {subType===("english") && <EnglishFields />} */}
+                {/* {subType===("vocational") && <VocationalFields />} */}
                 {courseNameId &&
-                  (courseType.includes("interpersonal") ||
-                    courseType.includes("english")) && (
+                  (subType === "interpersonal_skills" ||
+                    subType === "english_module") && (
                     <InterpersonalFieldsAndEnglish
                       setLiftUpState={setLiftUpState}
                     />
                   )}
-
-                {!courseType.includes("workshop") && (
+                {subType !== "workshop" && (
+                  <Grid item xs={12} md={6}>
+                    <ComboBoxAddCourse
+                      label="وضعیت دوره"
+                      identifier="statusCourse"
+                      options={[
+                        {
+                          value: "TeachingStatus...",
+                          label: "waiting for value of TeachingStatus",
+                        },
+                      ]}
+                      handleChange={(e) => setTeachingStatus(e.target.value)}
+                      val={teachingStatus}
+                    />
+                  </Grid>
+                )}
+                {subType !== "workshop" && (
                   <>
                     <Grid item xs={12} md={6}>
                       <RelatedGroup
@@ -272,28 +334,25 @@ const AddNewCourse = () => {
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <Stack>
-                        <Typography variant="body2" gutterBottom>
-                          تاریخ شروع آموزش دوره
-                        </Typography>
                         <JalaliDatePicker
                           setSessionDate={setStartDate}
                           sessionDate={startDate}
+                          label="تاریخ شروع آموزش دوره"
                         />
                       </Stack>
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <Stack>
-                        <Typography variant="body2" gutterBottom>
-                          تاریخ پایان آموزش دوره
-                        </Typography>
                         <JalaliDatePicker
                           setSessionDate={setEndDate}
                           sessionDate={endDate}
+                          label="تاریخ پایان آموزش دوره"
                         />
                       </Stack>
                     </Grid>
                   </>
                 )}
+
                 <Grid item xs={12} md={6}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="numberOfHours">
@@ -368,6 +427,10 @@ export const ComboBoxAddCourse = ({
   );
 };
 
+function TransitionLeft(props: any) {
+  return <Slide {...props} direction="left" />;
+}
+
 const typeOfCourse = [
   {
     label: "دوره تخصصی",
@@ -390,24 +453,3 @@ const typeOfCourse = [
     value: "moduleType=general&moduleSubType=interpersonal_skills",
   },
 ];
-
-//instructors is array but i need to convert it to string and send to child components
-const convertArrToStr = (arr: Array<Instructor>): string => {
-  return arr
-    .map(({ firstName, family }) => firstName + " " + family)
-    .join("، ");
-};
-// this func help to extract of type and subType from string like "moduleType=general&moduleSubType=interpersonal_skills"
-const getTypeAndSubtype = (val: string): string[] => {
-  const keyValuePairs = val.split("&");
-  const result = [];
-  for (const pair of keyValuePairs) {
-    const [key, value] = pair.split("=");
-    if (key === "moduleType" || key === "moduleSubType") {
-      result.push(value);
-    }
-  }
-  return result;
-};
-//this func help to xtract name and id of course from string like "68 + کارگاه آشنایی با گیت (Git) "
-const getNameAndId = (val: string): string[] => val.split("+");

@@ -14,16 +14,17 @@ const RelatedGroup = ({ errMsg, state, setState }: Prop) => {
     "/modules/categories/short-details/all",
     fetcherGet
   );
-
+  console.log(state);
   return (
     <FormControl fullWidth error={!state && !!errMsg}>
       <InputLabel id="related-group-label">گروه مرتبط</InputLabel>
       <Select
         labelId="related-group-label"
         id="related-group"
-        value={state}
         label="گروه مرتبط"
         onChange={(e) => setState(e.target.value)}
+        defaultValue={state}
+        value={state !== undefined ? state : ""}//for handling the uncontrolled component error
       >
         {data?.map(({ name, groupCode, id }) => (
           <MenuItem key={id} value={id}>

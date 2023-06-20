@@ -1,28 +1,30 @@
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
-import { EnglishShort } from "../../../model";
+import { WorkshopShort } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
+import { convertArrToStr } from "../../../utils/courseMethod";
 interface Prop {
-  englishCourse: EnglishShort;
+  vocational: WorkshopShort;
+  counter: number;
 }
-const TableBodyLanguage = ({ englishCourse }: Prop) => {
+const TableBodyVocational = ({ vocational, counter }: Prop) => {
   const navigate = useNavigate();
   const {
     id,
-    levelName,
     name,
     startDate,
     endDate,
     studentCount,
-    category: { name: categoryName },
-    isActive,
+    category,
+    // isActive,
+    teachingStatus,
     instructors,
-  } = englishCourse;
+  } = vocational;
   return (
     <StyledTableRow
       onClick={() => {
-        navigate("/admin/language-course/1");
+        navigate(`/admin/general-course/${id}`);
       }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
@@ -30,28 +32,27 @@ const TableBodyLanguage = ({ englishCourse }: Prop) => {
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{id}</Typography>
+        <Typography variant="body2">{counter + 1}</Typography>
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+      {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{levelName}</Typography>
-      </StyledTableCell>
+      </StyledTableCell> */}
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{categoryName}</Typography>
+        <Typography variant="body2">{category?.name}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
-          {isActive ? "در حال آموزش" : "تمام‌شده"}
+          {/* {isActive ? "در حال آموزش" : "تمام‌شده"} */}
+          {teachingStatus}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
-          {instructors.length
-            ? instructors[0].firstName + " " + instructors[0].family
-            : "-"}
+          {instructors.length ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
@@ -67,4 +68,4 @@ const TableBodyLanguage = ({ englishCourse }: Prop) => {
   );
 };
 
-export default TableBodyLanguage;
+export default TableBodyVocational;

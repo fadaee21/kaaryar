@@ -3,16 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import { WorkshopShort } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
+import { convertArrToStr } from "../../../utils/courseMethod";
 interface Prop {
   workshops: WorkshopShort;
+  counter: number;
 }
-const TableBodyWorksShops = ({ workshops }: Prop) => {
+const TableBodyWorksShops = ({ workshops, counter }: Prop) => {
   const navigate = useNavigate();
-  const { id, name, startDate, endDate, studentCount, instructors } = workshops;
+  const { id, name, startDate, studentCount, instructors } = workshops;
   return (
     <StyledTableRow
       onClick={() => {
-        navigate("/admin/workshops/1");
+        navigate(`/admin/general-course/${id}`);
       }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
@@ -20,7 +22,7 @@ const TableBodyWorksShops = ({ workshops }: Prop) => {
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{id}</Typography>
+        <Typography variant="body2">{counter + 1}</Typography>
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
@@ -28,16 +30,11 @@ const TableBodyWorksShops = ({ workshops }: Prop) => {
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
-          {instructors.length
-            ? instructors[0].firstName + " " + instructors[0].family
-            : "-"}
+          {instructors.length ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{persianDate(startDate)}</Typography>
-      </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{persianDate(endDate)}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{studentCount}</Typography>

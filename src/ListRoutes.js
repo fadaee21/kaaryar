@@ -35,16 +35,20 @@ import NotFound from "./pages/NotFound";
 import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
 import GroupsTable from "./pages/groups/GroupsTable";
 import GroupDetail from "./pages/groups/GroupDetail";
-import TrainingCoursesTable from "./pages/trainingCourse/TrainingCoursesTable";
-import TrainingCoursesDetail from "./pages/trainingCourse/TrainingCoursesDetail";
+
 // import LanguageTable from "./pages/generalEducation/GeneralEducationTable";
-import LanguageDetail from "./pages/generalEducation/LanguageDetail";
+import LanguageDetail from "./pages/generalEducation/language/LanguageDetail";
 // import Workshops from "./pages/workshops/workshopsTable";
-import WorkshopsDetail from "./pages/workshops/workshopsDetail";
+
 import GeneralEducationTable from "./pages/generalEducation/GeneralEducationTable";
 import AddGroup from "./pages/groups/AddGroup";
 import GroupEdit from "./pages/groups/GroupEdit";
-import AddNewCourse from "./pages/addNewcourse/AddNewCourse";
+import AddNewCourse from "./pages/addNewCourse/AddNewCourse";
+import CoreModuleCoursesTable from "./pages/coreModuleCourses/CoreModuleCoursesTable";
+import CoreModuleCourseDetail from "./pages/coreModuleCourses/CoreModuleCourseDetail";
+import CoreModuleCourseEdit from "./pages/coreModuleCourses/CoreModuleCourseEdit";
+import GeneralCourseEdit from "./pages/generalEducation/GeneralCourseEdit";
+import GeneralDetail from "./pages/generalEducation/GeneralDetail";
 
 const ListRoutes = [
   //! ta________________________________
@@ -453,19 +457,28 @@ const ListRoutes = [
     key: "admin22-a",
   },
   {
-    path: "admin/training-course",
+    path: "admin/core-course",
     name: "فهرست دوره‌های تخصصی",
     // icon:<></>,
-    component: TrainingCoursesTable,
+    component: CoreModuleCoursesTable,
     showInNav: true,
     role: "admin",
     key: "admin23",
   },
   {
-    path: "admin/training-course/1",
+    path: "admin/core-course/:coreId",
     name: "",
     // icon:<></>,
-    component: TrainingCoursesDetail,
+    component: CoreModuleCourseDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-d",
+  },
+  {
+    path: "admin/core-course/edit/:coreId",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseEdit,
     showInNav: false,
     role: "admin",
     key: "admin23-d",
@@ -480,7 +493,7 @@ const ListRoutes = [
     key: "admin24",
   },
   {
-    path: "admin/language-course/1",
+    path: "admin/language-course/:id",
     name: "",
     // icon:<></>,
     component: LanguageDetail,
@@ -507,13 +520,22 @@ const ListRoutes = [
   //   key: "admin25",
   // },
   {
-    path: "admin/workshops/1",
+    path: "admin/general-course/:id",
     name: "",
     // icon:<></>,
-    component: WorkshopsDetail,
+    component: GeneralDetail,
     showInNav: false,
     role: "admin",
     key: "admin25-d",
+  },
+  {
+    path: "admin/general-course/edit/:id",
+    name: "",
+    // icon:<></>,
+    component: GeneralCourseEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin25-e",
   },
 
   {

@@ -3,7 +3,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 import { RtlInputDate } from "../../styles/addComment/formBox";
 import dayjs from "dayjs";
-import { useEffect } from "react";
 
 interface JalaliType {
   sessionDate: Date | dayjs.Dayjs | null;
@@ -11,12 +10,14 @@ interface JalaliType {
     React.SetStateAction<Date | dayjs.Dayjs | null>
   >;
   usageType?: "watching";
+  label?:string;
 }
 
 export function JalaliDatePicker({
   sessionDate,
   setSessionDate,
   usageType,
+  label
 }: JalaliType) {
   const handleDateChange = (date: any) => {
     if (date) {
@@ -31,9 +32,6 @@ export function JalaliDatePicker({
       setSessionDate?.(null);
     }
   };
-  useEffect(() => {
-    console.log(sessionDate);
-  }, [sessionDate]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterJalali}>
@@ -43,6 +41,7 @@ export function JalaliDatePicker({
         onChange={handleDateChange}
         renderInput={(params) => <RtlInputDate {...params} />}
         readOnly={usageType === "watching"}
+        label={label}
       />
     </LocalizationProvider>
   );

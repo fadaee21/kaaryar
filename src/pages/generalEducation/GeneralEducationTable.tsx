@@ -1,53 +1,32 @@
-import {
-  AccordionDetails,
-  Box,
-  Container,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  Typography,
-} from "@mui/material";
+import { Container } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { useState } from "react";
-//   import { ExcelExport } from "../../components/ExcelExport";
-import {
-  AccordionStyled,
-  AccordionSummaryStyled,
-} from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import TableHeader from "../../components/table/TableHeader";
-import { language, workshops } from "../../components/table/helper-header";
-import TableBodyLanguage from "../../components/language/table/TableBodyLanguage";
-import TableBodyWorksShops from "../../components/workshops/table/TableBodyWorksShops";
-import useSWR from "swr";
-import { EnglishShort, WorkshopShort } from "../../model";
-import { fetcherGet } from "../../api/axios";
-import LoadingProgress from "../../components/LoadingProgress";
+import LanguageTable from "./language/LanguageTable";
+import WorkshopTable from "./workshops/WorkshopTable";
+import InterpersonalTable from "./interpersonal/InterpersonalTable";
+import VocationalTable from "./vocational/VocationalTable";
+import { useSearchParams } from "react-router-dom";
 
 const GeneralEducationTable = () => {
-  const [chevronDir, setChevronDir] = useState(false);
-  const WORKSHOP_LIST =
-    "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id&moduleType=general&moduleSubType=workshop";
-  const ENGLISH_LIST =
-    "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id&moduleType=general&moduleSubType=english_module";
-  const { data, isLoading, error } = useSWR<WorkshopShort[]>(
-    WORKSHOP_LIST,
-    fetcherGet
-  );
-  const {
-    data: dataEng,
-    isLoading: isLoadingEng,
-    error: errorEng,
-  } = useSWR<EnglishShort[]>(ENGLISH_LIST, fetcherGet);
+  const [value, setValue] = useState(0);
+  const [tab, setTab] = useSearchParams(undefined);
 
-  if (isLoading || isLoadingEng) {
-    return <LoadingProgress />;
-  }
-  if (error || errorEng) {
-    console.log(error);
-    console.log(errorEng);
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+    setTab({ tab: newValue.toString() });
+  };
+
+  let numberValue;
+
+  const tabVal = tab.get("tab");
+
+  if (tabVal !== null) {
+    numberValue = Number(tabVal);
+  } else {
+    numberValue = 0;
   }
 
   return (
@@ -58,142 +37,33 @@ const GeneralEducationTable = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4">فهرست آموزش‌های عمومی</Typography>
+            <Typography variant="h5">فهرست دوره‌های عمومی</Typography>
           </Box>
-          {/* workshop */}
-          <Box
-            component={"div"}
-            // sx={{ display: "flex", justifyContent: "space-between"}}
-          >
-            <Typography variant="h5">کارگاه‌های جانبی</Typography>
-          </Box>
-          <AccordionStyled>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-              }}
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={numberValue || value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
             >
-              <AccordionSummaryStyled
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                onClick={() => setChevronDir(!chevronDir)}
-              >
-                <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
-              </AccordionSummaryStyled>
-
-              {/* <ExcelExport
-                  fileName={"Applicant Info"}
-                  searchData={[]}
-                  linkAll=""
-                  useIn="reg"
-                /> */}
-            </Box>
-            <AccordionDetails>
-              <Box
-                sx={{
-                  width: "100%",
-                  my: 3,
-                }}
-              >
-                {/* //!component for searching student */}
-                {/* <SearchAll
-                    setSearchingStudentRegister={setSearchingStudentRegister}
-                    searchPage="reg"
-                    chevronDir={chevronDir}
-                    stateWaiting={stateWaiting}
-                    setStateWaiting={setStateWaiting}
-                    statusState={statusState}
-                    setStatusState={setStatusState}
-                  /> */}
-              </Box>
-            </AccordionDetails>
-          </AccordionStyled>
-
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={workshops} />
-              <TableBody>
-                {data?.map((workshops) => (
-                  <TableBodyWorksShops
-                    key={workshops.id}
-                    workshops={workshops}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {/* language */}
-          <Box component={"div"} sx={{ mt: 20 }}>
-            <Typography variant="h5">دوره‌های زبان انگلیسی</Typography>
+              <Tab label="کارگاه‌های جانبی" {...a11yProps(0)} />
+              <Tab label="دوره‌های زبان انگلیسی" {...a11yProps(1)} />
+              <Tab label="مهارت‌های حرفه‌ای" {...a11yProps(2)} />
+              <Tab label="مهارت‌های ارتباطی" {...a11yProps(3)} />
+            </Tabs>
           </Box>
-          <AccordionStyled>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-              }}
-            >
-              <AccordionSummaryStyled
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                onClick={() => setChevronDir(!chevronDir)}
-              >
-                <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
-              </AccordionSummaryStyled>
+          <TabPanel value={numberValue || value} index={0}>
+            <WorkshopTable />
+          </TabPanel>
 
-              {/* <ExcelExport
-                  fileName={"Applicant Info"}
-                  searchData={[]}
-                  linkAll=""
-                  useIn="reg"
-                /> */}
-            </Box>
-            <AccordionDetails>
-              <Box
-                sx={{
-                  width: "100%",
-                  my: 3,
-                }}
-              >
-                {/* //!component for searching student */}
-                {/* <SearchAll
-                    setSearchingStudentRegister={setSearchingStudentRegister}
-                    searchPage="reg"
-                    chevronDir={chevronDir}
-                    stateWaiting={stateWaiting}
-                    setStateWaiting={setStateWaiting}
-                    statusState={statusState}
-                    setStatusState={setStatusState}
-                  /> */}
-              </Box>
-            </AccordionDetails>
-          </AccordionStyled>
-
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={language} />
-              <TableBody>
-                {dataEng?.map((englishCourse) => (
-                  <TableBodyLanguage
-                    key={englishCourse.id}
-                    englishCourse={englishCourse}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          {/* //!for empty response of search return TableEmpty */}
-          {/* {searchingStudentRegister?.length === 0 && <TableEmpty />} */}
+          <TabPanel value={numberValue || value} index={1}>
+            <LanguageTable />
+          </TabPanel>
+          <TabPanel value={numberValue || value} index={2}>
+            <InterpersonalTable />
+          </TabPanel>
+          <TabPanel value={numberValue || value} index={3}>
+            <VocationalTable />
+          </TabPanel>
         </Container>
       </Box>
     </Box>
@@ -201,3 +71,32 @@ const GeneralEducationTable = () => {
 };
 
 export default GeneralEducationTable;
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}

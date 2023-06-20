@@ -4,7 +4,6 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
-  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { JalaliDatePicker } from "../comment/JalaliDatePicker";
@@ -44,17 +43,16 @@ const WorkshopFields = ({ setLiftUpState }: Prop) => {
             label="محتوای دوره (لینک به دوره در LMS)"
             value={weblinkLmsCourse}
             onChange={(e) => setWeblinkLmsCourse(e.target.value)}
+            placeholder="example.com"
           />
         </FormControl>
       </Grid>
       <Grid item xs={12} md={6}>
         <Stack>
-          <Typography variant="body2" gutterBottom>
-            تاریخ برگزاری
-          </Typography>
           <JalaliDatePicker
             setSessionDate={setStartDate}
             sessionDate={startDate}
+            label="تاریخ برگزاری"
           />
         </Stack>
       </Grid>

@@ -19,14 +19,14 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import TableHeader from "../../components/table/TableHeader";
 import { trainingCourseHeader } from "../../components/table/helper-header";
-import TableBodyTrainingCourse from "../../components/trainingCourse/table/TableBodyTrainingCourse";
+import TableBodyTrainingCourse from "../../components/coreCourse/table/TableBodyCoreModuleCourse";
 import useSWR from "swr";
 import { fetcherGet } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
 import { ShortCoreModule } from "../../model";
 
-const TrainingCourseTable = () => {
-  const MODULES_ALL_CORE = "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=id&moduleType=core";
+const CoreModuleCoursesTable = () => {
+  const MODULES_ALL_CORE = "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&hasCategory=true&moduleType=core";
   const [chevronDir, setChevronDir] = useState(false);
 
   const { data, error, isLoading } = useSWR<ShortCoreModule[]>(
@@ -118,4 +118,4 @@ const TrainingCourseTable = () => {
   );
 };
 
-export default TrainingCourseTable;
+export default CoreModuleCoursesTable;

@@ -1,6 +1,5 @@
 import { FormControl, Grid, InputLabel, OutlinedInput } from "@mui/material";
 import { useEffect, useState } from "react";
-import { ComboBoxAddCourse } from "../../pages/addNewcourse/AddNewCourse";
 
 type LiftUpStateType = {
   [index: string]: string;
@@ -11,13 +10,11 @@ interface Prop {
 
 const InterpersonalFieldsAndEnglish = ({ setLiftUpState }: Prop) => {
   const [weblinkLmsCourse, setWeblinkLmsCourse] = useState("");
-  const [teachingStatus, setTeachingStatus] = useState("");
   useEffect(() => {
     setLiftUpState({
       weblinkLmsCourse,
-      teachingStatus,
     });
-  }, [weblinkLmsCourse, teachingStatus, setLiftUpState]);
+  }, [weblinkLmsCourse, setLiftUpState]);
 
   return (
     <>
@@ -31,22 +28,9 @@ const InterpersonalFieldsAndEnglish = ({ setLiftUpState }: Prop) => {
             label="محتوای دوره (لینک به دوره در LMS)"
             value={weblinkLmsCourse}
             onChange={(e) => setWeblinkLmsCourse(e.target.value)}
+            placeholder="example.com"
           />
         </FormControl>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <ComboBoxAddCourse
-          label="وضعیت دوره"
-          identifier="statusCourse"
-          options={[
-            {
-              value: "TeachingStatus...",
-              label: "waiting for value of TeachingStatus",
-            },
-          ]}
-          handleChange={(e) => setTeachingStatus(e.target.value)}
-          val={teachingStatus}
-        />
       </Grid>
     </>
   );

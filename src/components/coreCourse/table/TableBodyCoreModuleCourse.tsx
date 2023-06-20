@@ -8,7 +8,7 @@ interface Prop {
   moduleAll: ShortCoreModule;
 }
 
-const TableBodyTrainingCourse = ({ moduleAll }: Prop) => {
+const TableBodyCoreModuleCourse = ({ moduleAll }: Prop) => {
   const navigate = useNavigate();
   const {
     id,
@@ -28,7 +28,7 @@ const TableBodyTrainingCourse = ({ moduleAll }: Prop) => {
   return (
     <StyledTableRow
       onClick={() => {
-        navigate("/admin/training-course/1");
+        navigate(`/admin/core-course/${id}`);
       }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
@@ -86,4 +86,4 @@ const TableBodyTrainingCourse = ({ moduleAll }: Prop) => {
   );
 };
 
-export default TableBodyTrainingCourse;
+export default TableBodyCoreModuleCourse;
