@@ -7,7 +7,12 @@ export const SearchFamily = ({
   searchPage,
   searchLink,
 }: any) => {
-  const fetchData = async (inputValue: string) => {
+  let typingTimer: ReturnType<typeof setTimeout>;
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const fetchData = async (inputValue: string, delayMs: number = 0) => {
+    await delay(delayMs);
     try {
       const response = await getData(searchLink, {
         params: {
@@ -26,9 +31,10 @@ export const SearchFamily = ({
 
   const promiseOptions: any = (inputValue: string) =>
     new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(fetchData(inputValue));
-      }, 1500);
+      clearTimeout(typingTimer); // Clear the previous timer
+      typingTimer = setTimeout(() => {
+        resolve(fetchData(inputValue, 400)); // Fetch data after 400ms 
+      }, 500); // Set the delay before fetching data 
     });
 
   return (

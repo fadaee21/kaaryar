@@ -10,15 +10,18 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
 import useGetImage from "../../hooks/request/useGetImage";
 import { AfterWeekType } from "../../model";
-import { BoxExamDetail } from "../../styles/examFormDetail";
+import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
-import FinalResult from "./FinalResult";
+// import FinalResult from "./FinalResult";
+import ImageModal from "../ImageModal";
+import { getLabel } from "../../utils/getLabel";
+import { SelectedFieldOpt } from "../search/searchOptions";
 const LookUpLink = React.lazy(() => import("./LookUpLink"));
 // import UploadImage from "../UploadImage";
 
@@ -53,13 +56,16 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
 
   const { pic, getPicture } = useGetImage("/moodle/payment/img/user/");
 
+  const sField = student?.beforeWeekForm?.registrationForm?.selectedField;
+  const cField = student?.beforeWeekForm?.registrationForm?.careerPathwayOther;
+  const st = student?.moodleUser;
   React.useEffect(() => {
-    if (!student?.moodleUser) {
-      return;
-    }
-    getPicture(student.moodleUser.id.toString());
-  }, [getPicture, student?.moodleUser]);
+    st && getPicture(st.id.toString());
+  }, [getPicture, st]);
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <>
       {!seekerPage && (
@@ -108,7 +114,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </ButtonGroup>
         )}
       </Box>
-      <BoxExamDetail
+      {/* فرم ثبت نام هفته پذیرش */}
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -136,41 +143,71 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="نتیجه تست MBTI"
-                  secondary={student?.mbtiTest}
+                  primary="انتخاب اولیه مسیر شغلی"
+                  secondary={
+                    sField?.trim() === "other"
+                      ? "سایر"
+                      : getLabel(sField, SelectedFieldOpt)
+                  }
                 />
               </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="نتیجه تعیین سطح کامپیوتر"
-                  secondary={student?.comLevelResult}
-                />
-              </ListItem>
+
+              {cField && (
+                <ListItem>
+                  <ListItemText
+                    primary="مسیر مورد نظر متقاضی"
+                    secondary={cField}
+                  />
+                </ListItem>
+              )}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
                 <ListItemText
-                  primary="انتخاب اولیه مسیر شغلی"
-                  secondary={student?.firstSelectJobRoad}
+                  primary="نتیجه تعیین سطح کامپیوتر"
+                  secondary={student?.comLevelResult}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="نتیجه تعیین سطح زبان انگلیسی"
+                  secondary={student?.langScore}
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemText
+                  primary="تعیین سطح الگوریتم و ریاضی"
+                  secondary={student?.algoScore}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="نمره مهارت‌های پایه--"
+                  // secondary={student?.langScore}
                 />
               </ListItem>
               <ListItem
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
-                <ListItemText primary="فیش واریزی" />
-                {student?.moodleUser?.id && (
-                  <ListItemAvatar>
+                <ListItemText primary="عکس فیش واریزی" />
+                {pic && (
+                  <ListItemAvatar
+                    onClick={handleOpen}
+                    sx={{ cursor: "pointer" }}
+                  >
                     <Box
                       component={"img"}
-                      alt="avatar"
+                      alt="payment image"
                       src={pic}
                       sx={{ width: 150, height: "100%", borderRadius: 2 }}
                     />
                   </ListItemAvatar>
                 )}
               </ListItem>
+              {/* upload image that doesn't need anymore */}
               {/* <ListItem>
                 <UploadImage
                   id={id}
@@ -180,26 +217,19 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                   }
                 />
               </ListItem> */}
-              <ListItem>
-                <ListItemText
-                  primary="نتیجه تعیین سطح الگوریتم"
-                  secondary={student?.algoLevelResult}
-                />
-              </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-
-      <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
-        نتیجه هفته پذیرش
-      </Typography>
-      <BoxExamDetail
+      </ContentBox>
+      {/* کارنامه هفته پذیرش */}
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
+        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
+          کارنامه هفته پذیرش
+        </DetailTypography>
         <Divider
           variant="middle"
           flexItem
@@ -210,20 +240,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="نمره تعیین سطح زیان"
-                  secondary={student?.langScore}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="نمره آزمون الگوریتم"
-                  secondary={student?.algoScore}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="نمره آزمون کامپیوتر"
-                  secondary={student?.comScore}
+                  primary="نتیجه تعیین سطح الگوریتم"
+                  secondary={student?.algoLevelResult}
                 />
               </ListItem>
               <ListItem>
@@ -234,8 +252,31 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               </ListItem>
             </List>
           </Grid>
+        </Grid>
+      </ContentBox>
+      {/* نظرات سرگروه */}
+      <ContentBox
+        colorActive={
+          student?.afterWeekChecked || successObject === "afterWeekChecked"
+        }
+      >
+        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
+          نظرات سرگروه
+        </DetailTypography>
+        <Divider
+          variant="middle"
+          flexItem
+          orientation={matches ? "vertical" : "horizontal"}
+        />
+        <Grid container>
           <Grid item xs={12} md={6}>
             <List>
+              <ListItem>
+                <ListItemText
+                  primary="اختصاص زمان کافی به کاریار"
+                  secondary={student?.consistCompleteTime}
+                />
+              </ListItem>
               <ListItem>
                 <ListItemText
                   primary="وضعیت دسترسی به کامپیوتر و اینترنت"
@@ -250,24 +291,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               </ListItem>
             </List>
           </Grid>
-        </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail
-        colorActive={
-          student?.afterWeekChecked || successObject === "afterWeekChecked"
-        }
-      >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          نتیجه جلسه با سرگروه
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
-        <Grid container>
           <Grid item xs={12} md={6}>
             <List>
+              <ListItem>
+                <ListItemText
+                  primary="تعهد به کار"
+                  secondary={student?.jobCommit}
+                />
+              </ListItem>
               <ListItem>
                 <ListItemText
                   primary="رشته پیشنهادی سرگروه"
@@ -276,21 +307,22 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="ریسک ها و محدودیت ها"
-                  secondary={student?.limitAndRisk}
+                  primary="سایر ریسک‌ها و محدودیت‌ها"
+                  secondary={student?.etcDesc}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail
+      </ContentBox>
+      {/* نظرات منتور */}
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          نتیجه جلسه با منتور
+          نظرات منتور
         </DetailTypography>
         <Divider
           variant="middle"
@@ -302,27 +334,37 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="اختصاص وقت کافی به کاریار"
-                  secondary={student?.consistCompleteTime}
+                  primary="اختصاص زمان کافی به کاریار"
+                  secondary={student?.consistTime}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="تعهد به اشتغال"
-                  secondary={student?.jobCommit}
+                  primary="رشته پیشنهادی منتور"
+                  secondary={student?.recommendFieldMentor}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="تعهد به کار"
+                  secondary={student?.workCommit}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="سایر ملاحظات"
-                  secondary={student?.etcDesc}
+                  primary="سایر ریسک‌ها و محدودیت‌ها"
+                  secondary={student?.limitAndRisk}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail
+      </ContentBox>
+      {/* <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -340,24 +382,6 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="تعهد به کار"
-                  secondary={student?.workCommit}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="اختصاص زمان کافی"
-                  secondary={student?.consistTime}
-                />
-              </ListItem>
-              {/* <ListItem>
-                <ListItemText
-                  primary="دسترسی به کامپیوتر و اینترنت"
-                  secondary={student?.comAccessStatus}
-                />
-              </ListItem> */}
-              <ListItem>
-                <ListItemText
                   primary="اخلاق فردی و حرفه ای"
                   secondary={student?.ethics}
                 />
@@ -365,21 +389,21 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox> */}
 
       {/* link after week student to moodle student */}
-      {!seekerPage && (
+      {/* {!seekerPage && (
         <FinalResult
           approvedStu={student?.afterWeekChecked}
           finalResult={student?.finalResult}
           id={id}
         />
-      )}
-
-      {/* <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
+      )} */}
+      {/* نهایی */}
+      <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
       </Typography>
-      <BoxExamDetail>
+      <ContentBox>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
 
         <Divider
@@ -392,17 +416,16 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             <List>
               <ListItem>
                 <ListItemText secondary={student?.finalResult} />
-                
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail> */}
+      </ContentBox>
 
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         ثبت نام نهایی
       </Typography>
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
@@ -423,12 +446,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                   secondary={student?.scholar ? "بله" : "خیر"}
                 />
               </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="درصد بورسیه"
-                  secondary={student?.scholarPercentage}
-                />
-              </ListItem>
+              {student?.scholar && (
+                <ListItem>
+                  <ListItemText
+                    primary="درصد بورسیه"
+                    secondary={student?.scholarPercentage}
+                  />
+                </ListItem>
+              )}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -442,7 +467,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
       <Box
         sx={{
           display: "flex",
@@ -483,6 +508,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           </ButtonGroup>
         )}
       </Box>
+      <ImageModal pic={pic} open={open} handleClose={handleClose} />
     </>
   );
 };

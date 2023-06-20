@@ -96,13 +96,13 @@ const LookUpLink = ({ student, id, refreshingPage }: LookUpLinkType) => {
       >
         <Autocomplete
           options={students}
-          getOptionLabel={(option) => {
-            return (
-              option?.firstName +
-              " " +
-              (option?.family ? option.family : option?.lastName)
-            );
-          }}
+          getOptionLabel={(option) =>
+            option?.firstName +
+            " " +
+            (option?.family ? option.family : option?.lastName) +
+            " " +
+            `(${option?.username})`
+          }
           id="close-on-select"
           sx={{ mr: 10 }}
           fullWidth
@@ -118,7 +118,14 @@ const LookUpLink = ({ student, id, refreshingPage }: LookUpLinkType) => {
             setOneStudent(newValue);
           }}
           renderInput={(params) => (
-            <TextField {...params} label={"لینک کردن کاربر"} />
+            <TextField {...params} label="لینک کردن کاربر" />
+          )}
+          renderOption={(props, option) => (
+            <Box component="li" {...props}>
+              {option?.firstName +
+                " " +
+                (option?.family ? option.family : option?.lastName)}
+            </Box>
           )}
           readOnly={approvedStu}
         />
@@ -140,3 +147,4 @@ const LookUpLink = ({ student, id, refreshingPage }: LookUpLinkType) => {
 };
 
 export default LookUpLink;
+

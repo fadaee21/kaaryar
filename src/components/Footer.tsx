@@ -1,4 +1,4 @@
-import { Box, Grid, Link, Stack, Typography } from "@mui/material";
+import {  Grid, Link, Stack, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import PublicIcon from "@mui/icons-material/Public";
 import EmailIcon from "@mui/icons-material/Email";

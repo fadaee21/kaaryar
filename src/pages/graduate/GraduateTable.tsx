@@ -8,7 +8,7 @@ import {
   TableContainer,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import  { useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import {
   AccordionStyled,
@@ -16,8 +16,9 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import TableHeaderG from "../../components/graduate/table/TableHeaderG";
 import TableBodyG from "../../components/graduate/table/TableBodyG";
+import TableHeader from "../../components/table/TableHeader";
+import { graduateTableHeader } from "../../components/table/helper-header";
 
 const GraduateTable = () => {
   const [chevronDir, setChevronDir] = useState(false);
@@ -81,7 +82,7 @@ const GraduateTable = () => {
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeaderG />
+              <TableHeader headerItems={graduateTableHeader} />
               <TableBody>
                 <TableBodyG />
               </TableBody>

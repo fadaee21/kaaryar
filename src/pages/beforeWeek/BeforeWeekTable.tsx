@@ -28,6 +28,7 @@ import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import useGetListLearner from "../../hooks/request/useGetListLearner";
+import { beforeTableHeader } from "../../components/table/helper-header";
 
 const BeforeWeekTable = () => {
   const [page, setPage] = useState(1);
@@ -156,7 +157,9 @@ const BeforeWeekTable = () => {
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentBefore?.length !== 0 && <TableHeader />}
+              {searchingStudentBefore?.length !== 0 && (
+                <TableHeader headerItems={beforeTableHeader} />
+              )}
 
               {/*//! while searching show the search content */}
               {!searchingStudentBefore && (
@@ -166,7 +169,6 @@ const BeforeWeekTable = () => {
                       id,
                       contCourseApproach,
                       jobStandby,
-                      cgpa,
                       registrationForm: {
                         province,
                         city,
@@ -177,7 +179,7 @@ const BeforeWeekTable = () => {
                         mobile,
                         email,
                         gender,
-                        studyField
+                        studyField,
                       },
                       acceptWeekChecked,
                     } = examRegisterUser;
@@ -199,7 +201,8 @@ const BeforeWeekTable = () => {
                         email={email}
                         gender={gender}
                         directNav="before-week"
-                        cgpa={cgpa}
+                        // cgpa={cgpa}
+                        cgpa="-" //TODO:cgpa is not correct it must be change
                         checked={acceptWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
@@ -219,20 +222,17 @@ const BeforeWeekTable = () => {
                       province={
                         searchingStudentBefore.registrationForm.province
                       }
-                      city={
-                        searchingStudentBefore.registrationForm.city
-                      }
+                      city={searchingStudentBefore.registrationForm.city}
                       studyField={
                         searchingStudentBefore.registrationForm.studyField
                       }
                       contCourseApproach={
                         searchingStudentBefore.contCourseApproach
                       }
-                      jobStandby={
-                        searchingStudentBefore.jobStandby
-                      }
+                      jobStandby={searchingStudentBefore.jobStandby}
                       cgpa={
-                        searchingStudentBefore.cgpa
+                        // searchingStudentBefore.cgpa
+                        "-"
                       }
                       family={searchingStudentBefore.registrationForm.family}
                       firstName={

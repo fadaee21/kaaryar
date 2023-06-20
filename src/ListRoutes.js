@@ -33,6 +33,22 @@ import GraduateProfile from "./pages/graduate/GraduateProfile";
 import GraduateTable from "./pages/graduate/GraduateTable";
 import NotFound from "./pages/NotFound";
 import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
+import GroupsTable from "./pages/groups/GroupsTable";
+import GroupDetail from "./pages/groups/GroupDetail";
+
+// import LanguageTable from "./pages/generalEducation/GeneralEducationTable";
+import LanguageDetail from "./pages/generalEducation/language/LanguageDetail";
+// import Workshops from "./pages/workshops/workshopsTable";
+
+import GeneralEducationTable from "./pages/generalEducation/GeneralEducationTable";
+import AddGroup from "./pages/groups/AddGroup";
+import GroupEdit from "./pages/groups/GroupEdit";
+import AddNewCourse from "./pages/addNewCourse/AddNewCourse";
+import CoreModuleCoursesTable from "./pages/coreModuleCourses/CoreModuleCoursesTable";
+import CoreModuleCourseDetail from "./pages/coreModuleCourses/CoreModuleCourseDetail";
+import CoreModuleCourseEdit from "./pages/coreModuleCourses/CoreModuleCourseEdit";
+import GeneralCourseEdit from "./pages/generalEducation/GeneralCourseEdit";
+import GeneralDetail from "./pages/generalEducation/GeneralDetail";
 
 const ListRoutes = [
   //! ta________________________________
@@ -122,15 +138,7 @@ const ListRoutes = [
     role: "ta",
     key: "ta11",
   },
-  {
-    path: "ta/all-comments",
-    name: "نظرات",
-    // icon: <CommentIcon />,
-    component: Comments,
-    showInNav: true,
-    role: "ta",
-    key: "ta5",
-  },
+
   // mentor____________________________________________
   {
     path: "mentor/dashboard",
@@ -411,6 +419,123 @@ const ListRoutes = [
     showInNav: false,
     role: "admin",
     key: "admin21",
+  },
+  {
+    path: "admin/groups",
+    name: "فهرست گروه‌ها",
+    // icon:<></>,
+    component: GroupsTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin22",
+  },
+  {
+    path: "admin/groups/:groupId",
+    name: "",
+    // icon:<></>,
+    component: GroupDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-d",
+  },
+  {
+    path: "admin/groups/edit/:groupId",
+    name: "",
+    // icon:<></>,
+    component: GroupEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-e",
+  },
+  {
+    path: "admin/groups/add-group",
+    name: "",
+    // icon:<></>,
+    component: AddGroup,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-a",
+  },
+  {
+    path: "admin/core-course",
+    name: "فهرست دوره‌های تخصصی",
+    // icon:<></>,
+    component: CoreModuleCoursesTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin23",
+  },
+  {
+    path: "admin/core-course/:coreId",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-d",
+  },
+  {
+    path: "admin/core-course/edit/:coreId",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-d",
+  },
+  {
+    path: "admin/general-course",
+    name: "فهرست آموزش‌های عمومی",
+    // icon:<></>,
+    component: GeneralEducationTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin24",
+  },
+  {
+    path: "admin/language-course/:id",
+    name: "",
+    // icon:<></>,
+    component: LanguageDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-d",
+  },
+  {
+    path: "admin/add-new-course",
+    name: "افزودن دوره جدید",
+    // icon:<></>,
+    component: AddNewCourse,
+    showInNav: true,
+    role: "admin",
+    key: "admin25",
+  },
+  // {
+  //   path: "admin/workshops",
+  //   name: "فهرست کارگاه‌های جانبی",
+  //   // icon:<></>,
+  //   component: Workshops,
+  //   showInNav: true,
+  //   role: "admin",
+  //   key: "admin25",
+  // },
+  {
+    path: "admin/general-course/:id",
+    name: "",
+    // icon:<></>,
+    component: GeneralDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin25-d",
+  },
+  {
+    path: "admin/general-course/edit/:id",
+    name: "",
+    // icon:<></>,
+    component: GeneralCourseEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin25-e",
   },
 
   {

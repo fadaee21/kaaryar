@@ -26,9 +26,9 @@ import {
 } from "../../styles/search/accordion";
 import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
-import { addComma } from "../../utils/addComma";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import useGetListLearner from "../../hooks/request/useGetListLearner";
+import { registerTableHeader } from "../../components/table/helper-header";
 
 const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
@@ -149,7 +149,9 @@ const RegisterFormTable = () => {
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentRegister?.length !== 0 && <TableHeader />}
+              {searchingStudentRegister?.length !== 0 && (
+                <TableHeader headerItems={registerTableHeader} />
+              )}
 
               {/*//! while searching show the search content */}
               {!searchingStudentRegister && (
@@ -169,7 +171,7 @@ const RegisterFormTable = () => {
                         education={RegisterUser.education}
                         refer={RegisterUser.refer}
                         highSchoolYear={RegisterUser.highSchoolYear}
-                        familiarity={addComma(RegisterUser.familiarity)}
+                        familiarity={RegisterUser.familiarity}
                         province={RegisterUser.province}
                         createTime={RegisterUser.createTime}
                         course={RegisterUser.course}
@@ -199,9 +201,7 @@ const RegisterFormTable = () => {
                         highSchoolYear={
                           searchingStudentRegister?.highSchoolYear
                         }
-                        familiarity={addComma(
-                          searchingStudentRegister?.familiarity
-                        )}
+                        familiarity={searchingStudentRegister?.familiarity}
                         province={searchingStudentRegister?.province}
                         createTime={searchingStudentRegister?.createTime}
                         course={searchingStudentRegister?.course}

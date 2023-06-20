@@ -16,7 +16,7 @@ export const DesireBox = styled(Box)(({ theme }) => ({
 }));
 
 
-export const HeaderBox = styled(Box)(({ theme }) => ({
+export const ContentBoxHeader = styled(Box)(({ theme }) => ({
   display: "flex",
   margin: theme.spacing(0, 0, 3),
   width: "100%",

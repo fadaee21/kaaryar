@@ -1,13 +1,13 @@
 import { Box,BoxProps } from "@mui/material";
 import { styled } from "@mui/system";
 
-interface BoxExamDetailProps extends BoxProps {
+interface ContentBoxProps extends BoxProps {
   colorActive?: boolean | null;
 }
 
-export const BoxExamDetail = styled(Box,{
+export const ContentBox = styled(Box,{
   shouldForwardProp:(prop)=>prop!=="colorActive"
-})<BoxExamDetailProps>(({ theme,colorActive }) => ({
+})<ContentBoxProps>(({ theme,colorActive }) => ({
   display: "flex",
   justifyContent: "center",
   width: "100%",

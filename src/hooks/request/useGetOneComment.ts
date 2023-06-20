@@ -24,7 +24,6 @@ const useGetOneComment = () => {
         let response = await getData(commentLink);
         let data = await response.data;
         setAllComment(data);
-        console.log(data);
         setLoading(false);
       } catch (error) {
         //TODO:handle Error

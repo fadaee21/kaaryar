@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableContainer,
-  TableHead,
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -16,10 +15,12 @@ import { useAuth } from "../../context/AuthProvider";
 import { MoodleUserAssignee } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { AccordionStyled } from "../../styles/search/accordion";
-import useMoodle from "../../hooks/request/useMoodle";
-
+import useGetMoodleStudents from "../../hooks/request/useGetMoodleStudents";
+import TableHeader from "../../components/table/TableHeader";
+import { studentTableHeader } from "../../components/table/helper-header";
+//^this component list related student for mentor and ta
 const StudentListMoodleTable = () => {
-  const { students, loading } = useMoodle("/moodle/user/assignee");
+  const { students, loading } = useGetMoodleStudents("/moodle/user/assignee");
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -61,22 +62,13 @@ const StudentListMoodleTable = () => {
           </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell align="left"></StyledTableCell>
-                  <StyledTableCell align="left">
-                    نام و نام خانوادگی
-                  </StyledTableCell>
-                  <StyledTableCell align="left">نام کاربری</StyledTableCell>
-                  <StyledTableCell align="left">شهر</StyledTableCell>
-                  <StyledTableCell align="left">موبایل</StyledTableCell>
-                  <StyledTableCell align="left">ایمیل</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-
+              <TableHeader headerItems={studentTableHeader} />
               <TableBody>
                 {students.map(
                   (moodleUser: MoodleUserAssignee, i: React.Key) => {
+                    if (!moodleUser.assigneeContext.student) {
+                      return false;
+                    }
                     const {
                       assigneeContext: {
                         student: {

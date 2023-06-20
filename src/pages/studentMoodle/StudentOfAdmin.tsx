@@ -4,7 +4,6 @@ import {
   Table,
   TableBody,
   TableContainer,
-  TableHead,
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -27,10 +26,13 @@ import {
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
 import styleRot from "../../styles/search/searchChevron.module.css";
-import useMoodle from "../../hooks/request/useMoodle";
+
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
+import TableHeader from "../../components/table/TableHeader";
+import { studentTableHeader } from "../../components/table/helper-header";
+import useGetMoodleStudents from "../../hooks/request/useGetMoodleStudents";
 
 const StudentOfAdmin = () => {
   const [page, setPage] = useState(1);
@@ -44,7 +46,7 @@ const StudentOfAdmin = () => {
     MoodleUser[] | null
   >(null);
 
-  const { students, loading } = useMoodle(adminStudent, page);
+  const { students, loading, error } = useGetMoodleStudents(adminStudent, page);
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -52,6 +54,9 @@ const StudentOfAdmin = () => {
 
   if (loading) {
     return <LoadingProgress />;
+  }
+  if (error) {
+    navigate("/");
   }
   return (
     <Box sx={{ m: 2 }}>
@@ -113,18 +118,7 @@ const StudentOfAdmin = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
               {searchingMoodleStudent?.length !== 0 && (
-                <TableHead>
-                  <StyledTableRow>
-                    <StyledTableCell align="left"></StyledTableCell>
-                    <StyledTableCell align="left">
-                      نام و نام خانوادگی
-                    </StyledTableCell>
-                    <StyledTableCell align="left">نام کاربری</StyledTableCell>
-                    <StyledTableCell align="left">شهر</StyledTableCell>
-                    <StyledTableCell align="left">موبایل</StyledTableCell>
-                    <StyledTableCell align="left">ایمیل</StyledTableCell>
-                  </StyledTableRow>
-                </TableHead>
+                <TableHeader headerItems={studentTableHeader} />
               )}
               {!searchingMoodleStudent && (
                 <TableBody>
@@ -148,17 +142,17 @@ const StudentOfAdmin = () => {
                         }}
                       >
                         <StyledTableCell
-                          align="left"
-                          sx={{ width: "5%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "5%", verticalAlign: "center" }}
                         >
                           {/* //TODO: add picture */}
-                          <TablePic picture={picture?.imageAddress} lastName={family} />
+                          <TablePic picture={picture} lastName={family} />
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "25%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                             cursor: "pointer",
                           }}
                           onClick={() => navigate(`/${roles}/student/${id}`)}
@@ -168,48 +162,52 @@ const StudentOfAdmin = () => {
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "10%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2" textAlign={"left"}>
+                          <Typography variant="body2" textAlign={"center"}>
                             {username}
                           </Typography>
                         </StyledTableCell>
 
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{city}</Typography>
+                          <Typography variant="body2">{city || "-"}</Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{mobile}</Typography>
+                          <Typography variant="body2">
+                            {mobile || "-"}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{email}</Typography>
+                          <Typography variant="body2">
+                            {email || "-"}
+                          </Typography>
                         </StyledTableCell>
 
                         {/* <StyledTableCell
-                          align="left"
-                          sx={{ width: "30%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "30%", verticalAlign: "center" }}
                         >
                           <ListItem sx={{ pt: 0 }}> */}
                         {/* <ButtonGroup
@@ -256,16 +254,16 @@ const StudentOfAdmin = () => {
                         }}
                       >
                         <StyledTableCell
-                          align="left"
-                          sx={{ width: "5%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "5%", verticalAlign: "center" }}
                         >
                           <TablePic picture={picture} lastName={family} />
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "25%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                             cursor: "pointer",
                           }}
                           onClick={() => navigate(`/${roles}/student/${id}`)}
@@ -275,48 +273,52 @@ const StudentOfAdmin = () => {
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "10%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2" textAlign={"left"}>
-                            {username}
+                          <Typography variant="body2" textAlign={"center"}>
+                            {username || "-"}
                           </Typography>
                         </StyledTableCell>
 
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{city}</Typography>
+                          <Typography variant="body2">{city || "-"}</Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{mobile}</Typography>
+                          <Typography variant="body2">
+                            {mobile || "-"}
+                          </Typography>
                         </StyledTableCell>
                         <StyledTableCell
-                          align="left"
+                          align="center"
                           sx={{
                             width: "30%",
-                            verticalAlign: "top",
+                            verticalAlign: "center",
                           }}
                         >
-                          <Typography variant="body2">{email}</Typography>
+                          <Typography variant="body2">
+                            {email || "-"}
+                          </Typography>
                         </StyledTableCell>
 
                         {/* <StyledTableCell
-                          align="left"
-                          sx={{ width: "30%", verticalAlign: "top" }}
+                          align="center"
+                          sx={{ width: "30%", verticalAlign: "center" }}
                         >
                           <ListItem sx={{ pt: 0 }}> */}
                         {/* <ButtonGroup

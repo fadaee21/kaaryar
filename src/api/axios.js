@@ -62,3 +62,5 @@ removeData.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+export const fetcherGet = (url) => getData(url).then((res) => res.data);

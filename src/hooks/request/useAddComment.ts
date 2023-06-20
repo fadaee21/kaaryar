@@ -44,7 +44,7 @@ export const useAddComment = (
       console.log(error);
       navigate("/");
     }
-  }, []);
+  }, [allCourseLink, navigate]);
   useEffect(() => {
     getAllCourse();
   }, [getAllCourse]);

@@ -5,16 +5,30 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { BeforeWeekType } from "../../model";
-import { BoxExamDetail } from "../../styles/examFormDetail";
+import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
+import {
+  accessTimeOpt,
+  employmentTimeCommitmentOpt,
+  getEng,
+  getMath,
+  internetAccessOpt,
+  internetAccessTimingOpt,
+  motivationOpt,
+  questionCityOpt,
+} from "./helper";
+import { getLabel } from "../../utils/getLabel";
+import ImageModal from "../ImageModal";
+import useGetImage from "../../hooks/request/useGetImage";
 
 interface ExamStudent {
   student: BeforeWeekType | null;
@@ -25,6 +39,7 @@ interface ExamStudent {
   successObject?: string;
   handleOpenAlert?: (alert: "approve" | "disApprove") => void;
 }
+
 const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   student,
   matches,
@@ -37,8 +52,23 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
+
+  const transcript = student?.transcriptImageAddress;
+  React.useEffect(() => {
+    if (!transcript) {
+      return;
+    }
+    getPicture(transcript);
+  }, [getPicture, transcript]);
+
   return (
     <>
+      {/* header */}
       <Box
         sx={{
           display: "flex",
@@ -50,6 +80,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           فرم آزمون (فرم درخواست ثبت نام دردوره های آموزشی مطعوف به اشتغال
           کاریار)
         </Typography>
+        {/* ButtonGroup */}
         <ButtonGroup
           variant="contained"
           color="secondary"
@@ -80,7 +111,8 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Button>
         </ButtonGroup>
       </Box>
-      <BoxExamDetail
+      {/*اطلاعات تحصیلی*/}
+      <ContentBox
         colorActive={
           student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
@@ -104,55 +136,78 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               </ListItem>
               <ListItem>
                 <ListItemText
+                  primary="در حال حاضر مشغول به تحصیل هستید؟"
+                  secondary={student?.isCurrentlyStudent ? "بله" : "خیر"}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
                   primary="نام موسسه آموزشی آخرین مقطع تحصیلی"
                   secondary={student?.lastInstitute}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="اگر دانشجو هستید در چه مقطعی هستید؟"
-                  secondary={student?.eduLevel}
+                  primary="میانگین معدل آخرین مقطع تحصیلی"
+                  secondary={student?.cgpa}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="اگر دانشجو هستید در چه ترمی هستید؟"
-                  secondary={student?.stuSemester}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="اگر دانش آموز هستید سال چندم هستید؟"
-                  secondary={student?.stuYear}
+                  primary="تجربه یا استعداد تحصیلی"
+                  secondary={student?.skills}
                 />
               </ListItem>
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
             <List>
-              <ListItem>
-                <ListItemText
-                  primary="نوع موسسه آموزشی که در حال حاضر درآن تحصیل می کنید"
-                  secondary={student?.instituteType}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="نام موسسه آموزشی تحصیلات حال حاضر"
-                  secondary={student?.currentInstName}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="رشته تحصیلی فعلی"
-                  secondary={student?.currentField}
-                />
+              {student?.isCurrentlyStudent && (
+                <>
+                  <ListItem>
+                    <ListItemText
+                      primary="نوع موسسه آموزشی که در حال حاضر درآن تحصیل می کنید"
+                      secondary={student?.instituteCurrentType}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="نام موسسه آموزشی تحصیلات حال حاضر"
+                      secondary={student?.currentInstName}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="رشته تحصیلی فعلی"
+                      secondary={student?.currentField}
+                    />
+                  </ListItem>
+                </>
+              )}
+              <ListItem
+                sx={{ flexDirection: "column", alignItems: "flex-start" }}
+              >
+                <ListItemText primary="کارنامه تحصیلی" />
+                {pic && (
+                  <ListItemAvatar
+                    onClick={handleOpen}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <Box
+                      component={"img"}
+                      alt="payment image"
+                      src={pic}
+                      sx={{ width: 150, height: "100%", borderRadius: 2 }}
+                    />
+                  </ListItemAvatar>
+                )}
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      </ContentBox>
+      {/*وضعیت اشتغال*/}
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           وضعیت اشتغال
         </DetailTypography>
@@ -168,60 +223,62 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="وضعیت فعلی اشتغال"
-                  secondary={student?.jobStatus}
+                  secondary={
+                    student?.jobStatus
+                      ? "مشغول کار منجر به درآمد هستم"
+                      : "مشغول کار منجر به درآمد نیستم"
+                  }
                 />
               </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="نوع اشتغال"
-                  secondary={student?.jobType}
-                />
-              </ListItem>
+              {student?.jobStatus ? (
+                <>
+                  <ListItem>
+                    <ListItemText
+                      primary="نوع کار"
+                      secondary={student?.employmentType}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="متوسط حقوق ماهیانه "
+                      secondary={student?.avgSalary}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="زمان صرف شده برای کار"
+                      secondary={getLabel(
+                        student?.employmentTimeCommitment,
+                        employmentTimeCommitmentOpt
+                      )}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="نوع و سمت شغلی"
+                      secondary={student?.jobTitle}
+                    />
+                  </ListItem>
+                </>
+              ) : (
+                <>
+                  <ListItem>
+                    <ListItemText
+                      primary="مشغولیت‌های فعلی"
+                      secondary={student?.noneJobActivation}
+                    />
+                  </ListItem>
+                </>
+              )}
             </List>
-            <ListItem>
-              <ListItemText
-                primary="تعداد ساعت کاری"
-                secondary={student?.workTime}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="مشغولیت فعلی در صورت عدم اشتغال"
-                secondary={student?.noneJobActivation}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="آمادگی اشتغال به محض اتمام دوره کاریار"
-                secondary={student?.jobStandby ? "بله" : "خیر"}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب"
-                secondary={student?.webDevFamiliarity ? "بله" : "خیر"}
-              />
-            </ListItem>
           </Grid>
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
-                <ListItemText
-                  primary="نوع و سمت شغلی"
-                  secondary={student?.jobTitle}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="متوسط حقوق ماهیانه"
-                  secondary={student?.avgSalary}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
+                {/* <ListItemText
                   primary="وقت آزاد روزانه"
                   secondary={student?.freeDailyTime}
-                />
+                /> */}
               </ListItem>
               <ListItem>
                 <ListItemText
@@ -229,11 +286,31 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   secondary={student?.jobVision}
                 />
               </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="وقت آزاد برای مطالعه و تمرین های کاریار"
+                  secondary={getLabel(student?.accessTime, accessTimeOpt)}
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemText
+                  primary="آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب"
+                  secondary={student?.webDevFamiliarity}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="آمادگی اشتغال به محض اتمام دوره کاریار"
+                  secondary={student?.jobStandby ? "بله" : "خیر"}
+                />
+              </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      </ContentBox>
+      {/*دسترسی به کامپیوتر*/}
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           دسترسی به کامپیوتر
         </DetailTypography>
@@ -246,9 +323,44 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
+                {/* <ListItemText
+                  primary="آشنایی کار با کامپیوتر"
+                  secondary={student?.computerFamiliarity.map((item2) => (
+                    <Typography
+                      sx={{ display: "inline-block" }}
+                      component="span"
+                      variant="subtitle2"
+                    >
+                      {
+                        computerFamiliarityOpt.find(
+                          (item) => item.value === item2
+                        )?.label
+                      }
+                    </Typography>
+                  ))}
+                /> */}
                 <ListItemText
                   primary="آشنایی کار با کامپیوتر"
-                  secondary={student?.computerFamiliarity ? "بله" : "خیر"}
+                  secondary={student?.computerFamiliarity?.map((item, index) =>
+                    !item.includes("همه موارد") ? (
+                      <Typography
+                        sx={{ display: "inline-block" }}
+                        component="span"
+                        variant="subtitle2"
+                        key={index}
+                      >
+                        {item}
+                      </Typography>
+                    ) : (
+                      <Typography
+                        sx={{ display: "inline-block" }}
+                        component="span"
+                        variant="subtitle2"
+                      >
+                        همه موارد
+                      </Typography>
+                    )
+                  )}
                 />
               </ListItem>
               <ListItem>
@@ -264,32 +376,33 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="آیا تا به حال  دوره آموزشی  در ارتباط با مهارت های کامپیوتر یا کدنویسی گذرانده اید؟"
-                  secondary={student?.programmingCoursePassed ? "بله" : "خیر"}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="توضیح دوره"
-                  secondary={student?.courseDescription}
+                  secondary={student?.codingKnowledge}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="ابزار دسترسی به اینترنت"
-                  secondary={student?.internetAccess}
+                  secondary={getLabel(
+                    student?.internetAccessDevice,
+                    internetAccessOpt
+                  )}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="ساعات دسترسی"
-                  secondary={student?.accessTime}
+                  primary="ساعات دسترسی به اینترنت"
+                  secondary={getLabel(
+                    student?.internetAccessTiming,
+                    internetAccessTimingOpt
+                  )}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      </ContentBox>
+      {/*مدیریت زمان*/}
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           مدیریت زمان
         </DetailTypography>
@@ -314,14 +427,15 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="انگیزه ورود به کاریار"
-                  secondary={student?.motivation}
+                  secondary={getLabel(student?.motivation, motivationOpt)}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      </ContentBox>
+      {/*مهارت های پایه*/}
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
           مهارت های پایه
         </DetailTypography>
@@ -337,7 +451,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="آتشنشان در شهر خیالی"
-                  secondary={student?.questionCity}
+                  secondary={getLabel(student?.questionCity, questionCityOpt)}
                 />
               </ListItem>
               <ListItem>
@@ -354,8 +468,10 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="میزان آشنایی با سرفصل های ریاضی"
-                  secondary={student?.questionMaths}
+                  primary="میزان آشنایی با زبان انگلیسی"
+                  secondary={getEng(
+                    Number(student?.questionEnglishFamiliarity)
+                  )}
                 />
               </ListItem>
             </List>
@@ -380,14 +496,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   secondary={student?.questionWords}
                 />
               </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="میزان آشنایی با زبان انگلیسی"
-                  secondary={student?.questionEnglishFamiliarity}
-                />
-              </ListItem>
             </List>
           </Grid>
+
           <Grid item xs={8}>
             <List>
               <ListItem>
@@ -399,10 +510,11 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-      <BoxExamDetail colorActive={student?.acceptWeekChecked}>
+      </ContentBox>
+      {/*سرفصل های ریاضی*/}
+      <ContentBox colorActive={student?.acceptWeekChecked}>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          وضعیت بورسیه
+          سرفصل های ریاضی
         </DetailTypography>
         <Divider
           variant="middle"
@@ -410,25 +522,83 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           orientation={matches ? "vertical" : "horizontal"}
         />
         <Grid container>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
             <List>
               <ListItem>
                 <ListItemText
-                  primary="نحوه آشنایی با کاریار"
-                  secondary={student?.familiar}
+                  primary="ریاضیات گسسته"
+                  secondary={getMath(student?.levelDiscreteMath)}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="نام معرف/موسسه نیکوکاری"
-                  secondary={student?.charity}
+                  primary="جبر خطی"
+                  secondary={getMath(student?.levelLinearAlgebra)}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="آمار و احتمال"
+                  secondary={getMath(student?.levelProbabilities)}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="فلوچارت"
+                  secondary={getMath(student?.levelFlowDiagrams)}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="الگوریتم"
+                  secondary={getMath(student?.levelAlgorithms)}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="ساختارهای داده"
+                  secondary={getMath(student?.levelDataStructures)}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="منطق (Logic)"
+                  secondary={getMath(student?.levelLogics)}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
-
+      </ContentBox>
+      {/*توضیحات*/}
+      <ContentBox colorActive={student?.acceptWeekChecked}>
+        <DetailTypography
+          variant="h6"
+          sx={{ minWidth: "14rem" }}
+        ></DetailTypography>
+        <Divider
+          variant="middle"
+          flexItem
+          orientation={matches ? "vertical" : "horizontal"}
+        />
+        <Grid container>
+          <Grid item xs={9}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="توضیحات"
+                  secondary={student?.applicantAdditionalComments}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+        </Grid>
+      </ContentBox>
+      {/*ارزیابی قبل از پذیرش*/}
       <Box
         sx={{
           display: "flex",
@@ -440,7 +610,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           ارزیابی قبل از پذیرش
         </Typography>
       </Box>
-      <BoxExamDetail
+      <ContentBox
         colorActive={
           student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
@@ -458,20 +628,27 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="وضعیت تحصیلی"
-                  secondary={student?.eduStatus}
+                  primary="میزان تحصیلات"
+                  secondary={student?.registrationForm?.education}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="آمادگی به کار بعد از اتمام دوره"
-                  secondary={student?.jobReady ? "بله" : "خیر"}
+                  primary="نحوه آشنایی با کاریار"
+                  secondary={student?.registrationForm?.familiarity}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="توضیحات"
-                  secondary={student?.beforeAcceptDesc}
+                  primary="نام معرف/موسسه نیکوکاری"
+                  secondary={student?.registrationForm?.refer}
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemText
+                  primary="توضیحات ادمین"
+                  secondary={student?.administrativeComments}
                 />
               </ListItem>
             </List>
@@ -480,14 +657,21 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="هدف از شرکت در دوره"
-                  secondary={student?.contCourseApproach}
+                  primary="انگیزه اصلی از شرکت در دوره"
+                  secondary={student?.motivation}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="آمادگی به کار بعد از اتمام دوره--"
+                  secondary={student?.jobStandby ? "بله" : "خیر"}
                 />
               </ListItem>
             </List>
           </Grid>
         </Grid>
-      </BoxExamDetail>
+      </ContentBox>
+      {/* ButtonGroup */}
       <Box
         sx={{
           display: "flex",
@@ -528,6 +712,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Button>
         </ButtonGroup>
       </Box>
+      <ImageModal pic={pic} open={open} handleClose={handleClose} />
     </>
   );
 };

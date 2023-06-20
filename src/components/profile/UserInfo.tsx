@@ -7,7 +7,7 @@ import useEditProfile from "../../hooks/request/useEditProfile";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useState } from "react";
 import UploadProfileImage from "../../pages/profile/UploadProfileImage";
-import { DesireBox, HeaderBox, StackTitle } from "../../styles/profile";
+import { DesireBox, ContentBoxHeader, StackTitle } from "../../styles/profile";
 import { Box, Button, Container, Typography } from "@mui/material";
 import AddLink, { DesireLink } from "../../pages/profile/AddLink";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -73,7 +73,7 @@ const UserInfo = ({ profileData }: ProfileData) => {
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mb: 30 }}>
       <Container maxWidth="lg">
-        <HeaderBox>
+        <ContentBoxHeader>
           <Typography variant="h5">پروفایل من</Typography>
 
           <Button
@@ -92,7 +92,7 @@ const UserInfo = ({ profileData }: ProfileData) => {
           >
             بازگشت
           </Button>
-        </HeaderBox>
+        </ContentBoxHeader>
         <Typography variant="body1">
           اینجا می‌توانید پروفایل عمومی خودتان را درست کنید. پروفایل شما برای
           سایر داوطلبان، ادمین، و در آینده برای مهارت‌آموزان قابل مشاهده است.

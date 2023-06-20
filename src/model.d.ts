@@ -212,7 +212,7 @@ export interface RegistrationForm {
   studyField?: string;
   selectedField?: string;
   description?: string;
-  token?: string;
+  careerPathwayOther?: string;
   highSchoolYear?: string;
   refer?: string;
   createTime?: string;
@@ -226,26 +226,25 @@ export interface BeforeWeekType {
   acceptWeekChecked: boolean | null;
   accessTime: string;
   avgSalary: string;
-  beforeAcceptDesc: string;
+  applicantAdditionalComments: string;
   cgpa?: string;
   charity: string;
   codingKnowledge: ?string;
   computerAccess: string;
-  computerFamiliarity: string;
+  computerFamiliarity: string[] | null;
   contCourseApproach: string;
-  courseDescription: string;
   currentField: string;
   currentInstName: string;
   instituteCurrentType: string;
   eduLevel: string;
   eduStatus: string;
   familiar: string;
-  freeDailyTime: string;
+  accessTime: string;
   instituteType: string;
-  internetAccess: string;
+  internetAccessDevice: string;
   jobReady: boolean;
   jobStandby: boolean;
-  jobStatus: string;
+  jobStatus: boolean;
   jobTitle: string;
   jobType: string;
   jobVision: string;
@@ -253,34 +252,47 @@ export interface BeforeWeekType {
   limitTime: string;
   motivation: string;
   paymentImageAddress: string;
-  programmingCoursePassed: boolean;
-  questionCity?: string;
-  questionStudents?: string;
-  questionNumbers?: string;
-  questionDiameters?: string;
-  questionMultiplication?: string;
-  questionWords?: string;
-  questionMaths?: string;
-  questionEnglishFamiliarity?: string;
-  engPara?: string;
-  skills?: string;
+  codingKnowledge: string;
+  questionCity: string;
+  questionStudents: string;
+  questionNumbers: string;
+  questionDiameters: string;
+  questionMultiplication: string;
+  questionWords: string;
+  questionMaths: string;
+  questionEnglishFamiliarity: string;
+  engPara: string;
+  skills: string;
   stuSemester: string;
   stuYear: string;
-  transcriptImageAddress?: string;
-  noneJobActivation?: string;
+  transcriptImageAddress: string;
+  noneJobActivation: string;
   webDevFamiliarity: string;
   workTime: string;
   id: 1;
+  levelAlgorithms: number | undefined;
+  levelDataStructures: number | undefined;
+  levelDiscreteMath: number | undefined;
+  levelFlowDiagrams: number | undefined;
+  levelLinearAlgebra: number | undefined;
+  levelLogics: number | undefined;
+  levelProbabilities: number | undefined;
+  isCurrentlyStudent: boolean;
+  employmentTimeCommitment: string;
+  employmentType: string;
+  administrativeComments: string;
+  freeDailyTime: string;
+  internetAccessTiming: string;
 }
 
 interface AfterWeekType {
-  beforeWeekForm: BeforeWeek;
+  beforeWeekForm: BeforeWeekType;
   id: number;
   afterWeekChecked: boolean;
-  algoScore: number;
+  algoScore: string;
   comAccess: string;
   comAccessStatus: string;
-  comScore: number;
+  comScore: string;
   consistCompleteTime: string;
   consistTime: string;
   etcDesc: string;
@@ -288,18 +300,18 @@ interface AfterWeekType {
   finalField: string;
   finalResult: string;
   jobCommit: string;
-  langScore: number;
+  langScore: string;
   limitAndRisk: string;
   predict: string;
   presentStatus: string;
   recommendField: string;
+  recommendFieldMentor: String;
   scholar: boolean;
-  scholarPercentage: number;
+  scholarPercentage: string;
   workCommit: string;
   algoLevelResult: string;
   comLevelResult: string;
   firstSelectJobRoad: string;
-  mbtiTest: string;
   notifyAcceptWeek: string;
   workshopCont: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
@@ -317,7 +329,7 @@ export interface TableBodyAllType extends RegistrationForm {
   jobStandby?: boolean;
   scholar?: boolean;
   finalResult?: string;
-  cgpa?:string;
+  cgpa?: string;
 }
 
 export interface SeekerStudent {
@@ -380,3 +392,295 @@ export interface Profile {
 }
 
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;
+
+export type OptionsString = { label: string; value: string };
+
+export interface PropEditString {
+  placeholder: string;
+  identifier: string;
+  value: string;
+  handleChange: (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+}
+export interface PropEditBool {
+  placeholder: string;
+  identifier: string;
+  value: any;
+  handleChange: (e: SelectChangeEvent<string | boolean>) => void;
+}
+export interface PropEditCombo {
+  placeholder: string;
+  identifier: string;
+  value: any;
+  options: {
+    value: any;
+    label: string;
+  }[];
+  handleChange: (e: SelectChangeEvent<string>) => void;
+}
+
+export type TableHeaderProps = { headerItems: string[] };
+
+//!Education
+// /modules/categories/all
+export interface Instructor {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface TeachingAssistant {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface Mentor {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface StudentEdu {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface ModuleGroup {
+  name: string;
+  description: any;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: any;
+  levelName: any;
+  startDate: any;
+  endDate: any;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+export interface Group {
+  name: string;
+  groupCode: string;
+  description: any;
+  isActive: boolean;
+  startDate: any;
+  endDate: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  modules: ModuleGroup[];
+  instructors: Instructor[];
+  teachingAssistants: TeachingAssistant[];
+  mentors: Mentor[];
+  students: Student[];
+}
+
+export type GroupArray = Group[];
+
+// short Group
+export interface ShortGroup {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  groupCode: string;
+  description: string;
+  isActive: boolean;
+  startDate: string;
+  endDate: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+// /modules/all
+export interface CareerPathway {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: any;
+  isActive: boolean;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+export interface Category {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  groupCode: string;
+  description: string;
+  isActive: boolean;
+  startDate: string;
+  endDate: string;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+
+export interface ModuleAll {
+  name: string;
+  description: any;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: any;
+  levelName?: string;
+  startDate: any;
+  endDate: any;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+  teachingAssistants: TeachingAssistant[];
+  mentors: Mentor[];
+  students: Student[];
+}
+
+export type ModuleAllArray = ModuleAll[];
+
+//short detail for module core
+export interface ShortCoreModule {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string;
+  weblinkFinalProject: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+  numberOfHours: undefined | string;
+}
+
+export interface WorkshopShort {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: any;
+  startDate: string;
+  endDate?: string;
+  weblinkFeedbackForm?: string;
+  weblinkFinalProject?: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+}
+
+export interface EnglishShort {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: string;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string;
+  weblinkFinalProject: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+}

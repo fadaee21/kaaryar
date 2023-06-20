@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
-import TableHeader from "../../components/volunteer/table/TableHeader";
 // import {
 //   AccordionStyled,
 //   AccordionSummaryStyled,
@@ -25,6 +24,8 @@ import LoadingProgress from "../../components/LoadingProgress";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { Profile } from "../../model";
 import useEditProfile from "../../hooks/request/useEditProfile";
+import TableHeader from "../../components/table/TableHeader";
+import { volunteerTableHeader } from "../../components/table/helper-header";
 
 const Volunteer = () => {
   const pageSize = 10;
@@ -41,7 +42,7 @@ const Volunteer = () => {
 
   useEffect(() => {
     getAllData(addressLink);
-  }, []);
+  }, [addressLink, getAllData]);
 
   if (loadingCall || loadingProfile) {
     return <LoadingProgress />;
@@ -101,7 +102,7 @@ const Volunteer = () => {
           {/* </AccordionStyled> */}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              <TableHeader headerItems={volunteerTableHeader} />
               {/*//! while searching show the search content */}
               {/* {!searchingVolunteer && ( */}
               {/* <TableBody>

@@ -22,6 +22,7 @@ const StudentPage = () => {
   const { id } = useParams();
 
   useEffect(() => {
+
     const studentId = `/moodle/user/${id}`;
     const studentIdDetail = `/moodle/user/detail/${id}`;
     const afterBeforeInfo = `/exam/after/week/form/moodle/${id}`;
@@ -44,6 +45,7 @@ const StudentPage = () => {
       }
       setLoadingAfter(false);
     };
+
     const getStudent = async () => {
       setLoading(true);
       try {
@@ -59,6 +61,7 @@ const StudentPage = () => {
       }
       setLoading(false);
     };
+    
     const getStudentMoreDetail = async () => {
       setLoadingDetail(true);
       try {
@@ -80,7 +83,7 @@ const StudentPage = () => {
     getStudentMoreDetail();
     getStudentAfterDetail();
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [id, navigate]);
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 

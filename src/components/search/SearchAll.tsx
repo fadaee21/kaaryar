@@ -11,12 +11,15 @@ import { GreyButton } from "../../styles/Button";
 import {
   acquaintanceOptions,
   eduLevelOptions,
+  fieldOptions,
   finalResults,
   highSchoolOptions2,
   provinceOptions,
+  scholarOptions,
+  statusOptions,
 } from "./searchOptions";
-import { ApprovalStatus } from "../../model";
-import SearchScholar from "./SearchScholar";
+// import { ApprovalStatus } from "../../model";
+// import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
 
 interface SearchAllType {
@@ -55,14 +58,14 @@ const SearchAll: ({
 
   const [provincesState, setProvincesState] = useState<string | null>(null);
   const [cityState, setCityState] = useState<string | null>(null);
-  const [approvalStatus, setApprovalStatus] = useState<ApprovalStatus>(null);
+  const [approvalStatus, setApprovalStatus] = useState<string | null>(null);
   const [acquaintance, setAcquaintance] = useState<string | null>(null);
   const [eduLevel, setEduLevel] = useState<string | null>(null);
 
   // const [gender, setGender] = useState<"مرد" | "زن" | null>(null);
   // const [studyField, setStudyField] = useState<string | null>(null);
   const [finalResult, setFinalResult] = useState<string | null>(null);
-  const [scholar, setScholar] = useState<{label:string,value:boolean} | null>(null);
+  const [scholar, setScholar] = useState<string | null>(null);
   const [finalField, setFinalField] = useState<string | null>(null);
   const [contCourseApproach, setContCourseApproach] = useState<string | null>(
     null
@@ -130,7 +133,7 @@ const SearchAll: ({
       // gender,
       // studyField,
       finalResult,
-      scholarshipStatus: scholar?.value,
+      scholarshipStatus: scholar,
       finalField,
       contCourseApproach,
       jobStandby,
@@ -184,7 +187,7 @@ const SearchAll: ({
           searchLink={searchLink()}
         />
       </Grid>
-      {searchPage === "reg" && ( //some field just use in registration search
+      {searchPage === "reg" && (
         <Grid item xs={3}>
           <SearchString
             state={referState}
@@ -223,7 +226,7 @@ const SearchAll: ({
           />
         </Grid>
       )}
-      {searchPage !== "moodle" && ( //some field not use in moodle search at the moment
+      {searchPage !== "moodle" && (
         <Grid item xs={3}>
           <SearchString
             state={registerCodeState}
@@ -246,11 +249,6 @@ const SearchAll: ({
           label="ایمیل"
         />
       </Grid>
-      {/* {searchPage !== "moodle" && (
-        <Grid item xs={3}>
-          <SearchGender gender={gender} setGender={setGender} />
-        </Grid>
-      )} */}
       {searchPage !== "moodle" && (
         <Grid item xs={3}>
           <SearchSelect
@@ -270,8 +268,10 @@ const SearchAll: ({
         <>
           <Grid item xs={3}>
             <StatusSearch
-              setApprovalStatus={setApprovalStatus}
-              approvalStatus={approvalStatus}
+              setState={setApprovalStatus}
+              state={approvalStatus}
+              statusOptions={statusOptions}
+              placeholder="وضعیت"
             />
           </Grid>
           {/* {searchPage !== "reg" && (
@@ -321,22 +321,19 @@ const SearchAll: ({
             />
           </Grid>
           <Grid item xs={3}>
-            {/* <SearchString
-              state={scholar}
-              setState={setScholar}
-              label="وضعیت بورسیه"
-            /> */}
-            <SearchScholar
+            <StatusSearch
               state={scholar}
               setState={setScholar}
               placeholder="وضعیت بورسیه"
+              statusOptions={scholarOptions}
             />
           </Grid>
           <Grid item xs={3}>
-            <SearchString
+            <StatusSearch
               state={finalField}
               setState={setFinalField}
-              label="رشته نهایی"
+              placeholder="رشته نهایی"
+              statusOptions={fieldOptions}
             />
           </Grid>
         </>

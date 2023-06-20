@@ -8,7 +8,7 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
   const [profileImage, setProfileImage] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = React.useState(false);
-  const [success, setSuccess] = useState(false);
+  const [, setSuccess] = useState(false);
   const [showImage, setShowImage] = useState(false); // handling showing image or not
   const { getPicture, pic } = useGetImage("/exam/after/week/image/get");
   const imageUploading = async (dataContent: FormData) => {
@@ -34,7 +34,7 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
     if (profileImage || imageServer) {
       setShowImage(true);
     }
-  }, []);
+  }, [getPicture, imageServer, profileImage]);
 
   const pickImage = (e: React.ChangeEvent<any>) => {
     const image = e.target.files[0];
