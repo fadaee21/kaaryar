@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 
 import useSWR from "swr";
-import { fetcherGet } from "../../api/axios";
 
 type LiftUpStateType = {
   [index: string]: string;
@@ -37,7 +36,7 @@ const CoreFields = ({ setLiftUpState, errMsg }: Prop) => {
     });
   }, [weblinkLmsCourse, weblinkFinalProject, careerPathwayId, setLiftUpState]);
 
-  const { data, isLoading } = useSWR<RelatedPath[]>(RELATED_PATH, fetcherGet);
+  const { data, isLoading } = useSWR<RelatedPath[]>(RELATED_PATH);
 
   return (
     <>

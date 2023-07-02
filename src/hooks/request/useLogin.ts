@@ -37,7 +37,7 @@ export const useSubmitLogin = (username: string, password: string) => {
             ? "admin"
             : res.indexOf("mentor") >= 0
             ? "mentor"
-            : res.indexOf("editingteacher") >= 0
+            : res.indexOf("teachingassistant") >= 0
             ? "ta"
             : null;
 

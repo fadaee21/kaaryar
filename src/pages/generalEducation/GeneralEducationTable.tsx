@@ -32,7 +32,7 @@ const GeneralEducationTable = () => {
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}

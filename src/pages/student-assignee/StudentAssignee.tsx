@@ -19,7 +19,7 @@ import useGetMoodleStudents from "../../hooks/request/useGetMoodleStudents";
 import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
 //^this component list related student for mentor and ta
-const StudentListMoodleTable = () => {
+const StudentAssignee = () => {
   const { students, loading } = useGetMoodleStudents("/moodle/user/assignee");
 
   const { auth } = useAuth();
@@ -211,4 +211,4 @@ const StudentListMoodleTable = () => {
     </Box>
   );
 };
-export default StudentListMoodleTable;
+export default StudentAssignee;

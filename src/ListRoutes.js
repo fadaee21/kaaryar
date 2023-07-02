@@ -1,5 +1,5 @@
-import StudentPage from "./pages/studentMoodle/StudentPage";
-import StudentListMoodleTable from "./pages/studentMoodle/StudentListMoodleTable";
+import StudentPage from "./pages/student-assignee/StudentPage";
+import StudentAssignee from "./pages/student-assignee/StudentAssignee";
 import Comments from "./pages/comment/TableComments";
 import AddComment from "./pages/comment/AddComment";
 import BeforeWeekTable from "./pages/beforeWeek/BeforeWeekTable";
@@ -9,14 +9,6 @@ import AfterWeekTable from "./pages/afterWeek/AfterWeekTable";
 import RegisterFormTable from "./pages/reg/registerFormTable";
 import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
-
-// import DashboardIcon from "@mui/icons-material/Dashboard";
-// import PeopleIcon from "@mui/icons-material/People";
-// import CommentIcon from "@mui/icons-material/Comment";
-// import AddCommentIcon from "@mui/icons-material/AddComment";
-// import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-// import HowToRegIcon from "@mui/icons-material/HowToReg";
-// import PortraitIcon from "@mui/icons-material/Portrait";
 import AfterWeekDetail from "./pages/afterWeek/AfterWeekDetail";
 import AfterWeekDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import justTest from "./pages/justTest";
@@ -24,7 +16,6 @@ import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
 import EditComments from "./pages/comment/EditComments";
-import StudentOfAdmin from "./pages/studentMoodle/StudentOfAdmin";
 import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import Volunteer from "./pages/volunteer/Volunteer";
@@ -35,11 +26,7 @@ import NotFound from "./pages/NotFound";
 import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
 import GroupsTable from "./pages/groups/GroupsTable";
 import GroupDetail from "./pages/groups/GroupDetail";
-
-// import LanguageTable from "./pages/generalEducation/GeneralEducationTable";
 import LanguageDetail from "./pages/generalEducation/language/LanguageDetail";
-// import Workshops from "./pages/workshops/workshopsTable";
-
 import GeneralEducationTable from "./pages/generalEducation/GeneralEducationTable";
 import AddGroup from "./pages/groups/AddGroup";
 import GroupEdit from "./pages/groups/GroupEdit";
@@ -49,6 +36,12 @@ import CoreModuleCourseDetail from "./pages/coreModuleCourses/CoreModuleCourseDe
 import CoreModuleCourseEdit from "./pages/coreModuleCourses/CoreModuleCourseEdit";
 import GeneralCourseEdit from "./pages/generalEducation/GeneralCourseEdit";
 import GeneralDetail from "./pages/generalEducation/GeneralDetail";
+import StudentAdminDetail from "./pages/student-admin/StudentAdminDetail";
+import StudentEditStatus from "./pages/student-admin/StudentEditStatus";
+import StudentCoreDetail from "./pages/student-admin/StudentCoreDetail";
+import StudentTableAdmin from "./pages/student-admin/StudentTableAdmin";
+import StudentGeneralEdit from "./pages/student-admin/StudentGeneralEdit";
+import StudentCoreEdit from "./pages/student-admin/StudentCoreEdit";
 
 const ListRoutes = [
   //! ta________________________________
@@ -65,7 +58,7 @@ const ListRoutes = [
     path: "ta/student",
     name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
-    component: StudentListMoodleTable,
+    component: StudentAssignee,
     showInNav: true,
     role: "ta",
     key: "ta2",
@@ -153,7 +146,7 @@ const ListRoutes = [
     path: "mentor/student",
     name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
-    component: StudentListMoodleTable,
+    component: StudentAssignee,
     showInNav: true,
     role: "mentor",
     key: "mentor2",
@@ -342,7 +335,7 @@ const ListRoutes = [
     path: "admin/student",
     name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
-    component: StudentOfAdmin,
+    component: StudentTableAdmin,
     showInNav: true,
     role: "admin",
     key: "admin13",
@@ -350,10 +343,42 @@ const ListRoutes = [
   {
     path: "admin/student/:id",
     name: " ",
-    component: StudentPage,
+    component: StudentAdminDetail,
     showInNav: false,
     role: "admin",
-    key: "admin14",
+    key: "admin14-newEdited",
+  },
+  {
+    path: "admin/student/:student_id/:module_id/core-detail",
+    name: " ",
+    component: StudentCoreDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-coreDetail",
+  },
+  {
+    path: "admin/student/:student_id/:module_id/core-detail/edit",
+    name: " ",
+    component: StudentCoreEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-coreDetail-edit",
+  },
+  {
+    path: "admin/student/:student_id/:module_id/general-edit",
+    name: " ",
+    component: StudentGeneralEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-generalEdit",
+  },
+  {
+    path: "admin/student/:id/edit-status",
+    name: " ",
+    component: StudentEditStatus,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-newEdited-se",
   },
   {
     path: "admin/volunteer",

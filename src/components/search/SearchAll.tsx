@@ -1,5 +1,5 @@
 import { Button, Grid } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import { SearchFirstName } from "./SearchFirstName";
 import { SearchFamily } from "./SearchFamily";
@@ -72,24 +72,73 @@ const SearchAll: ({
   );
   const [jobStandby, setJobStandby] = useState<string | null>(null);
   const [cgpa, setCgpa] = useState<string | null>(null);
-
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [searchLink, setSearchLink] = useState("");
   const beforeWeekSearch = "/exam/before/week/search/param";
   const afterWeekSearch = "/exam/after/week/search/param";
   const regSearch = "/reg/search/param";
   const moodleSearch = "/moodle/search/param";
+
   // below function search in 4 pages at first find the api link for searching
-  const searchLink = () => {
+  useEffect(() => {
     if (searchPage === "moodle") {
-      return moodleSearch;
+      setSearchLink(moodleSearch);
+      return;
     }
     if (searchPage === "beforeWeek") {
-      return beforeWeekSearch;
+      setSearchLink(beforeWeekSearch);
+      return;
     }
     if (searchPage === "afterWeek") {
-      return afterWeekSearch;
+      setSearchLink(afterWeekSearch);
+      return;
     }
-    return regSearch;
-  };
+    setSearchLink(regSearch);
+  }, [searchPage]);
+
+  //disable search and clear buttons
+  useEffect(() => {
+    const buttonStatus = ![
+      outputFirstName,
+      outputFamily,
+      referState,
+      highSchoolState,
+      registerCodeState,
+      mobileState,
+      emailState,
+      provincesState,
+      cityState,
+      approvalStatus,
+      acquaintance,
+      eduLevel,
+      finalResult,
+      scholar,
+      finalField,
+      contCourseApproach,
+      jobStandby,
+      cgpa,
+    ].some(Boolean);
+    setDisabledButton(buttonStatus);
+  }, [
+    acquaintance,
+    approvalStatus,
+    cgpa,
+    cityState,
+    contCourseApproach,
+    eduLevel,
+    emailState,
+    finalField,
+    finalResult,
+    highSchoolState,
+    jobStandby,
+    mobileState,
+    outputFamily,
+    outputFirstName,
+    provincesState,
+    referState,
+    registerCodeState,
+    scholar,
+  ]);
 
   //if AccordionDetails is close, do nothing(fetching data and mounting component)
   if (!chevronDir) {
@@ -98,7 +147,7 @@ const SearchAll: ({
 
   const fetchData = async (obj: any) => {
     try {
-      const response = await getData(searchLink(), {
+      const response = await getData(searchLink, {
         params: obj,
       });
       console.log(response);
@@ -176,7 +225,7 @@ const SearchAll: ({
           outputFirstName={outputFirstName}
           setOutputFirstName={setOutputFirstName}
           searchPage={searchPage}
-          searchLink={searchLink()}
+          searchLink={searchLink}
         />
       </Grid>
       <Grid item xs={3}>
@@ -184,7 +233,7 @@ const SearchAll: ({
           outputFamily={outputFamily}
           setOutputFamily={setOutputFamily}
           searchPage={searchPage}
-          searchLink={searchLink()}
+          searchLink={searchLink}
         />
       </Grid>
       {searchPage === "reg" && (
@@ -344,6 +393,7 @@ const SearchAll: ({
           sx={{ width: "100%" }}
           variant="outlined"
           onClick={clearSearch}
+          disabled={disabledButton}
         >
           پاک کردن
         </GreyButton>
@@ -354,6 +404,7 @@ const SearchAll: ({
           endIcon={<SearchIcon sx={{ rotate: "90deg" }} />}
           variant="outlined"
           onClick={handleSearch}
+          disabled={disabledButton}
         >
           جستجو
         </Button>

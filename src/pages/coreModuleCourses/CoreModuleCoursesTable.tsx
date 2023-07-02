@@ -21,18 +21,17 @@ import TableHeader from "../../components/table/TableHeader";
 import { trainingCourseHeader } from "../../components/table/helper-header";
 import TableBodyTrainingCourse from "../../components/coreCourse/table/TableBodyCoreModuleCourse";
 import useSWR from "swr";
-import { fetcherGet } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
 import { ShortCoreModule } from "../../model";
-
+import SearchAllCourse from "../../components/search-course/SearchAllCourse";
+import TableEmpty from "../../components/table/TableEmpty";
+const SETTING_RESPONSE = "&hasCategory=true";
+const MODULES_ALL_CORE = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&moduleType=core${SETTING_RESPONSE}`;
 const CoreModuleCoursesTable = () => {
-  const MODULES_ALL_CORE = "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&hasCategory=true&moduleType=core";
   const [chevronDir, setChevronDir] = useState(false);
-
-  const { data, error, isLoading } = useSWR<ShortCoreModule[]>(
-    MODULES_ALL_CORE,
-    fetcherGet
-  );
+  const [searchCourseCore, setSearchCourseCore] = useState<ShortCoreModule[]>();
+  const { data, error, isLoading } =
+    useSWR<ShortCoreModule[]>(MODULES_ALL_CORE);
 
   if (isLoading) {
     return <LoadingProgress />;
@@ -40,7 +39,7 @@ const CoreModuleCoursesTable = () => {
   if (error) {
     console.log(error);
   }
-
+  console.log(searchCourseCore);
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -86,32 +85,40 @@ const CoreModuleCoursesTable = () => {
                 }}
               >
                 {/* //!component for searching student */}
-                {/* <SearchAll
-                    setSearchingStudentRegister={setSearchingStudentRegister}
-                    searchPage="reg"
-                    chevronDir={chevronDir}
-                    stateWaiting={stateWaiting}
-                    setStateWaiting={setStateWaiting}
-                    statusState={statusState}
-                    setStatusState={setStatusState}
-                  /> */}
+                <SearchAllCourse
+                  moduleSubType="unassigned"
+                  moduleType="core"
+                  chevronDir={chevronDir}
+                  setSearchCourseCore={setSearchCourseCore}
+                  settingResponse={SETTING_RESPONSE}
+                />
               </Box>
             </AccordionDetails>
           </AccordionStyled>
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={trainingCourseHeader} />
+              {/* //!for empty response of search don't return TableHeader */}
+              {searchCourseCore?.length !== 0 && (
+                <TableHeader headerItems={trainingCourseHeader} />
+              )}
+
               <TableBody>
-                {data?.map((moduleAll) => (
-                  <TableBodyTrainingCourse key={moduleAll.id} moduleAll={moduleAll} />
-                ))}
+                {(searchCourseCore ? searchCourseCore : data)?.map(
+                  (moduleAll, inx) => (
+                    <TableBodyTrainingCourse
+                      counter={inx}
+                      key={moduleAll.id}
+                      moduleAll={moduleAll}
+                    />
+                  )
+                )}
               </TableBody>
             </Table>
           </TableContainer>
 
           {/* //!for empty response of search return TableEmpty */}
-          {/* {searchingStudentRegister?.length === 0 && <TableEmpty />} */}
+          {searchCourseCore?.length === 0 && <TableEmpty />}
         </Container>
       </Box>
     </Box>

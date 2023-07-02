@@ -15,7 +15,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useEffect, useState } from "react";
 import { OptionsString, Instructor } from "../../model";
 import useSWR from "swr";
-import { editAxios, fetcherGet, postData } from "../../api/axios";
+import { editAxios, postData } from "../../api/axios";
 import CoreFields from "../../components/addNewcourseComp/CoreFields";
 import WorkshopFields from "../../components/addNewcourseComp/WorkshopFields";
 // import EnglishFields from "../../components/addNewcourseComp/EnglishFields";
@@ -66,7 +66,7 @@ const AddNewCourse = () => {
   const [teachingStatus, setTeachingStatus] = useState("");
 
   const [errMsg, setErrMsg] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [courseIdVal, courseNameVal] = getNameAndId(courseNameId); //destruct name and id from courseNameId string
   const [moduleType, subType] = getTypeAndSubtype(courseType); //destruct type and subType value
 
@@ -92,17 +92,13 @@ const AddNewCourse = () => {
   }, [courseType, subType]);
 
   //give type of course and get all course name
-  const { data: dataTypeCourse, isLoading: loadingTypeCourse } = useSWR<
-    courseTypeProp[]
-  >(keyTypeCourse, fetcherGet);
+  const { data: dataTypeCourse, isLoading: loadingTypeCourse } =
+    useSWR<courseTypeProp[]>(keyTypeCourse);
 
   const keyNameCourse =
     courseNameId && dataTypeCourse ? `/modules/details/${courseIdVal}` : null;
   //give course id and get all course information
-  const { data: dataNameCourse } = useSWR<courseNameResponse>(
-    keyNameCourse,
-    fetcherGet
-  );
+  const { data: dataNameCourse } = useSWR<courseNameResponse>(keyNameCourse);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -126,9 +122,9 @@ const AddNewCourse = () => {
     } else {
       careerPathwayId = getNameAndId(liftUpState.careerPathwayId)[0]; //destruct name and id from careerPathwayId string
     }
-    setErrMsg("");
-
     try {
+      setErrMsg("");
+      setLoading(true);
       let res;
       if (courseType.includes("english")) {
         res = await postData("/modules/new", {
@@ -195,6 +191,8 @@ const AddNewCourse = () => {
     } catch (error) {
       console.log(error);
       setErrMsg("دوره جدید ایجاد نشد");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -217,6 +215,7 @@ const AddNewCourse = () => {
                 color="inherit"
                 endIcon={<ArrowBackIcon />}
                 onClick={() => navigate(-1)}
+                disabled={loading}
               >
                 بازگشت
               </Button>
@@ -312,12 +311,7 @@ const AddNewCourse = () => {
                     <ComboBoxAddCourse
                       label="وضعیت دوره"
                       identifier="statusCourse"
-                      options={[
-                        {
-                          value: "TeachingStatus...",
-                          label: "waiting for value of TeachingStatus",
-                        },
-                      ]}
+                      options={statusCourseOpt}
                       handleChange={(e) => setTeachingStatus(e.target.value)}
                       val={teachingStatus}
                     />
@@ -451,5 +445,20 @@ const typeOfCourse = [
   {
     label: "دوره عمومی: مهارت‌های حرفه‌ای",
     value: "moduleType=general&moduleSubType=interpersonal_skills",
+  },
+];
+
+export const statusCourseOpt = [
+  {
+    value: "منتظر شروع",
+    label: "منتظر شروع",
+  },
+  {
+    value: "در حال برگزاری",
+    label: "در حال برگزاری",
+  },
+  {
+    value: "پایان یافته",
+    label: "پایان یافته",
   },
 ];

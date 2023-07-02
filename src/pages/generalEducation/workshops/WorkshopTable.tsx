@@ -15,22 +15,22 @@ import Typography from "@mui/material/Typography";
 import style from "../../../styles/search/searchChevron.module.css";
 import TableHeader from "../../../components/table/TableHeader";
 import { useState } from "react";
-import { fetcherGet } from "../../../api/axios";
 import { WorkshopShort } from "../../../model";
 import useSWR from "swr";
 import LoadingProgress from "../../../components/LoadingProgress";
 import TableBodyWorksShops from "../../../components/generalCourse/workshops/TableBodyWorksShops";
 import { workshops } from "../../../components/table/helper-header";
-const WORKSHOP_LIST =
-  "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&hasCategory=false&moduleType=general&isImported=true&moduleSubType=workshop";
+import SearchAllCourse from "../../../components/search-course/SearchAllCourse";
+import TableEmpty from "../../../components/table/TableEmpty";
+const SETTING_RESPONSE = "&hasCategory=false&isImported=true";
+
+const WORKSHOP_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&moduleType=general&moduleSubType=workshop${SETTING_RESPONSE}`;
 
 const WorkshopTable = () => {
   const [chevronDir, setChevronDir] = useState(false);
-
-  const { data, isLoading, error } = useSWR<WorkshopShort[]>(
-    WORKSHOP_LIST,
-    fetcherGet
-  );
+  const [searchCourseWorkshop, setSearchCourseWorkshop] =
+    useState<WorkshopShort[]>();
+  const { data, isLoading, error } = useSWR<WorkshopShort[]>(WORKSHOP_LIST);
 
   if (isLoading) {
     return <LoadingProgress />;
@@ -76,29 +76,37 @@ const WorkshopTable = () => {
             }}
           >
             {/* //!component for searching student */}
-            {/* <SearchAll
-                    setSearchingStudentRegister={setSearchingStudentRegister}
-                    searchPage="reg"
-                    chevronDir={chevronDir}
-                    stateWaiting={stateWaiting}
-                    setStateWaiting={setStateWaiting}
-                    statusState={statusState}
-                    setStatusState={setStatusState}
-                  /> */}
+            <SearchAllCourse
+              moduleSubType="workshop"
+              moduleType="general"
+              chevronDir={chevronDir}
+              setSearchCourseCore={setSearchCourseWorkshop}
+              settingResponse={SETTING_RESPONSE}
+            />
           </Box>
         </AccordionDetails>
       </AccordionStyled>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
-          <TableHeader headerItems={workshops} />
+          {searchCourseWorkshop?.length !== 0 && (
+            <TableHeader headerItems={workshops} />
+          )}
           <TableBody>
-            {data?.map((workshops,index) => (
-              <TableBodyWorksShops key={workshops.id} workshops={workshops} counter={index} />
-            ))}
+            {(searchCourseWorkshop ? searchCourseWorkshop : data)?.map(
+              (workshops, index) => (
+                <TableBodyWorksShops
+                  key={workshops.id}
+                  workshops={workshops}
+                  counter={index}
+                />
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      {/* //!for empty response of search return TableEmpty */}
+      {searchCourseWorkshop?.length === 0 && <TableEmpty />}
     </>
   );
 };

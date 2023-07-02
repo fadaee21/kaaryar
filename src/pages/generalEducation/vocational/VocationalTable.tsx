@@ -15,22 +15,22 @@ import Typography from "@mui/material/Typography";
 import style from "../../../styles/search/searchChevron.module.css";
 import TableHeader from "../../../components/table/TableHeader";
 import { useState } from "react";
-import { fetcherGet } from "../../../api/axios";
 import { WorkshopShort } from "../../../model";
 import useSWR from "swr";
 import LoadingProgress from "../../../components/LoadingProgress";
 import { vocational } from "../../../components/table/helper-header";
 import TableBodyVocational from "../../../components/generalCourse/vocational-interpersonal/TableBodyVocational";
-const INTERPERSONAL_LIST =
-  "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&hasCategory=true&moduleType=general&moduleSubType=vocational_skills";
+import SearchAllCourse from "../../../components/search-course/SearchAllCourse";
+import TableEmpty from "../../../components/table/TableEmpty";
+const SETTING_RESPONSE = "&hasCategory=true";
+const INTERPERSONAL_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&moduleType=general&moduleSubType=vocational_skills${SETTING_RESPONSE}`;
 
 const VocationalTable = () => {
   const [chevronDir, setChevronDir] = useState(false);
-
-  const { data, isLoading, error } = useSWR<WorkshopShort[]>(
-    INTERPERSONAL_LIST,
-    fetcherGet
-  );
+  const [searchCourseVocational, setSearchCourseVocational] =
+    useState<WorkshopShort[]>();
+  const { data, isLoading, error } =
+    useSWR<WorkshopShort[]>(INTERPERSONAL_LIST);
 
   if (isLoading) {
     return <LoadingProgress />;
@@ -76,33 +76,37 @@ const VocationalTable = () => {
             }}
           >
             {/* //!component for searching student */}
-            {/* <SearchAll
-                      setSearchingStudentRegister={setSearchingStudentRegister}
-                      searchPage="reg"
-                      chevronDir={chevronDir}
-                      stateWaiting={stateWaiting}
-                      setStateWaiting={setStateWaiting}
-                      statusState={statusState}
-                      setStatusState={setStatusState}
-                    /> */}
+            <SearchAllCourse
+              moduleSubType="vocational_skills"
+              moduleType="general"
+              chevronDir={chevronDir}
+              setSearchCourseCore={setSearchCourseVocational}
+              settingResponse={SETTING_RESPONSE}
+            />
           </Box>
         </AccordionDetails>
       </AccordionStyled>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
-          <TableHeader headerItems={vocational} />
+          {searchCourseVocational?.length !== 0 && (
+            <TableHeader headerItems={vocational} />
+          )}
           <TableBody>
-            {data?.map((vocational, index) => (
-              <TableBodyVocational
-                key={vocational.id}
-                vocational={vocational}
-                counter={index}
-              />
-            ))}
+            {(searchCourseVocational ? searchCourseVocational : data)?.map(
+              (vocational, index) => (
+                <TableBodyVocational
+                  key={vocational.id}
+                  vocational={vocational}
+                  counter={index}
+                />
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      {/* //!for empty response of search return TableEmpty */}
+      {searchCourseVocational?.length === 0 && <TableEmpty />}
     </>
   );
 };

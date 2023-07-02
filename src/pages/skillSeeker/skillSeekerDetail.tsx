@@ -68,14 +68,14 @@ const SkillSeekerDetail = () => {
         <Divider />
         <BeforeWeekDetailShowComp
           typeComp="admission"
-          student={student?.beforeWeekForm as BeforeWeekType | null}
+          student={student?.beforeWeekForm as BeforeWeekType }
           matches={matches}
           id={id}
         />
         <Divider />
         <AfterWeekDetailShowComp
           typeComp="admission"
-          student={student?.afterWeekForm as AfterWeekType | null}
+          student={student?.afterWeekForm as AfterWeekType }
           matches={matches}
           id={id}
         />

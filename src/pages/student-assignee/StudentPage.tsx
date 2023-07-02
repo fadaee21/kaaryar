@@ -29,7 +29,7 @@ const StudentPage = () => {
     let mounted = true;
     const getStudentAfterDetail = async () => {
       setLoadingAfter(true);
-      try {
+      try {   
         let response = await getData(afterBeforeInfo);
         if (response.status === 200 && mounted) {
           setAfterInfo(response.data);
@@ -61,7 +61,7 @@ const StudentPage = () => {
       }
       setLoading(false);
     };
-    
+
     const getStudentMoreDetail = async () => {
       setLoadingDetail(true);
       try {
@@ -127,3 +127,4 @@ const StudentPage = () => {
 };
 
 export default StudentPage;
+

@@ -8,6 +8,8 @@ import theme from "./styles/theme";
 import { RTL } from "./styles/rtl";
 import { AuthProvider } from "./context/AuthProvider";
 import { BrowserRouter } from "react-router-dom";
+import { SWRConfig } from "swr";
+import { fetcherGet } from "./api/axios";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,11 +18,21 @@ root.render(
   <React.StrictMode>
     <RTL>
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </BrowserRouter>
+        <SWRConfig
+          value={{
+            revalidateOnFocus: false,
+            fetcher: fetcherGet,
+            onErrorRetry({ retryCount }) {
+              if (retryCount > 4) return;
+            },
+          }}
+        >
+          <BrowserRouter>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </BrowserRouter>
+        </SWRConfig>
       </ThemeProvider>
     </RTL>
   </React.StrictMode>

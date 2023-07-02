@@ -2,7 +2,10 @@ import { Grid, MenuItem, OutlinedInput, Select } from "@mui/material";
 import { ShortCoreModule } from "../../../model";
 import useSWR from "swr";
 
-import { ComboBoxAddCourse } from "../../../pages/addNewCourse/AddNewCourse";
+import {
+  ComboBoxAddCourse,
+  statusCourseOpt,
+} from "../../../pages/addNewCourse/AddNewCourse";
 import TypeAndName from "./TypeAndName";
 import { FormControl, InputLabel } from "@mui/material";
 import { useState } from "react";
@@ -11,7 +14,7 @@ import DateAndDescribe from "./DateAndDescribe";
 import { Button, Stack, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import { editAxios, fetcherGet } from "../../../api/axios";
+import { editAxios } from "../../../api/axios";
 import { convertArrToStr, getNameAndId } from "../../../utils/courseMethod";
 import { RELATED_PATH } from "../../addNewcourseComp/CoreFields";
 
@@ -75,7 +78,7 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
         data: {
           name,
           description: liftState.descriptionState,
-          numberOfHours: liftState.numberOfHoursState,
+          numberOfHours: liftState.numberOfHoursState || undefined,
           moduleType,
           subType,
           startDate: liftState.startDateState,
@@ -98,7 +101,10 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
     }
   };
 
-  const { data, isLoading } = useSWR<RelatedPath[]>(RELATED_PATH, fetcherGet);
+  const { data, isLoading } = useSWR<RelatedPath[]>(RELATED_PATH);
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -163,12 +169,7 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
           <ComboBoxAddCourse
             label="وضعیت دوره"
             identifier="statusCourse"
-            options={[
-              {
-                value: "TeachingStatus...",
-                label: "waiting for value of TeachingStatus",
-              },
-            ]}
+            options={statusCourseOpt}
             handleChange={(e) => setTeachingStatus(e.target.value)}
             val={teachingStatus}
           />

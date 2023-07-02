@@ -34,7 +34,7 @@ import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
 import useGetMoodleStudents from "../../hooks/request/useGetMoodleStudents";
 
-const StudentOfAdmin = () => {
+const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const pageSize = 25;
   const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}`;
@@ -369,4 +369,4 @@ const StudentOfAdmin = () => {
     </Box>
   );
 };
-export default StudentOfAdmin;
+export default StudentTableAdmin;

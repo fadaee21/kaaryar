@@ -12,7 +12,7 @@ import { useApproveWeek } from "../../hooks/request/useApprove";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const BeforeWeekDetail = () => {
-  const [student, setStudent] = useState<BeforeWeekType | null>(null);
+  const [student, setStudent] = useState<BeforeWeekType>();
   const [loading, setLoading] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertType, setAlertType] = useState<
@@ -85,7 +85,9 @@ const BeforeWeekDetail = () => {
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <RegisterFormDetailComp student={student?.registrationForm as RegistrationForm} />
+        <RegisterFormDetailComp
+          student={student?.registrationForm as RegistrationForm}
+        />
         <Divider />
         <BeforeWeekDetailShow
           typeComp="exam"

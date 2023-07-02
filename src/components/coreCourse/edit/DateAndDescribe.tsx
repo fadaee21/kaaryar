@@ -31,9 +31,9 @@ const DateAndDescribe = ({
   const [descriptionState, setDescriptionState] = useState(
     description || undefined
   );
-  const [numberOfHoursState, setNumberOfHoursState] = useState<
-    undefined | string
-  >(numberOfHours);
+  const [numberOfHoursState, setNumberOfHoursState] = useState<string>(
+    numberOfHours || ""
+  );
   useEffect(() => {
     setLiftState({
       startDateState,

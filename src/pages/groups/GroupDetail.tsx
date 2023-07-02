@@ -5,7 +5,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
-import { fetcherGet } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
 import { persianDate } from "../../utils/persianDate";
 
@@ -14,7 +13,7 @@ const GroupDetail = () => {
   const navigate = useNavigate();
   const GROUP_DETAIL = `/modules/categories/details/${groupId}`;
 
-  const { data, isLoading, error } = useSWR(GROUP_DETAIL, fetcherGet);
+  const { data, isLoading, error } = useSWR(GROUP_DETAIL);
 
   if (error) {
     console.log(error);

@@ -12,7 +12,6 @@ import useSWR from "swr";
 import TableHeader from "../../components/table/TableHeader";
 import { groupsTableHeader } from "../../components/table/helper-header";
 import TableBodyGroups from "../../components/group/table/TableBodyGroups";
-import { fetcherGet } from "../../api/axios";
 import { ShortGroup } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";
 import { useNavigate } from "react-router-dom";
@@ -23,8 +22,7 @@ const Groups = () => {
 
   const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<ShortGroup[]>(
-    GROUP_ALL,
-    fetcherGet
+    GROUP_ALL
   );
 
   if (isLoading) {

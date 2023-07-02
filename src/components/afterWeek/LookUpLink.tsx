@@ -10,7 +10,7 @@ import { editAxios, getData } from "../../api/axios";
 import { AfterWeekType, MoodleUser } from "../../model";
 
 interface LookUpLinkType {
-  student: AfterWeekType | null;
+  student: AfterWeekType | undefined;
   id: string | undefined;
   refreshingPage?: () => void;
 }

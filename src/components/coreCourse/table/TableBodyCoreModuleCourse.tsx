@@ -3,20 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import { ShortCoreModule } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
+import { convertArrToStr } from "../../../utils/courseMethod";
 
 interface Prop {
   moduleAll: ShortCoreModule;
+  counter: number;
 }
 
-const TableBodyCoreModuleCourse = ({ moduleAll }: Prop) => {
+const TableBodyCoreModuleCourse = ({ moduleAll, counter }: Prop) => {
   const navigate = useNavigate();
   const {
     id,
     name,
     careerPathway,
     category,
-
-    isActive,
+    teachingStatus,
     instructors,
     startDate,
     endDate,
@@ -36,7 +37,7 @@ const TableBodyCoreModuleCourse = ({ moduleAll }: Prop) => {
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{id}</Typography>
+        <Typography variant="body2">{counter + 1}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{name}</Typography>
@@ -48,20 +49,16 @@ const TableBodyCoreModuleCourse = ({ moduleAll }: Prop) => {
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
-          {category ? category.groupCode : "-"}
+          {category ? category.name : "-"}
         </Typography>
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">
-          {isActive ? "در حال آموزش" : "تمام‌شده"}
-        </Typography>
+        <Typography variant="body2">{teachingStatus || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
-          {instructors.length > 0
-            ? instructors[0].firstName + " " + instructors[0].family
-            : "-"}
+          {instructors.length > 0 ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>

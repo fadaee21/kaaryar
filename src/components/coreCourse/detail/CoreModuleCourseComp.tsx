@@ -22,6 +22,8 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
     weblinkFinalProject,
     studentCount,
     mentorCount,
+    numberOfHours,
+    deadlineFinalProject,
   } = coreDetail ?? {};
   return (
     <Grid container>
@@ -67,7 +69,10 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
             />
           </ListItem>
           <ListItem>
-            <ListItemText primary="ددلاین پروژه پایانی" secondary="--" />
+            <ListItemText
+              primary="ددلاین پروژه پایانی"
+              secondary={deadlineFinalProject ?? "-"}
+            />
           </ListItem>
           <ListItem>
             <ListItemText
@@ -89,7 +94,7 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
           <ListItem>
             <ListItemText
               primary="مسیر مرتبط"
-              secondary={careerPathway?.name}
+              secondary={careerPathway?.name || "-"}
             />
           </ListItem>
           <ListItem>
@@ -122,6 +127,12 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
                   "-"
                 )
               }
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="تعداد ساعات دوره"
+              secondary={numberOfHours}
             />
           </ListItem>
           <ListItem>

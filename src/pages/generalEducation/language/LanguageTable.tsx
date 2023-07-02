@@ -16,22 +16,24 @@ import Typography from "@mui/material/Typography";
 import style from "../../../styles/search/searchChevron.module.css";
 import TableHeader from "../../../components/table/TableHeader";
 import { useState } from "react";
-import { fetcherGet } from "../../../api/axios";
 import { EnglishShort } from "../../../model";
 import useSWR from "swr";
 import { language } from "../../../components/table/helper-header";
 import LoadingProgress from "../../../components/LoadingProgress";
-
-const ENGLISH_LIST =
-  "/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&moduleType=general&moduleSubType=english_module";
+import SearchAllCourse from "../../../components/search-course/SearchAllCourse";
+import TableEmpty from "../../../components/table/TableEmpty";
+const SETTING_RESPONSE = "";
+const ENGLISH_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at&moduleType=general&moduleSubType=english_module${SETTING_RESPONSE}`;
 
 const LanguageTable = () => {
   const [chevronDir, setChevronDir] = useState(false);
+  const [searchCourseEnglish, setSearchCourseEnglish] =
+    useState<EnglishShort[]>();
   const {
     data: dataEng,
     isLoading: isLoadingEng,
     error: errorEng,
-  } = useSWR<EnglishShort[]>(ENGLISH_LIST, fetcherGet);
+  } = useSWR<EnglishShort[]>(ENGLISH_LIST);
   if (isLoadingEng) {
     return <LoadingProgress />;
   }
@@ -76,35 +78,37 @@ const LanguageTable = () => {
             }}
           >
             {/* //!component for searching student */}
-            {/* <SearchAll
-                    setSearchingStudentRegister={setSearchingStudentRegister}
-                    searchPage="reg"
-                    chevronDir={chevronDir}
-                    stateWaiting={stateWaiting}
-                    setStateWaiting={setStateWaiting}
-                    statusState={statusState}
-                    setStatusState={setStatusState}
-                  /> */}
+            <SearchAllCourse
+              moduleSubType="english_module"
+              moduleType="general"
+              chevronDir={chevronDir}
+              setSearchCourseCore={setSearchCourseEnglish}
+              settingResponse={SETTING_RESPONSE}
+            />
           </Box>
         </AccordionDetails>
       </AccordionStyled>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
-          <TableHeader headerItems={language} />
+          {searchCourseEnglish?.length !== 0 && (
+            <TableHeader headerItems={language} />
+          )}
           <TableBody>
-            {dataEng?.map((englishCourse,index) => (
-              <TableBodyLanguage
-                key={englishCourse.id}
-                englishCourse={englishCourse}
-                counter={index+1}
-              />
-            ))}
+            {(searchCourseEnglish ? searchCourseEnglish : dataEng)?.map(
+              (englishCourse, index) => (
+                <TableBodyLanguage
+                  key={englishCourse.id}
+                  englishCourse={englishCourse}
+                  counter={index}
+                />
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       {/* //!for empty response of search return TableEmpty */}
-      {/* {searchingStudentRegister?.length === 0 && <TableEmpty />} */}
+      {searchCourseEnglish?.length === 0 && <TableEmpty />}
     </>
   );
 };
