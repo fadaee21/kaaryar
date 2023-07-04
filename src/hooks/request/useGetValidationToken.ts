@@ -36,7 +36,7 @@ const useGetValidationToken = () => {
     if (token) {
       getValid();
     } else {
-      console.log("where is token")
+      console.log("token not found")
       setTokenValidation(false);
       setLoadingVal(true);
     }

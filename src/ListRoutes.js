@@ -1,5 +1,4 @@
-import StudentPage from "./pages/student-assignee/StudentPage";
-import StudentAssignee from "./pages/student-assignee/StudentAssignee";
+import StudentAssignee from "./pages/student/StudentAssignee";
 import Comments from "./pages/comment/TableComments";
 import AddComment from "./pages/comment/AddComment";
 import BeforeWeekTable from "./pages/beforeWeek/BeforeWeekTable";
@@ -11,12 +10,11 @@ import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 import AfterWeekDetail from "./pages/afterWeek/AfterWeekDetail";
 import AfterWeekDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
-import justTest from "./pages/justTest";
 import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
 import EditComments from "./pages/comment/EditComments";
-import Dashboard from "./pages/dashboard/Dashboard";
+import Dashboard from "./pages/dashboard/DashboardMentorTa";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import Volunteer from "./pages/volunteer/Volunteer";
 import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
@@ -26,22 +24,22 @@ import NotFound from "./pages/NotFound";
 import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
 import GroupsTable from "./pages/groups/GroupsTable";
 import GroupDetail from "./pages/groups/GroupDetail";
-import LanguageDetail from "./pages/generalEducation/language/LanguageDetail";
-import GeneralEducationTable from "./pages/generalEducation/GeneralEducationTable";
+import LanguageDetail from "./pages/generalModuleCourses/language/LanguageDetail";
+import GeneralEducationTable from "./pages/generalModuleCourses/GeneralEducationTable";
 import AddGroup from "./pages/groups/AddGroup";
 import GroupEdit from "./pages/groups/GroupEdit";
 import AddNewCourse from "./pages/addNewCourse/AddNewCourse";
 import CoreModuleCoursesTable from "./pages/coreModuleCourses/CoreModuleCoursesTable";
 import CoreModuleCourseDetail from "./pages/coreModuleCourses/CoreModuleCourseDetail";
 import CoreModuleCourseEdit from "./pages/coreModuleCourses/CoreModuleCourseEdit";
-import GeneralCourseEdit from "./pages/generalEducation/GeneralCourseEdit";
-import GeneralDetail from "./pages/generalEducation/GeneralDetail";
-import StudentAdminDetail from "./pages/student-admin/StudentAdminDetail";
-import StudentEditStatus from "./pages/student-admin/StudentEditStatus";
-import StudentCoreDetail from "./pages/student-admin/StudentCoreDetail";
-import StudentTableAdmin from "./pages/student-admin/StudentTableAdmin";
-import StudentGeneralEdit from "./pages/student-admin/StudentGeneralEdit";
-import StudentCoreEdit from "./pages/student-admin/StudentCoreEdit";
+import GeneralCourseEdit from "./pages/generalModuleCourses/GeneralCourseEdit";
+import GeneralDetail from "./pages/generalModuleCourses/GeneralDetail";
+import StudentAdminDetail from "./pages/student/StudentAdminDetail";
+import StudentEditStatus from "./pages/student/StudentEditStatus";
+import StudentCoreDetail from "./pages/student/StudentCoreDetail";
+import StudentTableAdmin from "./pages/student/StudentTableAdmin";
+import StudentGeneralEdit from "./pages/student/StudentGeneralEdit";
+import StudentCoreEdit from "./pages/student/StudentCoreEdit";
 
 const ListRoutes = [
   //! ta________________________________
@@ -66,10 +64,18 @@ const ListRoutes = [
   {
     path: "ta/student/:id",
     name: " ",
-    component: StudentPage,
+    component: StudentAdminDetail,
     showInNav: false,
     role: "ta",
     key: "ta3",
+  },
+  {
+    path: "ta/student/:student_id/:module_id/core-detail",
+    name: " ",
+    component: StudentCoreDetail,
+    showInNav: false,
+    role: "ta",
+    key: "ta4-coreDetail",
   },
   {
     path: "ta/all-comments",
@@ -154,10 +160,18 @@ const ListRoutes = [
   {
     path: "mentor/student/:id",
     name: " ",
-    component: StudentPage,
+    component: StudentAdminDetail,
     showInNav: false,
     role: "mentor",
     key: "mentor3",
+  },
+  {
+    path: "mentor/student/:student_id/:module_id/core-detail",
+    name: " ",
+    component: StudentCoreDetail,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor4-coreDetail",
   },
 
   {
@@ -568,15 +582,6 @@ const ListRoutes = [
     component: NotFound,
     showInNav: false,
     key: "notFound",
-  },
-  {
-    path: "test123456789",
-    name: "",
-    // icon: <AddCommentIcon />,
-    component: justTest,
-    showInNav: false,
-    role: "admin",
-    key: "test11111111111",
   },
 ];
 

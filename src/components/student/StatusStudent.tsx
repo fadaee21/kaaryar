@@ -2,11 +2,14 @@ import { Button, List, ListItem, ListItemText, Stack } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { StatusForm } from "../../model";
+import { useAuth } from "../../context/AuthProvider";
 interface Prop {
   statusForm: StatusForm | undefined;
 }
 const StatusStudent = ({ statusForm }: Prop) => {
   const navigate = useNavigate();
+  const { adminVisibility } = useAuth();
+  console.log(adminVisibility);
   const {
     trainingStatus,
     nextTrainingStep,
@@ -34,7 +37,12 @@ const StatusStudent = ({ statusForm }: Prop) => {
           endIcon={<EditIcon />}
           variant="outlined"
           onClick={() => navigate(`edit-status`)}
-          sx={{ mr: 2, px: 5 }}
+          disabled={!adminVisibility}
+          sx={{
+            mr: 2,
+            px: 5,
+            ...(!adminVisibility && { visibility: "hidden" }),
+          }}
         >
           ویرایش
         </Button>
@@ -87,7 +95,12 @@ const StatusStudent = ({ statusForm }: Prop) => {
           endIcon={<EditIcon />}
           variant="outlined"
           onClick={() => navigate(`edit-status`)}
-          sx={{ mr: 2, px: 5 }}
+          disabled={!adminVisibility}
+          sx={{
+            mr: 2,
+            px: 5,
+            ...(!adminVisibility && { visibility: "hidden" }),
+          }}
         >
           ویرایش
         </Button>

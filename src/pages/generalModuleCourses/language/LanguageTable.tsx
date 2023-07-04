@@ -77,7 +77,6 @@ const LanguageTable = () => {
               my: 3,
             }}
           >
-            {/* //!component for searching student */}
             <SearchAllCourse
               moduleSubType="english_module"
               moduleType="general"

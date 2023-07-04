@@ -17,14 +17,14 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useGetImage from "../../hooks/request/useGetImage";
 import { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import RegisterInfo from "../../components/studentNew/RegisterInfo";
+import RegisterInfo from "../../components/student/RegisterInfo";
 import StudentDetailMore from "../../components/student/StudentDetailMore";
 
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
 import AfterWeekDetailShowComp from "../../components/afterWeek/AfterWeekDetailShowComp";
-import GeneralCourseStudent from "../../components/studentNew/GeneralCourseStudent";
-import CoreCourseStudent from "../../components/studentNew/CoreCourseStudent";
-import StatusStudent from "../../components/studentNew/StatusStudent";
+import GeneralCourseStudent from "../../components/student/GeneralCourseStudent";
+import CoreCourseStudent from "../../components/student/CoreCourseStudent";
+import StatusStudent from "../../components/student/StatusStudent";
 
 const StudentAdminDetail = () => {
   const [value, setValue] = useState(0);

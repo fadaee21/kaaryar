@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ModulesAsStudentAssessment, StudentEdu } from "../../model";
-import { EditComboStudent } from "./StudentStatusEditComp";
+import { EditComboStudent } from "./EditComboStudent";
 import { useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useParams } from "react-router-dom";

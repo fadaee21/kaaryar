@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import { ModuleAsStudentForDetail } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";
-import StudentCoreDetailEdit from "../../components/studentNew/StudentCoreDetailEdit";
+import StudentCoreDetailEdit from "../../components/student/StudentCoreDetailEdit";
 
 const StudentCoreEdit = () => {
   const { student_id, module_id } = useParams();

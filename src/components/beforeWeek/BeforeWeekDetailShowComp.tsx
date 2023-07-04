@@ -324,22 +324,6 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
-                {/* <ListItemText
-                  primary="آشنایی کار با کامپیوتر"
-                  secondary={student?.computerFamiliarity.map((item2) => (
-                    <Typography
-                      sx={{ display: "inline-block" }}
-                      component="span"
-                      variant="subtitle2"
-                    >
-                      {
-                        computerFamiliarityOpt.find(
-                          (item) => item.value === item2
-                        )?.label
-                      }
-                    </Typography>
-                  ))}
-                /> */}
                 <ListItemText
                   primary="آشنایی کار با کامپیوتر"
                   secondary={student?.computerFamiliarity?.map((item, index) =>
@@ -357,6 +341,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                         sx={{ display: "inline-block" }}
                         component="span"
                         variant="subtitle2"
+                        key={index}
                       >
                         همه موارد
                       </Typography>

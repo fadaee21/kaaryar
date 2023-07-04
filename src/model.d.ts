@@ -904,3 +904,8 @@ export interface NextModule {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ErrorResponse {
+  detail: string;
+  error: { code: number; message: string; status: string };
+}

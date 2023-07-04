@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingProgress from "../../components/LoadingProgress";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,7 +7,9 @@ import Paper from "@mui/material/Paper";
 import { CommentTable } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { Container } from "@mui/system";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
+  AccordionDetails,
   Alert,
   Box,
   IconButton,
@@ -23,6 +25,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import style from "../../styles/search/searchChevron.module.css";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
 import { counterPagination } from "../../utils/counterPagination";
@@ -32,10 +35,17 @@ import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
 import { commentsTableHeader } from "../../components/table/helper-header";
 import { persianDate } from "../../utils/persianDate";
+import {
+  AccordionStyled,
+  AccordionSummaryStyled,
+} from "../../styles/search/accordion";
+import SearchAllComments from "./SearchAllComments";
 
 const Comments = () => {
+  const [chevronDir, setChevronDir] = useState(false);
+
   const [page, setPage] = useState(1);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const { auth } = useAuth();
   const roleAuth = auth.roles.toString();
   const navigate = useNavigate();
@@ -93,6 +103,53 @@ const Comments = () => {
           >
             <Typography variant="h4"> فهرست نظرات</Typography>
           </Box>
+
+          <AccordionStyled>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
+            >
+              <AccordionSummaryStyled
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => setChevronDir(!chevronDir)}
+              >
+                <Typography variant="button">جستجو</Typography>
+                <ExpandMoreIcon
+                  className={chevronDir ? style.rotate180 : style.rotate0}
+                />
+              </AccordionSummaryStyled>
+
+              {/* <ExcelExport
+                  fileName={"Applicant Info"}
+                  searchData={[]}
+                  linkAll=""
+                  useIn="reg"
+                /> */}
+            </Box>
+            <AccordionDetails>
+              <Box
+                sx={{
+                  width: "100%",
+                  my: 3,
+                }}
+              >
+                {/* //!component for searching student */}
+                {/* <SearchAllCourse
+              moduleSubType="english_module"
+              moduleType="general"
+              chevronDir={chevronDir}
+              setSearchCourseCore={setSearchCourseEnglish}
+              settingResponse={SETTING_RESPONSE}
+            /> */}
+                <SearchAllComments />
+              </Box>
+            </AccordionDetails>
+          </AccordionStyled>
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHeader headerItems={commentsTableHeader} />

@@ -6,19 +6,17 @@ import {
   InputLabel,
   List,
   ListItem,
-  MenuItem,
   OutlinedInput,
-  Select,
-  SelectChangeEvent,
   Stack,
   Typography,
 } from "@mui/material";
 import useSWR from "swr";
 import { editAxios } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
-import { Alert, Slide, Snackbar } from "@mui/material";
 import LoadingProgress from "../LoadingProgress";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { toast } from "react-toastify";
+import { EditComboStudent } from "./EditComboStudent";
 
 interface Prop {
   statusForm?: StatusForm;
@@ -41,7 +39,7 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
   const [referralToFinance, setReferralToFinance] = useState(
     statusForm?.referralToFinance?.id.toString() || ""
   );
-  const [errMsg, setErrMsg] = useState("");
+
   const [loading, setLoading] = useState(false);
   const { data: trainingData, isLoading: statusLoading } = useSWR<
     DetailStudentStatus[]
@@ -59,7 +57,6 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setErrMsg("");
       setLoading(true);
       const res = await editAxios(`/status/form/${statusForm?.id}`, {
         data: {
@@ -75,12 +72,11 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
       if (res.status === 200) {
         navigate(-1);
       } else {
-        console.log(res.data);
-        setErrMsg("ویرایش انجام نشد");
+        toast.error("ویرایش انجام نشد");
       }
     } catch (error: any) {
       console.log(error);
-      setErrMsg(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -117,7 +113,6 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
             disabled={loading}
             endIcon={<ArrowBackIcon />}
             color="inherit"
-
           >
             بازگشت
           </Button>
@@ -191,55 +186,8 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
           </List>
         </Stack>
       </form>
-      <Snackbar
-        open={!!errMsg}
-        onClose={() => setErrMsg("")}
-        autoHideDuration={3000}
-        TransitionComponent={TransitionLeft}
-      >
-        <Alert severity="error">{errMsg}</Alert>
-      </Snackbar>
     </>
   );
 };
 
 export default StudentStatusEditComp;
-interface EditComboProp {
-  data: DetailStudentStatus[] | undefined;
-  identifier: string;
-  label: string;
-  val: string | undefined;
-  handleChange: (e: SelectChangeEvent<string>) => void;
-}
-
-export const EditComboStudent = ({
-  data,
-  identifier,
-  label,
-  val,
-  handleChange,
-}: EditComboProp) => {
-  return (
-    <FormControl fullWidth>
-      <InputLabel id={`${identifier}-label`}>{label}</InputLabel>
-      <Select
-        labelId={`${identifier}-label`}
-        id={identifier}
-        name={identifier}
-        value={val}
-        label={label}
-        onChange={handleChange}
-      >
-        {data?.map((i) => (
-          <MenuItem key={i.id} value={i.id}>
-            {i.value}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
-
-function TransitionLeft(props: any) {
-  return <Slide {...props} direction="left" />;
-}

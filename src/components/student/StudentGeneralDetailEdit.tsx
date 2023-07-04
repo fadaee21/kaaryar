@@ -17,7 +17,7 @@ import { Button, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useParams } from "react-router-dom";
 import { getTitle } from "../../utils/courseMethod";
-import { EditComboStudent } from "./StudentStatusEditComp";
+import { EditComboStudent } from "./EditComboStudent";
 import useSWR, { KeyedMutator } from "swr";
 import { editAxios } from "../../api/axios";
 import LoadingProgress from "../LoadingProgress";

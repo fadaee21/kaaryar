@@ -14,10 +14,7 @@ import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
 import TablePic from "../../components/table/TablePic";
 import { useAuth } from "../../context/AuthProvider";
-import {
-  // moodleJustStudent,
-  MoodleUser,
-} from "../../model";
+import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -26,13 +23,12 @@ import {
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
 import styleRot from "../../styles/search/searchChevron.module.css";
-
+import useSWR from "swr";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
 import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
-import useGetMoodleStudents from "../../hooks/request/useGetMoodleStudents";
 
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
@@ -46,13 +42,13 @@ const StudentTableAdmin = () => {
     MoodleUser[] | null
   >(null);
 
-  const { students, loading, error } = useGetMoodleStudents(adminStudent, page);
+  const { data, isLoading, error } = useSWR(adminStudent);
 
   const { auth } = useAuth();
   const roles = auth.roles.toString();
   const navigate = useNavigate();
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingProgress />;
   }
   if (error) {
@@ -122,7 +118,7 @@ const StudentTableAdmin = () => {
               )}
               {!searchingMoodleStudent && (
                 <TableBody>
-                  {students.map((moodleUser: MoodleUser, i: React.Key) => {
+                  {data.map((moodleUser: MoodleUser, i: React.Key) => {
                     const {
                       id,
                       firstName,

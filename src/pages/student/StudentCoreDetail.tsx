@@ -6,8 +6,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
 import { ModuleAsStudentForDetail } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";
-import StudentCoreDetailComp from "../../components/studentNew/StudentCoreDetailComp";
+import StudentCoreDetailComp from "../../components/student/StudentCoreDetailComp";
+import { useAuth } from "../../context/AuthProvider";
 const StudentCoreDetail = () => {
+  const { adminVisibility } = useAuth();
   const { student_id, module_id } = useParams();
   const navigate = useNavigate();
   const MODULE_STUDENT_DETAIL = `/modules/student/enrollment/details/${module_id}/${student_id}`;
@@ -31,7 +33,13 @@ const StudentCoreDetail = () => {
             endIcon={<EditIcon />}
             variant="outlined"
             onClick={() => navigate(`edit`)}
-            sx={{ mr: 2, px: 5, ml: "auto" }}
+            disabled={!adminVisibility}
+            sx={{
+              mr: 2,
+              px: 5,
+              ml: "auto",
+              ...(!adminVisibility && { visibility: "hidden" }),
+            }}
           >
             ویرایش
           </Button>

@@ -13,10 +13,10 @@ import { useNavigate } from "react-router-dom";
 import { ShortCoreModule } from "../../model";
 import { editAxios } from "../../api/axios";
 import TypeAndName from "../coreCourse/edit/TypeAndName";
-import { ComboBoxAddCourse } from "../../pages/addNewCourse/AddNewCourse";
+import { ComboBoxAddCourse } from "../../pages/addNewCourse/ComboBoxAddCourse";
 import { convertArrToStr, getTitle } from "../../utils/courseMethod";
 import DateAndDescribe from "../coreCourse/edit/DateAndDescribe";
-import RelatedGroup from "../addNewcourseComp/RelatedGroup";
+import RelatedGroup from "../addNewCourseComp/RelatedGroup";
 
 type LiftUpStateType = {
   [index: string]: string | undefined;

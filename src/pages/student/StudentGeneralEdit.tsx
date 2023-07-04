@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import LoadingProgress from "../../components/LoadingProgress";
 import useSWR from "swr";
 import { ModuleAsStudentForDetail } from "../../model";
-import StudentGeneralDetailEdit from "../../components/studentNew/StudentGeneralDetailEdit";
+import StudentGeneralDetailEdit from "../../components/student/StudentGeneralDetailEdit";
 
 import { useParams } from "react-router-dom";
 

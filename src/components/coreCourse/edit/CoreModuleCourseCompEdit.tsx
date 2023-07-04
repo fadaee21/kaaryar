@@ -1,22 +1,19 @@
 import { Grid, MenuItem, OutlinedInput, Select } from "@mui/material";
 import { ShortCoreModule } from "../../../model";
 import useSWR from "swr";
-
-import {
-  ComboBoxAddCourse,
-  statusCourseOpt,
-} from "../../../pages/addNewCourse/AddNewCourse";
+import { ComboBoxAddCourse } from "../../../pages/addNewCourse/ComboBoxAddCourse";
 import TypeAndName from "./TypeAndName";
 import { FormControl, InputLabel } from "@mui/material";
 import { useState } from "react";
-import RelatedGroup from "../../addNewcourseComp/RelatedGroup";
+import RelatedGroup from "../../addNewCourseComp/RelatedGroup";
 import DateAndDescribe from "./DateAndDescribe";
 import { Button, Stack, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { editAxios } from "../../../api/axios";
 import { convertArrToStr, getNameAndId } from "../../../utils/courseMethod";
-import { RELATED_PATH } from "../../addNewcourseComp/CoreFields";
+import { RELATED_PATH } from "../../addNewCourseComp/CoreFields";
+import { statusCourseOpt } from "../../../pages/addNewCourse/addNewCourseHelper";
 
 interface Prop {
   coreDetail: ShortCoreModule | undefined;

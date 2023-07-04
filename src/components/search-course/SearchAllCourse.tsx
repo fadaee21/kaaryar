@@ -15,7 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import InstructorSearch from "./InstructorsSearch";
 import useSWR from "swr";
 import SelectiveSearchCourse from "./SelectiveSearchCourse";
-import { statusCourseOpt } from "../../pages/addNewCourse/AddNewCourse";
+import { statusCourseOpt } from "../../pages/addNewCourse/addNewCourseHelper";
 
 type ValType = { value: number | string; label: string };
 interface Props {

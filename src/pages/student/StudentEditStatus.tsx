@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import StudentStatusEditComp from "../../components/studentNew/StudentStatusEditComp";
+import StudentStatusEditComp from "../../components/student/StudentStatusEditComp";
 import useSWR from "swr";
 import { StudentInfo } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";

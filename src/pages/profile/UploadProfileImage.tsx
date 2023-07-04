@@ -1,13 +1,12 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import { postData } from "../../api/axios";
 import useGetImage from "../../hooks/request/useGetImage";
+import { toast } from "react-toastify";
 
 const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
   const [profileImage, setProfileImage] = useState<any>(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [open, setOpen] = React.useState(false);
   const [, setSuccess] = useState(false);
   const [showImage, setShowImage] = useState(false); // handling showing image or not
   const { getPicture, pic } = useGetImage("/exam/after/week/image/get");
@@ -39,14 +38,12 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
   const pickImage = (e: React.ChangeEvent<any>) => {
     const image = e.target.files[0];
     if (image.size > 5000000) {
-      setErrorMessage("حجم فایل بیشتر از ۵ مگابایت است");
-      setOpen(true);
+      toast.error("حجم فایل بیشتر از ۵ مگابایت است");
       return;
     }
     const validPrefix = ["image/jpg", "image/jpeg", "image/png"];
     if (!validPrefix.includes(image.type)) {
-      setErrorMessage("فرمت فایل قابل قبول نیست");
-      setOpen(true);
+      toast.error("فرمت فایل قابل قبول نیست");
       return;
     }
     setShowImage(true);
@@ -55,10 +52,6 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
     console.log(dataContent);
     imageUploading(dataContent);
     setProfileImage(image);
-  };
-  const closeSnack = () => {
-    setOpen(false);
-    setErrorMessage("");
   };
 
   return (
@@ -154,11 +147,6 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
           </Box>
         )}
       </Box>
-      <Snackbar open={open} autoHideDuration={4000} onClose={closeSnack}>
-        <Alert onClose={closeSnack} severity="error">
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

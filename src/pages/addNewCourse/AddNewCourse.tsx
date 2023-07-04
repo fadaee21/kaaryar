@@ -11,32 +11,27 @@ import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import { useEffect, useState } from "react";
-import { OptionsString, Instructor } from "../../model";
+import { Instructor } from "../../model";
 import useSWR from "swr";
 import { editAxios, postData } from "../../api/axios";
-import CoreFields from "../../components/addNewcourseComp/CoreFields";
-import WorkshopFields from "../../components/addNewcourseComp/WorkshopFields";
-// import EnglishFields from "../../components/addNewcourseComp/EnglishFields";
-// import VocationalFields from "../../components/addNewcourseComp/VocationalFields";
-import InterpersonalFieldsAndEnglish from "../../components/addNewcourseComp/InterpersonalFields";
+import CoreFields from "../../components/addNewCourseComp/CoreFields";
+import WorkshopFields from "../../components/addNewCourseComp/WorkshopFields";
+import InterpersonalFieldsAndEnglish from "../../components/addNewCourseComp/InterpersonalFields";
 import { JalaliDatePicker } from "../../components/comment/JalaliDatePicker";
-import RelatedGroup from "../../components/addNewcourseComp/RelatedGroup";
-import { Alert, Slide, Snackbar } from "@mui/material";
+import RelatedGroup from "../../components/addNewCourseComp/RelatedGroup";
+
 import {
   convertArrToStr,
   getNameAndId,
   getTypeAndSubtype,
 } from "../../utils/courseMethod";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { statusCourseOpt, typeOfCourse } from "./addNewCourseHelper";
+import { ComboBoxAddCourse } from "./ComboBoxAddCourse";
 
-interface ComboBoxProp {
-  options: OptionsString[];
-  val: string | undefined;
-  identifier: string;
-  label: string;
-  handleChange: (event: SelectChangeEvent) => void;
-}
 interface courseTypeProp {
   name: string;
   id: number;
@@ -104,26 +99,25 @@ const AddNewCourse = () => {
     e.preventDefault();
     //handling error and guiding for compulsory field
     if ([courseType, courseNameId].some((val) => !val)) {
-      setErrMsg("نوع دوره و نام دوره پر شود");
+      toast.error("نوع دوره و نام دوره پر شود");
       return;
     }
     if (subType !== "workshop" && !moduleCategoryId) {
-      setErrMsg("گروه مرتبط پر شود");
+      toast.error("گروه مرتبط پر شود");
       return;
     }
     if (subType !== "workshop" && !teachingStatus) {
-      setErrMsg("وضعیت دوره پر شود");
+      toast.error("وضعیت دوره پر شود");
       return;
     }
     let careerPathwayId;
     if (moduleType === "core" && !liftUpState.careerPathwayId) {
-      setErrMsg("مسیر مرتبط پر شود");
+      toast.error("مسیر مرتبط پر شود");
       return;
     } else {
       careerPathwayId = getNameAndId(liftUpState.careerPathwayId)[0]; //destruct name and id from careerPathwayId string
     }
     try {
-      setErrMsg("");
       setLoading(true);
       let res;
       if (courseType.includes("english")) {
@@ -188,9 +182,8 @@ const AddNewCourse = () => {
         console.log(res);
         setErrMsg("دوره جدید ایجاد نشد");
       }
-    } catch (error) {
-      console.log(error);
-      setErrMsg("دوره جدید ایجاد نشد");
+    } catch (error: any) {
+      toast.error(handleError(error));
     } finally {
       setLoading(false);
     }
@@ -379,86 +372,8 @@ const AddNewCourse = () => {
           </Grid>
         </form>
       </Container>
-      <Snackbar
-        open={!!errMsg}
-        onClose={() => setErrMsg("")}
-        autoHideDuration={3000}
-        TransitionComponent={TransitionLeft}
-      >
-        <Alert severity="error">{errMsg}</Alert>
-      </Snackbar>
     </>
   );
 };
 
 export default AddNewCourse;
-
-export const ComboBoxAddCourse = ({
-  options,
-  val,
-  identifier,
-  label,
-  handleChange,
-}: ComboBoxProp) => {
-  return (
-    <FormControl fullWidth>
-      <InputLabel id={`${identifier}-label`}>{label}</InputLabel>
-      <Select
-        labelId={`${identifier}-label`}
-        id={identifier}
-        name={identifier}
-        value={val}
-        label={label}
-        onChange={handleChange}
-      >
-        {options.map((option, i) => (
-          <MenuItem key={i} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
-
-function TransitionLeft(props: any) {
-  return <Slide {...props} direction="left" />;
-}
-
-const typeOfCourse = [
-  {
-    label: "دوره تخصصی",
-    value: "moduleType=core&moduleSubType=unassigned",
-  },
-  {
-    label: "دوره عمومی: کارگاه جانبی",
-    value: "moduleType=general&moduleSubType=workshop",
-  },
-  {
-    label: "دوره عمومی: زبان انگلیسی",
-    value: "moduleType=general&moduleSubType=english_module",
-  },
-  {
-    label: "دوره عمومی: مهارت‌های ارتباطی",
-    value: "moduleType=general&moduleSubType=vocational_skills",
-  },
-  {
-    label: "دوره عمومی: مهارت‌های حرفه‌ای",
-    value: "moduleType=general&moduleSubType=interpersonal_skills",
-  },
-];
-
-export const statusCourseOpt = [
-  {
-    value: "منتظر شروع",
-    label: "منتظر شروع",
-  },
-  {
-    value: "در حال برگزاری",
-    label: "در حال برگزاری",
-  },
-  {
-    value: "پایان یافته",
-    label: "پایان یافته",
-  },
-];

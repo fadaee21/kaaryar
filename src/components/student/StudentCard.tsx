@@ -38,7 +38,7 @@ export default function StudentCard({ moodleUser }: Props) {
   };
 
   return (
-    <Card sx={{ minWidth: 345, pb: 1 }}>
+    <Card sx={{ minWidth: 345,height:300 ,pb: 1, display:"flex" ,flexDirection:"column" }}>
       <CardHeader
         avatar={<TablePic2 studentId={studentId} lastName={studentLastName} />}
         title={studentFirstName + " " + studentLastName}
@@ -47,27 +47,27 @@ export default function StudentCard({ moodleUser }: Props) {
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              تلفن: {studentMobile ?? studentPhone}
+              تلفن: {(studentMobile ?? studentPhone) || " - "}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              ایمیل: {studentEmail}
+              ایمیل: {studentEmail || " - "}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              شهر: {studentCity}
+              شهر: {studentCity || " - "}
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="text.secondary">
+            {/* <Typography variant="body2" color="text.secondary">
               course
-            </Typography>
+            </Typography> */}
           </Grid>
         </Grid>
       </CardContent>
-      <Divider variant="middle" sx={{ my: 1 }} />
+      <Divider variant="middle" sx={{ mt: "auto",mb:2}} />
       <CardActions>
         <Button
           variant="outlined"

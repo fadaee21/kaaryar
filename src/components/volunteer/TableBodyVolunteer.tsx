@@ -1,21 +1,26 @@
 import { IconButton, Typography } from "@mui/material";
-import { StyledTableCell, StyledTableRow } from "../../../styles/table";
+import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/AuthProvider";
+
+interface Props {
+  firstName: string;
+  lastName: string;
+  username: string;
+  role: string;
+  id: number;
+  counter: number;
+}
 
 const TableBodyVolunteer = ({
   username,
   firstName,
   lastName,
-  id,
   role,
-}: any) => {
+  counter,
+}: Props) => {
   const navigate = useNavigate();
-  const handleNav = () => navigate(`/${roles}/volunteer/${username}`);
-  const {
-    auth: { roles },
-  } = useAuth();
+
   return (
     <StyledTableRow
       sx={{
@@ -29,16 +34,14 @@ const TableBodyVolunteer = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{id}</Typography>
+        <Typography variant="body2">{counter}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
         sx={{
           width: "30%",
           verticalAlign: "center",
-          cursor:"pointer"
         }}
-        onClick={handleNav}
       >
         <Typography variant="body2">{`${firstName} ${lastName}`}</Typography>
       </StyledTableCell>
@@ -56,7 +59,7 @@ const TableBodyVolunteer = ({
         align="center"
         sx={{ width: "10%", verticalAlign: "center" }}
       >
-        <IconButton onClick={handleNav}>
+        <IconButton onClick={() => navigate(username)}>
           <VisibilityIcon fontSize="small" color="info" />
         </IconButton>
       </StyledTableCell>

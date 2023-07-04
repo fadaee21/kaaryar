@@ -18,12 +18,15 @@ import {
 import { convertArrToStr } from "../../utils/courseMethod";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 
 interface Prop {
   courses: ModulesAsStudent[] | undefined;
 }
 
 const GeneralCourseStudent = ({ courses }: Prop) => {
+  const { adminVisibility } = useAuth();
+
   const workshopCourses = courses?.filter(
     (item) => item.module.subType === "workshop"
   );
@@ -55,7 +58,13 @@ const GeneralCourseStudent = ({ courses }: Prop) => {
           <Typography sx={{ mt: 4, mb: 1 }}>کارگاه جانبی</Typography>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={workshopsStudent} />
+              <TableHeader
+                headerItems={
+                  adminVisibility
+                    ? workshopsStudent
+                    : workshopsStudent.slice(0, -1) //remove editing column for whose are not admin
+                }
+              />
               <TableBody>
                 {workshopCourses.map((course) => (
                   <RowTableWorkShop key={course.module.id} {...course} />
@@ -71,7 +80,11 @@ const GeneralCourseStudent = ({ courses }: Prop) => {
           <Typography sx={{ mt: 4, mb: 2 }}>زبان انگلیسی</Typography>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={englishStudent} />
+              <TableHeader
+                headerItems={
+                  adminVisibility ? englishStudent : englishStudent.slice(0, -1) //remove editing column for whose are not admin
+                }
+              />
               <TableBody>
                 {englishCourses.map((course) => (
                   <RowTableEnglish key={course.module.id} {...course} />
@@ -87,7 +100,13 @@ const GeneralCourseStudent = ({ courses }: Prop) => {
           <Typography sx={{ mt: 4, mb: 2 }}>مهارت‌های ارتباطی</Typography>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={vocationalStudent} />
+              <TableHeader
+                headerItems={
+                  adminVisibility
+                    ? vocationalStudent
+                    : vocationalStudent.slice(0, -1) //remove editing column for whose are not admin
+                }
+              />
               <TableBody>
                 {vocationalCourses.map((course) => (
                   <RowTableVocational key={course.module.id} {...course} />
@@ -103,7 +122,13 @@ const GeneralCourseStudent = ({ courses }: Prop) => {
           <Typography sx={{ mt: 4, mb: 2 }}>مهارت‌های حرفه‌ای</Typography>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={interpersonalStudent} />
+              <TableHeader
+                headerItems={
+                  adminVisibility
+                    ? interpersonalStudent
+                    : interpersonalStudent.slice(0, -1) //remove editing column for whose are not admin
+                }
+              />
               <TableBody>
                 {interpersonalCourses.map((course) => (
                   <RowTableInterpersonal key={course.module.id} {...course} />
@@ -123,6 +148,8 @@ const RowTableWorkShop = ({ module, assessment }: ModulesAsStudent) => {
   const { name, instructors, startDate, id } = module;
   const { attendanceGrade } = assessment;
   const navigate = useNavigate();
+  const { adminVisibility } = useAuth();
+
   return (
     <StyledTableRow
       sx={{
@@ -148,7 +175,11 @@ const RowTableWorkShop = ({ module, assessment }: ModulesAsStudent) => {
       </StyledTableCell>
       <StyledTableCell
         align="center"
-        sx={{ verticalAlign: "center", cursor: "pointer" }}
+        sx={{
+          verticalAlign: "center",
+          cursor: "pointer",
+          ...(!adminVisibility && { display: "none" }),
+        }}
         onClick={() => navigate(`${id}/general-edit`)}
       >
         <EditIcon />
@@ -161,6 +192,8 @@ const RowTableEnglish = ({ module, assessment }: ModulesAsStudent) => {
   const { attendanceGrade, nextModule, finalGrade, finalAssessment } =
     assessment;
   const navigate = useNavigate();
+  const { adminVisibility } = useAuth();
+
   return (
     <StyledTableRow
       sx={{
@@ -197,7 +230,11 @@ const RowTableEnglish = ({ module, assessment }: ModulesAsStudent) => {
       </StyledTableCell>
       <StyledTableCell
         align="center"
-        sx={{ verticalAlign: "center", cursor: "pointer" }}
+        sx={{
+          verticalAlign: "center",
+          cursor: "pointer",
+          ...(!adminVisibility && { display: "none" }),
+        }}
         onClick={() => navigate(`${id}/general-edit`)}
       >
         <EditIcon />
@@ -209,6 +246,8 @@ const RowTableVocational = ({ module, assessment }: ModulesAsStudent) => {
   const { name, instructors, startDate, teachingStatus, category, id } = module;
   const { attendanceGrade } = assessment;
   const navigate = useNavigate();
+  const { adminVisibility } = useAuth();
+
   return (
     <StyledTableRow
       sx={{
@@ -238,7 +277,11 @@ const RowTableVocational = ({ module, assessment }: ModulesAsStudent) => {
       <StyledTableCell align="center">{attendanceGrade ?? "-"}</StyledTableCell>
       <StyledTableCell
         align="center"
-        sx={{ verticalAlign: "center", cursor: "pointer" }}
+        sx={{
+          verticalAlign: "center",
+          cursor: "pointer",
+          ...(!adminVisibility && { display: "none" }),
+        }}
         onClick={() => navigate(`${id}/general-edit`)}
       >
         <EditIcon />
@@ -258,6 +301,7 @@ const RowTableInterpersonal = ({ module, assessment }: ModulesAsStudent) => {
   } = module;
   const { attendanceGrade, homeworkAssessment, finalAssessment } = assessment;
   const navigate = useNavigate();
+  const { adminVisibility } = useAuth();
   return (
     <StyledTableRow
       sx={{
@@ -301,7 +345,11 @@ const RowTableInterpersonal = ({ module, assessment }: ModulesAsStudent) => {
       </StyledTableCell>
       <StyledTableCell
         align="center"
-        sx={{ verticalAlign: "center", cursor: "pointer" }}
+        sx={{
+          verticalAlign: "center",
+          cursor: "pointer",
+          ...(!adminVisibility && { display: "none" }),
+        }}
         onClick={() => navigate(`${id}/general-edit`)}
       >
         <EditIcon />
