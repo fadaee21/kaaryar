@@ -14,7 +14,7 @@ function useProviderAuthValue() {
   const [auth, setAuth] = useState<AuthType>(storedValue);
   const [adminVisibility, setAdminVisibility] = useState(true);
   useEffect(() => {
-    setAdminVisibility(auth.roles.includes("admin"));//some component only visible for admin
+    setAdminVisibility(auth?.roles.includes("admin"));//some component only visible for admin
     setValue(auth);
   }, [auth, setValue]);
 

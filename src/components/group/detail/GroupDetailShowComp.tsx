@@ -1,4 +1,4 @@
-import { Box, Button, Grid, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Grid, List, ListItem, ListItemText } from "@mui/material";
 import { persianDate } from "../../../utils/persianDate";
 interface Props {
   studentCount: number;
@@ -40,9 +40,9 @@ const GroupDetailShowComp = ({
               secondary={
                 <Box component={"span"} sx={{ mt: 1, display: "inline-block" }}>
                   {studentCount}
-                  <Button sx={{ ml: 3 }} variant="contained" size="small">
+                  {/* <Button sx={{ ml: 3 }} variant="contained" size="small">
                     مشاهده
-                  </Button>
+                  </Button> */}
                 </Box>
               }
             />
@@ -53,17 +53,17 @@ const GroupDetailShowComp = ({
               secondary={
                 <Box component={"span"} sx={{ mt: 1, display: "inline-block" }}>
                   {mentorCount}
-                  <Button sx={{ ml: 3 }} variant="contained" size="small">
+                  {/* <Button sx={{ ml: 3 }} variant="contained" size="small">
                     مشاهده
-                  </Button>
+                  </Button> */}
                 </Box>
               }
             />
           </ListItem>
 
-          <ListItem>
-            <ListItemText primary="وضعیت آموزش مهارت‌آموزان" secondary={""} />
-          </ListItem>
+          {/* <ListItem>
+                <ListItemText primary="وضعیت آموزش مهارت‌آموزان" secondary={""} />
+              </ListItem> */}
           <ListItem>
             <ListItemText primary="توضیحات" secondary={description} />
           </ListItem>
@@ -86,14 +86,14 @@ const GroupDetailShowComp = ({
               secondary={
                 <Box component={"span"} sx={{ mt: 1, display: "inline-block" }}>
                   {teachingAssisstantCount}
-                  <Button sx={{ ml: 3 }} variant="contained" size="small">
+                  {/* <Button sx={{ ml: 3 }} variant="contained" size="small">
                     مشاهده
-                  </Button>
+                  </Button> */}
                 </Box>
               }
             />
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <ListItemText
               primary="دوره‌های آموزشی برگزارشده در این گروه"
               secondary={
@@ -102,7 +102,7 @@ const GroupDetailShowComp = ({
                 </Button>
               }
             />
-          </ListItem>
+          </ListItem> */}
         </List>
       </Grid>
     </Grid>

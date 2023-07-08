@@ -9,11 +9,13 @@ import RelatedGroup from "../../addNewCourseComp/RelatedGroup";
 import DateAndDescribe from "./DateAndDescribe";
 import { Button, Stack, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { editAxios } from "../../../api/axios";
 import { convertArrToStr, getNameAndId } from "../../../utils/courseMethod";
 import { RELATED_PATH } from "../../addNewCourseComp/CoreFields";
 import { statusCourseOpt } from "../../../pages/addNewCourse/addNewCourseHelper";
+import { toast } from "react-toastify";
+import { handleError } from "../../../utils/handleError";
 
 interface Prop {
   coreDetail: ShortCoreModule | undefined;
@@ -50,7 +52,7 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
   const [moduleCategoryId, setModuleCategoryId] = useState<undefined | string>(
     category?.id.toString() || undefined
   ); //Group
-  const [errMsg, setErrMsg] = useState("");
+  const [errMsg, setErrMsg] = useState(false);
   const [careerPathwayIdState, setCareerPathwayIdState] = useState<string>(
     `${careerPathwayResponse?.id} + ${careerPathwayResponse?.name}`
   ); //related path
@@ -62,7 +64,7 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
     weblinkFinalProjectResponse || undefined
   );
   const [weblinkLmsCourse, setWeblinkLmsCourse] = useState(
-    weblinkLmsCourseResponse || undefined
+    weblinkLmsCourseResponse || ""
   );
   const [liftState, setLiftState] = useState<LiftUpStateType>({});
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -89,20 +91,26 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
       });
       if (res.status === 200) {
         navigate("/admin/core-course");
+      } else {
+        setErrMsg(true);
+        toast.error("دوره جدید ویرایش نشد");
       }
-      console.log(res);
-      setErrMsg("دوره جدید ایجاد نشد");
-    } catch (error) {
-      console.log(error);
-      setErrMsg("دوره جدید ایجاد نشد");
+    } catch (error: any) {
+      setErrMsg(true);
+      toast.error(handleError(error));
     }
   };
 
-  const { data, isLoading } = useSWR<RelatedPath[]>(RELATED_PATH);
+  const { data, isLoading, error } = useSWR<RelatedPath[]>(RELATED_PATH);
   if (isLoading) {
     return <></>;
   }
-
+   if (error) {
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
+  }
   return (
     <form onSubmit={handleSubmit}>
       <header>
@@ -141,7 +149,7 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
           <FormControl
             disabled={!data && isLoading}
             fullWidth
-            error={!careerPathwayIdState && !!errMsg}
+            error={!careerPathwayIdState && errMsg}
           >
             <InputLabel id="careerPathwayId-label">مسیر مرتبط</InputLabel>
             <Select

@@ -12,7 +12,7 @@ import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import { TablePic2 } from "../../components/table/TablePic";
 import { useAuth } from "../../context/AuthProvider";
-import { MoodleUserAssignee } from "../../model";
+import { StudentEdu } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { AccordionStyled } from "../../styles/search/accordion";
 import useSWR from "swr";
@@ -20,17 +20,18 @@ import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
 //^this component list related student for mentor and ta
 const StudentAssignee = () => {
-  const { data, isLoading, error } = useSWR("/moodle/user/assignee");
-
   const { auth } = useAuth();
   const roles = auth.roles.toString();
+  const { data, isLoading, error } = useSWR<StudentEdu[]>(
+    `/${roles}/user/student`
+  );
   const navigate = useNavigate();
 
   if (isLoading) {
     return <LoadingProgress />;
   }
 
-  if (error ) {
+  if (error) {
     console.log(error);
     navigate("/");
   }
@@ -59,7 +60,7 @@ const StudentAssignee = () => {
 
               <ExcelExport
                 fileName={"excel export"}
-                linkAll="/moodle/user/assignee"
+                linkAll={`/${roles}/user/student`}
                 searchData={null}
                 useIn="studentListMoodleTable"
               />
@@ -69,22 +70,15 @@ const StudentAssignee = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader headerItems={studentTableHeader} />
               <TableBody>
-                {data.map((moodleUser: MoodleUserAssignee, i: React.Key) => {
-                  if (!moodleUser.assigneeContext.student) {
-                    return false;
-                  }
+                {data?.map((moodleUser: StudentEdu, i: React.Key) => {
                   const {
-                    assigneeContext: {
-                      student: {
-                        studentMobile,
-                        studentId,
-                        studentUserName,
-                        studentEmail,
-                        studentCity,
-                        studentFirstName,
-                        studentLastName,
-                      },
-                    },
+                    id,
+                    firstName,
+                    family,
+                    username,
+                    city,
+                    email,
+                    mobile,
                   } = moodleUser;
                   return (
                     <StyledTableRow
@@ -95,59 +89,54 @@ const StudentAssignee = () => {
                       }}
                     >
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{ width: "5%", verticalAlign: "top" }}
                       >
-                        <TablePic2
-                          studentId={studentId}
-                          lastName={studentLastName}
-                        />
+                        <TablePic2 studentId={id} lastName={family} />
                         {/* <TablePic picture={picture} lastName={lastName} /> */}
                       </StyledTableCell>
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{
                           width: "25%",
                           verticalAlign: "top",
                           cursor: "pointer",
                         }}
-                        onClick={() =>
-                          navigate(`/${roles}/student/${studentId}`)
-                        }
+                        onClick={() => navigate(`${id}`)}
                       >
                         <Typography variant="body1">
-                          {studentFirstName + " " + studentLastName}
+                          {firstName + " " + family}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{
                           width: "10%",
                           verticalAlign: "top",
                         }}
                       >
                         <Typography variant="body2" textAlign={"left"}>
-                          {studentUserName}
+                          {username}
                         </Typography>
                       </StyledTableCell>
 
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{
                           width: "30%",
                           verticalAlign: "top",
                         }}
                       >
-                        <Typography variant="body2">{studentCity}</Typography>
+                        <Typography variant="body2">{city}</Typography>
                       </StyledTableCell>
                       <StyledTableCell
-                        align="left"
+                        align="center"
                         sx={{
                           width: "30%",
                           verticalAlign: "top",
                         }}
                       >
-                        <Typography variant="body2">{studentMobile}</Typography>
+                        <Typography variant="body2">{mobile}</Typography>
                       </StyledTableCell>
                       <StyledTableCell
                         align="right"
@@ -156,31 +145,8 @@ const StudentAssignee = () => {
                           verticalAlign: "top",
                         }}
                       >
-                        <Typography variant="body2">{studentEmail}</Typography>
+                        <Typography variant="body2">{email}</Typography>
                       </StyledTableCell>
-
-                      {/* <StyledTableCell
-                        align="left"
-                        sx={{ width: "30%", verticalAlign: "top" }}
-                      >
-                        <ListItem sx={{ pt: 0 }}> */}
-                      {/* <ButtonGroup
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            aria-label="small button group"
-                          >
-                            <Button
-                              onClick={() =>
-                                navigate(`/${roles}/student/${id}`)
-                              }
-                            >
-                              جزییات
-                            </Button>
-                            <Button>ویرایش</Button>
-                          </ButtonGroup> */}
-                      {/* </ListItem>
-                      </StyledTableCell> */}
                     </StyledTableRow>
                   );
                 })}
@@ -189,24 +155,6 @@ const StudentAssignee = () => {
           </TableContainer>
         </Container>
       </Box>
-      {/* {!searchingMoodleStudent && (
-        <Pagination
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            my: 4,
-          }}
-          size="large"
-          count={24}
-          variant="outlined"
-          shape="rounded"
-          page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-            setPage(value);
-          }}
-        />
-      )} */}
     </Box>
   );
 };

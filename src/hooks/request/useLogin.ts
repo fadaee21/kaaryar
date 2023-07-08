@@ -21,7 +21,6 @@ export const useSubmitLogin = (username: string, password: string) => {
         },
         data: bodyContent,
       });
-      console.log(response);
       if (response.status === 201) {
         cookies.set("token", response?.data?.authorization, {
           path: "/",
@@ -47,6 +46,7 @@ export const useSubmitLogin = (username: string, password: string) => {
         }
 
         setAuth({
+          id: response.data.profile.id,
           username,
           roles: [roleResponseServer],
         });

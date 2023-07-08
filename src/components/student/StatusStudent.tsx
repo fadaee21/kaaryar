@@ -9,7 +9,6 @@ interface Prop {
 const StatusStudent = ({ statusForm }: Prop) => {
   const navigate = useNavigate();
   const { adminVisibility } = useAuth();
-  console.log(adminVisibility);
   const {
     trainingStatus,
     nextTrainingStep,

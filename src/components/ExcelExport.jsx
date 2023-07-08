@@ -53,7 +53,7 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
           exportToCSV(c, fileName);
           break;
         case "studentListMoodleTable":
-          const g = allData.map((i) => i.assigneeContext?.student);
+          const g = allData.map((i) => i);
           exportToCSV(g, fileName);
           break;
         case "studentOfAdmin":

@@ -3,31 +3,52 @@ import { SearchField } from "../../styles/search/searchField";
 import { Button, Grid } from "@mui/material";
 import { GreyButton } from "../../styles/Button";
 import SearchIcon from "@mui/icons-material/Search";
+import { useAuth } from "../../context/AuthProvider";
+import { Comment } from "../../model";
 
-const SearchAllComments = () => {
+interface Props {
+  setSearchResult: React.Dispatch<React.SetStateAction<Comment[] | null>>;
+  setLiftUpSearchState: React.Dispatch<
+    React.SetStateAction<{
+      student: string;
+      commenterUser: string;
+    }>
+  >;
+  setSearchingComments: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const SearchAllComments = ({
+  setSearchResult,
+  setLiftUpSearchState,
+  setSearchingComments,
+}: Props) => {
   const [disabledButton, setDisabledButton] = useState(false);
   const [commenterUser, setCommenterUser] = useState("");
   const [student, setStudent] = useState("");
+
+  const { adminVisibility } = useAuth();
+
   useEffect(() => {
-    const buttonStatus = ![commenterUser,student].some(Boolean);
+    setLiftUpSearchState({ student, commenterUser });
+    const buttonStatus = ![commenterUser, student].some(Boolean);
     setDisabledButton(buttonStatus);
-  }, [commenterUser,student]);
+  }, [commenterUser, setLiftUpSearchState, student]);
   const clearSearch = () => {
+    setSearchResult(null);
     setCommenterUser("");
-    setStudent("")
+    setStudent("");
   };
-  const handleSearch = () => {
-    console.log(commenterUser,student);
-  };
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={4}>
-        <SearchString
-          label="نام و نام خانوادگی نظر دهنده"
-          setState={setCommenterUser}
-          state={commenterUser}
-        />
-      </Grid>
+      {adminVisibility && (
+        <Grid item xs={4}>
+          <SearchString
+            label="نام و نام خانوادگی نظر دهنده"
+            setState={setCommenterUser}
+            state={commenterUser}
+          />
+        </Grid>
+      )}
       <Grid item xs={4}>
         <SearchString
           label="نام و نام خانوادگی مهارت آموز"
@@ -50,7 +71,7 @@ const SearchAllComments = () => {
           sx={{ width: "100%" }}
           endIcon={<SearchIcon sx={{ rotate: "90deg" }} />}
           variant="outlined"
-          onClick={handleSearch}
+          onClick={() => setSearchingComments(true)}
           disabled={disabledButton}
         >
           جستجو

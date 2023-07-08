@@ -22,13 +22,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useState } from "react";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
+import { useSWRConfig } from "swr";
 
 const WatchComment = () => {
   const [open, setOpen] = useState(false);
   const { allComment, loading } = useGetOneComment();
   const [idComment, setIdComment] = useState<number>();
   const { removeComment } = useDeleteComment(idComment);
-
+  const { mutate } = useSWRConfig();
   const navigate = useNavigate();
   const {
     auth: { roles },
@@ -40,16 +41,16 @@ const WatchComment = () => {
     id,
     comment,
     sessionDate,
-    isStudentPresent,
-    studentContribute,
+    studentPresent,
+    studentContribution,
     studentTask,
     sessionProblem,
-    studentUser: { firstName, family },
-    commenterUser,
+    student: { firstName, family },
+    commenter,
   } = allComment as Comment;
 
   const handleClickOpenEdit = () => {
-    navigate(`/${roles}/all-comments/${id}/editing`);
+    navigate("editing");
   };
 
   const handleBack = () => navigate(-1);
@@ -59,9 +60,10 @@ const WatchComment = () => {
     setIdComment(id);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setOpen(false);
-    removeComment();
+    await removeComment();
+    mutate(`/${roles}/survey/all`);
     navigate(`/${roles}/all-comments`);
   };
   const handleClose = () => {
@@ -69,7 +71,7 @@ const WatchComment = () => {
   };
 
   return (
-    <Box sx={{mb:20}}>
+    <Box sx={{ mb: 20 }}>
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -79,7 +81,7 @@ const WatchComment = () => {
           }}
         >
           <Typography variant="h6">
-            {/* مشاهده نظر برای {`${firstName} ${family}`} */}
+            مشاهده نظر برای {`${firstName} ${family}`}
           </Typography>
           <Button
             endIcon={<DeleteIcon />}
@@ -118,7 +120,7 @@ const WatchComment = () => {
           <Grid item xs={3}>
             <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">نام منتور</Typography>
-              <Typography variant="body1">{`${commenterUser.firstName} ${commenterUser.family}`}</Typography>
+              <Typography variant="body1">{`${commenter.firstName} ${commenter.family}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
@@ -133,7 +135,12 @@ const WatchComment = () => {
               <Typography variant="body1">
                 {/* in post Date of comment i must change type toISOstring,when fetch Date,it response with one day false! zero utc help to improve this fault */}
                 {/* {dateConverter(zeroUTCOffset(new Date(sessionDate)))} */}
-                {new Intl.DateTimeFormat("fa",{dateStyle:"full"}).format(new Date(sessionDate)).replace(',', '').split(' ').reverse().join(' ')}
+                {new Intl.DateTimeFormat("fa", { dateStyle: "full" })
+                  .format(new Date(sessionDate))
+                  .replace(",", "")
+                  .split(" ")
+                  .reverse()
+                  .join(" ")}
               </Typography>
             </PaperW>
           </Grid>
@@ -142,13 +149,7 @@ const WatchComment = () => {
               <Typography variant="body2">
                 {descComment.allStudentPresent}
               </Typography>
-              <Typography variant="body1">
-                {isStudentPresent === true
-                  ? "بله"
-                  : isStudentPresent === null
-                  ? "فقط بخشی از جلسه را حضور داشت"
-                  : "خیر"}
-              </Typography>
+              <Typography variant="body1">{studentPresent}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={12}>
@@ -168,7 +169,7 @@ const WatchComment = () => {
               <Typography variant="body2">
                 {descComment.allStudentContribute}
               </Typography>
-              <Typography variant="body1">{studentContribute}</Typography>
+              <Typography variant="body1">{studentContribution}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={4}>

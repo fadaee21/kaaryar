@@ -17,6 +17,8 @@ import { ComboBoxAddCourse } from "../../pages/addNewCourse/ComboBoxAddCourse";
 import { convertArrToStr, getTitle } from "../../utils/courseMethod";
 import DateAndDescribe from "../coreCourse/edit/DateAndDescribe";
 import RelatedGroup from "../addNewCourseComp/RelatedGroup";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 type LiftUpStateType = {
   [index: string]: string | undefined;
@@ -49,7 +51,7 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
   const [moduleCategoryId, setModuleCategoryId] = useState<undefined | string>(
     category?.id.toString() || undefined
   ); //Group
-  const [errMsg, setErrMsg] = useState("");
+  const [errMsg, setErrMsg] = useState(false);
   // const [careerPathwayId, setCareerPathwayId] = useState<string | undefined>(
   //   undefined
   // ); //related path
@@ -68,7 +70,8 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
     //handling error and guiding for compulsory field
 
     try {
-      const res = await editAxios(`/modules/${id}`, {
+      setErrMsg(false);
+      await editAxios(`/modules/${id}`, {
         data: {
           name,
           description: liftState.descriptionState,
@@ -79,7 +82,7 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
           endDate: liftState.endDateState,
           // weblinkFinalProject,
           moduleCategoryId,
-          careerPathwayId: 8, //liftUpState.careerPathwayId
+          // careerPathwayId,
           weblinkLmsCourse,
           teachingStatus,
         },
@@ -99,15 +102,13 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
           navigate("/admin/general-course?tab=2");
           break;
         default:
-          navigate("/admin/general-course");
+          setErrMsg(true);
+          toast.error("دوره جدید ایجاد نشد");
           break;
       }
-
-      console.log(res);
-      setErrMsg("دوره جدید ایجاد نشد");
-    } catch (error) {
-      console.log(error);
-      setErrMsg("دوره جدید ایجاد نشد");
+    } catch (error: any) {
+      setErrMsg(true);
+      toast.error(handleError(error));
     }
   };
 

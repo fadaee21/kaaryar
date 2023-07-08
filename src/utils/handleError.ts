@@ -1,22 +1,30 @@
 import { AxiosError } from "axios";
 import { ErrorResponse } from "../model";
 
-export const handleError = (error: AxiosError<ErrorResponse>) => {
+export const handleError = (
+  error: AxiosError<ErrorResponse>
+): string | undefined => {
   if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
+    console.log(error.response);
+    const { data } = error.response;
 
-    console.log(error.response.status);
-    console.log(error.response.headers);
-    const detailError = error.response?.data.detail;
-    if (detailError) {
-      return detailError;
+    if (data?.detail) {
+      const detail = data?.detail;
+      if (Array.isArray(detail)) {
+        return detail[0].loc[1] + " - " + detail[0].msg; //i prefer to send several toast in page,just show first one
+      } else {
+        return detail;
+      }
     }
-    return error.response.data.error.message;
+
+    if (data?.error?.message) {
+      return data.error.message;
+    }
+
+    if (!data) {
+      return "خطای سرور";
+    }
   } else if (error.request) {
-    // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
     console.log(error.request);
     return "درخواست با موفقیت انجام نشد";
   } else {
@@ -24,4 +32,6 @@ export const handleError = (error: AxiosError<ErrorResponse>) => {
     console.log("Error", error.message);
     return "خطای سرور دوباره تلاش کنید";
   }
+
+  return undefined;
 };

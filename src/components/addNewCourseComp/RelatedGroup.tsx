@@ -1,24 +1,34 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import useSWR from "swr";
 import { GroupArray } from "../../model";
-
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { Navigate } from "react-router-dom";
 interface Prop {
-  errMsg: string;
+  errMsg: boolean;
   state: string | undefined;
   setState: (state: string | undefined) => void;
 }
 
 const RelatedGroup = ({ errMsg, state, setState }: Prop) => {
-  const { data, isLoading } = useSWR<GroupArray>(
+  const { data, isLoading, error } = useSWR<GroupArray>(
     "/modules/categories/short-details/all"
   );
-  // if (isLoading) {
-  //   return <></>;
-  // }
+
+   if (error) {
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
+  }
+
   return (
     <>
       {!isLoading && (
-        <FormControl fullWidth error={!state && !!errMsg}>
+        <FormControl fullWidth error={!state && errMsg}>
           <InputLabel id="related-group-label">گروه مرتبط</InputLabel>
           <Select
             labelId="related-group-label"

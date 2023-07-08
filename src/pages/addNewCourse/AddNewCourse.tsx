@@ -59,13 +59,15 @@ const AddNewCourse = () => {
     undefined
   );
   const [teachingStatus, setTeachingStatus] = useState("");
-
-  const [errMsg, setErrMsg] = useState("");
+  const [errMsg, setErrMsg] = useState(false);
   const [loading, setLoading] = useState(false);
   const [courseIdVal, courseNameVal] = getNameAndId(courseNameId); //destruct name and id from courseNameId string
   const [moduleType, subType] = getTypeAndSubtype(courseType); //destruct type and subType value
 
-  useEffect(() => setCourseNameId(""), [courseType]);
+  useEffect(() => {
+    setCourseNameId("");
+    setErrMsg(false);
+  }, [courseType]);
 
   //finding the LINK of request:for english remove hasCategory=false and else set null to disable SWR
   useEffect(() => {
@@ -96,23 +98,28 @@ const AddNewCourse = () => {
   const { data: dataNameCourse } = useSWR<courseNameResponse>(keyNameCourse);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setErrMsg(false);
     e.preventDefault();
     //handling error and guiding for compulsory field
     if ([courseType, courseNameId].some((val) => !val)) {
       toast.error("نوع دوره و نام دوره پر شود");
+      setErrMsg(true);
       return;
     }
     if (subType !== "workshop" && !moduleCategoryId) {
       toast.error("گروه مرتبط پر شود");
+      setErrMsg(true);
       return;
     }
     if (subType !== "workshop" && !teachingStatus) {
       toast.error("وضعیت دوره پر شود");
+      setErrMsg(true);
       return;
     }
     let careerPathwayId;
     if (moduleType === "core" && !liftUpState.careerPathwayId) {
       toast.error("مسیر مرتبط پر شود");
+      setErrMsg(true);
       return;
     } else {
       careerPathwayId = getNameAndId(liftUpState.careerPathwayId)[0]; //destruct name and id from careerPathwayId string
@@ -179,8 +186,8 @@ const AddNewCourse = () => {
           return;
         }
       } else {
-        console.log(res);
-        setErrMsg("دوره جدید ایجاد نشد");
+        toast.error("دوره جدید ایجاد نشد");
+        setErrMsg(true);
       }
     } catch (error: any) {
       toast.error(handleError(error));
@@ -216,7 +223,7 @@ const AddNewCourse = () => {
           </header>
           <Grid container rowSpacing={4} columnSpacing={8}>
             <Grid item xs={6}>
-              <FormControl fullWidth error={!courseType && !!errMsg}>
+              <FormControl fullWidth error={!courseType && errMsg}>
                 <InputLabel id="courseType-label">نوع دوره</InputLabel>
                 <Select
                   labelId="courseType-label"

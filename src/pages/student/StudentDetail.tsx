@@ -25,8 +25,15 @@ import AfterWeekDetailShowComp from "../../components/afterWeek/AfterWeekDetailS
 import GeneralCourseStudent from "../../components/student/GeneralCourseStudent";
 import CoreCourseStudent from "../../components/student/CoreCourseStudent";
 import StatusStudent from "../../components/student/StatusStudent";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { useAuth } from "../../context/AuthProvider";
 
-const StudentAdminDetail = () => {
+const StudentDetail = () => {
+  const {
+    auth: { roles },
+  } = useAuth();
+  const isTa = roles.includes("ta"); //unmount "اطلاعات ارزیابی" for ta
   const [value, setValue] = useState(0);
   const { id } = useParams();
   const studentProfile = `/moodle/user/${id}`;
@@ -53,7 +60,8 @@ const StudentAdminDetail = () => {
     return <LoadingProgress />;
   }
   if (error) {
-    return <p>ERROR</p>;
+    toast.error(handleError(error));
+    navigate("/");
   }
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -80,12 +88,11 @@ const StudentAdminDetail = () => {
             {data?.firstName + " " + data?.family}
           </Typography>
           <Button
-            variant="contained"
-            color="secondary"
-            size="small"
+            variant="outlined"
+            sx={{ px: 5, ml: "auto" }}
+            color="inherit"
             endIcon={<ArrowBackIcon />}
             onClick={() => navigate(-1)}
-            sx={{ ml: "auto" }}
           >
             بازگشت
           </Button>
@@ -101,7 +108,12 @@ const StudentAdminDetail = () => {
           scrollButtons="auto"
         >
           <Tab label="اطلاعات ثبت‌نام" {...a11yProps(0)} />
-          <Tab label="اطلاعات ارزیابی" {...a11yProps(1)} />
+          <Tab
+            label="اطلاعات ارزیابی"
+            {...a11yProps(1)}
+            disabled={isTa}
+            sx={{ ...(isTa && { display: "none" }) }}
+          />
           <Tab label="اطلاعات پذیرش" {...a11yProps(2)} />
           <Tab label="مشخصات فردی" {...a11yProps(3)} />
           <Tab label="وضعیت آموزش" {...a11yProps(4)} />
@@ -144,6 +156,7 @@ const StudentAdminDetail = () => {
           </>
         )}
       </TabPanel>
+
       <TabPanel value={value} index={2}>
         {afterBeforeError ? (
           <p>اطلاعات پذیرش برای این مهارت آموز وجود ندارد</p>
@@ -180,7 +193,7 @@ const StudentAdminDetail = () => {
   );
 };
 
-export default StudentAdminDetail;
+export default StudentDetail;
 
 interface TabPanelProps {
   children?: React.ReactNode;

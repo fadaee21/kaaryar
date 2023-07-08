@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 const Groups = () => {
   const GROUP_ALL =
-    "/modules/categories/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=updated_at";
+    "/modules/categories/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=created_at";
 
   const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<ShortGroup[]>(

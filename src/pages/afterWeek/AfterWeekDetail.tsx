@@ -78,10 +78,10 @@ const AfterWeekDetail = () => {
         }}
       >
         <Button
-          variant="contained"
+          variant="outlined"
+          sx={{ px: 5 }}
+          color="inherit"
           endIcon={<ArrowBackIcon />}
-          color="secondary"
-          size="small"
           onClick={() => navigate(-1)}
         >
           بازگشت

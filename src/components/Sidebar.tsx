@@ -17,7 +17,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import { useNavigate } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { AppBar, DrawerHeader, drawerWidth, ListTextFont, Main } from "../styles/sideBar";
+import {
+  AppBar,
+  DrawerHeader,
+  drawerWidth,
+  ListTextFont,
+  Main,
+} from "../styles/sideBar";
 import { useAuth } from "../context/AuthProvider";
 import { ListItemText, Menu, MenuItem, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -49,7 +55,7 @@ export default function Sidebar({ listRoutes }: any) {
     handleClose();
     navigate("/");
     cookie.remove("token", { path: "/", sameSite: "strict" });
-    setAuth({ roles: [], username: "" });
+    setAuth({ roles: [], username: "", id: null });
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -219,7 +225,7 @@ export default function Sidebar({ listRoutes }: any) {
                         }}
                       >
                         <ListItemIcon>{route.icon}</ListItemIcon>
-                        <ListTextFont sx={{ my:0.25 }} primary={route.name} />
+                        <ListTextFont sx={{ my: 0.25 }} primary={route.name} />
                       </Box>
                     ) : (
                       <Box
@@ -233,7 +239,7 @@ export default function Sidebar({ listRoutes }: any) {
                         }}
                       >
                         <ListItemIcon>{route.icon}</ListItemIcon>
-                        <ListTextFont primary={route.name} sx={{ my:0.25 }} />
+                        <ListTextFont primary={route.name} sx={{ my: 0.25 }} />
                       </Box>
                     )}
                   </ListItemButton>

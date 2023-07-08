@@ -3,29 +3,37 @@ import { Container } from "@mui/system";
 import LoadingProgress from "../../components/LoadingProgress";
 import StudentCard from "../../components/student/StudentCard";
 import useSWR from "swr";
-import { MoodleUserAssignee } from "../../model";
 
+import { useAuth } from "../../context/AuthProvider";
+// import { toast } from "react-toastify";
+// import { handleError } from "../../utils/handleError";
+import { StudentEdu } from "../../model";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const { data, isLoading, error } = useSWR("/moodle/user/assignee");
+  const {
+    auth: { roles },
+  } = useAuth();
+  const { data, isLoading, error } = useSWR<StudentEdu[]>(
+    `/${roles}/user/student`
+  );
 
   if (isLoading) {
     return <LoadingProgress />;
   }
   if (error) {
-    return (
-      <p style={{ display: "flex", justifyContent: "center" }}>Loading Error</p>
-    );
+    // toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
     <Container maxWidth={"lg"}>
       <Grid container spacing={4}>
-        {data.map((student: MoodleUserAssignee) => (
+        {data?.map((student: StudentEdu) => (
           <Grid item sm={12} md={6} key={student.id}>
-            {student.assigneeContext.student && (
-              <StudentCard moodleUser={student} />
-            )}
+            <StudentCard moodleUser={student} />
           </Grid>
         ))}
       </Grid>

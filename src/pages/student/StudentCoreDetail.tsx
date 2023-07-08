@@ -18,7 +18,7 @@ const StudentCoreDetail = () => {
   );
 
   if (isLoading) return <LoadingProgress />;
-  if (error) return <p>ERROR</p>;
+  if (error) navigate("/");
   return (
     <Container maxWidth="lg">
       <header>

@@ -34,7 +34,7 @@ import CoreModuleCourseDetail from "./pages/coreModuleCourses/CoreModuleCourseDe
 import CoreModuleCourseEdit from "./pages/coreModuleCourses/CoreModuleCourseEdit";
 import GeneralCourseEdit from "./pages/generalModuleCourses/GeneralCourseEdit";
 import GeneralDetail from "./pages/generalModuleCourses/GeneralDetail";
-import StudentAdminDetail from "./pages/student/StudentAdminDetail";
+import StudentAdminDetail from "./pages/student/StudentDetail";
 import StudentEditStatus from "./pages/student/StudentEditStatus";
 import StudentCoreDetail from "./pages/student/StudentCoreDetail";
 import StudentTableAdmin from "./pages/student/StudentTableAdmin";

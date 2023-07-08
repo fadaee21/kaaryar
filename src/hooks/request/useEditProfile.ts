@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { editAxios } from "../../api/axios";
+import { editAxios, removeData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 import { handleError } from "../../utils/handleError";
 import { toast } from "react-toastify";
@@ -67,12 +67,31 @@ const useEditProfile = () => {
       profileCurrentJob,
       profileCurrentWorkPlace,
     } = userProfile;
+    const isDelete = [
+      //if these items was empty delete profile
+      profileName,
+      profileFamily,
+    ].every((val) => !val);
+    if (isDelete) {
+      try {
+        setLoadingProfile(true);
+        const res = await removeData(`/user/profile`);
+        if (res.status === 204) {
+          navigate(`/${roles}/volunteer`);
+        }
+      } catch (error: any) {
+        toast.error(handleError(error));
+      } finally {
+        setLoadingProfile(false);
+      }
+      return;
+    }
 
     try {
       setLoadingProfile(true);
       const res = await editAxios(`/user/profile`, {
         data: {
-          profile_data: {
+          profile: {
             aboutMe: about,
             birthday: profileBirth,
             city: profileCity,
@@ -100,7 +119,6 @@ const useEditProfile = () => {
       });
 
       if (res.status === 200) {
-        toast.success("درخواست شما با موفقیت انجام شد");
         navigate(`/${roles}/volunteer`);
       }
       console.log(res);

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  Grid,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Grid from "@mui/material/Grid";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 import useSWR from "swr";
 
@@ -15,7 +13,7 @@ type LiftUpStateType = {
 };
 interface Prop {
   setLiftUpState: React.Dispatch<React.SetStateAction<LiftUpStateType>>;
-  errMsg: string;
+  errMsg: boolean;
 }
 interface RelatedPath {
   name: string;
@@ -44,7 +42,7 @@ const CoreFields = ({ setLiftUpState, errMsg }: Prop) => {
         <FormControl
           disabled={!data && isLoading}
           fullWidth
-          error={!careerPathwayId && !!errMsg}
+          error={!careerPathwayId && errMsg}
         >
           <InputLabel id="careerPathwayId-label">مسیر مرتبط</InputLabel>
           <Select

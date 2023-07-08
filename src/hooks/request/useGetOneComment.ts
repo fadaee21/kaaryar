@@ -15,7 +15,6 @@ const useGetOneComment = () => {
   const linkGetOne =
     roles === "admin" ? `total/survey/${id}` : `${roles}/survey/${id}`;
 
-
   useEffect(() => {
     const oneComment = async () => {
       setLoading(true);
@@ -33,7 +32,7 @@ const useGetOneComment = () => {
         setLoading(false);
       }
     };
-    oneComment()
+    oneComment();
     window.scroll(0, 0);
   }, [linkGetOne, navigate]);
 

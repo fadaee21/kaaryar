@@ -6,7 +6,6 @@ type Prop = {
   studentDetail?: InfoDaum[];
 };
 const StudentDetailMore = ({ studentDetail }: Prop) => {
-  console.log(studentDetail);
   //studentDetail is really shit array,first off arrange to regular object then get key value for mapping dynamically
   const studentDetailArr = arrayArranger(studentDetail);
   const keyArrayOfObject = Object.keys(studentDetailArr);
