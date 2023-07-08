@@ -102,15 +102,15 @@ const BeforeWeekDetailEdit = () => {
           marginRight: 5,
         }}
       >
-        <Button
-          variant="contained"
-          endIcon={<ArrowBackIcon />}
-          color="secondary"
-          size="small"
-          onClick={() => navigate(-1)}
-        >
-          بازگشت
-        </Button>
+    <Button
+            variant="outlined"
+            sx={{ px: 5 }}
+            color="inherit"
+            endIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            بازگشت
+          </Button>
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp

@@ -7,6 +7,8 @@ import { PersistLogin } from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import Unauthorize from "./pages/Unauthorize";
 import NotFound from "./pages/NotFound";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export enum Roles {
   ADMIN = "admin",
@@ -82,6 +84,12 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2500}
+        rtl
+        hideProgressBar
+      />
     </>
   );
 }

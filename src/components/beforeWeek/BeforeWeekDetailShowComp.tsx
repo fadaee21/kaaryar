@@ -31,11 +31,11 @@ import ImageModal from "../ImageModal";
 import useGetImage from "../../hooks/request/useGetImage";
 
 interface ExamStudent {
-  student: BeforeWeekType | null;
+  student: BeforeWeekType | undefined;
   matches: boolean;
   id: string | undefined;
   //typeComp:help to check which page use and show or not show button group
-  typeComp: "exam" | "admission";
+  typeComp: "exam" | "admission" | "student";
   successObject?: string;
   handleOpenAlert?: (alert: "approve" | "disApprove") => void;
 }
@@ -74,6 +74,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          ...(typeComp === "student" && { display: "none" }),
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
@@ -323,22 +324,6 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
-                {/* <ListItemText
-                  primary="آشنایی کار با کامپیوتر"
-                  secondary={student?.computerFamiliarity.map((item2) => (
-                    <Typography
-                      sx={{ display: "inline-block" }}
-                      component="span"
-                      variant="subtitle2"
-                    >
-                      {
-                        computerFamiliarityOpt.find(
-                          (item) => item.value === item2
-                        )?.label
-                      }
-                    </Typography>
-                  ))}
-                /> */}
                 <ListItemText
                   primary="آشنایی کار با کامپیوتر"
                   secondary={student?.computerFamiliarity?.map((item, index) =>
@@ -356,6 +341,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                         sx={{ display: "inline-block" }}
                         component="span"
                         variant="subtitle2"
+                        key={index}
                       >
                         همه موارد
                       </Typography>
@@ -504,7 +490,14 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="یک پاراگراف درباره خود به انگلیسی"
-                  secondary={student?.engPara}
+                  secondary={
+                    <Typography
+                      sx={{ textAlign: "right", textIndent: 8 }}
+                      dir="ltr"
+                    >
+                      {student?.engPara}
+                    </Typography>
+                  }
                 />
               </ListItem>
             </List>
@@ -685,7 +678,11 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           color="secondary"
           size="large"
           aria-label="small button group"
-          sx={{ ...(typeComp === "admission" && { display: "none" }) }}
+          sx={{
+            ...((typeComp === "admission" || typeComp === "student") && {
+              display: "none",
+            }),
+          }}
           disabled={
             student?.acceptWeekChecked !== null ||
             successObject === "acceptWeekChecked"

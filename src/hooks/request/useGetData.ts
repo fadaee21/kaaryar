@@ -1,5 +1,7 @@
 import { useCallback, useState } from "react";
 import { getData } from "../../api/axios";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 const useGetData = () => {
   const [dataCall, setDataCall] = useState<any>();
@@ -10,10 +12,9 @@ const useGetData = () => {
       setLoadingCall(true);
       const response = await getData(address);
       const result = await response.data;
-      console.log(result);
       setDataCall(result);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(handleError(error));
     } finally {
       setLoadingCall(false);
     }

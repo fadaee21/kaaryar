@@ -17,7 +17,7 @@ import { ExcelExport } from "../../components/ExcelExport";
 // } from "../../styles/search/accordion";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import style from "../../styles/search/searchChevron.module.css";
-import TableBodyVolunteer from "../../components/volunteer/table/TableBodyVolunteer";
+import TableBodyVolunteer from "../../components/volunteer/TableBodyVolunteer";
 import useGetData from "../../hooks/request/useGetData";
 import { counterPagination } from "../../utils/counterPagination";
 import LoadingProgress from "../../components/LoadingProgress";
@@ -111,7 +111,7 @@ const Volunteer = () => {
               {/* )} */}
 
               <TableBody>
-                {dataCall?.map((item: Profile) => (
+                {dataCall?.map((item: Profile, i: number) => (
                   <TableBodyVolunteer
                     key={item.id}
                     firstName={item.firstName}
@@ -119,6 +119,7 @@ const Volunteer = () => {
                     username={item.user.username}
                     role={item.role}
                     id={item.id}
+                    counter={i + 1}
                   />
                 ))}
               </TableBody>

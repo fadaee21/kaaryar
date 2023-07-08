@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
-import { fetcherGet } from "../../api/axios";
 import { ShortCoreModule } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";
 import CoreModuleCourseCompEdit from "../../components/coreCourse/edit/CoreModuleCourseCompEdit";
@@ -12,8 +11,7 @@ const CoreModuleCourseEdit = () => {
   const Core_Module_DETAIL = `/modules/details/${coreId}`;
 
   const { data, isLoading, error } = useSWR<ShortCoreModule>(
-    Core_Module_DETAIL,
-    fetcherGet
+    Core_Module_DETAIL
   );
   if (error) {
     console.log(error);

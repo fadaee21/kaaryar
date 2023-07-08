@@ -22,8 +22,7 @@ const useGetValidationToken = () => {
           setTokenValidation(false);
         }
         setLoadingVal(true);
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
         setTokenValidation(false);
         setLoadingVal(true);
         throw new Error("your token is not valid anymore, please log in again");
@@ -36,7 +35,7 @@ const useGetValidationToken = () => {
     if (token) {
       getValid();
     } else {
-      console.log("where is token")
+      console.log("token not found");
       setTokenValidation(false);
       setLoadingVal(true);
     }

@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Divider,
-  // useMediaQuery,
-} from "@mui/material";
+import { Box, Button, ButtonGroup, Container } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 import { RegistrationForm } from "../../model";
@@ -113,7 +106,6 @@ const RegisterFormDetail = () => {
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp student={student} />
-        <Divider />
       </Container>
       <AlertDialog
         handleCloseAlert={handleCloseAlert}

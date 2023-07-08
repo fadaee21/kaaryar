@@ -1,7 +1,6 @@
 import { Container } from "@mui/material";
 
 import useSWR from "swr";
-import { fetcherGet } from "../../api/axios";
 import LoadingProgress from "../../components/LoadingProgress";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -11,7 +10,7 @@ const GroupsEdit = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
   const GROUP_DETAIL = `/modules/categories/details/${groupId}`;
-  const { data, isLoading, error } = useSWR(GROUP_DETAIL, fetcherGet);
+  const { data, isLoading, error } = useSWR(GROUP_DETAIL);
 
   if (error) {
     console.log(error);

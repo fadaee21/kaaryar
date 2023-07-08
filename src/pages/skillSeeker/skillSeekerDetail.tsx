@@ -53,29 +53,29 @@ const SkillSeekerDetail = () => {
           marginRight: 5,
         }}
       >
-        <Button
-          variant="contained"
-          endIcon={<ArrowBackIcon />}
-          color="secondary"
-          size="small"
-          onClick={() => navigate(-1)}
-        >
-          بازگشت
-        </Button>
+    <Button
+            variant="outlined"
+            sx={{ px: 5 }}
+            color="inherit"
+            endIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            بازگشت
+          </Button>
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp student={student?.regForm as RegistrationForm} />
         <Divider />
         <BeforeWeekDetailShowComp
           typeComp="admission"
-          student={student?.beforeWeekForm as BeforeWeekType | null}
+          student={student?.beforeWeekForm as BeforeWeekType }
           matches={matches}
           id={id}
         />
         <Divider />
         <AfterWeekDetailShowComp
           typeComp="admission"
-          student={student?.afterWeekForm as AfterWeekType | null}
+          student={student?.afterWeekForm as AfterWeekType }
           matches={matches}
           id={id}
         />

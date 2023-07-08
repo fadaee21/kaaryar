@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import useSWR from "swr";
 import LoadingProgress from "../../components/LoadingProgress";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import { CommentTable } from "../../model";
+import { Comment } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { Container } from "@mui/system";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  Alert,
+  AccordionDetails,
   Box,
   IconButton,
   ListItem,
@@ -23,6 +25,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import style from "../../styles/search/searchChevron.module.css";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
 import { counterPagination } from "../../utils/counterPagination";
@@ -32,57 +35,85 @@ import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
 import { commentsTableHeader } from "../../components/table/helper-header";
 import { persianDate } from "../../utils/persianDate";
+import {
+  AccordionStyled,
+  AccordionSummaryStyled,
+} from "../../styles/search/accordion";
+import SearchAllComments from "./SearchAllComments";
+import TableEmpty from "../../components/table/TableEmpty";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 const Comments = () => {
+  const [chevronDir, setChevronDir] = useState(false);
+
+  // ^searching- i have to create logic if user want delete a comment on search table, i need to code fetching search here that if user delete ane comment mutate search api to see latest content
+  const [liftUpSearchState, setLiftUpSearchState] = useState<{
+    student: string;
+    commenterUser: string;
+  }>({ student: "", commenterUser: "" });
+  const [searchingComments, setSearchingComments] = useState(false);
+  const {
+    auth: { id },
+    adminVisibility,
+  } = useAuth();
+  const SEARCH_URL = `/total/survey/search?commenterId=${
+    !adminVisibility ? id : "" //while you are not admin send your id as commenter by default otherwise you can search for commenter
+  }&commenterName=${liftUpSearchState?.commenterUser}&studentName=${
+    liftUpSearchState?.student
+  }&pageNum=1&pageSize=100&orderAscending=false&orderBy=created_at`;
+
+  const { error: errorSearch, mutate } = useSWR(
+    searchingComments ? SEARCH_URL : null,
+    {
+      onSuccess: (data) => {
+        setSearchingComments(false); //after get response disable swr, otherwise typing every character in textField send new req to server
+        setSearchResult(data);
+      },
+      onError: () => setSearchingComments(false),
+    }
+  );
+  if (errorSearch) {
+    toast.error(handleError(errorSearch));
+  }
+  // ^searching
+
   const [page, setPage] = useState(1);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [searchResult, setSearchResult] = useState<Comment[] | null>(null);
   const { auth } = useAuth();
   const roleAuth = auth.roles.toString();
   const navigate = useNavigate();
   const pageSize = 10;
-  const { getListComments, commentsTable, loading, commentCounter } =
+  const { commentsTable, commentsTableLoading, commentCounter, refreshData } =
     useGetComments(page, pageSize);
   const handleClickOpenEdit = (id: any) => {
-    navigate(`/${roleAuth}/all-comments/${id}/editing`);
+    navigate(`${id}/editing`);
   };
   const [idComment, setIdComment] = useState<number>();
-  const {
-    removeComment,
-    refresh,
-    errRemoveMsg,
-    setErrRemoveMsg,
-    successRemoveMsg,
-    setSuccessRemoveMsg,
-  } = useDeleteComment(idComment);
+  const { removeComment } = useDeleteComment(idComment);
 
   const handleClickOpen = (id: number) => {
     setOpen(true);
     setIdComment(id);
   };
 
-  const handleDelete = () => {
+  //the bottleneck of this component was deleting,because after deleting in search table you should see the latest content and that's why i have to setSearchingComments(true) that swr let mutate searched data
+  const handleDelete: () => void = async () => {
     setOpen(false);
-    removeComment();
+    await removeComment();
+    setSearchingComments(true);
+    refreshData();
+    mutate();
   };
   const handleClose = () => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    getListComments();
-    // eslint-disable-next-line
-  }, [page, refresh]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setErrRemoveMsg("");
-      setSuccessRemoveMsg("");
-    }, 3000);
-  }, [errRemoveMsg, setErrRemoveMsg, successRemoveMsg, setSuccessRemoveMsg]);
-
-  if (loading) {
+  if (commentsTableLoading) {
     return <LoadingProgress />;
   }
+
   return (
     <>
       <Box component={"article"} sx={{ m: 2 }}>
@@ -93,108 +124,145 @@ const Comments = () => {
           >
             <Typography variant="h4"> فهرست نظرات</Typography>
           </Box>
+
+          <AccordionStyled>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
+            >
+              <AccordionSummaryStyled
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => setChevronDir(!chevronDir)}
+              >
+                <Typography variant="button">جستجو</Typography>
+                <ExpandMoreIcon
+                  className={chevronDir ? style.rotate180 : style.rotate0}
+                />
+              </AccordionSummaryStyled>
+
+              {/* <ExcelExport
+                  fileName={"Applicant Info"}
+                  searchData={[]}
+                  linkAll=""
+                  useIn="reg"
+                /> */}
+            </Box>
+            <AccordionDetails>
+              <Box
+                sx={{
+                  width: "100%",
+                  my: 3,
+                }}
+              >
+                <SearchAllComments
+                  setSearchResult={setSearchResult}
+                  setLiftUpSearchState={setLiftUpSearchState}
+                  setSearchingComments={setSearchingComments}
+                />
+              </Box>
+            </AccordionDetails>
+          </AccordionStyled>
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHeader headerItems={commentsTableHeader} />
+              {/* //!for empty response of search don't return TableHeader */}
+              {searchResult?.length !== 0 && (
+                <TableHeader headerItems={commentsTableHeader} />
+              )}
               <TableBody>
-                {commentsTable?.map((commentItem: CommentTable) => {
-                  const {
-                    id,
-                    course,
-                    studentUser,
-
-                    createTime,
-                    commenterUser,
-                  } = commentItem;
-
-                  return (
-                    <StyledTableRow
-                      key={id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
-                    >
-                      <StyledTableCell
-                        component="th"
-                        scope="row"
-                        align="center"
-                        sx={{ width: "10%", verticalAlign: "center" }}
-                      >
-                        {/* <Typography variant="body2"> */}
-                        {persianDate(createTime)}
-                        {/* </Typography> */}
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
+                {(searchResult ?? commentsTable)?.map(
+                  (commentItem: Comment) => {
+                    const { id, module, student, createTime, commenter } =
+                      commentItem;
+                    return (
+                      <StyledTableRow
+                        key={id}
                         sx={{
-                          width: "15%",
-                          verticalAlign: "center",
-                          cursor: "pointer",
-                        }}
-                        onClick={() =>
-                          navigate(`/${roleAuth}/all-comments/${id}`)
-                        }
-                      >
-                        <Typography variant="body1">
-                          {studentUser.firstName + " " + studentUser.family}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        sx={{ width: "15%", verticalAlign: "center" }}
-                      >
-                        <Typography variant="body2">
-                          {commenterUser.firstName + " " + commenterUser.family}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        sx={{ width: "15%", verticalAlign: "center" }}
-                      >
-                        <Typography variant="body2">
-                          {course?.fullname}
-                        </Typography>
-                      </StyledTableCell>
-
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          width: "10%",
-                          verticalAlign: "center",
+                          "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
-                        <ListItem
-                          sx={{ pt: 0, justifyContent: "center" }}
-                          alignItems="center"
+                        <StyledTableCell
+                          component="th"
+                          scope="row"
+                          align="center"
+                          sx={{ width: "10%", verticalAlign: "center" }}
                         >
-                          <IconButton
-                            onClick={() =>
-                              navigate(`/${roleAuth}/all-comments/${id}`)
-                            }
+                          {persianDate(createTime)}
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          sx={{
+                            width: "15%",
+                            verticalAlign: "center",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => navigate(`${id}`)}
+                        >
+                          <Typography variant="body1">
+                            {student.firstName + " " + student.family}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          sx={{ width: "15%", verticalAlign: "center" }}
+                        >
+                          <Typography variant="body1">
+                            {commenter?.firstName + " " + commenter?.family}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          sx={{ width: "15%", verticalAlign: "center" }}
+                        >
+                          <Typography variant="body1">
+                            {module?.name}
+                          </Typography>
+                        </StyledTableCell>
+
+                        <StyledTableCell
+                          align="center"
+                          sx={{
+                            width: "10%",
+                            verticalAlign: "center",
+                          }}
+                        >
+                          <ListItem
+                            sx={{ pt: 0, justifyContent: "center" }}
+                            alignItems="center"
                           >
-                            <VisibilityIcon fontSize="small" color="info" />
-                          </IconButton>
-                          <IconButton
-                            sx={{
-                              ...(roleAuth === "admin" && { display: "none" }),
-                            }}
-                            onClick={() => handleClickOpenEdit(id)}
-                          >
-                            <EditIcon fontSize="small" color="primary" />
-                          </IconButton>
-                          <IconButton
-                            sx={{
-                              ...(roleAuth === "admin" && { display: "none" }),
-                            }}
-                            onClick={() => handleClickOpen(id)}
-                          >
-                            <DeleteIcon fontSize="small" color="error" />
-                          </IconButton>
-                        </ListItem>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })}
+                            <IconButton onClick={() => navigate(`${id}`)}>
+                              <VisibilityIcon fontSize="small" color="info" />
+                            </IconButton>
+                            <IconButton
+                              sx={{
+                                ...(roleAuth === "admin" && {
+                                  display: "none",
+                                }),
+                              }}
+                              onClick={() => handleClickOpenEdit(`${id}`)}
+                            >
+                              <EditIcon fontSize="small" color="primary" />
+                            </IconButton>
+                            <IconButton
+                              sx={{
+                                ...(roleAuth === "admin" && {
+                                  display: "none",
+                                }),
+                              }}
+                              onClick={() => handleClickOpen(id)}
+                            >
+                              <DeleteIcon fontSize="small" color="error" />
+                            </IconButton>
+                          </ListItem>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  }
+                )}
                 <Dialog
                   open={open}
                   onClose={handleClose}
@@ -219,34 +287,28 @@ const Comments = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          {errRemoveMsg && (
-            <Alert severity="error" sx={{ width: "17rem", my: 2 }}>
-              {errRemoveMsg}
-            </Alert>
-          )}
-          {successRemoveMsg && (
-            <Alert severity="success" sx={{ width: "17rem", my: 2 }}>
-              {successRemoveMsg}
-            </Alert>
-          )}
+          {/* //!for empty response of search return TableEmpty */}
+          {searchResult?.length === 0 && <TableEmpty />}
         </Container>
       </Box>
-      <Pagination
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          my: 4,
-        }}
-        size="large"
-        count={counterPagination(commentCounter, pageSize)}
-        variant="outlined"
-        shape="rounded"
-        page={page}
-        onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
-          setPage(value);
-        }}
-      />
+      {!searchResult && (
+        <Pagination
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            my: 4,
+          }}
+          size="large"
+          count={counterPagination(commentCounter?.count, pageSize)}
+          variant="outlined"
+          shape="rounded"
+          page={page}
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
+            setPage(value);
+          }}
+        />
+      )}
     </>
   );
 };

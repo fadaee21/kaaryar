@@ -32,7 +32,7 @@ const TableBodyLanguage = ({ englishCourse, counter }: Prop) => {
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{counter + 1}</Typography>
+        <Typography variant="body2">{counter+1}</Typography>
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>

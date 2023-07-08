@@ -1,4 +1,4 @@
-import { Grid, List, ListItem, ListItemText } from "@mui/material";
+import { Grid, Link, List, ListItem, ListItemText } from "@mui/material";
 import { ShortCoreModule } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
 import { convertArrToStr } from "../../../utils/courseMethod";
@@ -14,14 +14,14 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
     startDate,
     endDate,
     weblinkLmsCourse,
-    instructorCount,
     description,
     name,
     careerPathway,
     instructors,
     weblinkFinalProject,
     studentCount,
-    mentorCount,
+    numberOfHours,
+    deadlineFinalProject,
   } = coreDetail ?? {};
   return (
     <Grid container>
@@ -53,13 +53,16 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
               primary="محتوای دوره"
               secondary={
                 weblinkLmsCourse ? (
-                  <a
+                  <Link
                     href={`https://www.${weblinkLmsCourse}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    variant="body2"
+                    color="inherit"
+                    underline="hover"
                   >
                     {weblinkLmsCourse}
-                  </a>
+                  </Link>
                 ) : (
                   "-"
                 )
@@ -67,14 +70,17 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
             />
           </ListItem>
           <ListItem>
-            <ListItemText primary="ددلاین پروژه پایانی" secondary="--" />
+            <ListItemText
+              primary="ددلاین پروژه پایانی"
+              secondary={deadlineFinalProject ?? "-"}
+            />
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <ListItemText
               primary="تعداد مربیان حل تمرین فعال این دوره"
               secondary={instructorCount}
             />
-          </ListItem>
+          </ListItem> */}
 
           <ListItem>
             <ListItemText primary="توضیحات" secondary={description ?? "-"} />
@@ -89,7 +95,7 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
           <ListItem>
             <ListItemText
               primary="مسیر مرتبط"
-              secondary={careerPathway?.name}
+              secondary={careerPathway?.name || "-"}
             />
           </ListItem>
           <ListItem>
@@ -111,13 +117,16 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
               primary="پروژه پایانی"
               secondary={
                 weblinkFinalProject ? (
-                  <a
+                  <Link
                     href={`https://www.${weblinkFinalProject}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    variant="body2"
+                    color="inherit"
+                    underline="hover"
                   >
                     {weblinkFinalProject}
-                  </a>
+                  </Link>
                 ) : (
                   "-"
                 )
@@ -126,16 +135,22 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
           </ListItem>
           <ListItem>
             <ListItemText
-              primary="تعداد مهارت‌آموزان این دوره"
-              secondary={studentCount}
+              primary="تعداد ساعات دوره"
+              secondary={numberOfHours || "-"}
             />
           </ListItem>
           <ListItem>
             <ListItemText
+              primary="تعداد مهارت‌آموزان این دوره"
+              secondary={studentCount}
+            />
+          </ListItem>
+          {/* <ListItem>
+            <ListItemText
               primary="تعداد منتورهای فعال این دوره"
               secondary={mentorCount}
             />
-          </ListItem>
+          </ListItem> */}
         </List>
       </Grid>
     </Grid>

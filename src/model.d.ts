@@ -4,8 +4,7 @@ export interface AuthType {
   username: string;
   password?: string;
   roles: RoleType[];
-  // token: string;
-  id?: number;
+  id: number | null;
 }
 
 export interface AuthContextType {
@@ -29,33 +28,6 @@ interface RolesStudent {
   userRole: string;
 }
 
-export interface StudentUser {
-  id: number;
-  username: string;
-  firstName: string;
-  family: string;
-  roles: RolesStudent[];
-  city: string;
-  email: string;
-  mobile: string;
-  phone: string;
-  username: string;
-}
-export interface StudentId {
-  id: number;
-}
-
-export interface StudentProp {
-  student: StudentUser;
-}
-
-//types for comment
-
-export interface Course {
-  id: number;
-  fullname: string;
-}
-
 export interface MentorUser {
   city: string;
   email: string;
@@ -67,59 +39,62 @@ export interface MentorUser {
   roles: Array;
   username: string;
 }
+
+export interface StudentComment {
+  role: string;
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+// export interface Comment {
+//   isChecked: boolean;
+//   comment: string;
+//   createTime: string;
+//   id: number;
+//   sessionDate: string;
+//   sessionProblem: string;
+//   studentContribute: string;
+//   isStudentPresent: true;
+//   studentTask: string;
+//   updateTime: string;
+//   studentUser: StudentComment;
+//   course: ModulesAsStudentModule;
+//   commenter: StudentComment;
+// }
+
 export interface Comment {
   isChecked: boolean;
   comment: string;
-  createTime: string;
-  id: number;
+  studentContribution: string | null;
   sessionDate: string;
+  studentPresent: string;
   sessionProblem: string;
-  studentContribute: string;
-  isStudentPresent: true;
   studentTask: string;
-  updateTime: string;
-  studentUser: StudentUser;
-  course: Course;
-  commenterUser: MentorUser;
-}
-
-// export interface Comment {
-//   checked: unknown;
-//   comment: string;
-//   sessionDate: string;
-//   isStudentPresent: boolean;
-//   studentContribute: string;
-//   studentTask: string;
-//   sessionProblem: string;
-//   studentId: number;
-//   courseId: unknown;
-//   commenterId: number;
-//   createTime: string;
-//   updateTime: string;
-//   deleted: false;
-//   id: number;
-//   deleteTime: unknown;
-// }
-
-export interface CommentTable {
-  checked: boolean | null;
-  comment: string;
-  sessionDate: string;
-  isStudentPresent: boolean;
-  studentContribute: string;
-  studentTask: string;
-  sessionProblem: string;
   studentId: number;
-  courseId: number;
-  mentorId: number;
-  createTime: string;
-  updateTime: null;
-  deleted: false;
+  moduleId: number;
+  commenterId: number;
+  isDeleted: boolean;
   id: number;
+  createTime: string;
+  updateTime: string | null;
   deleteTime: string | null;
-  studentUser: MoodleUser;
-  commenterUser: MoodleUser;
-  course: Course;
+  commenterRole: string;
+  student: StudentComment;
+  commenter: StudentComment;
+  module: ModulesAsStudentModule;
 }
 
 export interface editCommentProp {
@@ -441,6 +416,8 @@ export interface Instructor {
   timezone: string;
   calendarType: string;
   id: number;
+  roles?: Role[];
+  picture?: any;
 }
 
 export interface TeachingAssistant {
@@ -498,13 +475,22 @@ export interface StudentEdu {
   timezone: string;
   calendarType: string;
   id: number;
+  picture: Picture;
+  roles: Role[];
 }
+export type ModuleType = "core" | "general";
+export type ModuleSubType =
+  | "workshop"
+  | "unassigned"
+  | "english_module"
+  | "interpersonal_skills"
+  | "vocational_skills";
 
 export interface ModuleGroup {
   name: string;
   description: any;
-  moduleType: string;
-  subType: string;
+  moduleType: ModuleType;
+  subType: ModuleSubType;
   isActive: boolean;
   teachingStatus: any;
   levelName: any;
@@ -586,7 +572,7 @@ export interface ModuleAll {
   name: string;
   description: any;
   moduleType: string;
-  subType: string;
+  subType: ModuleSubType;
   isActive: boolean;
   teachingStatus: any;
   levelName?: string;
@@ -617,7 +603,7 @@ export interface ShortCoreModule {
   name: string;
   description: string;
   moduleType: string;
-  subType: string;
+  subType: ModuleSubType;
   isActive: boolean;
   teachingStatus: string;
   levelName: any;
@@ -632,7 +618,8 @@ export interface ShortCoreModule {
   category: Category;
   careerPathway: CareerPathway;
   instructors: Instructor[];
-  numberOfHours: undefined | string;
+  numberOfHours: string;
+  deadlineFinalProject: any;
 }
 
 export interface WorkshopShort {
@@ -643,7 +630,7 @@ export interface WorkshopShort {
   name: string;
   description: string;
   moduleType: string;
-  subType: string;
+  subType: ModuleSubType;
   isActive: boolean;
   teachingStatus: string;
   levelName: any;
@@ -668,7 +655,7 @@ export interface EnglishShort {
   name: string;
   description: string;
   moduleType: string;
-  subType: string;
+  subType: ModuleSubType;
   isActive: boolean;
   teachingStatus: string;
   levelName: string;
@@ -683,4 +670,182 @@ export interface EnglishShort {
   category: Category;
   careerPathway: CareerPathway;
   instructors: Instructor[];
+}
+
+//type for student
+
+export interface StudentInfo {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  roles: Role[];
+  picture: Picture;
+  infoData: InfoDaum[];
+  modulesAsStudent: ModulesAsStudent[];
+  modulesAsInstructor: ModulesAsInstructor[];
+  modulesAsTA: ModulesAsTa[];
+  modulesAsMentor: ModulesAsMentor[];
+  statusForm: StatusForm;
+}
+
+export interface Role {
+  name: string;
+  userRole: string;
+  description: string;
+  archeType: string;
+  id: number;
+}
+
+export interface Picture {
+  imageAddress: string;
+  pathnamehash: string;
+  userid: any;
+  id: number;
+}
+
+export interface InfoDaum {
+  field: Field;
+  data: string;
+}
+
+export interface Field {
+  name: string;
+  id: number;
+}
+
+export interface ModulesAsStudent {
+  moduleId: number;
+  studentId: number;
+  assessmentId: number;
+  module: ModulesAsStudentModule;
+  assessment: ModulesAsStudentAssessment;
+}
+export interface ModuleAsStudentForDetail extends ModulesAsStudent {
+  student: StudentEdu;
+}
+export interface ModulesAsStudentModule {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string | null;
+  numberOfHours: string | null;
+  moduleType?: string;
+  subType?: string;
+  isActive: boolean;
+  isImported: any;
+  teachingStatus: any;
+  levelName: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string | null;
+  weblinkFinalProject: string | null;
+  deadlineFinalProject: string | null;
+  weblinkLmsCourse: string | null;
+  id: number;
+  createdAt: string;
+  updatedAt: string | null;
+  category: Category | null;
+  careerPathway: CareerPathway | null;
+  instructors: Instructor[];
+}
+export interface ModulesAsMentorTA {
+  name: string;
+  description: any;
+  numberOfHours: any;
+  moduleType: string;
+  subType: ModuleSubType;
+  isActive: boolean;
+  isImported: any;
+  teachingStatus: any;
+  levelName: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  deadlineFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ModulesAsStudentAssessment {
+  finalProjectWeblink: string;
+  finalProjectGrade: number;
+  finalGrade: number;
+  attendanceQuality: AssessmentScore;
+  homeworkAssessment: AssessmentScore;
+  finalAssessment: AssessmentScore | null;
+  finalStudentStatus?: AssessmentScore;
+  nextModule?: NextModule;
+  attendanceGrade: number | null;
+}
+
+export interface AssessmentScore {
+  value: string;
+  id: number;
+}
+
+export interface StatusForm {
+  afterWeekChecked: boolean;
+  beforeWeekChecked: boolean;
+  description: string | null;
+  regChecked: boolean;
+  registrationCode: string;
+  id: number;
+  trainingStatus: DetailStudentStatus | null;
+  withdrawalReason: DetailStudentStatus | null;
+  nextTrainingStep: DetailStudentStatus | null;
+  referralToFinance: DetailStudentStatus | null;
+}
+
+export interface DetailStudentStatus {
+  value: string;
+  id: number;
+}
+export interface NextModule {
+  name: string;
+  description?: string;
+  numberOfHours: any;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  isImported: any;
+  teachingStatus?: string;
+  levelName: any;
+  startDate: string;
+  endDate?: string;
+  weblinkFeedbackForm?: string;
+  weblinkFinalProject?: string;
+  deadlineFinalProject?: string;
+  weblinkLmsCourse?: string;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ErrorResponse {
+  detail: string | DetailError[];
+  error: { code: number; message: string; status: string };
+}
+
+interface DetailError {
+  loc: string[];
+  msg: string;
+  type: string;
 }

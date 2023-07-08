@@ -12,7 +12,7 @@ import { useApproveWeek } from "../../hooks/request/useApprove";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const BeforeWeekDetail = () => {
-  const [student, setStudent] = useState<BeforeWeekType | null>(null);
+  const [student, setStudent] = useState<BeforeWeekType>();
   const [loading, setLoading] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertType, setAlertType] = useState<
@@ -74,18 +74,20 @@ const BeforeWeekDetail = () => {
           marginRight: 5,
         }}
       >
-        <Button
-          variant="contained"
-          endIcon={<ArrowBackIcon />}
-          color="secondary"
-          size="small"
-          onClick={() => navigate(-1)}
-        >
-          بازگشت
-        </Button>
+    <Button
+            variant="outlined"
+            sx={{ px: 5 }}
+            color="inherit"
+            endIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            بازگشت
+          </Button>
       </Box>
       <Container maxWidth="lg">
-        <RegisterFormDetailComp student={student?.registrationForm as RegistrationForm} />
+        <RegisterFormDetailComp
+          student={student?.registrationForm as RegistrationForm}
+        />
         <Divider />
         <BeforeWeekDetailShow
           typeComp="exam"

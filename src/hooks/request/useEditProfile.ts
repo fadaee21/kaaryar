@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { editAxios } from "../../api/axios";
+import { editAxios, removeData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-//TODO:look again maybe you don't need to use HOOK, just regular function is ok
+import { handleError } from "../../utils/handleError";
+import { toast } from "react-toastify";
 interface RelatedLink {
   web?: string;
   linkedin?: string;
@@ -66,12 +67,31 @@ const useEditProfile = () => {
       profileCurrentJob,
       profileCurrentWorkPlace,
     } = userProfile;
+    const isDelete = [
+      //if these items was empty delete profile
+      profileName,
+      profileFamily,
+    ].every((val) => !val);
+    if (isDelete) {
+      try {
+        setLoadingProfile(true);
+        const res = await removeData(`/user/profile`);
+        if (res.status === 204) {
+          navigate(`/${roles}/volunteer`);
+        }
+      } catch (error: any) {
+        toast.error(handleError(error));
+      } finally {
+        setLoadingProfile(false);
+      }
+      return;
+    }
 
     try {
       setLoadingProfile(true);
       const res = await editAxios(`/user/profile`, {
         data: {
-          profile_data: {
+          profile: {
             aboutMe: about,
             birthday: profileBirth,
             city: profileCity,
@@ -97,13 +117,16 @@ const useEditProfile = () => {
           },
         },
       });
-      const data = res.data;
-      console.log(data);
+
+      if (res.status === 200) {
+        navigate(`/${roles}/volunteer`);
+      }
+      console.log(res);
     } catch (error) {
-      console.log(error);
+      toast.error(handleError(error as any));
+    } finally {
+      setLoadingProfile(false);
     }
-    setLoadingProfile(false);
-    navigate(`/${roles}/volunteer`);
   };
 
   return { editProfile, loadingProfile };

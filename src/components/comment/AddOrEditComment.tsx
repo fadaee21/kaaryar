@@ -1,14 +1,11 @@
-import {
-  Autocomplete,
-  Button,
-  FormHelperText,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { JalaliDatePicker } from "./JalaliDatePicker";
-import React, { useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useAddComment } from "../../hooks/request/useAddComment";
-import { Comment, Course, StudentId } from "../../model";
+import { Comment, ModulesAsStudentModule } from "../../model";
 import { FormBox, SelectBox } from "../../styles/addComment/formBox";
 import Commenting from "./Commenting";
 import dayjs from "dayjs";
@@ -19,33 +16,23 @@ import {
   allStudentPresent,
   descComment,
 } from "./commentOptions";
-// import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
+import { Select } from "@mui/material";
 
 interface AddCommentType {
-  studentId: StudentId | null; //this prop just for adding
   compType: "adding" | "editing";
   allComment: Comment | null; //this prop just for editing
 }
-const AddOrEditComment = ({
-  studentId,
-  compType,
-  allComment,
-}: AddCommentType) => {
-  const [course, setCourse] = useState<Course | null>(
-    allComment ? allComment.course : null
+const AddOrEditComment = ({ compType, allComment }: AddCommentType) => {
+  const [course, setCourse] = useState<ModulesAsStudentModule | null>(
+    allComment ? allComment.module : null
   );
   const [studentContribute, setStudentContribute] = useState(
-    allComment ? allComment.studentContribute : ""
+    allComment?.studentContribution ?? ""
   );
   const [studentPresent, setStudentPresent] = useState(
-    allComment
-      ? allComment.isStudentPresent === true
-        ? "بله"
-        : allComment.isStudentPresent === false
-        ? "خیر"
-        : "فقط بخشی از جلسه را حضور داشت"
-      : ""
+    allComment?.studentPresent || ""
   );
+
   const [studentTask, setStudentTask] = useState(
     allComment ? allComment.studentTask : ""
   );
@@ -57,32 +44,25 @@ const AddOrEditComment = ({
   );
   const [comment, setComment] = useState(allComment ? allComment.comment : "");
 
-  const { setErrMsg, allCourse, postComment, errMsg, putComment } =
-    useAddComment(
-      course,
-      studentId,
-      comment,
-      sessionDate!.toISOString(),
-      sessionProblem,
-      studentTask,
-      studentContribute,
-      studentPresent
-    );
+  const { allCourse, postComment, putComment, courseLoading } = useAddComment(
+    course,
+    comment,
+    sessionDate!.toISOString(),
+    sessionProblem,
+    studentTask,
+    studentContribute,
+    studentPresent
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     compType === "adding" && postComment();
-    compType === "editing" &&
-      putComment(allComment?.id, allComment?.studentUser);
+    compType === "editing" && putComment(allComment?.id);
   };
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [comment, course, setErrMsg, studentId]);
 
   const defaultProps1 = {
     options: allCourse,
-    getOptionLabel: (option: Course) => option.fullname,
+    getOptionLabel: (option: ModulesAsStudentModule) => option.name,
   };
 
   return (
@@ -91,21 +71,27 @@ const AddOrEditComment = ({
         <Typography variant="body2" gutterBottom>
           نام دوره
         </Typography>
-        <Autocomplete
-          {...defaultProps1}
-          disablePortal
-          id="course-name"
-          options={allCourse}
-          renderInput={(params) => <TextField {...params} />}
-          onChange={(event: any, newValue: Course | null) => {
-            setCourse(newValue);
-          }}
-          value={course}
-          isOptionEqualToValue={(option, value) =>
-            option.fullname === value.fullname
-          }
-        />
+        {!courseLoading && allCourse ? (
+          <Autocomplete
+            {...defaultProps1}
+            disablePortal
+            id="course-name"
+            options={allCourse}
+            renderInput={(params) => <TextField {...params} />}
+            onChange={(
+              _event: any,
+              newValue: ModulesAsStudentModule | null
+            ) => {
+              setCourse(newValue);
+            }}
+            value={course}
+            isOptionEqualToValue={(option, value) => option.name === value.name}
+          />
+        ) : (
+          <Select disabled  value={""} />
+        )}
       </SelectBox>
+
       <SelectBox>
         <Typography variant="body2" gutterBottom>
           تاریخ جلسه
@@ -179,9 +165,6 @@ const AddOrEditComment = ({
         >
           {compType === "adding" ? "ارسال" : "ویرایش"}
         </Button>
-        <FormHelperText error>
-          <Typography variant="caption">{errMsg ? errMsg : " "}</Typography>
-        </FormHelperText>
       </SelectBox>
     </FormBox>
   );

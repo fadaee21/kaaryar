@@ -4,7 +4,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useParams } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import useSWR from "swr";
-import { fetcherGet } from "../../api/axios";
 import { persianDate } from "../../utils/persianDate";
 import { ShortCoreModule } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";
@@ -15,8 +14,7 @@ const CoreModuleCourseDetail = () => {
   const Core_Module_DETAIL = `/modules/details/${coreId}`;
 
   const { data, isLoading, error } = useSWR<ShortCoreModule>(
-    Core_Module_DETAIL,
-    fetcherGet
+    Core_Module_DETAIL
   );
   if (error) {
     console.log(error);

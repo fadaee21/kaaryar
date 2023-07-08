@@ -18,11 +18,10 @@ type Prop2 = {
 const TablePic = ({ picture, lastName }: Prop) => {
   const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   React.useEffect(() => {
-    if (picture !== null) {
+    if (picture) {
       getPicture(picture?.imageAddress);
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [getPicture, picture]);
 
   return (
     <>

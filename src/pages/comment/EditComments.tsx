@@ -21,8 +21,8 @@ const EditComments = () => {
         }}
       >
         <Typography variant="h5" gutterBottom sx={{ width: "100% !important" }}>
-          ویرایش گزارش برای {allComment?.studentUser?.firstName}{" "}
-          {allComment?.studentUser?.family}
+          ویرایش گزارش برای {allComment?.student?.firstName}{" "}
+          {allComment?.student?.family}
         </Typography>
         <Button
           onClick={() => navigate(-1)}
@@ -34,11 +34,7 @@ const EditComments = () => {
           بازگشت
         </Button>
       </Box>
-      <AddOrEditComment
-        compType="editing"
-        allComment={allComment}
-        studentId={null}
-      />
+      <AddOrEditComment compType="editing" allComment={allComment} />
     </Container>
   );
 };

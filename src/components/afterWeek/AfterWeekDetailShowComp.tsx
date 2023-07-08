@@ -26,10 +26,10 @@ const LookUpLink = React.lazy(() => import("./LookUpLink"));
 // import UploadImage from "../UploadImage";
 
 interface AfterWeekStudentShow {
-  student: AfterWeekType | null;
+  student: AfterWeekType | undefined;
   matches: boolean;
   id: string | undefined;
-  typeComp: "exam" | "admission";
+  typeComp: "exam" | "admission" | "student";
   successObject?: string;
   handleOpenAlert?: (alert: "approve" | "disApprove") => void;
   refreshingPage?: () => void;
@@ -76,6 +76,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          ...(typeComp === "student" && { display: "none" }),
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
@@ -120,7 +121,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           student?.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
+        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
+          نتیجه کارگاه معارفه
+        </DetailTypography>
         <Divider
           variant="middle"
           flexItem
