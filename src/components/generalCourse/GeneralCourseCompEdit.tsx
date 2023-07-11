@@ -19,6 +19,7 @@ import DateAndDescribe from "../coreCourse/edit/DateAndDescribe";
 import RelatedGroup from "../addNewCourseComp/RelatedGroup";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import { statusCourseOpt } from "../../pages/addNewCourse/addNewCourseHelper";
 
 type LiftUpStateType = {
   [index: string]: string | undefined;
@@ -34,6 +35,7 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
     startDate,
     endDate,
     weblinkLmsCourse: weblinkLmsCourseResponse,
+    weblinkFeedbackForm: weblinkFeedbackFormResponse,
     // instructorCount,
     description,
     name,
@@ -46,6 +48,7 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
     moduleType,
     subType,
     id,
+    nonLmsInstructors,
   } = generalDetail ?? {};
   const navigate = useNavigate();
   const [moduleCategoryId, setModuleCategoryId] = useState<undefined | string>(
@@ -64,7 +67,13 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
   const [weblinkLmsCourse, setWeblinkLmsCourse] = useState(
     weblinkLmsCourseResponse || undefined
   );
+  const [weblinkFeedbackForm, setWeblinkFeedbackForm] = useState(
+    weblinkFeedbackFormResponse || undefined
+  );
   const [liftState, setLiftState] = useState<LiftUpStateType>({});
+  const [nonLmsInstructorsState, setNonLmsInstructorsState] = useState(
+    nonLmsInstructors || undefined
+  );
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //handling error and guiding for compulsory field
@@ -80,11 +89,13 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
           subType,
           startDate: liftState.startDateState,
           endDate: liftState.endDateState,
+          weblinkFeedbackForm,
           // weblinkFinalProject,
           moduleCategoryId,
           // careerPathwayId,
           weblinkLmsCourse,
           teachingStatus,
+          nonLmsInstructors: nonLmsInstructorsState,
         },
       });
 
@@ -96,10 +107,10 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
           navigate("/admin/general-course?tab=1");
           break;
         case "vocational_skills":
-          navigate("/admin/general-course?tab=3");
+          navigate("/admin/general-course?tab=2");
           break;
         case "interpersonal_skills":
-          navigate("/admin/general-course?tab=2");
+          navigate("/admin/general-course?tab=3");
           break;
         default:
           setErrMsg(true);
@@ -173,48 +184,81 @@ const GeneralCourseCompEdit = ({ generalDetail }: Prop) => {
             <ComboBoxAddCourse
               label="وضعیت دوره"
               identifier="statusCourse"
-              options={[
-                {
-                  value: "TeachingStatus...",
-                  label: "waiting for value of TeachingStatus",
-                },
-              ]}
+              options={statusCourseOpt}
               handleChange={(e) => setTeachingStatus(e.target.value)}
               val={teachingStatus}
             />
           </Grid>
         )}
         <Grid item xs={12} md={6}>
-          <FormControl disabled fullWidth>
-            <InputLabel htmlFor="instructors-amount">مدرس(ها)</InputLabel>
-            <OutlinedInput
-              id="instructors-amount"
-              label="مدرس(ها)"
-              defaultValue={instructors && convertArrToStr(instructors)}
-              multiline
-              rows={4}
-              inputProps={{
-                style: {
-                  height: 28,
-                  overflowY: "auto",
-                },
-              }}
-            />
-          </FormControl>
+          {subType === "english_module" ? (
+            <FormControl fullWidth>
+              <InputLabel htmlFor="instructors-amount">مدرس(ها)</InputLabel>
+              <OutlinedInput
+                value={nonLmsInstructorsState}
+                onChange={(e) => setNonLmsInstructorsState(e.target.value)}
+                id="instructors-amount"
+                label="مدرس(ها)"
+                multiline
+                rows={4}
+                inputProps={{
+                  style: {
+                    height: 28,
+                    overflowY: "auto",
+                  },
+                }}
+              />
+            </FormControl>
+          ) : (
+            <FormControl disabled fullWidth>
+              <InputLabel htmlFor="instructors-amount">مدرس(ها)</InputLabel>
+              <OutlinedInput
+                id="instructors-amount"
+                label="مدرس(ها)"
+                defaultValue={instructors && convertArrToStr(instructors)}
+                multiline
+                rows={4}
+                inputProps={{
+                  style: {
+                    height: 28,
+                    overflowY: "auto",
+                  },
+                }}
+              />
+            </FormControl>
+          )}
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="weblinkLmsCourse-amount">
-              محتوای دوره (لینک به دوره در LMS)
-            </InputLabel>
-            <OutlinedInput
-              id="weblinkLmsCourse-amount"
-              label="محتوای دوره (لینک به دوره در LMS)"
-              value={weblinkLmsCourse}
-              onChange={(e) => setWeblinkLmsCourse(e.target.value)}
-            />
-          </FormControl>
-        </Grid>
+        {subType !== "interpersonal_skills" && (
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="weblinkLmsCourse-amount">
+                محتوای دوره (لینک به دوره در LMS)
+              </InputLabel>
+              <OutlinedInput
+                id="weblinkLmsCourse-amount"
+                label="محتوای دوره (لینک به دوره در LMS)"
+                value={weblinkLmsCourse}
+                onChange={(e) => setWeblinkLmsCourse(e.target.value)}
+                placeholder="https://www.example.com"
+              />
+            </FormControl>
+          </Grid>
+        )}
+
+        {subType !== "english_module" && (
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="weblinkFeedbackForm">بازخوردها</InputLabel>
+              <OutlinedInput
+                id="weblinkFeedbackForm"
+                label="بازخوردها"
+                value={weblinkFeedbackForm}
+                onChange={(e) => setWeblinkFeedbackForm(e.target.value)}
+                placeholder="https://www.example.com"
+              />
+            </FormControl>
+          </Grid>
+        )}
         {/* <Grid item xs={12} md={6}>
           <FormControl fullWidth>
             <InputLabel htmlFor="weblinkFinalProject-amount">

@@ -262,14 +262,36 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   </ListItem>
                 </>
               ) : (
-                <>
-                  <ListItem>
-                    <ListItemText
-                      primary="مشغولیت‌های فعلی"
-                      secondary={student?.noneJobActivation}
-                    />
-                  </ListItem>
-                </>
+                <ListItem>
+                  <ListItemText
+                    primary="مشغولیت‌های فعلی"
+                    secondary={
+                      Array.isArray(student?.noneJobActivation)
+                        ? student?.noneJobActivation.map((item, index) =>
+                            !item.includes("همه موارد") ? (
+                              <Typography
+                                sx={{ display: "inline-block" }}
+                                component="span"
+                                variant="subtitle2"
+                                key={index}
+                              >
+                                {item}
+                              </Typography>
+                            ) : (
+                              <Typography
+                                sx={{ display: "inline-block" }}
+                                component="span"
+                                variant="subtitle2"
+                                key={index}
+                              >
+                                همه موارد
+                              </Typography>
+                            )
+                          )
+                        : student?.noneJobActivation
+                    }
+                  />
+                </ListItem>
               )}
             </List>
           </Grid>

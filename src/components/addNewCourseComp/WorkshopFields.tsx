@@ -13,13 +13,16 @@ type LiftUpStateType = {
 };
 interface Prop {
   setLiftUpState: React.Dispatch<React.SetStateAction<LiftUpStateType>>;
+  startDateProp: Date | null;
 }
 
-const WorkshopFields = ({ setLiftUpState }: Prop) => {
+const WorkshopFields = ({ setLiftUpState, startDateProp }: Prop) => {
   const [weblinkLmsCourse, setWeblinkLmsCourse] = useState("");
-  const [startDate, setStartDate] = useState<any>(null);
+  const [startDate, setStartDate] = useState<any>(
+    startDateProp ? new Date(startDateProp) : null
+  );
   const [endDate, setEndDate] = useState<any>(null);
-
+  console.log(startDate);
   useEffect(() => {
     setLiftUpState({
       weblinkLmsCourse,
@@ -43,7 +46,7 @@ const WorkshopFields = ({ setLiftUpState }: Prop) => {
             label="محتوای دوره (لینک به دوره در LMS)"
             value={weblinkLmsCourse}
             onChange={(e) => setWeblinkLmsCourse(e.target.value)}
-            placeholder="example.com"
+            placeholder="https://www.example.com"
           />
         </FormControl>
       </Grid>
@@ -53,6 +56,7 @@ const WorkshopFields = ({ setLiftUpState }: Prop) => {
             setSessionDate={setStartDate}
             sessionDate={startDate}
             label="تاریخ برگزاری"
+            usageType="watching"
           />
         </Stack>
       </Grid>

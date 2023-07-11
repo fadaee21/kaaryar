@@ -5,6 +5,7 @@ import { ModulesAsStudentModule } from "../../model";
 import useSWR from "swr";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import { useState } from "react";
 export const useAddComment = (
   course: ModulesAsStudentModule | null,
   comment: string,
@@ -20,19 +21,7 @@ export const useAddComment = (
   const { id: studentId } = useParams();
   const postCommentLink = `/${roles}/survey/new`;
   const allCourseLink = `${roles}/modules/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=name`;
-
-  // // there is a problem for selecting null as value, handle by this function
-  // const StPresentBoolean = () => {
-  //   switch (studentPresent) {
-  //     case "بله":
-  //       return true;
-  //     case "خیر":
-  //       return false;
-  //     default:
-  //       return null;
-  //   }
-  // };
-
+  const [loading, setLoading] = useState(false);
   const {
     data: allCourse,
     error: errorAllCourse,
@@ -43,6 +32,7 @@ export const useAddComment = (
   }
 
   const postComment = async () => {
+    setLoading(true);
     try {
       const response = await postData(postCommentLink, {
         data: {
@@ -67,11 +57,14 @@ export const useAddComment = (
       toast.error(" نظر شما ثبت نشد");
     } catch (error: any) {
       toast.error(handleError(error));
+    } finally {
+      setLoading(false);
     }
   };
 
   const putComment = async (id: number | undefined) => {
     try {
+      setLoading(true);
       const response = await editAxios(`${roles}/survey/${id}`, {
         data: {
           studentId,
@@ -96,6 +89,8 @@ export const useAddComment = (
       toast.error(" نظر شما ثبت نشد");
     } catch (error: any) {
       toast.error(handleError(error));
+    } finally {
+      setLoading(false);
     }
   };
   return {
@@ -103,5 +98,6 @@ export const useAddComment = (
     allCourse,
     postComment,
     putComment,
+    loading,
   };
 };

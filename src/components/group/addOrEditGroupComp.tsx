@@ -10,7 +10,6 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 type Props = {
   compType: "edit" | "add";
@@ -54,12 +53,11 @@ const AddOrEditGroupComp = ({
           )}
 
           <Button
-            endIcon={compType === "edit" ? <EditIcon /> : <></>}
             variant="outlined"
             type="submit"
             sx={{ mr: 2, ml: "auto", px: 5 }}
           >
-            {compType === "add" ? "ذخیره" : "ویرایش"}
+            ذخیره
           </Button>
           <Button
             variant="outlined"

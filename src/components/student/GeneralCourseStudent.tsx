@@ -97,7 +97,8 @@ const GeneralCourseStudent = ({ courses }: Prop) => {
 
       {vocationalCourses && vocationalCourses.length > 0 && (
         <>
-          <Typography sx={{ mt: 4, mb: 2 }}>مهارت‌های ارتباطی</Typography>
+          <Typography sx={{ mt: 4, mb: 2 }}>مهارت‌های حرفه‌ای</Typography>
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader
@@ -119,7 +120,8 @@ const GeneralCourseStudent = ({ courses }: Prop) => {
 
       {interpersonalCourses && interpersonalCourses.length > 0 && (
         <>
-          <Typography sx={{ mt: 4, mb: 2 }}>مهارت‌های حرفه‌ای</Typography>
+          <Typography sx={{ mt: 4, mb: 2 }}>مهارت‌های ارتباطی</Typography>
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader

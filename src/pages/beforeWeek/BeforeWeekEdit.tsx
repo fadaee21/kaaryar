@@ -7,7 +7,8 @@ import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import BeforeWeekEditComp from "../../components/beforeWeek/BeforeWeekEditComp";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
-// import ExamFormDetailEditComp2 from "../../components/ExamFormDetail/ExamFormDetailEditComp2";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 const BeforeWeekDetailEdit = () => {
   const [student, setStudent] = useState<BeforeWeekType | undefined>();
@@ -15,6 +16,9 @@ const BeforeWeekDetailEdit = () => {
   const [loadingPut, setLoadingPut] = useState(false);
   //lift up the state to be able to send as computerFamiliarity
   const [compFamCheckBox, setCompFamCheckBox] = useState<string[]>([]);
+  const [noneJobActivationCheckBox, setNoneJobActivationCheckBox] = useState<
+    string[]
+  >([]);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -50,9 +54,9 @@ const BeforeWeekDetailEdit = () => {
       } else {
         console.log(response.data);
       }
-      setLoadingPut(false);
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      toast.error(handleError(error));
+    } finally {
       setLoadingPut(false);
     }
   };
@@ -81,6 +85,23 @@ const BeforeWeekDetailEdit = () => {
       }));
     }
   }, [compFamCheckBox]);
+  useEffect(() => {
+    //if you select all or select "همه موارد" instead sending of all items,only send "همه موارد"
+    if (
+      noneJobActivationCheckBox.includes("همه موارد") ||
+      noneJobActivationCheckBox.length >= 4
+    ) {
+      setStudent((prev: any) => ({
+        ...prev,
+        noneJobActivation: ["همه موارد"],
+      }));
+    } else {
+      setStudent((prev: any) => ({
+        ...prev,
+        noneJobActivation: noneJobActivationCheckBox,
+      }));
+    }
+  }, [noneJobActivationCheckBox]);
 
   useEffect(() => {
     getStudent();
@@ -102,15 +123,15 @@ const BeforeWeekDetailEdit = () => {
           marginRight: 5,
         }}
       >
-    <Button
-            variant="outlined"
-            sx={{ px: 5 }}
-            color="inherit"
-            endIcon={<ArrowBackIcon />}
-            onClick={() => navigate(-1)}
-          >
-            بازگشت
-          </Button>
+        <Button
+          variant="outlined"
+          sx={{ px: 5 }}
+          color="inherit"
+          endIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}
+        >
+          بازگشت
+        </Button>
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp
@@ -145,6 +166,7 @@ const BeforeWeekDetailEdit = () => {
             student={student}
             handleChange={handleChange}
             setCompFamCheckBox={setCompFamCheckBox}
+            setNoneJobActivationCheckBox={setNoneJobActivationCheckBox}
           />
         </Box>
       </Container>

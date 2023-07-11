@@ -15,6 +15,7 @@ const StatusStudent = ({ statusForm }: Prop) => {
     description,
     withdrawalReason,
     referralToFinance,
+    kaaryarAssessment
   } = statusForm || {};
   if (
     [
@@ -78,14 +79,20 @@ const StatusStudent = ({ statusForm }: Prop) => {
               <ListItem>
                 <ListItemText
                   primary="دلیل انصراف/ریزش"
-                  secondary={withdrawalReason?.value}
+                  secondary={withdrawalReason?.value || "-"}
                 />
               </ListItem>
             )}
             <ListItem>
               <ListItemText
                 primary="ارجاع به واحد مالی"
-                secondary={referralToFinance?.value}
+                secondary={referralToFinance?.value || "-"}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="ارزیابی کاریار"
+                secondary={kaaryarAssessment?.value || "-"}
               />
             </ListItem>
           </List>

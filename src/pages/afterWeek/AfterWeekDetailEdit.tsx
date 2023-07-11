@@ -7,6 +7,8 @@ import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AfterWeekDetailEditComp from "../../components/afterWeek/AfterWeekDetailEditComp";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 const AfterWeekDetailEdit = () => {
   const [student, setStudent] = useState<AfterWeekType | null>(null);
@@ -46,9 +48,9 @@ const AfterWeekDetailEdit = () => {
       } else {
         console.log(response.data);
       }
-      setLoadingPut(false);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(handleError(error));
+    } finally {
       setLoadingPut(false);
     }
   };
@@ -86,15 +88,15 @@ const AfterWeekDetailEdit = () => {
           marginRight: 5,
         }}
       >
-    <Button
-            variant="outlined"
-            sx={{ px: 5 }}
-            color="inherit"
-            endIcon={<ArrowBackIcon />}
-            onClick={() => navigate(-1)}
-          >
-            بازگشت
-          </Button>
+        <Button
+          variant="outlined"
+          sx={{ px: 5 }}
+          color="inherit"
+          endIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}
+        >
+          بازگشت
+        </Button>
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp

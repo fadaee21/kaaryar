@@ -7,13 +7,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
 import TablePic from "../../components/table/TablePic";
-import { useAuth } from "../../context/AuthProvider";
+// import { useAuth } from "../../context/AuthProvider";
 import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -33,7 +33,7 @@ import { studentTableHeader } from "../../components/table/helper-header";
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const pageSize = 25;
-  const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}`;
+  const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&orderAscending=false&orderBy=after_week_update_timestamp`;
 
   const studentCount = "moodle/user/student/count";
   const [, counterPage] = useCountPagination(studentCount);
@@ -42,10 +42,12 @@ const StudentTableAdmin = () => {
     MoodleUser[] | null
   >(null);
 
-  const { data, isLoading, error } = useSWR(adminStudent);
+  const { data, isLoading, error } = useSWR(adminStudent, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
 
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  // const { auth } = useAuth();
+  // const roles = auth.roles.toString();
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -96,7 +98,6 @@ const StudentTableAdmin = () => {
               {/* //! export excel */}
               <Box
                 sx={{
-                  width: "100%",
                   my: 3,
                 }}
               >
@@ -116,42 +117,38 @@ const StudentTableAdmin = () => {
               {searchingMoodleStudent?.length !== 0 && (
                 <TableHeader headerItems={studentTableHeader} />
               )}
-              {!searchingMoodleStudent && (
-                <TableBody>
-                  {data.map((moodleUser: MoodleUser, i: React.Key) => {
+
+              <TableBody>
+                {(searchingMoodleStudent ? searchingMoodleStudent : data)?.map(
+                  (moodleUser: MoodleUser) => {
                     const {
                       id,
                       firstName,
                       family,
                       username,
-                      email,
                       picture,
                       city,
-                      mobile,
+                      statusForm,
+                      registrationForm,
                     } = moodleUser;
                     return (
                       <StyledTableRow
-                        //TODO:add id as key not index
-                        key={i}
+                        key={id}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
-                        <StyledTableCell
-                          align="center"
-                          sx={{ width: "5%", verticalAlign: "center" }}
-                        >
+                        <StyledTableCell align="center">
                           {/* //TODO: add picture */}
                           <TablePic picture={picture} lastName={family} />
                         </StyledTableCell>
                         <StyledTableCell
                           align="center"
                           sx={{
-                            width: "25%",
                             verticalAlign: "center",
                             cursor: "pointer",
                           }}
-                          onClick={() => navigate(`/${roles}/student/${id}`)}
+                          onClick={() => navigate(`${id}`)}
                         >
                           <Typography variant="body1">
                             {firstName + " " + family}
@@ -160,7 +157,6 @@ const StudentTableAdmin = () => {
                         <StyledTableCell
                           align="center"
                           sx={{
-                            width: "10%",
                             verticalAlign: "center",
                           }}
                         >
@@ -172,168 +168,83 @@ const StudentTableAdmin = () => {
                         <StyledTableCell
                           align="center"
                           sx={{
-                            width: "30%",
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">{city || "-"}</Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            width: "30%",
                             verticalAlign: "center",
                           }}
                         >
                           <Typography variant="body2">
-                            {mobile || "-"}
+                            {registrationForm?.city || city || "-"}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="center"
                           sx={{
-                            width: "30%",
                             verticalAlign: "center",
                           }}
                         >
                           <Typography variant="body2">
-                            {email || "-"}
-                          </Typography>
-                        </StyledTableCell>
-
-                        {/* <StyledTableCell
-                          align="center"
-                          sx={{ width: "30%", verticalAlign: "center" }}
-                        >
-                          <ListItem sx={{ pt: 0 }}> */}
-                        {/* <ButtonGroup
-                              variant="contained"
-                              color="secondary"
-                              size="small"
-                              aria-label="small button group"
-                            >
-                              <Button
-                                onClick={() =>
-                                  navigate(`/${roles}/student/${id}`)
-                                }
-                              >
-                                جزییات
-                              </Button>
-                              <Button>ویرایش</Button>
-                            </ButtonGroup> */}
-                        {/* </ListItem>
-                        </StyledTableCell> */}
-                      </StyledTableRow>
-                    );
-                  })}
-                </TableBody>
-              )}
-              <TableBody>
-                {searchingMoodleStudent?.map(
-                  (searchingMoodleStudent: MoodleUser) => {
-                    const {
-                      id,
-                      firstName,
-                      family,
-                      username,
-                      email,
-                      picture,
-                      city,
-                      mobile,
-                    } = searchingMoodleStudent;
-
-                    return (
-                      <StyledTableRow
-                        key={id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <StyledTableCell
-                          align="center"
-                          sx={{ width: "5%", verticalAlign: "center" }}
-                        >
-                          <TablePic picture={picture} lastName={family} />
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            width: "25%",
-                            verticalAlign: "center",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => navigate(`/${roles}/student/${id}`)}
-                        >
-                          <Typography variant="body1">
-                            {firstName + " " + family}
+                            {registrationForm?.province || "-"}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="center"
                           sx={{
-                            width: "10%",
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2" textAlign={"center"}>
-                            {username || "-"}
-                          </Typography>
-                        </StyledTableCell>
-
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            width: "30%",
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">{city || "-"}</Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            width: "30%",
                             verticalAlign: "center",
                           }}
                         >
                           <Typography variant="body2">
-                            {mobile || "-"}
+                            {registrationForm?.course}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell
                           align="center"
                           sx={{
-                            width: "30%",
                             verticalAlign: "center",
                           }}
                         >
                           <Typography variant="body2">
-                            {email || "-"}
+                            {registrationForm?.refer || "-"}
                           </Typography>
                         </StyledTableCell>
-
-                        {/* <StyledTableCell
+                        <StyledTableCell
                           align="center"
-                          sx={{ width: "30%", verticalAlign: "center" }}
+                          sx={{
+                            verticalAlign: "center",
+                          }}
                         >
-                          <ListItem sx={{ pt: 0 }}> */}
-                        {/* <ButtonGroup
-                              variant="contained"
-                              color="secondary"
-                              size="small"
-                              aria-label="small button group"
-                            >
-                              <Button
-                                onClick={() =>
-                                  navigate(`/${roles}/student/${id}`)
-                                }
-                              >
-                                جزییات
-                              </Button>
-                              <Button>ویرایش</Button>
-                            </ButtonGroup> */}
-                        {/* </ListItem>
-                        </StyledTableCell> */}
+                          <Typography variant="body2">
+                            {statusForm?.trainingStatus?.value || "-"}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          sx={{
+                            verticalAlign: "center",
+                          }}
+                        >
+                          <Typography variant="body2">
+                            {statusForm?.nextTrainingStep?.value || "-"}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          sx={{
+                            verticalAlign: "center",
+                          }}
+                        >
+                          <Typography variant="body2">
+                            {statusForm?.referralToFinance?.value || "-"}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          sx={{
+                            verticalAlign: "center",
+                          }}
+                        >
+                          <Typography variant="body2">
+                            {statusForm?.kaaryarAssessment?.value || "-"}
+                          </Typography>
+                        </StyledTableCell>
                       </StyledTableRow>
                     );
                   }

@@ -16,6 +16,7 @@ import InstructorSearch from "./InstructorsSearch";
 import useSWR from "swr";
 import SelectiveSearchCourse from "./SelectiveSearchCourse";
 import { statusCourseOpt } from "../../pages/addNewCourse/addNewCourseHelper";
+import SearchString from "../search/SearchString";
 
 type ValType = { value: number | string; label: string };
 interface Props {
@@ -35,6 +36,9 @@ const SearchAllCourse = ({
   const [disabledButton, setDisabledButton] = useState(false);
   const [moduleName, setModuleName] = useState<ModuleAll | null>(null);
   const [instructor, setInstructor] = useState<Instructor | null>(null);
+  const [nonLmsInstructors, setNonLmsInstructors] = useState<string | null>(
+    null
+  );
   const [careerPathway, setCareerPathway] = useState<ValType | null>(null);
   const [statusCourse, setStatusCourse] = useState<ValType | null>(null);
   const [moduleCategory, setModuleCategory] = useState<ValType | null>(null);
@@ -46,9 +50,11 @@ const SearchAllCourse = ({
       careerPathway?.value,
       moduleCategory?.value,
       statusCourse?.value,
+      nonLmsInstructors,
     ].some(Boolean);
     setDisabledButton(buttonStatus);
   }, [
+    nonLmsInstructors,
     moduleName,
     instructor,
     careerPathway?.value,
@@ -93,6 +99,7 @@ const SearchAllCourse = ({
       includeCareerpathwaysIds: careerPathway?.value,
       includeCategoryIds: moduleCategory?.value,
       teachingStatus: statusCourse?.value,
+      instructorName: nonLmsInstructors,
     });
   };
   const clearSearch = () => {
@@ -103,6 +110,7 @@ const SearchAllCourse = ({
     setStatusCourse(null);
     setModuleCategory(null);
     setStatusCourse(null);
+    setNonLmsInstructors(null);
     setSearchCourseCore(undefined);
   };
   return (
@@ -117,10 +125,18 @@ const SearchAllCourse = ({
         />
       </Grid>
       <Grid item xs={3}>
-        <InstructorSearch
-          instructor={instructor}
-          setInstructor={setInstructor}
-        />
+        {moduleSubType !== "english_module" ? (
+          <InstructorSearch
+            instructor={instructor}
+            setInstructor={setInstructor}
+          />
+        ) : (
+          <SearchString
+            state={nonLmsInstructors}
+            setState={setNonLmsInstructors}
+            label="نام مدرس(ها)"
+          />
+        )}
       </Grid>
       {["workshop", "english_module"].every((i) => i !== moduleSubType) && (
         <>

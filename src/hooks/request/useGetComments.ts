@@ -9,14 +9,14 @@ export const useGetComments = (page: number, pageSize: number) => {
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-  const countComment =
-    roles === "admin" ? "/total/count" : `/${roles}/survey/count`;
+  const countComment = "/total/count";
+  // roles === "admin" ? "/total/count" : `/${roles}/survey/count`;
   const allCommentLink =
     roles === "admin"
-      ? `total/all?pageNum=${page}&pageSize=${pageSize}`
+      ? `total/all?pageNum=${page}&pageSize=${pageSize}&orderAscending=false&orderBy=session_date`
       : `${roles}/survey/all?pageNum=${page}&pageSize=${pageSize}`;
 
-  const { data: commentCounter } = useSWR<{count:number}>(countComment);
+  const { data: commentCounter } = useSWR<{ count: number }>(countComment);
 
   const {
     data: commentsTable,

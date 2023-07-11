@@ -6,23 +6,24 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import { TablePic2 } from "../../components/table/TablePic";
 import { useAuth } from "../../context/AuthProvider";
-import { StudentEdu } from "../../model";
+import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { AccordionStyled } from "../../styles/search/accordion";
 import useSWR from "swr";
 import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
+import TablePic from "../../components/table/TablePic";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 //^this component list related student for mentor and ta
-const StudentAssignee = () => {
+const StudentTableAssignee = () => {
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-  const { data, isLoading, error } = useSWR<StudentEdu[]>(
+  const { data, isLoading, error } = useSWR<MoodleUser[]>(
     `/${roles}/user/student`
   );
   const navigate = useNavigate();
@@ -32,8 +33,10 @@ const StudentAssignee = () => {
   }
 
   if (error) {
-    console.log(error);
-    navigate("/");
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
@@ -70,36 +73,31 @@ const StudentAssignee = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader headerItems={studentTableHeader} />
               <TableBody>
-                {data?.map((moodleUser: StudentEdu, i: React.Key) => {
+                {data?.map((moodleUser: MoodleUser) => {
                   const {
                     id,
                     firstName,
                     family,
                     username,
+                    picture,
                     city,
-                    email,
-                    mobile,
+                    statusForm,
+                    registrationForm,
                   } = moodleUser;
                   return (
                     <StyledTableRow
-                      //TODO: id from moodle Assignee is not unique for now insert index for key
-                      key={i}
+                      key={id}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
-                      <StyledTableCell
-                        align="center"
-                        sx={{ width: "5%", verticalAlign: "top" }}
-                      >
-                        <TablePic2 studentId={id} lastName={family} />
-                        {/* <TablePic picture={picture} lastName={lastName} /> */}
+                      <StyledTableCell align="center">
+                        <TablePic picture={picture} lastName={family} />
                       </StyledTableCell>
                       <StyledTableCell
                         align="center"
                         sx={{
-                          width: "25%",
-                          verticalAlign: "top",
+                          verticalAlign: "center",
                           cursor: "pointer",
                         }}
                         onClick={() => navigate(`${id}`)}
@@ -111,11 +109,10 @@ const StudentAssignee = () => {
                       <StyledTableCell
                         align="center"
                         sx={{
-                          width: "10%",
-                          verticalAlign: "top",
+                          verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2" textAlign={"left"}>
+                        <Typography variant="body2" textAlign={"center"}>
                           {username}
                         </Typography>
                       </StyledTableCell>
@@ -123,29 +120,82 @@ const StudentAssignee = () => {
                       <StyledTableCell
                         align="center"
                         sx={{
-                          width: "30%",
-                          verticalAlign: "top",
+                          verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2">{city}</Typography>
+                        <Typography variant="body2">
+                          {registrationForm?.city || city || "-"}
+                        </Typography>
                       </StyledTableCell>
                       <StyledTableCell
                         align="center"
                         sx={{
-                          width: "30%",
-                          verticalAlign: "top",
+                          verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2">{mobile}</Typography>
+                        <Typography variant="body2">
+                          {registrationForm?.province || "-"}
+                        </Typography>
                       </StyledTableCell>
                       <StyledTableCell
-                        align="right"
+                        align="center"
                         sx={{
-                          width: "30%",
-                          verticalAlign: "top",
+                          verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2">{email}</Typography>
+                        <Typography variant="body2">
+                          {registrationForm?.course}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {registrationForm?.refer || "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {statusForm?.trainingStatus?.value || "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {statusForm?.nextTrainingStep?.value || "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {statusForm?.referralToFinance?.value || "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {statusForm?.kaaryarAssessment?.value || "-"}
+                        </Typography>
                       </StyledTableCell>
                     </StyledTableRow>
                   );
@@ -158,4 +208,4 @@ const StudentAssignee = () => {
     </Box>
   );
 };
-export default StudentAssignee;
+export default StudentTableAssignee;

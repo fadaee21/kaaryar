@@ -19,9 +19,10 @@ import { toast } from "react-toastify";
 import { EditComboStudent } from "./EditComboStudent";
 
 interface Prop {
-  statusForm?: StatusForm;
-  firstName?: string;
-  family?: string;
+  statusForm: StatusForm | undefined;
+  firstName: string | undefined;
+  family: string | undefined;
+  
 }
 
 const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
@@ -39,6 +40,9 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
   const [referralToFinance, setReferralToFinance] = useState(
     statusForm?.referralToFinance?.id.toString() || ""
   );
+  const [kaaryarAssessment, setKaaryarAssessment] = useState(
+    statusForm?.kaaryarAssessment?.id.toString() || ""
+  );
 
   const [loading, setLoading] = useState(false);
   const { data: trainingData, isLoading: statusLoading } = useSWR<
@@ -53,6 +57,8 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
   const { data: referralToFinanceData, isLoading: referralLoading } = useSWR<
     DetailStudentStatus[]
   >("/status/referral-finance/values/all");
+  const { data: kaaryarAssessmentData, isLoading: kaaryarAssessmentLoading } =
+    useSWR<DetailStudentStatus[]>("/status/kaaryar-assessment/values/all");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,6 +72,7 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
             description,
             withdrawalReasonId: withdrawalReason || undefined,
             referralToFinanceId: referralToFinance,
+            kaaryarAssessmentId: kaaryarAssessment,
           },
         },
       });
@@ -86,7 +93,8 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
     statusLoading ||
     nextStepLoading ||
     withdrawalLoading ||
-    referralLoading
+    referralLoading ||
+    kaaryarAssessmentLoading
   ) {
     return <LoadingProgress />;
   }
@@ -102,7 +110,13 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
             variant="outlined"
             type="submit"
             sx={{ px: 5, ml: "auto" }}
-            disabled={loading}
+            disabled={
+              loading ||
+              !trainingStatus ||
+              !nextTrainingStep ||
+              !referralToFinance ||
+              !kaaryarAssessment
+            }
           >
             ذخیره
           </Button>
@@ -181,6 +195,17 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
                 }
                 label="ارجاع به واحد مالی"
                 val={referralToFinance}
+              />
+            </ListItem>
+            <ListItem>
+              <EditComboStudent
+                data={kaaryarAssessmentData}
+                identifier="kaaryarAssessment"
+                handleChange={(e) =>
+                  setKaaryarAssessment(e.target.value.toString())
+                }
+                label="ارزیابی کاریار"
+                val={kaaryarAssessment}
               />
             </ListItem>
           </List>

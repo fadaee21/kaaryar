@@ -43,6 +43,7 @@ import SearchAllComments from "./SearchAllComments";
 import TableEmpty from "../../components/table/TableEmpty";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import { roleConverter } from "../../utils/roleConverter";
 
 const Comments = () => {
   const [chevronDir, setChevronDir] = useState(false);
@@ -61,7 +62,7 @@ const Comments = () => {
     !adminVisibility ? id : "" //while you are not admin send your id as commenter by default otherwise you can search for commenter
   }&commenterName=${liftUpSearchState?.commenterUser}&studentName=${
     liftUpSearchState?.student
-  }&pageNum=1&pageSize=100&orderAscending=false&orderBy=created_at`;
+  }&pageNum=1&pageSize=100&orderAscending=false&orderBy=session_date`;
 
   const { error: errorSearch, mutate } = useSWR(
     searchingComments ? SEARCH_URL : null,
@@ -81,10 +82,9 @@ const Comments = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<Comment[] | null>(null);
-  const { auth } = useAuth();
-  const roleAuth = auth.roles.toString();
+
   const navigate = useNavigate();
-  const pageSize = 10;
+  const pageSize = adminVisibility ? 10 : 100;
   const { commentsTable, commentsTableLoading, commentCounter, refreshData } =
     useGetComments(page, pageSize);
   const handleClickOpenEdit = (id: any) => {
@@ -115,183 +115,199 @@ const Comments = () => {
   }
 
   return (
-    <>
-      <Box component={"article"} sx={{ m: 2 }}>
-        <Container maxWidth="xl">
+    <Box component={"article"} sx={{ m: 2, mb: 8 }}>
+      <Container maxWidth="xl">
+        <Box
+          component={"div"}
+          sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
+        >
+          <Typography variant="h4"> فهرست نظرات</Typography>
+        </Box>
+
+        <AccordionStyled>
           <Box
-            component={"div"}
-            sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+            }}
           >
-            <Typography variant="h4"> فهرست نظرات</Typography>
-          </Box>
-
-          <AccordionStyled>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-              }}
+            <AccordionSummaryStyled
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              onClick={() => setChevronDir(!chevronDir)}
             >
-              <AccordionSummaryStyled
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                onClick={() => setChevronDir(!chevronDir)}
-              >
-                <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
-              </AccordionSummaryStyled>
+              <Typography variant="button">جستجو</Typography>
+              <ExpandMoreIcon
+                className={chevronDir ? style.rotate180 : style.rotate0}
+              />
+            </AccordionSummaryStyled>
 
-              {/* <ExcelExport
+            {/* <ExcelExport
                   fileName={"Applicant Info"}
                   searchData={[]}
                   linkAll=""
                   useIn="reg"
                 /> */}
+          </Box>
+          <AccordionDetails>
+            <Box
+              sx={{
+                width: "100%",
+                my: 3,
+              }}
+            >
+              <SearchAllComments
+                setSearchResult={setSearchResult}
+                setLiftUpSearchState={setLiftUpSearchState}
+                setSearchingComments={setSearchingComments}
+              />
             </Box>
-            <AccordionDetails>
-              <Box
-                sx={{
-                  width: "100%",
-                  my: 3,
-                }}
-              >
-                <SearchAllComments
-                  setSearchResult={setSearchResult}
-                  setLiftUpSearchState={setLiftUpSearchState}
-                  setSearchingComments={setSearchingComments}
-                />
-              </Box>
-            </AccordionDetails>
-          </AccordionStyled>
+          </AccordionDetails>
+        </AccordionStyled>
 
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              {/* //!for empty response of search don't return TableHeader */}
-              {searchResult?.length !== 0 && (
-                <TableHeader headerItems={commentsTableHeader} />
-              )}
-              <TableBody>
-                {(searchResult ?? commentsTable)?.map(
-                  (commentItem: Comment) => {
-                    const { id, module, student, createTime, commenter } =
-                      commentItem;
-                    return (
-                      <StyledTableRow
-                        key={id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            {/* //!for empty response of search don't return TableHeader */}
+            {searchResult?.length !== 0 && (
+              <TableHeader headerItems={commentsTableHeader} />
+            )}
+            <TableBody>
+              {(searchResult ?? commentsTable)?.map((commentItem: Comment) => {
+                const {
+                  id,
+                  module,
+                  student,
+                  commenter,
+                  commenterRole,
+                  sessionDate,
+                } = commentItem;
+                return (
+                  <StyledTableRow
+                    key={id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                  >
+                    {/* <StyledTableCell
+                      component="th"
+                      scope="row"
+                      align="center"
+                      sx={{ width: "10%", verticalAlign: "center" }}
+                    >
+                      {persianDate(createTime)}
+                    </StyledTableCell> */}
+                    <StyledTableCell
+                      component="th"
+                      scope="row"
+                      align="center"
+                      sx={{ width: "10%", verticalAlign: "center" }}
+                    >
+                      {persianDate(sessionDate)}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="center"
+                      sx={{
+                        width: "15%",
+                        verticalAlign: "center",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => navigate(`${id}`)}
+                    >
+                      <Typography variant="body1">
+                        {student.firstName + " " + student.family}
+                      </Typography>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="center"
+                      sx={{ width: "15%", verticalAlign: "center" }}
+                    >
+                      <Typography variant="body1">
+                        {commenter?.firstName + " " + commenter?.family}
+                      </Typography>
+                    </StyledTableCell>
+
+                    <StyledTableCell
+                      align="center"
+                      sx={{ width: "15%", verticalAlign: "center" }}
+                    >
+                      <Typography variant="body1">
+                        {roleConverter(commenterRole)}
+                      </Typography>
+                    </StyledTableCell>
+
+                    <StyledTableCell
+                      align="center"
+                      sx={{ width: "15%", verticalAlign: "center" }}
+                    >
+                      <Typography variant="body1">{module?.name}</Typography>
+                    </StyledTableCell>
+
+                    <StyledTableCell
+                      align="center"
+                      sx={{
+                        width: "10%",
+                        verticalAlign: "center",
+                      }}
+                    >
+                      <ListItem
+                        sx={{ pt: 0, justifyContent: "center" }}
+                        alignItems="center"
                       >
-                        <StyledTableCell
-                          component="th"
-                          scope="row"
-                          align="center"
-                          sx={{ width: "10%", verticalAlign: "center" }}
-                        >
-                          {persianDate(createTime)}
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
+                        <IconButton onClick={() => navigate(`${id}`)}>
+                          <VisibilityIcon fontSize="small" color="info" />
+                        </IconButton>
+                        <IconButton
                           sx={{
-                            width: "15%",
-                            verticalAlign: "center",
-                            cursor: "pointer",
+                            ...(adminVisibility && {
+                              display: "none",
+                            }),
                           }}
-                          onClick={() => navigate(`${id}`)}
+                          onClick={() => handleClickOpenEdit(`${id}`)}
                         >
-                          <Typography variant="body1">
-                            {student.firstName + " " + student.family}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{ width: "15%", verticalAlign: "center" }}
-                        >
-                          <Typography variant="body1">
-                            {commenter?.firstName + " " + commenter?.family}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{ width: "15%", verticalAlign: "center" }}
-                        >
-                          <Typography variant="body1">
-                            {module?.name}
-                          </Typography>
-                        </StyledTableCell>
-
-                        <StyledTableCell
-                          align="center"
+                          <EditIcon fontSize="small" color="primary" />
+                        </IconButton>
+                        <IconButton
                           sx={{
-                            width: "10%",
-                            verticalAlign: "center",
+                            ...(adminVisibility && {
+                              display: "none",
+                            }),
                           }}
+                          onClick={() => handleClickOpen(id)}
                         >
-                          <ListItem
-                            sx={{ pt: 0, justifyContent: "center" }}
-                            alignItems="center"
-                          >
-                            <IconButton onClick={() => navigate(`${id}`)}>
-                              <VisibilityIcon fontSize="small" color="info" />
-                            </IconButton>
-                            <IconButton
-                              sx={{
-                                ...(roleAuth === "admin" && {
-                                  display: "none",
-                                }),
-                              }}
-                              onClick={() => handleClickOpenEdit(`${id}`)}
-                            >
-                              <EditIcon fontSize="small" color="primary" />
-                            </IconButton>
-                            <IconButton
-                              sx={{
-                                ...(roleAuth === "admin" && {
-                                  display: "none",
-                                }),
-                              }}
-                              onClick={() => handleClickOpen(id)}
-                            >
-                              <DeleteIcon fontSize="small" color="error" />
-                            </IconButton>
-                          </ListItem>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    );
-                  }
-                )}
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"حذف  نظر"}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      آیا می خواهید این نظر را حذف کنید؟
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleDelete} autoFocus>
-                      بله
-                    </Button>
-                    <Button onClick={handleClose}>خیر</Button>
-                  </DialogActions>
-                </Dialog>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {/* //!for empty response of search return TableEmpty */}
-          {searchResult?.length === 0 && <TableEmpty />}
-        </Container>
-      </Box>
-      {!searchResult && (
+                          <DeleteIcon fontSize="small" color="error" />
+                        </IconButton>
+                      </ListItem>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })}
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">{"حذف  نظر"}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    آیا می خواهید این نظر را حذف کنید؟
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleDelete} autoFocus>
+                    بله
+                  </Button>
+                  <Button onClick={handleClose}>خیر</Button>
+                </DialogActions>
+              </Dialog>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* //!for empty response of search return TableEmpty */}
+        {searchResult?.length === 0 && <TableEmpty />}
+      </Container>
+      {!searchResult && adminVisibility && (
         <Pagination
           sx={{
             display: "flex",
@@ -309,7 +325,7 @@ const Comments = () => {
           }}
         />
       )}
-    </>
+    </Box>
   );
 };
 

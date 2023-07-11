@@ -17,6 +17,9 @@ const InstructorSearch = ({ instructor, setInstructor }: Prop) => {
         params: {
           name: inputValue,
           role: "instructor",
+          orderBy: "lastName",
+          pageSize: 10,
+          orderAscending: true,
         },
       });
       if (response.status === 200) {

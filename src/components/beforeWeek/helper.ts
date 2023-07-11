@@ -9,6 +9,7 @@ export interface ExamStudent {
       | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
   setCompFamCheckBox: React.Dispatch<React.SetStateAction<string[]>>;
+  setNoneJobActivationCheckBox: React.Dispatch<React.SetStateAction<string[]>>;
 }
 interface ObjEnum {
   [key: number]: string;
@@ -199,6 +200,13 @@ export const computerFamiliarityOpt = [
   "می توانم از نرم افزار Word برای تایپ نامه، از Powerpoint برای تهیه ارائه ها و از Excel برای حسابداری شخصی استفاده کنم",
   "از برنامه های Skype، Zoom یا Google Meet برای تماس های تصویری استفاده  می کنم.",
   "می توانم حین یک تماس تصویری، صفحه نمایش کامپیوترم را به طور زنده با دیگران به اشتراک بگذارم.",
+  "همه موارد",
+];
+export const noneJobActivationOpt = [
+  "آموزش غیر آکادمیک ( مانند کلاس ورزش حرفه ای و کلاس زبان و غیره)",
+  "خانه دار",
+  "جویای کار",
+  "دانش‌آموز/ دانشجو",
   "همه موارد",
 ];
 

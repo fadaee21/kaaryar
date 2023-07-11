@@ -11,6 +11,7 @@ interface EditComboProp {
   label: string;
   val: string | undefined;
   handleChange: (e: SelectChangeEvent<string>) => void;
+  error?:boolean
 }
 
 export const EditComboStudent = ({
@@ -19,6 +20,7 @@ export const EditComboStudent = ({
   label,
   val,
   handleChange,
+  error=false
 }: EditComboProp) => {
   return (
     <FormControl fullWidth>
@@ -30,6 +32,7 @@ export const EditComboStudent = ({
         value={val}
         label={label}
         onChange={handleChange}
+        error={error}
       >
         {data?.map((i) => (
           <MenuItem key={i.id} value={i.id}>

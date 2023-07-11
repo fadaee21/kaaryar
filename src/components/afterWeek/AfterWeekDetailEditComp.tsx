@@ -10,7 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import { AfterWeekType, PropEditCombo, PropEditString } from "../../model";
-import { fieldOptions, finalResults } from "../search/searchOptions";
+import { SelectedFieldOpt, fieldOptions, finalResults } from "../search/searchOptions";
 import {
   comAccessStatusOpt,
   notifyAcceptWeekOpt,
@@ -19,7 +19,7 @@ import {
   recommendFieldMentorOpt,
   scholarOpt,
   workshopContOpt,
-  yesOrNo
+  yesOrNo,
 } from "./helper";
 
 interface AfterWeekStudentEdit {
@@ -51,10 +51,11 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
               placeholder="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
               value={student?.notifyAcceptWeek}
             />
-            <EditString
+            <EditCombo
               handleChange={handleChange}
               identifier="firstSelectJobRoad"
               placeholder="انتخاب اولیه مسیر شغلی"
+              options={SelectedFieldOpt}
               value={student?.firstSelectJobRoad || ""}
             />
           </List>
@@ -79,12 +80,12 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
               placeholder="تعیین سطح الگوریتم و ریاضی"
               value={student?.algoScore || ""}
             />
-            <EditString
+            {/* <EditString
               handleChange={handleChange}
               identifier="comLevelResult"
               placeholder="نمره مهارت‌های پایه--"
               value={student?.comLevelResult || ""}
-            />
+            /> */}
           </List>
         </Grid>
       </Grid>
@@ -224,7 +225,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
               placeholder="بورسیه دارد؟"
               options={scholarOpt}
             />
-            {student?.scholar  && (
+            {student?.scholar && (
               <EditString
                 handleChange={handleChange}
                 value={student?.scholarPercentage || ""}

@@ -26,7 +26,7 @@ import { ShortCoreModule } from "../../model";
 import SearchAllCourse from "../../components/search-course/SearchAllCourse";
 import TableEmpty from "../../components/table/TableEmpty";
 const SETTING_RESPONSE = "&hasCategory=true";
-const MODULES_ALL_CORE = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=created_at&moduleType=core${SETTING_RESPONSE}`;
+const MODULES_ALL_CORE = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=start_date&moduleType=core${SETTING_RESPONSE}`;
 const CoreModuleCoursesTable = () => {
   const [chevronDir, setChevronDir] = useState(false);
   const [searchCourseCore, setSearchCourseCore] = useState<ShortCoreModule[]>();
@@ -84,7 +84,6 @@ const CoreModuleCoursesTable = () => {
                   my: 3,
                 }}
               >
-                {/* //!component for searching student */}
                 <SearchAllCourse
                   moduleSubType="unassigned"
                   moduleType="core"

@@ -38,6 +38,7 @@ const Login = () => {
   useEffect(() => {
     setErrMsg("");
   }, [username, password, setErrMsg]);
+  useEffect(() => window.scrollTo(0, 0), []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

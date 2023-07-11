@@ -8,6 +8,7 @@ import SearchSelect from "./SearchSelect";
 import SearchString from "./SearchString";
 import SearchIcon from "@mui/icons-material/Search";
 import { GreyButton } from "../../styles/Button";
+import useSWR from "swr";
 import {
   acquaintanceOptions,
   eduLevelOptions,
@@ -18,6 +19,12 @@ import {
   scholarOptions,
   statusOptions,
 } from "./searchOptions";
+// import { EditComboStudent } from "../student/EditComboStudent";
+// import TrainingStatusSearch from "./SearchSelect2";
+import { DetailStudentStatus, Group, ModuleAll } from "../../model";
+import SearchSelect2 from "./SearchSelect2";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 // import { ApprovalStatus } from "../../model";
 // import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
@@ -74,11 +81,53 @@ const SearchAll: ({
   const [cgpa, setCgpa] = useState<string | null>(null);
   const [disabledButton, setDisabledButton] = useState(false);
   const [searchLink, setSearchLink] = useState("");
+
+  const [trainingStatus, setTrainingStatus] =
+    useState<DetailStudentStatus | null>(null);
+  const [nextTrainingStep, setNextTrainingStep] =
+    useState<DetailStudentStatus | null>(null);
+  const [referralToFinance, setReferralToFinance] =
+    useState<DetailStudentStatus | null>(null);
+  const [kaaryarAssessment, setKaaryarAssessment] =
+    useState<DetailStudentStatus | null>(null);
+  const [module, setModule] = useState<ModuleAll | null>(null);
+  const [group, setGroup] = useState<Group | null>(null);
+
+  const { data: trainingStatusData } = useSWR<DetailStudentStatus[]>(
+    searchPage === "moodle" && chevronDir
+      ? "/status/training-status/values/all"
+      : null // get trainingData only for moodle search student
+  );
+  const { data: nextTrainingStepData } = useSWR<DetailStudentStatus[]>(
+    searchPage === "moodle" && chevronDir
+      ? "/status/next-training-step/values/all"
+      : null
+  );
+  const { data: referralToFinanceData } = useSWR<DetailStudentStatus[]>(
+    searchPage === "moodle" && chevronDir
+      ? "/status/referral-finance/values/all"
+      : null
+  );
+  const { data: KaaryarAssessmentData } = useSWR<DetailStudentStatus[]>(
+    searchPage === "moodle" && chevronDir
+      ? "/status/kaaryar-assessment/values/all"
+      : null
+  );
+  const { data: ModuleData } = useSWR<ModuleAll[]>(
+    searchPage === "moodle" && chevronDir
+      ? "/modules/short-details/all?orderAscending=true&orderBy=name"
+      : null
+  );
+  const { data: groupData } = useSWR<Group[]>(
+    searchPage === "moodle" && chevronDir
+      ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
+      : null
+  );
+
   const beforeWeekSearch = "/exam/before/week/search/param";
   const afterWeekSearch = "/exam/after/week/search/param";
   const regSearch = "/reg/search/param";
   const moodleSearch = "/moodle/search/param";
-
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
     if (searchPage === "moodle") {
@@ -117,9 +166,21 @@ const SearchAll: ({
       contCourseApproach,
       jobStandby,
       cgpa,
+      trainingStatus,
+      nextTrainingStep,
+      referralToFinance,
+      kaaryarAssessment,
+      module,
+      group,
     ].some(Boolean);
     setDisabledButton(buttonStatus);
   }, [
+    group,
+    module,
+    kaaryarAssessment,
+    referralToFinance,
+    nextTrainingStep,
+    trainingStatus,
     acquaintance,
     approvalStatus,
     cgpa,
@@ -150,7 +211,6 @@ const SearchAll: ({
       const response = await getData(searchLink, {
         params: obj,
       });
-      console.log(response);
       if (response.status === 200) {
         //for each search you need specific setState
         searchPage === "moodle" && setSearchingMoodleStudent(response.data);
@@ -160,8 +220,9 @@ const SearchAll: ({
       } else {
         console.log(response);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(handleError(error));
     }
   };
 
@@ -187,6 +248,12 @@ const SearchAll: ({
       contCourseApproach,
       jobStandby,
       cgpa,
+      trainingStatusID: trainingStatus?.id,
+      nextTrainingStepID: nextTrainingStep?.id,
+      referralToFinanceID: referralToFinance?.id,
+      kaaryarAssessmentID: kaaryarAssessment?.id,
+      moduleID: module?.id,
+      groupID: group?.id,
     });
   };
 
@@ -211,6 +278,12 @@ const SearchAll: ({
     setContCourseApproach(null);
     setJobStandby(null);
     setCgpa(null);
+    setTrainingStatus(null);
+    setNextTrainingStep(null);
+    setReferralToFinance(null);
+    setKaaryarAssessment(null);
+    setModule(null);
+    setGroup(null);
     // searchPage !== "moodle" && setApprovalStatus(null);
     searchPage === "moodle" && setSearchingMoodleStudent(null);
     searchPage === "beforeWeek" && setSearchingStudentBefore(null);
@@ -236,7 +309,7 @@ const SearchAll: ({
           searchLink={searchLink}
         />
       </Grid>
-      {searchPage === "reg" && (
+      {["reg", "moodle"].includes(searchPage) && (
         <Grid item xs={3}>
           <SearchString
             state={referState}
@@ -298,16 +371,15 @@ const SearchAll: ({
           label="ایمیل"
         />
       </Grid>
-      {searchPage !== "moodle" && (
-        <Grid item xs={3}>
-          <SearchSelect
-            state={provincesState}
-            setState={setProvincesState}
-            options={provinceOptions}
-            placeholder="استان"
-          />
-        </Grid>
-      )}
+
+      <Grid item xs={3}>
+        <SearchSelect
+          state={provincesState}
+          setState={setProvincesState}
+          options={provinceOptions}
+          placeholder="استان"
+        />
+      </Grid>
 
       <Grid item xs={3}>
         <SearchString state={cityState} setState={setCityState} label="شهر" />
@@ -385,6 +457,71 @@ const SearchAll: ({
               statusOptions={fieldOptions}
             />
           </Grid>
+        </>
+      )}
+
+      {searchPage === "moodle" && (
+        <>
+          {trainingStatusData && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={trainingStatus}
+                setState={setTrainingStatus}
+                options={trainingStatusData}
+                placeholder="وضعیت آموزش"
+              />
+            </Grid>
+          )}
+          {nextTrainingStepData && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={nextTrainingStep}
+                setState={setNextTrainingStep}
+                options={nextTrainingStepData}
+                placeholder="قدم آتی آموزش"
+              />
+            </Grid>
+          )}
+          {referralToFinanceData && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={referralToFinance}
+                setState={setReferralToFinance}
+                options={referralToFinanceData}
+                placeholder="ارجاع به واحد مالی"
+              />
+            </Grid>
+          )}
+          {KaaryarAssessmentData && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={kaaryarAssessment}
+                setState={setKaaryarAssessment}
+                options={KaaryarAssessmentData}
+                placeholder="ارزیابی کاریار"
+              />
+            </Grid>
+          )}
+          {ModuleData && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={module as any}
+                setState={setModule as any}
+                options={ModuleData.map((i) => ({ id: i.id, value: i.name }))}
+                placeholder="نام دوره"
+              />
+            </Grid>
+          )}
+          {groupData && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={group as any}
+                setState={setGroup as any}
+                options={groupData.map((i) => ({ id: i.id, value: i.name }))}
+                placeholder="نام گروه"
+              />
+            </Grid>
+          )}
         </>
       )}
 

@@ -8,7 +8,7 @@ interface Prop {
   setLiftUpState: React.Dispatch<React.SetStateAction<LiftUpStateType>>;
 }
 
-const InterpersonalFieldsAndEnglish = ({ setLiftUpState }: Prop) => {
+const VocationalFieldsAndEnglish = ({ setLiftUpState }: Prop) => {
   const [weblinkLmsCourse, setWeblinkLmsCourse] = useState("");
   useEffect(() => {
     setLiftUpState({
@@ -28,7 +28,7 @@ const InterpersonalFieldsAndEnglish = ({ setLiftUpState }: Prop) => {
             label="محتوای دوره (لینک به دوره در LMS)"
             value={weblinkLmsCourse}
             onChange={(e) => setWeblinkLmsCourse(e.target.value)}
-            placeholder="example.com"
+            placeholder="https://www.example.com"
           />
         </FormControl>
       </Grid>
@@ -36,4 +36,4 @@ const InterpersonalFieldsAndEnglish = ({ setLiftUpState }: Prop) => {
   );
 };
 
-export default InterpersonalFieldsAndEnglish;
+export default VocationalFieldsAndEnglish;

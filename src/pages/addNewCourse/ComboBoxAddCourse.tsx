@@ -10,6 +10,7 @@ interface ComboBoxProp {
   identifier: string;
   label: string;
   handleChange: (event: SelectChangeEvent) => void;
+  error?: boolean;
 }
 
 export const ComboBoxAddCourse = ({
@@ -18,6 +19,7 @@ export const ComboBoxAddCourse = ({
   identifier,
   label,
   handleChange,
+  error = false,
 }: ComboBoxProp) => {
   return (
     <FormControl fullWidth>
@@ -29,6 +31,7 @@ export const ComboBoxAddCourse = ({
         value={val}
         label={label}
         onChange={handleChange}
+        error={error}
       >
         {options.map((option, i) => (
           <MenuItem key={i} value={option.value}>

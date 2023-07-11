@@ -9,64 +9,80 @@ import {
 import { RegistrationForm } from "../../model";
 import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
-// import { addComma } from "../../utils/addComma";
+
 import { getLabel } from "../../utils/getLabel";
 import { SelectedFieldOpt } from "../search/searchOptions";
 interface RegStudent {
   student: RegistrationForm | undefined;
+  studentDetailComp?: boolean;
 }
 
-const RegisterFormDetailComp = ({ student }: RegStudent) => {
+const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
   return (
     <ContentBox>
-      <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
-        فرم ثبت اطلاعات اولیه
-      </DetailTypography>
-      <Divider
-        variant="middle"
-        flexItem
-        orientation={matches ? "vertical" : "horizontal"}
-      />
+      {!studentDetailComp && (
+        <>
+          <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
+            فرم ثبت اطلاعات اولیه
+          </DetailTypography>
+          <Divider
+            variant="middle"
+            flexItem
+            orientation={matches ? "vertical" : "horizontal"}
+          />
+        </>
+      )}
       <Grid container>
         <Grid item xs={12} md={6}>
           <List>
             <ListItem>
               <ListItemText
                 primary="کد متقاضی :"
-                secondary={student?.registrationCode}
+                secondary={student?.registrationCode || "-"}
               />
             </ListItem>
             <ListItem>
-              <ListItemText primary="نام :" secondary={student?.firstName} />
+              <ListItemText
+                primary="نام :"
+                secondary={student?.firstName || "-"}
+              />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="نام خانوادگی :"
-                secondary={student?.family}
+                secondary={student?.family || "-"}
               />
             </ListItem>
             <ListItem>
-              <ListItemText primary="استان :" secondary={student?.province} />
+              <ListItemText
+                primary="استان :"
+                secondary={student?.province || "-"}
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary="شهر :" secondary={student?.city} />
+              <ListItemText primary="شهر :" secondary={student?.city || "-"} />
             </ListItem>
             <ListItem>
-              <ListItemText primary="دوره :" secondary={student?.course} />
+              <ListItemText
+                primary="دوره :"
+                secondary={student?.course || "-"}
+              />
             </ListItem>
 
             <ListItem>
               <ListItemText
                 primary="سال تولد :"
-                secondary={student?.birthDate}
+                secondary={student?.birthDate || "-"}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="نحوه آشنایی :"
                 secondary={
-                  student?.familiarity?.trim() === "other"
+                  !student?.familiarity || student?.familiarity === ""
+                    ? "-"
+                    : student?.familiarity === "other"
                     ? "سایر"
                     : student?.familiarity
                 }
@@ -76,7 +92,7 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
               <ListItem>
                 <ListItemText
                   primary="نام معرف یا موسسه :"
-                  secondary={student?.refer}
+                  secondary={student?.refer || "-"}
                 />
               </ListItem>
             )}
@@ -87,36 +103,47 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
             <ListItem>
               <ListItemText
                 primary="شماره همراه :"
-                secondary={student?.mobile}
+                secondary={student?.mobile || "-"}
               />
             </ListItem>
             <ListItem>
-              <ListItemText primary="ایمیل :" secondary={student?.email} />
+              <ListItemText
+                primary="ایمیل :"
+                secondary={student?.email || "-"}
+              />
             </ListItem>
 
             <ListItem>
               <ListItemText
                 primary="میزان تحصیلات :"
-                secondary={student?.education}
+                secondary={student?.education || "-"}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="سال دبیرستان :"
-                secondary={student?.highSchoolYear}
+                secondary={student?.highSchoolYear || "-"}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="ترم دانشگاه :"
+                secondary={student?.uniSemester || "-"}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="رشته تحصیلی :"
-                secondary={student?.studyField}
+                secondary={student?.studyField || "-"}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="رشته انتخابی در کاریار :"
                 secondary={
-                  student?.selectedField?.trim() === "other"
+                  !student?.selectedField || student?.selectedField === ""
+                    ? "-"
+                    : student?.selectedField === "other"
                     ? "سایر"
                     : getLabel(student?.selectedField, SelectedFieldOpt)
                 }
@@ -127,7 +154,7 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
               <ListItem>
                 <ListItemText
                   primary="مسیر مورد نظر متقاضی:"
-                  secondary={student?.careerPathwayOther}
+                  secondary={student?.careerPathwayOther || "-"}
                 />
               </ListItem>
             )}
@@ -135,7 +162,7 @@ const RegisterFormDetailComp = ({ student }: RegStudent) => {
             <ListItem>
               <ListItemText
                 primary="توضیحات سایر :"
-                secondary={student?.description}
+                secondary={student?.description || "-"}
               />
             </ListItem>
           </List>

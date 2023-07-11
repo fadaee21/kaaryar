@@ -10,6 +10,7 @@ import {
   eduLevelOptions,
   highSchoolOptions,
   provinceOptions,
+  uniSemesterOptions,
 } from "../search/searchOptions";
 import EditingInput from "./EditingInput";
 
@@ -143,6 +144,15 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 handleChange={handleChange}
                 state={student?.highSchoolYear || ""}
                 name="highSchoolYear"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingSelective
+                options={uniSemesterOptions}
+                placeholder="ترم دانشگاه"
+                handleChange={handleChange}
+                state={student?.uniSemester || ""}
+                name="uniSemester"
               />
             </ListItem>
 

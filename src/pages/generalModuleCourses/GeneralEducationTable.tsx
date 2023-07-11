@@ -59,10 +59,10 @@ const GeneralEducationTable = () => {
             <LanguageTable />
           </TabPanel>
           <TabPanel value={numberValue || value} index={2}>
-            <InterpersonalTable />
+            <VocationalTable />
           </TabPanel>
           <TabPanel value={numberValue || value} index={3}>
-            <VocationalTable />
+            <InterpersonalTable />
           </TabPanel>
         </Container>
       </Box>
