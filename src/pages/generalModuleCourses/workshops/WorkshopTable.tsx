@@ -24,7 +24,7 @@ import SearchAllCourse from "../../../components/search-course/SearchAllCourse";
 import TableEmpty from "../../../components/table/TableEmpty";
 const SETTING_RESPONSE = "&hasCategory=false&isImported=true";
 
-const WORKSHOP_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=created_at&moduleType=general&moduleSubType=workshop${SETTING_RESPONSE}`;
+const WORKSHOP_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=start_date&moduleType=general&moduleSubType=workshop${SETTING_RESPONSE}`;
 
 const WorkshopTable = () => {
   const [chevronDir, setChevronDir] = useState(false);

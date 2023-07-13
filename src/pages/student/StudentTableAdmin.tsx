@@ -33,13 +33,15 @@ import { studentTableHeader } from "../../components/table/helper-header";
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const pageSize = 25;
-  const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&orderAscending=false&orderBy=after_week_update_timestamp`;
+  const adminStudentQuery =
+    "orderAscending=false&orderBy=after_week_update_timestamp";
+  const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
 
   const studentCount = "moodle/user/student/count";
   const [, counterPage] = useCountPagination(studentCount);
   const [chevronDir, setChevronDir] = useState(false);
   const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
-    MoodleUser[] | null
+    any[] | null
   >(null);
 
   const { data, isLoading, error } = useSWR(adminStudent, {
@@ -89,8 +91,19 @@ const StudentTableAdmin = () => {
               </AccordionSummaryStyled>
               <ExcelExport
                 fileName={"excel export"}
-                linkAll="moodle/user/student/all?pageNum=1&pageSize=100000"
-                searchData={searchingMoodleStudent}
+                linkAll={`moodle/user/student/all?pageNum=1&pageSize=100000&${adminStudentQuery}`}
+                searchData={searchingMoodleStudent?.map((i) => ({
+                  "نام و نام خانوادگی": i.firstName + " " + i.family,
+                  "نام کاربری": i.username,
+                  شهر: i.registrationForm.city,
+                  استان: i.registrationForm.province,
+                  گروه: i.registrationForm.course,
+                  "مؤسسه معرف": i.registrationForm.refer,
+                  "وضعیت آموزش": i.statusForm?.trainingStatus?.value,
+                  "قدم آتی آموزش": i.statusForm?.nextTrainingStep?.value,
+                  "ارجاع به واحد مالی": i.statusForm?.referralToFinance?.value,
+                  "ارزیابی کاریار": i.statusForm?.kaaryarAssessment?.value,
+                }))}
                 useIn="studentOfAdmin"
               />
             </Box>

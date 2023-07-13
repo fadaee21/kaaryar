@@ -80,12 +80,12 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
               placeholder="تعیین سطح الگوریتم و ریاضی"
               value={student?.algoScore || ""}
             />
-            {/* <EditString
+            <EditString
               handleChange={handleChange}
-              identifier="comLevelResult"
-              placeholder="نمره مهارت‌های پایه--"
-              value={student?.comLevelResult || ""}
-            /> */}
+              identifier="fundamentalSkillsScore"
+              placeholder="نمره مهارت‌های پایه"
+              value={student?.fundamentalSkillsScore || ""}
+            />
           </List>
         </Grid>
       </Grid>

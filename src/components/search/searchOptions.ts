@@ -39,6 +39,7 @@ export const highSchoolOptions = [
   { label: "سال دوازدهم", value: "سال دوازدهم" },
 ];
 export const uniSemesterOptions = [
+  { label: "انتخاب کنید", value: "" },
   { label: "ترم اول", value: "ترم اول" },
   { label: "ترم دوم", value: "ترم دوم" },
   { label: "ترم سوم", value: "ترم سوم" },

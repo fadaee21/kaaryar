@@ -186,12 +186,12 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                   secondary={student?.algoScore}
                 />
               </ListItem>
-              {/* <ListItem> //TODO - فعلا سمت بک اند هیچی براش نیست
+              <ListItem>
                 <ListItemText
-                  primary="نمره مهارت‌های پایه--"
-                  // secondary={student?.langScore}
+                  primary="نمره مهارت‌های پایه"
+                  secondary={student?.fundamentalSkillsScore}
                 />
-              </ListItem> */}
+              </ListItem>
               <ListItem
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >

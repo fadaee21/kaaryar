@@ -289,9 +289,10 @@ interface AfterWeekType {
   algoLevelResult: string;
   comLevelResult: string;
   firstSelectJobRoad: string;
+  fundamentalSkillsScore: string;
   notifyAcceptWeek: string;
   workshopCont: string;
-  firstSelectJobRoad:string;
+  firstSelectJobRoad: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
 }
 
