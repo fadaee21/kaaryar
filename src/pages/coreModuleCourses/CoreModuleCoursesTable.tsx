@@ -25,6 +25,8 @@ import LoadingProgress from "../../components/LoadingProgress";
 import { ShortCoreModule } from "../../model";
 import SearchAllCourse from "../../components/search-course/SearchAllCourse";
 import TableEmpty from "../../components/table/TableEmpty";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 const SETTING_RESPONSE = "&hasCategory=true";
 const MODULES_ALL_CORE = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=start_date&moduleType=core${SETTING_RESPONSE}`;
 const CoreModuleCoursesTable = () => {
@@ -37,7 +39,9 @@ const CoreModuleCoursesTable = () => {
     return <LoadingProgress />;
   }
   if (error) {
+    toast.error(handleError(error));
     console.log(error);
+    return <Typography sx={{ mx: "auto" }}>Error Loading Page</Typography>;
   }
   console.log(searchCourseCore);
   return (

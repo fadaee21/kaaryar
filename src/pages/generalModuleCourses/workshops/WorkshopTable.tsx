@@ -22,6 +22,8 @@ import TableBodyWorksShops from "../../../components/generalCourse/workshops/Tab
 import { workshops } from "../../../components/table/helper-header";
 import SearchAllCourse from "../../../components/search-course/SearchAllCourse";
 import TableEmpty from "../../../components/table/TableEmpty";
+import { handleError } from "../../../utils/handleError";
+import { toast } from "react-toastify";
 const SETTING_RESPONSE = "&hasCategory=false&isImported=true";
 
 const WORKSHOP_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=start_date&moduleType=general&moduleSubType=workshop${SETTING_RESPONSE}`;
@@ -37,7 +39,8 @@ const WorkshopTable = () => {
   }
   if (error) {
     console.log(error);
-    return <Typography>Error</Typography>;
+    toast.error(handleError(error));
+    return <Typography sx={{ mx: "auto" }}>Error Loading Page</Typography>;
   }
 
   return (

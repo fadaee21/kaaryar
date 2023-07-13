@@ -22,6 +22,8 @@ import { language } from "../../../components/table/helper-header";
 import LoadingProgress from "../../../components/LoadingProgress";
 import SearchAllCourse from "../../../components/search-course/SearchAllCourse";
 import TableEmpty from "../../../components/table/TableEmpty";
+import { toast } from "react-toastify";
+import { handleError } from "../../../utils/handleError";
 const SETTING_RESPONSE = "";
 const ENGLISH_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=start_date&moduleType=general&moduleSubType=english_module${SETTING_RESPONSE}`;
 
@@ -39,7 +41,8 @@ const LanguageTable = () => {
   }
   if (errorEng) {
     console.log(errorEng);
-    return <Typography>Error</Typography>;
+    toast.error(handleError(errorEng))
+    return <Typography sx={{ mx: "auto" }}>Error Loading Page</Typography>;
   }
 
   return (

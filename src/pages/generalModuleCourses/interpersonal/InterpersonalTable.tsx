@@ -23,6 +23,8 @@ import { vocational } from "../../../components/table/helper-header";
 import TableBodyVocational from "../../../components/generalCourse/vocational-interpersonal/TableBodyVocational";
 import SearchAllCourse from "../../../components/search-course/SearchAllCourse";
 import TableEmpty from "../../../components/table/TableEmpty";
+import { toast } from "react-toastify";
+import { handleError } from "../../../utils/handleError";
 const SETTING_RESPONSE = "&hasCategory=true";
 const INTERPERSONAL_LIST = `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=start_date&moduleType=general&moduleSubType=interpersonal_skills${SETTING_RESPONSE}`;
 
@@ -38,7 +40,8 @@ const InterpersonalTable = () => {
   }
   if (error) {
     console.log(error);
-    return <Typography>Error</Typography>;
+    toast.error(handleError(error))
+    return <Typography sx={{ mx: "auto" }}>Error Loading Page</Typography>;
   }
 
   return (
