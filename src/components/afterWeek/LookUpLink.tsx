@@ -24,7 +24,8 @@ const LookUpLink = ({ student, id, refreshingPage }: LookUpLinkType) => {
   const [oneStudent, setOneStudent] = useState<any>(student); // get One student from after week
   const [loading, setLoading] = useState(true);
   const [feedBackMessage, setFeedBackMessage] = useState("");
-  const allStudentMoodle = `moodle/user/student/all?pageNum=1&pageSize=10000`;
+  // const allStudentMoodle = `moodle/user/student/all?pageNum=1&pageSize=10000`;
+  const allStudentMoodle = `/moodle/user/role/all?role=student&pageNum=1&pageSize=10000&orderAscending=false&orderBy=lastFirstName`;
   const oneStudentLink = `exam/after/week/form/${id}`;
   const approvedStu = student?.afterWeekChecked; // approvedStu help: false:don't show this component.true: just show whose link and related message. null: show whose link and let choose or edit it again!
   //get all list
