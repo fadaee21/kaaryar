@@ -6,6 +6,8 @@ import { Box, Button, ButtonGroup, Container } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RegisterFormDetailEditComp from "../../components/RegisterFormDetail/RegisterFormDetailEditComp";
 import { RegistrationForm } from "../../model";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 const RegisterFormDetailEdit = () => {
   const [student, setStudent] = useState<RegistrationForm | null>(null);
@@ -40,9 +42,9 @@ const RegisterFormDetailEdit = () => {
       } else {
         console.log(response);
       }
-      setLoadingPut(false);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(handleError(error));
+    } finally {
       setLoadingPut(false);
     }
   };

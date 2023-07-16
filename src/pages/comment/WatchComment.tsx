@@ -23,6 +23,7 @@ import { useAuth } from "../../context/AuthProvider";
 import { useState } from "react";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useSWRConfig } from "swr";
+import { roleConverter } from "../../utils/roleConverter";
 
 const WatchComment = () => {
   const [open, setOpen] = useState(false);
@@ -47,6 +48,7 @@ const WatchComment = () => {
     sessionProblem,
     student: { firstName, family },
     commenter,
+    commenterRole,
   } = allComment as Comment;
 
   const handleClickOpenEdit = () => {
@@ -80,7 +82,7 @@ const WatchComment = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h6">
+          <Typography variant="h5">
             مشاهده نظر برای {`${firstName} ${family}`}
           </Typography>
           <Button
@@ -119,7 +121,9 @@ const WatchComment = () => {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={3}>
             <PaperW sx={{ minHeight: "8rem" }}>
-              <Typography variant="body2">نام منتور</Typography>
+              <Typography variant="body2">
+                نام {roleConverter(commenterRole)}
+              </Typography>
               <Typography variant="body1">{`${commenter.firstName} ${commenter.family}`}</Typography>
             </PaperW>
           </Grid>
@@ -135,12 +139,14 @@ const WatchComment = () => {
               <Typography variant="body1">
                 {/* in post Date of comment i must change type toISOstring,when fetch Date,it response with one day false! zero utc help to improve this fault */}
                 {/* {dateConverter(zeroUTCOffset(new Date(sessionDate)))} */}
-                {new Intl.DateTimeFormat("fa", { dateStyle: "full" })
-                  .format(new Date(sessionDate))
-                  .replace(",", "")
-                  .split(" ")
-                  .reverse()
-                  .join(" ")}
+                {sessionDate
+                  ? new Intl.DateTimeFormat("fa", { dateStyle: "full" })
+                      .format(new Date(sessionDate))
+                      .replace(",", "")
+                      .split(" ")
+                      .reverse()
+                      .join(" ")
+                  : "-"}
               </Typography>
             </PaperW>
           </Grid>

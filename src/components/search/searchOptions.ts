@@ -38,6 +38,18 @@ export const highSchoolOptions = [
   { label: "سال یازدهم", value: "سال یازدهم" },
   { label: "سال دوازدهم", value: "سال دوازدهم" },
 ];
+export const uniSemesterOptions = [
+  { label: "انتخاب کنید", value: "" },
+  { label: "ترم اول", value: "ترم اول" },
+  { label: "ترم دوم", value: "ترم دوم" },
+  { label: "ترم سوم", value: "ترم سوم" },
+  { label: "ترم چهارم", value: "ترم چهارم" },
+  { label: "ترم پنجم", value: "ترم پنجم" },
+  { label: "ترم ششم", value: "ترم ششم" },
+  { label: "ترم هفتم", value: "ترم هفتم" },
+  { label: "ترم هشتم", value: "ترم هشتم" },
+  { label: "ترم نهم و یا بالاتر", value: "ترم نهم و یا بالاتر" },
+];
 export const highSchoolOptions2 = [
   { label: "سال دهم", value: "سال دهم" },
   { label: "سال یازدهم", value: "سال یازدهم" },
@@ -45,7 +57,7 @@ export const highSchoolOptions2 = [
 ];
 
 export const acquaintanceOptions = [
-  { label: "شرکت در کارگاه‌های آموزشی", value: "شرکت در کارگاه‌های آموزشی"},
+  { label: "شرکت در کارگاه‌های آموزشی", value: "شرکت در کارگاه‌های آموزشی" },
   { label: "شبکه‌های اجتماعی", value: "شبکه‌های اجتماعی" },
   { label: "موسسات نیکوکاری", value: "موسسات نیکوکاری" },
   { label: "دانشگاه", value: "دانشگاه" },
@@ -54,8 +66,6 @@ export const acquaintanceOptions = [
   { label: "کوئرا", value: "کوئرا" },
   { label: "سایر", value: "other" },
 ];
-
-
 
 export const eduLevelOptions = [
   { label: "زیر دیپلم", value: "زیر دیپلم" },

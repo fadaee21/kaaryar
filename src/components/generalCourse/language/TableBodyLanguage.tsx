@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import { EnglishShort } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
-import { convertArrToStr } from "../../../utils/courseMethod";
 interface Prop {
   englishCourse: EnglishShort;
   counter: number;
@@ -17,9 +16,8 @@ const TableBodyLanguage = ({ englishCourse, counter }: Prop) => {
     endDate,
     studentCount,
     category,
-    // isActive,
     teachingStatus,
-    instructors,
+    nonLmsInstructors,
   } = englishCourse;
   return (
     <StyledTableRow
@@ -32,28 +30,22 @@ const TableBodyLanguage = ({ englishCourse, counter }: Prop) => {
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{counter+1}</Typography>
+        <Typography variant="body2">{counter + 1}</Typography>
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
-      {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{levelName}</Typography>
-      </StyledTableCell> */}
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">
-          {/* {isActive ? "در حال آموزش" : "تمام‌شده"} */}
-          {teachingStatus}
-        </Typography>
-      </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{category?.name}</Typography>
+        <Typography variant="body2">{teachingStatus}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
-          {instructors.length ? convertArrToStr(instructors) : "-"}
+          {category ? category.groupCode + "-" + category.name : "-"}
         </Typography>
+      </StyledTableCell>
+      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+        <Typography variant="body2">{nonLmsInstructors || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{persianDate(startDate)}</Typography>

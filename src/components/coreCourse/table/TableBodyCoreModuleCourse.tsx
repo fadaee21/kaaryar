@@ -49,7 +49,7 @@ const TableBodyCoreModuleCourse = ({ moduleAll, counter }: Prop) => {
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
-          {category ? category.name : "-"}
+          {category ? category.groupCode + "-" + category.name : "-"}
         </Typography>
       </StyledTableCell>
 

@@ -8,7 +8,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { useState } from "react";
 import UploadProfileImage from "../../pages/profile/UploadProfileImage";
 import { DesireBox, ContentBoxHeader, StackTitle } from "../../styles/profile";
-import { Box, Button, Container, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import AddLink, { DesireLink } from "../../pages/profile/AddLink";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Profile } from "../../model";
@@ -75,20 +75,20 @@ const UserInfo = ({ profileData }: ProfileData) => {
       <Container maxWidth="lg">
         <ContentBoxHeader>
           <Typography variant="h5">پروفایل من</Typography>
-          <Tooltip
+          {/* <Tooltip
             title="در صورت پاک کردن نام و نام خانوادگی، پروفایل حذف می شود."
             placement="top"
+          > */}
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            sx={{ ml: "auto", mr: 1, px: 5 }}
+            disabled={loadingProfile}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              sx={{ ml: "auto", mr: 1, px: 5 }}
-              disabled={loadingProfile}
-            >
-              ذخیره
-            </Button>
-          </Tooltip>
+            ذخیره
+          </Button>
+          {/* </Tooltip> */}
           <Button
             onClick={() => navigate(-1)}
             endIcon={<ArrowBackIcon />}

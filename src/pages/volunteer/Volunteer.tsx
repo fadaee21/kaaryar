@@ -29,13 +29,13 @@ import { volunteerTableHeader } from "../../components/table/helper-header";
 
 const Volunteer = () => {
   const pageSize = 10;
-  const addressLink = `/user/profile/all?pageNum=1&pageSize=${pageSize}`;
+  const [page, setPage] = useState(1);
+  const addressLink = `/user/profile/all?pageNum=${page}&pageSize=${pageSize}`;
   const { dataCall, getAllData, loadingCall } = useGetData();
 
   // const [searchingVolunteer, setSearchingVolunteer] = useState([]);
   // const [volunteers, setvolunteers] = useState([]);
   // const [chevronDir, setChevronDir] = useState(false);
-  const [page, setPage] = useState(1);
   const volunteerCount = "/user/profile/count";
   const [, counterPage] = useCountPagination(volunteerCount);
   const { loadingProfile } = useEditProfile();
@@ -119,7 +119,7 @@ const Volunteer = () => {
                     username={item.user.username}
                     role={item.role}
                     id={item.id}
-                    counter={i + 1}
+                    counter={page * pageSize + (i + 1) - pageSize}
                   />
                 ))}
               </TableBody>

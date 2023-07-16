@@ -7,9 +7,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 // import SearchAll from "../../components/search/SearchAll";
@@ -19,57 +18,38 @@ import useCountPagination from "../../hooks/request/useCountPagination";
 import { SeekerStudent } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   AccordionStyled,
-  AccordionSummaryStyled,
+  // AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
+// import style from "../../styles/search/searchChevron.module.css";
 import { seekerStateFinder } from "../../utils/seekerStateFinder";
 import { afterTableSkillSeeker } from "../../components/table/helper-header";
-
+import useSWR from "swr";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 const SkillSeeker = () => {
-  const [seekerStudents, setSeekerStudents] = useState<SeekerStudent[] | null>(
-    null
-  );
-
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [chevronDir, setChevronDir] = useState(false);
-
+  // const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
-
   const navigate = useNavigate();
   const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=20`;
   const examFormCount = "/status/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(allStudentSeeker);
-      let data = await response.data;
-      setSeekerStudents(data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
+  const { data, isLoading, error } = useSWR(allStudentSeeker, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
 
-  useEffect(() => {
-    getListLearner();
-    // eslint-disable-next-line
-  }, [page]);
-
-  if (loading) {
+  if (isLoading) {
     return <LoadingProgress />;
   }
 
-  // console.log(seekerStudents);
+  if (error) {
+    toast.error(handleError(error));
+    navigate("/");
+  }
 
   return (
     <Box sx={{ m: 2 }}>
@@ -87,9 +67,10 @@ const SkillSeeker = () => {
                 display: "flex",
                 alignItems: "flex-start",
                 justifyContent: "flex-start",
+                mb: 2,
               }}
             >
-              <AccordionSummaryStyled
+              {/* <AccordionSummaryStyled
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
@@ -98,12 +79,12 @@ const SkillSeeker = () => {
                 <ExpandMoreIcon
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
-              </AccordionSummaryStyled>
+              </AccordionSummaryStyled> */}
               <ExcelExport
                 fileName={"Applicant Info"}
                 linkAll="/status/form/all?pageNum=1&pageSize=100000"
                 searchData={searchingStudentSeeker?.map(
-                  (i) => i.beforeWeekForm?.registrationForm
+                  (i) => i.BeforeWeekForm?.registrationForm
                 )}
                 useIn="seeker"
               />
@@ -130,7 +111,7 @@ const SkillSeeker = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentSeeker && (
                 <TableBody>
-                  {seekerStudents?.map((seekerStudent: SeekerStudent) => {
+                  {data?.map((seekerStudent: SeekerStudent) => {
                     // console.log(seekerStudent);
                     const {
                       id,

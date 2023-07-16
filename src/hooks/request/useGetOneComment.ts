@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 import { Comment } from "../../model";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 const useGetOneComment = () => {
   const [allComment, setAllComment] = useState<Comment | null>(null); //all data in the this comment
@@ -23,12 +25,10 @@ const useGetOneComment = () => {
         let response = await getData(commentLink);
         let data = await response.data;
         setAllComment(data);
-        setLoading(false);
-      } catch (error) {
-        //TODO:handle Error
-        console.log("catch block of error");
-        console.log(error);
+      } catch (error: any) {
+        toast.error(handleError(error));
         navigate("/");
+      } finally {
         setLoading(false);
       }
     };

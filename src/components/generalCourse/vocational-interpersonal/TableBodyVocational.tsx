@@ -42,7 +42,9 @@ const TableBodyVocational = ({ vocational, counter }: Prop) => {
         <Typography variant="body2">{levelName}</Typography>
       </StyledTableCell> */}
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{category?.name}</Typography>
+        <Typography variant="body2">
+          {category ? category.groupCode + "-" + category.name : "-"}
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">

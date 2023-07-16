@@ -56,7 +56,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
 
   const { pic, getPicture } = useGetImage("/moodle/payment/img/user/");
 
-  const sField = student?.beforeWeekForm?.registrationForm?.selectedField;
+  // const sField = student?.beforeWeekForm?.registrationForm?.selectedField;
   const cField = student?.beforeWeekForm?.registrationForm?.careerPathwayOther;
   const st = student?.moodleUser;
   React.useEffect(() => {
@@ -148,9 +148,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                 <ListItemText
                   primary="انتخاب اولیه مسیر شغلی"
                   secondary={
-                    sField?.trim() === "other"
+                    student?.firstSelectJobRoad?.trim() === "other"
                       ? "سایر"
-                      : getLabel(sField, SelectedFieldOpt)
+                      : getLabel(student?.firstSelectJobRoad, SelectedFieldOpt)
                   }
                 />
               </ListItem>
@@ -188,8 +188,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="نمره مهارت‌های پایه--"
-                  // secondary={student?.langScore}
+                  primary="نمره مهارت‌های پایه"
+                  secondary={student?.fundamentalSkillsScore}
                 />
               </ListItem>
               <ListItem

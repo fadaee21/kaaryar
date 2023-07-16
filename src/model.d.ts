@@ -127,6 +127,8 @@ export interface MoodleUser {
   picture: {
     imageAddress: string;
   };
+  registrationForm: RegistrationForm | null;
+  statusForm: StatusForm | null;
 }
 //this is just for admin
 export interface moodleJustStudent {
@@ -189,10 +191,10 @@ export interface RegistrationForm {
   description?: string;
   careerPathwayOther?: string;
   highSchoolYear?: string;
+  uniSemester?: string;
   refer?: string;
   createTime?: string;
   highSchoolYear?: string;
-  refer?: string;
   course?: string;
 }
 
@@ -241,7 +243,7 @@ export interface BeforeWeekType {
   stuSemester: string;
   stuYear: string;
   transcriptImageAddress: string;
-  noneJobActivation: string;
+  noneJobActivation: string[] | null;
   webDevFamiliarity: string;
   workTime: string;
   id: 1;
@@ -287,8 +289,10 @@ interface AfterWeekType {
   algoLevelResult: string;
   comLevelResult: string;
   firstSelectJobRoad: string;
+  fundamentalSkillsScore: string;
   notifyAcceptWeek: string;
   workshopCont: string;
+  firstSelectJobRoad: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
 }
 
@@ -312,9 +316,9 @@ export interface SeekerStudent {
   registrationCode: string;
   regForm: RegistrationForm;
   regChecked: boolean;
-  beforeWeekForm: BeforeWeekType;
+  BeforeWeekForm: BeforeWeekType;
   beforeWeekChecked: boolean;
-  afterWeekForm: AfterWeekType;
+  AfterWeekForm: AfterWeekType;
   afterWeekChecked: true;
 }
 
@@ -620,6 +624,7 @@ export interface ShortCoreModule {
   instructors: Instructor[];
   numberOfHours: string;
   deadlineFinalProject: any;
+  nonLmsInstructors: string | null;
 }
 
 export interface WorkshopShort {
@@ -670,6 +675,7 @@ export interface EnglishShort {
   category: Category;
   careerPathway: CareerPathway;
   instructors: Instructor[];
+  nonLmsInstructors: string | null;
 }
 
 //type for student
@@ -807,6 +813,7 @@ export interface StatusForm {
   description: string | null;
   regChecked: boolean;
   registrationCode: string;
+  kaaryarAssessment: any;
   id: number;
   trainingStatus: DetailStudentStatus | null;
   withdrawalReason: DetailStudentStatus | null;

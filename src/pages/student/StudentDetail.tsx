@@ -17,7 +17,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useGetImage from "../../hooks/request/useGetImage";
 import { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import RegisterInfo from "../../components/student/RegisterInfo";
+// import RegisterInfo from "../../components/student/RegisterInfo";
 import StudentDetailMore from "../../components/student/StudentDetailMore";
 
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
@@ -28,6 +28,7 @@ import StatusStudent from "../../components/student/StatusStudent";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { useAuth } from "../../context/AuthProvider";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const StudentDetail = () => {
   const {
@@ -42,7 +43,9 @@ const StudentDetail = () => {
 
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useSWR<StudentInfo>(studentProfile);
+  const { data, isLoading, error } = useSWR<StudentInfo>(studentProfile, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
   const {
     data: afterBeforeData,
     isLoading: afterBeforeLoading,
@@ -122,20 +125,20 @@ const StudentDetail = () => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Stack direction="row" alignItems="flex-start" gap={5}>
-          <RegisterInfo
-            firstName={data?.firstName}
-            family={data?.family}
-            username={data?.username}
-            phone={data?.phone}
-            mobile={data?.mobile}
-            institution={data?.institution}
-            email={data?.email}
-            country={data?.country}
-            city={data?.city}
-            address={data?.address}
-          />
-        </Stack>
+        {afterBeforeLoading ? (
+          <LoadingProgress />
+        ) : (
+          <>
+            {afterBeforeError ? (
+              <p>اطلاعات ثبت‌نام برای این مهارت آموز وجود ندارد</p>
+            ) : (
+              <RegisterFormDetailComp
+                student={afterBeforeData?.beforeWeekForm?.registrationForm}
+                studentDetailComp={true}
+              />
+            )}
+          </>
+        )}
       </TabPanel>
 
       <TabPanel value={value} index={1}>

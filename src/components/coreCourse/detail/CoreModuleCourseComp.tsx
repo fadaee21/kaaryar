@@ -54,7 +54,7 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
               secondary={
                 weblinkLmsCourse ? (
                   <Link
-                    href={`https://www.${weblinkLmsCourse}`}
+                    href={`${weblinkLmsCourse}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     variant="body2"
@@ -118,7 +118,7 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
               secondary={
                 weblinkFinalProject ? (
                   <Link
-                    href={`https://www.${weblinkFinalProject}`}
+                    href={`${weblinkFinalProject}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     variant="body2"

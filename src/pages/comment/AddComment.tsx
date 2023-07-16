@@ -1,12 +1,8 @@
-import { Button, Container, Typography } from "@mui/material";
-import { Stack } from "@mui/system";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Container } from "@mui/material";
+import { Navigate, useLocation } from "react-router-dom";
 import AddOrEditComment from "../../components/comment/AddOrEditComment";
 
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
 const AddComment = () => {
-  const navigate = useNavigate();
   const { state, pathname } = useLocation();
 
   if (!state) {
@@ -18,21 +14,11 @@ const AddComment = () => {
 
   return (
     <Container maxWidth="lg">
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography variant="h5" gutterBottom>
-          ثبت گزارش برای {student.firstName} {student.lastName}
-        </Typography>
-        <Button
-          onClick={() => navigate(-1)}
-          endIcon={<ArrowBackIcon />}
-          variant="outlined"
-          color="inherit"
-        >
-          بازگشت
-        </Button>
-      </Stack>
-
-      <AddOrEditComment compType={"adding"} allComment={null} />
+      <AddOrEditComment
+        compType={"adding"}
+        allComment={null}
+        studentName={student}
+      />
     </Container>
   );
 };

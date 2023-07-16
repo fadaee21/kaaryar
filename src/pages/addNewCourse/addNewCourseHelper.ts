@@ -1,5 +1,3 @@
-
-
 export const typeOfCourse = [
   {
     label: "دوره تخصصی",
@@ -14,11 +12,11 @@ export const typeOfCourse = [
     value: "moduleType=general&moduleSubType=english_module",
   },
   {
-    label: "دوره عمومی: مهارت‌های ارتباطی",
+    label: "دوره عمومی: مهارت‌های حرفه‌ای",
     value: "moduleType=general&moduleSubType=vocational_skills",
   },
   {
-    label: "دوره عمومی: مهارت‌های حرفه‌ای",
+    label: "دوره عمومی: مهارت‌های ارتباطی",
     value: "moduleType=general&moduleSubType=interpersonal_skills",
   },
 ];
@@ -36,4 +34,9 @@ export const statusCourseOpt = [
     value: "پایان یافته",
     label: "پایان یافته",
   },
+];
+
+export const englishDataTypeCourse = [
+  { name: "intermediate-1", id: 11 },
+  { name: "intermediate-2", id: 12 },
 ];

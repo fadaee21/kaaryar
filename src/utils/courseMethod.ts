@@ -40,8 +40,8 @@ export const getTitle = (val: string | undefined): string => {
   const changer = {
     workshop: "کارگاه جانبی",
     english_module: "زبان انگلیسی",
-    vocational_skills: "مهارت‌های ارتباطی",
-    interpersonal_skills: "مهارت‌های حرفه‌ای",
+    interpersonal_skills: "مهارت‌های ارتباطی",
+    vocational_skills: "مهارت‌های حرفه‌ای",
   } as { [key: string]: string };
   return changer[val] || "";
 };

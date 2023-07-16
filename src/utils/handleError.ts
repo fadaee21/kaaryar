@@ -7,11 +7,13 @@ export const handleError = (
   if (error.response) {
     console.log(error.response);
     const { data } = error.response;
-
+    if (error.response.status === 401) {
+      return "مدت‌زمان نشست کاربری شما به پایان رسیده است. لطفاً دوباره وارد سیستم شوید";
+    }
     if (data?.detail) {
       const detail = data?.detail;
       if (Array.isArray(detail)) {
-        return detail[0].loc[1] + " - " + detail[0].msg; //i prefer to send several toast in page,just show first one
+        return detail[0].loc[1] + " - " + detail[0].msg; //i prefer instead of sending several toast in a  page,just show first one
       } else {
         return detail;
       }

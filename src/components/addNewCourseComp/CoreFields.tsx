@@ -72,7 +72,7 @@ const CoreFields = ({ setLiftUpState, errMsg }: Prop) => {
             label="محتوای دوره (لینک به دوره در LMS)"
             value={weblinkLmsCourse}
             onChange={(e) => setWeblinkLmsCourse(e.target.value)}
-            placeholder="example.com"
+            placeholder="https://www.example.com"
           />
         </FormControl>
       </Grid>
@@ -86,7 +86,7 @@ const CoreFields = ({ setLiftUpState, errMsg }: Prop) => {
             label="پروژه پایانی (لینک به پروژه در LMS)"
             value={weblinkFinalProject}
             onChange={(e) => setWeblinkFinalProject(e.target.value)}
-            placeholder="example.com"
+            placeholder="https://www.example.com"
           />
         </FormControl>
       </Grid>

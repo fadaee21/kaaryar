@@ -1,4 +1,4 @@
-import StudentAssignee from "./pages/student/StudentAssignee";
+import StudentAssignee from "./pages/student/StudentTableAssignee";
 import Comments from "./pages/comment/TableComments";
 import AddComment from "./pages/comment/AddComment";
 import BeforeWeekTable from "./pages/beforeWeek/BeforeWeekTable";

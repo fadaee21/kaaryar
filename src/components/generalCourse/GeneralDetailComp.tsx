@@ -1,4 +1,4 @@
-import { Grid, List, ListItem, ListItemText } from "@mui/material";
+import { Grid, Link, List, ListItem, ListItemText } from "@mui/material";
 import { ShortCoreModule } from "../../model";
 import { persianDate } from "../../utils/persianDate";
 import { convertArrToStr, getTitle } from "../../utils/courseMethod";
@@ -113,25 +113,46 @@ const GeneralDetailComp = ({ workshopDetail }: Prop) => {
               secondary={numberOfHours || "-"}
             />
           </ListItem>
-          <ListItem>
-            <ListItemText
-              primary="بازخوردها"
-              secondary={
-                weblinkLmsCourse ? (
-                  <a href={weblinkFeedbackForm}>{weblinkFeedbackForm}</a>
-                ) : (
-                  "-"
-                )
-              }
-            />
-          </ListItem>
-          {subType !== "vocational_skills" && (
+          {subType !== "english_module" && (
+            <ListItem>
+              <ListItemText
+                primary="بازخوردها"
+                secondary={
+                  weblinkFeedbackForm ? (
+                    <Link
+                      href={`${weblinkFeedbackForm}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="body2"
+                      color="inherit"
+                      underline="hover"
+                    >
+                      {weblinkFeedbackForm}
+                    </Link>
+                  ) : (
+                    "-"
+                  )
+                }
+              />
+            </ListItem>
+          )}
+
+          {subType !== "interpersonal_skills" && (
             <ListItem>
               <ListItemText
                 primary="محتوای دوره"
                 secondary={
                   weblinkLmsCourse ? (
-                    <a href={weblinkLmsCourse}>{weblinkLmsCourse}</a>
+                    <Link
+                      href={`${weblinkLmsCourse}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="body2"
+                      color="inherit"
+                      underline="hover"
+                    >
+                      {weblinkLmsCourse}
+                    </Link>
                   ) : (
                     "-"
                   )

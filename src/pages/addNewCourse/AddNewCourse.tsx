@@ -18,7 +18,7 @@ import useSWR from "swr";
 import { editAxios, postData } from "../../api/axios";
 import CoreFields from "../../components/addNewCourseComp/CoreFields";
 import WorkshopFields from "../../components/addNewCourseComp/WorkshopFields";
-import InterpersonalFieldsAndEnglish from "../../components/addNewCourseComp/InterpersonalFields";
+import VocationalFieldsAndEnglish from "../../components/addNewCourseComp/VocationalFieldsAndEnglish";
 import { JalaliDatePicker } from "../../components/comment/JalaliDatePicker";
 import RelatedGroup from "../../components/addNewCourseComp/RelatedGroup";
 
@@ -29,8 +29,13 @@ import {
 } from "../../utils/courseMethod";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
-import { statusCourseOpt, typeOfCourse } from "./addNewCourseHelper";
+import {
+  englishDataTypeCourse,
+  statusCourseOpt,
+  typeOfCourse,
+} from "./addNewCourseHelper";
 import { ComboBoxAddCourse } from "./ComboBoxAddCourse";
+import EnglishFields from "../../components/addNewCourseComp/EnglishFields";
 
 interface courseTypeProp {
   name: string;
@@ -38,6 +43,7 @@ interface courseTypeProp {
 }
 interface courseNameResponse {
   instructors: Instructor[];
+  startDate: Date;
 }
 type LiftUpStateType = {
   [index: string]: string;
@@ -45,8 +51,18 @@ type LiftUpStateType = {
 
 const AddNewCourse = () => {
   const navigate = useNavigate();
-  const [courseType, setCourseType] = useState("");
+  const [keyTypeCourse, setKeyTypeCourse] = useState<string | null>(null);
+  //give type of course and get all course name
+  const { data: dataTypeCourse, isLoading: loadingTypeCourse } =
+    useSWR<courseTypeProp[]>(keyTypeCourse); //get data for نام دوره
   const [courseNameId, setCourseNameId] = useState<string>("");
+  const [courseIdVal, courseNameVal] = getNameAndId(courseNameId); //destruct name and id from courseNameId string
+  const keyNameCourse =
+    courseNameId && dataTypeCourse ? `/modules/details/${courseIdVal}` : null;
+  //give course id and get all course information
+  const { data: dataNameCourse } = useSWR<courseNameResponse>(keyNameCourse); // get data for all values in form
+
+  const [courseType, setCourseType] = useState("");
   const [startDate, setStartDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
   const [description, setDescription] = useState("");
@@ -54,16 +70,16 @@ const AddNewCourse = () => {
     undefined
   ); //Group
   const [liftUpState, setLiftUpState] = useState<LiftUpStateType>({});
-  const [keyTypeCourse, setKeyTypeCourse] = useState<string | null>(null);
   const [numberOfHours, setNumberOfHours] = useState<undefined | string>(
     undefined
   );
   const [teachingStatus, setTeachingStatus] = useState("");
   const [errMsg, setErrMsg] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [courseIdVal, courseNameVal] = getNameAndId(courseNameId); //destruct name and id from courseNameId string
   const [moduleType, subType] = getTypeAndSubtype(courseType); //destruct type and subType value
-
+  const [nonLmsInstructors, setNonLmsInstructors] = useState<
+    string | undefined
+  >(); //instructors for english only can write
   useEffect(() => {
     setCourseNameId("");
     setErrMsg(false);
@@ -71,11 +87,7 @@ const AddNewCourse = () => {
 
   //finding the LINK of request:for english remove hasCategory=false and else set null to disable SWR
   useEffect(() => {
-    if (subType === "english_module") {
-      setKeyTypeCourse(
-        `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=true&orderBy=name&${courseType}`
-      );
-    } else if (subType === "workshop") {
+    if (subType === "workshop") {
       setKeyTypeCourse(
         `/modules/short-details/all?pageNum=1&pageSize=100&orderAscending=true&orderBy=name&hasCategory=false&isImported=false&${courseType}`
       );
@@ -88,37 +100,31 @@ const AddNewCourse = () => {
     }
   }, [courseType, subType]);
 
-  //give type of course and get all course name
-  const { data: dataTypeCourse, isLoading: loadingTypeCourse } =
-    useSWR<courseTypeProp[]>(keyTypeCourse);
-
-  const keyNameCourse =
-    courseNameId && dataTypeCourse ? `/modules/details/${courseIdVal}` : null;
-  //give course id and get all course information
-  const { data: dataNameCourse } = useSWR<courseNameResponse>(keyNameCourse);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setErrMsg(false);
     e.preventDefault();
     //handling error and guiding for compulsory field
     if ([courseType, courseNameId].some((val) => !val)) {
-      toast.error("نوع دوره و نام دوره پر شود");
+      toast.error("فیلد های اجباری پر شود");
       setErrMsg(true);
       return;
     }
-    if (subType !== "workshop" && !moduleCategoryId) {
-      toast.error("گروه مرتبط پر شود");
+    if (
+      ["workshop", "english_module"].every((i) => i !== subType) &&
+      !moduleCategoryId
+    ) {
+      toast.error("فیلد های اجباری پر شود");
       setErrMsg(true);
       return;
     }
     if (subType !== "workshop" && !teachingStatus) {
-      toast.error("وضعیت دوره پر شود");
+      toast.error("فیلد های اجباری پر شود");
       setErrMsg(true);
       return;
     }
     let careerPathwayId;
     if (moduleType === "core" && !liftUpState.careerPathwayId) {
-      toast.error("مسیر مرتبط پر شود");
+      toast.error("فیلد های اجباری پر شود");
       setErrMsg(true);
       return;
     } else {
@@ -141,6 +147,7 @@ const AddNewCourse = () => {
             careerPathwayId,
             weblinkLmsCourse: liftUpState.weblinkLmsCourse,
             teachingStatus,
+            nonLmsInstructors,
           },
         });
       } else {
@@ -178,11 +185,11 @@ const AddNewCourse = () => {
           return;
         }
         if (subType === "vocational_skills") {
-          navigate("/admin/general-course?tab=3");
+          navigate("/admin/general-course?tab=2");
           return;
         }
         if (subType === "interpersonal_skills") {
-          navigate("/admin/general-course?tab=2");
+          navigate("/admin/general-course?tab=3");
           return;
         }
       } else {
@@ -245,7 +252,7 @@ const AddNewCourse = () => {
               <FormControl
                 disabled={!dataTypeCourse || loadingTypeCourse}
                 fullWidth
-                error={!courseNameId && !!errMsg}
+                error={!courseNameId && errMsg}
               >
                 <InputLabel id="course-name-label">نام دوره</InputLabel>
                 <Select
@@ -255,7 +262,10 @@ const AddNewCourse = () => {
                   label="نام دوره"
                   onChange={(e) => setCourseNameId(e.target.value.toString())}
                 >
-                  {dataTypeCourse?.map((item) => (
+                  {(subType === "english_module"
+                    ? englishDataTypeCourse
+                    : dataTypeCourse
+                  )?.map((item) => (
                     <MenuItem key={item.id} value={`${item.id} + ${item.name}`}>
                       {/*the reason of scheme of value: i need both name and id while MenuItem just let me send a single string or number */}
                       {item.name}
@@ -264,6 +274,25 @@ const AddNewCourse = () => {
                 </Select>
               </FormControl>
             </Grid>
+            {subType === "english_module" && courseNameId && (
+              <EnglishFields
+                description={description}
+                endDate={endDate}
+                errMsg={errMsg}
+                numberOfHours={numberOfHours}
+                setDescription={setDescription}
+                setEndDate={setEndDate}
+                setLiftUpState={setLiftUpState}
+                setNumberOfHours={setNumberOfHours}
+                setStartDate={setStartDate}
+                setTeachingStatus={setTeachingStatus}
+                startDate={startDate}
+                statusCourseOpt={statusCourseOpt}
+                teachingStatus={teachingStatus}
+                nonLmsInstructors={nonLmsInstructors}
+                setNonLmsInstructors={setNonLmsInstructors}
+              />
+            )}
 
             {dataNameCourse && (
               <>
@@ -295,30 +324,27 @@ const AddNewCourse = () => {
                   <CoreFields setLiftUpState={setLiftUpState} errMsg={errMsg} />
                 )}
                 {subType === "workshop" && (
-                  <WorkshopFields setLiftUpState={setLiftUpState} />
+                  <WorkshopFields
+                    setLiftUpState={setLiftUpState}
+                    startDateProp={dataNameCourse?.startDate}
+                  />
                 )}
-                {/* {subType===("english") && <EnglishFields />} */}
-                {/* {subType===("vocational") && <VocationalFields />} */}
-                {courseNameId &&
-                  (subType === "interpersonal_skills" ||
-                    subType === "english_module") && (
-                    <InterpersonalFieldsAndEnglish
-                      setLiftUpState={setLiftUpState}
-                    />
-                  )}
-                {subType !== "workshop" && (
-                  <Grid item xs={12} md={6}>
-                    <ComboBoxAddCourse
-                      label="وضعیت دوره"
-                      identifier="statusCourse"
-                      options={statusCourseOpt}
-                      handleChange={(e) => setTeachingStatus(e.target.value)}
-                      val={teachingStatus}
-                    />
-                  </Grid>
+
+                {courseNameId && subType === "vocational_skills" && (
+                  <VocationalFieldsAndEnglish setLiftUpState={setLiftUpState} />
                 )}
                 {subType !== "workshop" && (
                   <>
+                    <Grid item xs={12} md={6}>
+                      <ComboBoxAddCourse
+                        label="وضعیت دوره"
+                        identifier="statusCourse"
+                        options={statusCourseOpt}
+                        handleChange={(e) => setTeachingStatus(e.target.value)}
+                        val={teachingStatus}
+                        error={!teachingStatus && errMsg}
+                      />
+                    </Grid>
                     <Grid item xs={12} md={6}>
                       <RelatedGroup
                         errMsg={errMsg}
