@@ -6,7 +6,11 @@ import { useAuth } from "../../context/AuthProvider";
 import { RoleType } from "../../model";
 import Cookies from "universal-cookie";
 
-export const useSubmitLogin = (username: string, password: string) => {
+export const useSubmitLogin = (
+  username: string,
+  password: string,
+  from: string
+) => {
   const loginURL = "/oauth2/token";
   const { setAuth } = useAuth();
   const navigate = useNavigate();
@@ -51,7 +55,7 @@ export const useSubmitLogin = (username: string, password: string) => {
           roles: [roleResponseServer],
         });
 
-        navigate(`/${roleResponseServer}/dashboard`, {
+        navigate(from, {
           replace: true,
         });
       }
