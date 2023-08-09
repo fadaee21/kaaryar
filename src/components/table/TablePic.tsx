@@ -4,14 +4,24 @@ import { getData } from "../../api/axios";
 import useGetImage from "../../hooks/request/useGetImage";
 import { stringAvatar } from "../../utils/avatarColor";
 
-const TablePic = ({ picture, lastName }: any) => {
-  const { pic, getPicture } = useGetImage();
+type Prop = {
+  picture: {
+    imageAddress: string;
+  };
+  lastName: string;
+};
+type Prop2 = {
+  studentId: number;
+  lastName: string;
+};
+
+const TablePic = ({ picture, lastName }: Prop) => {
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   React.useEffect(() => {
-    if (picture !== null) {
-      getPicture(picture?.address);
+    if (picture) {
+      getPicture(picture?.imageAddress);
     }
-     // eslint-disable-next-line
-  }, []);
+  }, [getPicture, picture]);
 
   return (
     <>
@@ -26,21 +36,20 @@ const TablePic = ({ picture, lastName }: any) => {
 
 export default TablePic;
 
-export const TablePic2 = ({ studentId, lastName }: any) => {
-  const { pic, getPicture } = useGetImage();
+export const TablePic2 = ({ studentId, lastName }: Prop2) => {
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   React.useEffect(() => {
     const getLink = async () => {
       try {
         const res = await getData(`/moodle/user/image/${studentId}`);
         const data = await res.data;
-        data && getPicture(data.imageAddress);
+        data?.imageAddress && getPicture(data.imageAddress);
       } catch (error) {
         console.log(error);
       }
     };
     getLink();
-     // eslint-disable-next-line
-  }, []);
+  }, [getPicture, studentId]);
 
   return (
     <>

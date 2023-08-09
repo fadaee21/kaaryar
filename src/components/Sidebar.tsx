@@ -14,15 +14,20 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { AppBar, DrawerHeader, drawerWidth, Main } from "../styles/sideBar";
+import {
+  AppBar,
+  DrawerHeader,
+  drawerWidth,
+  ListTextFont,
+  Main,
+} from "../styles/sideBar";
 import { useAuth } from "../context/AuthProvider";
-import { Menu, MenuItem, Typography } from "@mui/material";
+import { ListItemText, Menu, MenuItem, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import style from "../styles/search/searchChevron.module.css";
+import style from "../styles/sideBar/searchChevron.module.css";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Face6Icon from "@mui/icons-material/Face6";
 import LogoLight from "./LogoLightSVG";
@@ -50,7 +55,7 @@ export default function Sidebar({ listRoutes }: any) {
     handleClose();
     navigate("/");
     cookie.remove("token", { path: "/", sameSite: "strict" });
-    setAuth({ roles: [], username: "" });
+    setAuth({ roles: [], username: "", id: null });
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -160,9 +165,7 @@ export default function Sidebar({ listRoutes }: any) {
               </MenuItem>
               <Divider variant="middle" />
               <MenuItem onClick={handleExit}>
-                <ListItemIcon sx={{  mr: 1 }}>
-                  {<LogoutIcon />}
-                </ListItemIcon>
+                <ListItemIcon sx={{ mr: 1 }}>{<LogoutIcon />}</ListItemIcon>
                 <ListItemText secondary="خروج" />
               </MenuItem>
             </Menu>
@@ -207,6 +210,7 @@ export default function Sidebar({ listRoutes }: any) {
                       handleDrawerClose();
                       setActiveKey(route.key);
                     }}
+                    sx={{ p: 0.5 }}
                   >
                     {activeKey === route.key ? (
                       <Box
@@ -221,13 +225,13 @@ export default function Sidebar({ listRoutes }: any) {
                         }}
                       >
                         <ListItemIcon>{route.icon}</ListItemIcon>
-                        <ListItemText primary={route.name} />
+                        <ListTextFont sx={{ my: 0.25 }} primary={route.name} />
                       </Box>
                     ) : (
                       <Box
                         sx={{
                           borderRadius: 5,
-                          padding: 0.5,
+                          padding: 0,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
@@ -235,7 +239,7 @@ export default function Sidebar({ listRoutes }: any) {
                         }}
                       >
                         <ListItemIcon>{route.icon}</ListItemIcon>
-                        <ListItemText primary={route.name} />
+                        <ListTextFont primary={route.name} sx={{ my: 0.25 }} />
                       </Box>
                     )}
                   </ListItemButton>

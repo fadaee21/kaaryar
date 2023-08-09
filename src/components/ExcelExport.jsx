@@ -53,11 +53,25 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
           exportToCSV(c, fileName);
           break;
         case "studentListMoodleTable":
-          exportToCSV(allData, fileName);
+          const g = allData.map((i) => i);
+          exportToCSV(g, fileName);
           break;
         case "studentOfAdmin":
-          const d = allData.map((i) => i.moodleUser);
+          const d = allData.map((i) => ({
+            "نام و نام خانوادگی": i.firstName + " " + i.family,
+            "نام کاربری": i.username,
+            شهر: i.registrationForm.city,
+            استان: i.registrationForm.province,
+            گروه: i.registrationForm.course,
+            "مؤسسه معرف": i.registrationForm.refer,
+            "وضعیت آموزش": i.statusForm?.trainingStatus?.value,
+            "قدم آتی آموزش":i.statusForm?.nextTrainingStep?.value,
+            "ارجاع به واحد مالی":i.statusForm?.referralToFinance?.value,
+            "ارزیابی کاریار":i.statusForm?.kaaryarAssessment?.value
+          }));
           exportToCSV(d, fileName);
+          // console.log(d);
+
           break;
         default:
           break;

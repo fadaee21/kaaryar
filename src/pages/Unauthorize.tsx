@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 const Unauthorize = () => {
   return (
@@ -10,6 +10,9 @@ const Unauthorize = () => {
       }}
     >
       <p>متاسفیم، شما مجاز به دسترسی به این پنل نیستید</p>
+      <Link to="/" style={{ textAlign: "center" }}>
+        بازگشت به داشبورد
+      </Link>
     </div>
   );
 };

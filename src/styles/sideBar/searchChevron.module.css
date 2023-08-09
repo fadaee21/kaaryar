@@ -1,0 +1,17 @@
+.rotate0 {
+  transform: rotate(0);
+}
+.rotate180 {
+  transform: rotate(180deg);
+  /* transition: transform 0.5s ease-in-out; */
+  animation: less 0.35s ease-in-out;
+}
+
+@keyframes less {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}

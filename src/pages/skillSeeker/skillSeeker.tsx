@@ -7,73 +7,51 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 // import SearchAll from "../../components/search/SearchAll";
 import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
-import { useAuth } from "../../context/AuthProvider";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { SeekerStudent } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   AccordionStyled,
-  AccordionSummaryStyled,
+  // AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
+// import style from "../../styles/search/searchChevron.module.css";
 import { seekerStateFinder } from "../../utils/seekerStateFinder";
-
+import { afterTableSkillSeeker } from "../../components/table/helper-header";
+import useSWR from "swr";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { itemCounterTable } from "../../utils/itemCoutnerTable";
+const pageSize = 20;
 const SkillSeeker = () => {
-  const [seekerStudents, setSeekerStudents] = useState<SeekerStudent[] | null>(
-    null
-  );
-
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [chevronDir, setChevronDir] = useState(false);
-
-  const [searchingStudentSeeker, setSearchingStudentSeeker] = useState<
-    SeekerStudent[] | null
-  >(null);
-
+  // const [chevronDir, setChevronDir] = useState(false);
+  const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
   const navigate = useNavigate();
-  const allStudentSeeker = `/status/form/all?pageNum=${page - 1}&pageSize=20`;
+  const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/status/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(allStudentSeeker);
-      let data = await response.data;
-      setSeekerStudents(data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
+  const { data, isLoading, error } = useSWR(allStudentSeeker, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
 
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
-  useEffect(() => {
-    getListLearner();
-    // eslint-disable-next-line
-  }, [page]);
-
-  if (loading) {
+  if (isLoading) {
     return <LoadingProgress />;
   }
 
-  console.log(seekerStudents);
+  if (error) {
+    toast.error(handleError(error));
+    navigate("/");
+  }
 
   return (
     <Box sx={{ m: 2 }}>
@@ -91,9 +69,10 @@ const SkillSeeker = () => {
                 display: "flex",
                 alignItems: "flex-start",
                 justifyContent: "flex-start",
+                mb: 2,
               }}
             >
-              <AccordionSummaryStyled
+              {/* <AccordionSummaryStyled
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
@@ -102,12 +81,12 @@ const SkillSeeker = () => {
                 <ExpandMoreIcon
                   className={chevronDir ? style.rotate180 : style.rotate0}
                 />
-              </AccordionSummaryStyled>
+              </AccordionSummaryStyled> */}
               <ExcelExport
                 fileName={"Applicant Info"}
-                linkAll="/status/form/all?pageNum=0&pageSize=100000"
+                linkAll="/status/form/all?pageNum=1&pageSize=100000"
                 searchData={searchingStudentSeeker?.map(
-                  (i) => i.beforeWeekForm?.registrationForm
+                  (i) => i.BeforeWeekForm?.registrationForm
                 )}
                 useIn="seeker"
               />
@@ -130,12 +109,12 @@ const SkillSeeker = () => {
           </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              <TableHeader headerItems={afterTableSkillSeeker} />
               {/*//! while searching show the search content */}
               {!searchingStudentSeeker && (
                 <TableBody>
-                  {seekerStudents?.map((seekerStudent: SeekerStudent) => {
-                    console.log(seekerStudent.regForm);
+                  {data?.map((seekerStudent: SeekerStudent, i: number) => {
+                    // console.log(seekerStudent);
                     const {
                       id,
                       regForm,
@@ -148,7 +127,6 @@ const SkillSeeker = () => {
                       <TableBodyAll
                         key={id}
                         id={id}
-                        roles={roles}
                         birthDate={regForm?.birthDate}
                         family={regForm?.family}
                         firstName={regForm?.firstName}
@@ -157,7 +135,11 @@ const SkillSeeker = () => {
                         mobile={regForm?.mobile}
                         email={regForm?.email}
                         directNav="skill-seeker"
-                        // gender={regForm?.gender}
+                        gender={regForm?.gender}
+                        province={regForm?.province}
+                        city={regForm?.city}
+                        studyField={regForm?.studyField}
+                        selectedField={regForm?.selectedField}
                         // just send checked prop due to tableBodyAll need this prob,
                         //in this case does't any effect
                         //all state affair will handle in resultStatus
@@ -167,6 +149,7 @@ const SkillSeeker = () => {
                           beforeWeekChecked,
                           regChecked
                         )}
+                        index={itemCounterTable(page, pageSize, i)}
                       />
                     );
                   })}
@@ -175,7 +158,7 @@ const SkillSeeker = () => {
 
               <TableBody>
                 {searchingStudentSeeker?.map(
-                  (searchingStudentSeeker: SeekerStudent) => {
+                  (searchingStudentSeeker: SeekerStudent, i: number) => {
                     const {
                       id,
                       regForm,
@@ -185,17 +168,19 @@ const SkillSeeker = () => {
                     } = searchingStudentSeeker;
                     return (
                       <TableBodyAll
-                        roles={roles}
                         key={id}
                         id={id}
                         birthDate={regForm?.birthDate}
                         family={regForm?.family}
                         firstName={regForm?.firstName}
                         registrationCode={regForm?.registrationCode}
-                        // codeMeli={regForm?.codeMeli}
                         mobile={regForm?.mobile}
                         email={regForm?.email}
-                        // gender={regForm?.gender}
+                        gender={regForm?.gender}
+                        province={regForm?.province}
+                        city={regForm?.city}
+                        studyField={regForm?.studyField}
+                        selectedField={regForm?.selectedField}
                         checked={searchingStudentSeeker.afterWeekChecked}
                         directNav="skill-seeker"
                         resultStatus={seekerStateFinder(
@@ -203,6 +188,7 @@ const SkillSeeker = () => {
                           beforeWeekChecked,
                           regChecked
                         )}
+                        index={i + 1}
                       />
                     );
                   }

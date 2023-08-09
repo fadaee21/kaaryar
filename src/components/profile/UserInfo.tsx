@@ -1,24 +1,22 @@
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Selector from "../../pages/profile/Selector";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import { useNavigate } from "react-router-dom";
 import useEditProfile from "../../hooks/request/useEditProfile";
 import FormHelperText from "@mui/material/FormHelperText";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import UploadProfileImage from "../../pages/profile/UploadProfileImage";
-import {
-  ButtonBox,
-  DesireBox,
-  HeaderBox,
-  ProfileTitle,
-} from "../../styles/profile";
+import { DesireBox, ContentBoxHeader, StackTitle } from "../../styles/profile";
 import { Box, Button, Container, Typography } from "@mui/material";
-import AddLink from "../../pages/profile/AddLink";
+import AddLink, { DesireLink } from "../../pages/profile/AddLink";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Profile } from "../../model";
-import { useAuth } from "../../context/AuthProvider";
+
+import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import LanguageIcon from "@mui/icons-material/Language";
 
 interface ProfileData {
   profileData: Profile | null;
@@ -47,10 +45,8 @@ const UserInfo = ({ profileData }: ProfileData) => {
     setUserProfile((prev: any) => ({ ...prev, [name]: value }));
   };
   //in desiredLink for handling the functionality i add "id" and "first" to object,notice that you shouldn't post these two items to server
-  const [desiredLink, setDesiredLink] = useState<any[]>(
-    profileData?.custom
-      ? JSON.parse(profileData.custom)
-      : [{ id: Date.now(), address: "", title: "", first: true }]
+  const [desiredLink, setDesiredLink] = useState<DesireLink[]>(
+    profileData?.custom ? JSON.parse(profileData.custom) : []
   );
   const [relatedLink, setRelatedLink] = useState({
     web: profileData?.website || "",
@@ -65,72 +61,52 @@ const UserInfo = ({ profileData }: ProfileData) => {
     const { name, value } = e.target;
     setRelatedLink((prev: any) => ({ ...prev, [name]: value }));
   };
-  const { editProfile } = useEditProfile();
-  const {
-    auth: { roles },
-  } = useAuth();
+  const { editProfile, loadingProfile } = useEditProfile();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     editProfile(relatedLink, desiredLink, userProfile, about);
-    navigate(`/${roles}/volunteer`);
   };
 
-  const handleAddLink = () => {
-    setDesiredLink((prev) => [
-      ...prev,
-      { address: "", title: "", first: false, id: Date.now() },
-    ]);
-  };
-  const handleRemoveLink = (id: number) => {
-    const remove = desiredLink.filter((item) => item.id !== id);
-    setDesiredLink(remove);
-  };
   const navigate = useNavigate();
-  const [emptyLink, setEmptyLink] = useState(true);
-  const checkEmptyDesireLink = useCallback(() => {
-    let arrTest: boolean[] = [];
-    desiredLink.forEach((item) => {
-      const { address, title } = item;
-      if (!address || !title) {
-        arrTest.push(true);
-      } else {
-        arrTest.push(false);
-      }
-    });
-    const result = arrTest.some((i) => i);
-    setEmptyLink(result);
-  }, [desiredLink]);
-
-  useEffect(() => {
-    checkEmptyDesireLink();
-  }, [checkEmptyDesireLink]);
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mb: 30 }}>
       <Container maxWidth="lg">
-        <HeaderBox>
+        <ContentBoxHeader>
           <Typography variant="h5">پروفایل من</Typography>
-          <ButtonBox>
-            <Button variant="contained" color="primary" type="submit" fullWidth>
-              ذخیره
-            </Button>
-            <Button
-              onClick={() => navigate(-1)}
-              endIcon={<ArrowBackIcon />}
-              variant="outlined"
-              color="inherit"
-              fullWidth
-            >
-              بازگشت
-            </Button>
-          </ButtonBox>
-        </HeaderBox>
+          {/* <Tooltip
+            title="در صورت پاک کردن نام و نام خانوادگی، پروفایل حذف می شود."
+            placement="top"
+          > */}
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            sx={{ ml: "auto", mr: 1, px: 5 }}
+            disabled={loadingProfile}
+          >
+            ذخیره
+          </Button>
+          {/* </Tooltip> */}
+          <Button
+            onClick={() => navigate(-1)}
+            endIcon={<ArrowBackIcon />}
+            variant="outlined"
+            color="inherit"
+          >
+            بازگشت
+          </Button>
+        </ContentBoxHeader>
         <Typography variant="body1">
           اینجا می‌توانید پروفایل عمومی خودتان را درست کنید. پروفایل شما برای
           سایر داوطلبان، ادمین، و در آینده برای مهارت‌آموزان قابل مشاهده است.
           <br /> هر زمان که بخواهید، می‌توانید پروفایل خود را ویرایش کنید.
         </Typography>
-        <ProfileTitle variant="h6">مشخصات فردی</ProfileTitle>
+        <StackTitle direction="row" alignItems="center" gap={1}>
+          <PersonOutlineOutlinedIcon />
+          <Typography variant="h6">مشخصات فردی</Typography>
+        </StackTitle>
 
         <Grid container spacing={2}>
           <Grid item xs={2.4}>
@@ -238,8 +214,10 @@ const UserInfo = ({ profileData }: ProfileData) => {
             />
           </Grid>
         </Grid>
-
-        <ProfileTitle variant="h6">مشخصات تحصیلی و شغلی</ProfileTitle>
+        <StackTitle direction="row" alignItems="center" gap={1}>
+          <SchoolOutlinedIcon />
+          <Typography variant="h6">مشخصات تحصیلی و شغلی</Typography>
+        </StackTitle>
         <Grid container spacing={2}>
           <Grid item xs={2.4}>
             <Selector
@@ -306,7 +284,10 @@ const UserInfo = ({ profileData }: ProfileData) => {
             />
           </Grid>
         </Grid>
-        <ProfileTitle variant="h6">لینک های مرتبط</ProfileTitle>
+        <StackTitle direction="row" alignItems="center" gap={1}>
+          <LanguageIcon />
+          <Typography variant="h6">لینک های مرتبط</Typography>
+        </StackTitle>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <TextField
@@ -366,44 +347,17 @@ const UserInfo = ({ profileData }: ProfileData) => {
           <Grid item xs={10}>
             <Typography variant="body1">لینک دلخواه</Typography>
             <DesireBox>
-              {desiredLink.map((item) => (
-                <AddLink
-                  key={item.id}
-                  id={item.id}
-                  address={item?.address}
-                  title={item?.title}
-                  desiredLink={desiredLink}
-                  setDesiredLink={setDesiredLink}
-                >
-                  {item.first ? (
-                    <Button
-                      sx={{ width: "12%" }}
-                      variant="outlined"
-                      color="primary"
-                      endIcon={<AddIcon />}
-                      onClick={handleAddLink}
-                      disabled={emptyLink}
-                    >
-                      افزودن
-                    </Button>
-                  ) : (
-                    <Button
-                      sx={{ width: "12%" }}
-                      variant="outlined"
-                      color="error"
-                      endIcon={<DeleteIcon />}
-                      onClick={() => handleRemoveLink(item.id)}
-                    >
-                      حذف
-                    </Button>
-                  )}
-                </AddLink>
-              ))}
+              <AddLink
+                desiredLink={desiredLink}
+                setDesiredLink={setDesiredLink}
+              />
             </DesireBox>
           </Grid>
         </Grid>
-
-        <ProfileTitle variant="h6">درباره من</ProfileTitle>
+        <StackTitle direction="row" alignItems="center" gap={1}>
+          <TextSnippetOutlinedIcon />
+          <Typography variant="h6">درباره من</Typography>
+        </StackTitle>
         <Grid container>
           <Grid item xs={6}>
             <TextField

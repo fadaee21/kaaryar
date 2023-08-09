@@ -6,23 +6,26 @@ import { useAuth } from "../../context/AuthProvider";
 import { RoleType } from "../../model";
 import Cookies from "universal-cookie";
 
-export const useSubmitLogin = (username: string, password: string) => {
-  const loginURL = "/auth/login";
+export const useSubmitLogin = (
+  username: string,
+  password: string,
+  from: string
+) => {
+  const loginURL = "/oauth2/token";
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
   const [errMsg, setErrMsg] = useState("");
-
+  let bodyContent = `username=${username}&password=${password}`;
   const handleLogin = async () => {
     try {
       const response = await userLogin(loginURL, {
-        data: {
-          username,
-          password,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
+        data: bodyContent,
       });
-
-      if (response.status === 200) {
+      if (response.status === 201) {
         cookies.set("token", response?.data?.authorization, {
           path: "/",
           // expires: new Date(Date.now() + 3600 * 24 * 1000),
@@ -30,13 +33,14 @@ export const useSubmitLogin = (username: string, password: string) => {
           maxAge: 3600 * 12,
           sameSite: "strict",
         });
+
         const res = response.data.profile.roles;
         const roleResponseServer: RoleType =
           res.indexOf("manager") >= 0
             ? "admin"
             : res.indexOf("mentor") >= 0
             ? "mentor"
-            : res.indexOf("editingteacher") >= 0
+            : res.indexOf("teachingassistant") >= 0
             ? "ta"
             : null;
 
@@ -46,11 +50,12 @@ export const useSubmitLogin = (username: string, password: string) => {
         }
 
         setAuth({
+          id: response.data.profile.id,
           username,
           roles: [roleResponseServer],
         });
 
-        navigate(`/${roleResponseServer}/dashboard`, {
+        navigate(from, {
           replace: true,
         });
       }

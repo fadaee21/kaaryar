@@ -2,23 +2,26 @@ import { useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { AfterWeekType, BeforeWeekType } from "../../model";
+import { AfterWeekType, BeforeWeekType, RegistrationForm } from "../../model";
 import { Box, Button, Container, Divider, useMediaQuery } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ExamFormDetailComp from "../../components/beforeWeek/InitialDataRegistered";
+
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
 import AfterWeekDetailShowComp from "../../components/afterWeek/AfterWeekDetailShowComp";
 import AlertDialog from "../../components/modal/AlertDialog";
 import { useApproveWeek } from "../../hooks/request/useApprove";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const AfterWeekDetail = () => {
-  const [student, setStudent] = useState<AfterWeekType | null>(null);
+  const [student, setStudent] = useState<AfterWeekType>();
   const [loading, setLoading] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertType, setAlertType] = useState<
     "approve" | "disApprove" | undefined
   >(undefined);
-  const { successObject, getApproveWeek } = useApproveWeek();
+  const [refreshPage, setRefreshPage] = useState(1); // after linking moodle user to after week, refresh page to get payment image
+  const refreshingPage = () => setRefreshPage((t) => t + 1);
+  const { successObject, getApproveWeek, loadingRegWeek } = useApproveWeek();
   const handleOpenAlert = (alert: "approve" | "disApprove") => {
     console.log(alert);
     setAlertType(alert);
@@ -28,43 +31,39 @@ const AfterWeekDetail = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
-  const studentIdAfterWeek = `/exam/after/week/form/${id}`;
-  const approveLink = "/exam/after/week/form/approve";
-  const getStudent = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(studentIdAfterWeek);
-      setStudent(response.data);
-      setLoading(false);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      setLoading(false);
-      navigate("/");
-    }
-  };
 
+  const approveLink = "/exam/after/week/form/approve";
   useEffect(() => {
+    const studentIdAfterWeek = `/exam/after/week/form/${id}`;
+    const getStudent = async () => {
+      setLoading(true);
+      try {
+        let response = await getData(studentIdAfterWeek);
+        setStudent(response.data);
+        setLoading(false);
+      } catch (error) {
+        //TODO:handle Error
+        console.log("catch block of error");
+        console.log(error);
+        setLoading(false);
+        navigate("/");
+      }
+    };
+
     getStudent();
     window.scrollTo(0, 0);
-    // eslint-disable-next-line
-  }, []);
+  }, [refreshPage, id, navigate]);
 
   const handleApprove = () => {
-    console.log("you trigger approve after Week");
-    getApproveWeek(id, { afterWeekChecked: true }, approveLink);
-    navigate(-1)
+    getApproveWeek(id, { setApproved: true }, approveLink);
   };
   const handleDisApprove = () => {
-    console.log("you trigger disApprove after Week");
-    getApproveWeek(id, { afterWeekChecked: false }, approveLink);
-    navigate(-1)
+    getApproveWeek(id, { setApproved: false }, approveLink);
   };
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
-  if (loading) {
+  if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
 
@@ -79,23 +78,25 @@ const AfterWeekDetail = () => {
         }}
       >
         <Button
-          variant="contained"
+          variant="outlined"
+          sx={{ px: 5 }}
+          color="inherit"
           endIcon={<ArrowBackIcon />}
-          color="secondary"
-          size="small"
           onClick={() => navigate(-1)}
         >
           بازگشت
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <ExamFormDetailComp
-          student={student?.beforeWeekForm as BeforeWeekType | null}
+        <RegisterFormDetailComp
+          student={
+            student?.beforeWeekForm?.registrationForm as RegistrationForm
+          }
         />
         <Divider />
         <BeforeWeekDetailShowComp
           typeComp="admission"
-          student={student?.beforeWeekForm as BeforeWeekType | null}
+          student={student?.beforeWeekForm as BeforeWeekType}
           matches={matches}
           id={id}
         />
@@ -107,6 +108,7 @@ const AfterWeekDetail = () => {
           id={id}
           successObject={successObject}
           handleOpenAlert={handleOpenAlert}
+          refreshingPage={refreshingPage}
         />
       </Container>
       <AlertDialog

@@ -8,15 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData } from "../../api/axios";
+import React, { useEffect, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
 import RegTableBodyAll from "../../components/table/RegTableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
-import { useAuth } from "../../context/AuthProvider";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { RegistrationForm } from "../../model";
@@ -27,89 +24,46 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
-import { addComma } from "../../utils/addComma";
+import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
+import useSWR from "swr";
 
+import { registerTableHeader } from "../../components/table/helper-header";
+import { itemCounterTable } from "../../utils/itemCoutnerTable";
+
+const pageSize = 20;
 const RegisterFormTable = () => {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  // const [checkStateIds, setCheckStateIds] = useState<string>("");
-  const [ids, setIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  // these two below state level up from search component because i have to handle these state values after trigger useApproveMulti, also these just use for this page
-  const [stateWaiting, setStateWaiting] = useState<boolean | null>(null); //this state is for handling statusState===null
-  const [statusState, setStatusState] = useState<boolean | null>(null);
-
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
-
-  const navigate = useNavigate();
-  const pageSize = 20;
-  const allStudentReg = `/reg/form/all?pageNum=${
-    page - 1
-  }&pageSize=${pageSize}`;
+  const allStudentReg = `/reg/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
-
-  const getListLearner = async () => {
-    setLoading(true);
-    try {
-      let response = await getData(allStudentReg);
-      let data = await response.data;
-      setStudents(data);
-      //empty checkBox state if you have
-      setIds([]);
-    } catch (error) {
-      //TODO:handle Error
-      console.log("catch block of error");
-      console.log(error);
-      navigate("/");
-      setIds([]);
-    }
-    setLoading(false);
-  };
-
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useSWR(allStudentReg, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
 
   //handle multi selected checkbox
-  const handleCheckBox = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-      if (e.target.checked) {
-        setIds((old) => [...old, id]);
-      }
-      if (!e.target.checked) {
-        setIds((current) => {
-          return current.filter((item) => item !== id);
-        });
-      }
-    },
-    []
-  );
-
-
-  useEffect(() => {
-    getListLearner();
-    window.scrollTo(0, 0);
-    setChevronDir(false);
-    // eslint-disable-next-line
-  }, [page, loadingMulti]);
-
+  const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
     setSearchingStudentRegister(null);
-    setStateWaiting(null);
-    setStatusState(null);
     setIds([]);
+    // eslint-disable-next-line
   }, [loadingMulti]);
 
   if (loading || loadingMulti) {
     return <LoadingProgress />;
   }
-
+  if (error) {
+    console.log(error);
+  }
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -121,7 +75,7 @@ const RegisterFormTable = () => {
             <Typography variant="h4"> فهرست ثبت نام</Typography>
           </Box>
 
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
@@ -133,23 +87,18 @@ const RegisterFormTable = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
               </AccordionSummaryStyled>
               <Box sx={{ ml: "auto" }}>
                 <Button
                   color="secondary"
                   variant="contained"
                   onClick={() => {
-                    getApproveMulti(
-                      ids.toString(),
-                      "/reg/form/multiple/approve"
-                    );
+                    getApproveMulti(ids, "/reg/form/multiple", true);
                   }}
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   تایید کردن گروهی
@@ -158,12 +107,9 @@ const RegisterFormTable = () => {
                   color="secondary"
                   variant="contained"
                   onClick={() =>
-                    getApproveMulti(
-                      ids.toString(),
-                      "/reg/form/multiple/disapprove"
-                    )
+                    getApproveMulti(ids, "/reg/form/multiple", false)
                   }
-                  disabled={ids.toString() === ""}
+                  disabled={ids.length === 0}
                   sx={{ mr: 0.5 }}
                 >
                   رد کردن گروهی
@@ -171,7 +117,7 @@ const RegisterFormTable = () => {
                 <ExcelExport
                   fileName={"Applicant Info"}
                   searchData={searchingStudentRegister?.map((i) => i)}
-                  linkAll="/reg/form/all?pageNum=0&pageSize=1000000"
+                  linkAll="/reg/form/all?pageNum=1&pageSize=100000"
                   useIn="reg"
                 />
               </Box>
@@ -188,10 +134,6 @@ const RegisterFormTable = () => {
                   setSearchingStudentRegister={setSearchingStudentRegister}
                   searchPage="reg"
                   chevronDir={chevronDir}
-                  stateWaiting={stateWaiting}
-                  setStateWaiting={setStateWaiting}
-                  statusState={statusState}
-                  setStatusState={setStatusState}
                 />
               </Box>
             </AccordionDetails>
@@ -201,17 +143,18 @@ const RegisterFormTable = () => {
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentRegister?.length !== 0 && <TableHeader />}
+              {searchingStudentRegister?.length !== 0 && (
+                <TableHeader headerItems={registerTableHeader} />
+              )}
 
               {/*//! while searching show the search content */}
               {!searchingStudentRegister && (
                 <TableBody>
-                  {students.map((RegisterUser: any /*RegistrationForm*/) => {
+                  {data?.map((RegisterUser: RegistrationForm, i: number) => {
                     return (
                       <RegTableBodyAll
                         key={RegisterUser.id}
                         id={RegisterUser.id}
-                        roles={roles}
                         family={RegisterUser.family}
                         firstName={RegisterUser.firstName}
                         registrationCode={RegisterUser.registrationCode}
@@ -222,9 +165,11 @@ const RegisterFormTable = () => {
                         education={RegisterUser.education}
                         refer={RegisterUser.refer}
                         highSchoolYear={RegisterUser.highSchoolYear}
-                        familiarity={addComma(RegisterUser.familiarity)}
+                        familiarity={RegisterUser.familiarity}
                         province={RegisterUser.province}
                         createTime={RegisterUser.createTime}
+                        course={RegisterUser.course}
+                        index={itemCounterTable(page, pageSize, i)}
                       />
                     );
                   })}
@@ -233,10 +178,9 @@ const RegisterFormTable = () => {
               {/* show content if searching in the box */}
               <TableBody>
                 {searchingStudentRegister?.map(
-                  (searchingStudentRegister: any) => {
+                  (searchingStudentRegister: RegistrationForm, i: number) => {
                     return (
                       <RegTableBodyAll
-                        roles={roles}
                         key={searchingStudentRegister?.id}
                         id={searchingStudentRegister?.id}
                         family={searchingStudentRegister?.family}
@@ -252,11 +196,12 @@ const RegisterFormTable = () => {
                         highSchoolYear={
                           searchingStudentRegister?.highSchoolYear
                         }
-                        familiarity={addComma(
-                          searchingStudentRegister?.familiarity
-                        )}
+                        familiarity={searchingStudentRegister?.familiarity}
                         province={searchingStudentRegister?.province}
                         createTime={searchingStudentRegister?.createTime}
+                        course={searchingStudentRegister?.course}
+                        education={searchingStudentRegister?.education}
+                        index={i + 1}
                       />
                     );
                   }
@@ -279,7 +224,7 @@ const RegisterFormTable = () => {
           variant="outlined"
           shape="rounded"
           page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
             setPage(value);
           }}
         />

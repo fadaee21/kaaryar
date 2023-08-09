@@ -3,39 +3,36 @@ import { useNavigate } from "react-router-dom";
 import { editAxios } from "../../api/axios";
 
 export const useApproveWeek = () => {
-  const [success, setSuccess] = useState(false);
   const [successObject, setSuccessObject] = useState("");
   const [loadingRegWeek, setLoadingRegWeek] = useState(false);
+  const navigate = useNavigate();
 
   const getApproveWeek = async (
     id: string | undefined,
-    approveObj: { acceptWeekChecked: boolean } | { afterWeekChecked: boolean },
+    approveObj: { setApproved: boolean },
     approveLink: string
   ) => {
+    setLoadingRegWeek(true);
     try {
-      setLoadingRegWeek(true);
       console.log(`${approveLink}/${id}`);
       const response = await editAxios(`${approveLink}/${id}`, {
         data: approveObj,
       });
-      console.log(response.data.state, id);
       if (response.status === 200) {
         const obj = Object.keys(approveObj)[0];
         setSuccessObject(obj);
-        return setSuccess(true);
+      } else {
+        console.log(response);
       }
-      setSuccess(false);
-      console.log(response.data);
-      setLoadingRegWeek(false);
     } catch (error) {
       console.log(error);
-      setSuccess(false);
-      setLoadingRegWeek(false);
     }
+    navigate(-1);
+    await new Promise((r) => setTimeout(r, 500));
+    setLoadingRegWeek(false);
   };
 
   return {
-    success,
     successObject,
     getApproveWeek,
     loadingRegWeek,
@@ -64,6 +61,8 @@ export const useApproveReg = () => {
         const obj = Object.keys(approveObj)[0];
         setSuccessObject(obj);
         navigate(-1);
+        await new Promise((r) => setTimeout(r, 500));
+        setLoadingRegApprove(false);
         return setSuccess(true);
       }
       setSuccess(false);
@@ -71,10 +70,10 @@ export const useApproveReg = () => {
     } catch (error) {
       console.log(error);
       setSuccess(false);
-      navigate(-1);
     }
+    navigate(-1);
+    await new Promise((r) => setTimeout(r, 500));
     setLoadingRegApprove(false);
   };
-  console.log(loadingRegApprove);
   return { success, successObject, getApproveReg, loadingRegApprove };
 };

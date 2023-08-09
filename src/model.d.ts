@@ -4,8 +4,7 @@ export interface AuthType {
   username: string;
   password?: string;
   roles: RoleType[];
-  // token: string;
-  id?: number;
+  id: number | null;
 }
 
 export interface AuthContextType {
@@ -29,75 +28,73 @@ interface RolesStudent {
   userRole: string;
 }
 
-export interface StudentUser {
-  id: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  roles: RolesStudent[];
-  city: string;
-  email: string;
-  mobile: string;
-  phone: string;
-  username: string;
-}
-export interface StudentId {
-  id: number;
-}
-
-export interface StudentProp {
-  student: StudentUser;
-}
-
-//types for comment
-
-export interface Course {
-  id: number;
-  courseName: string;
-}
-
 export interface MentorUser {
   city: string;
   email: string;
   firstName: string;
   id: number;
-  lastName: string;
+  family: string;
   mobile: string;
   phone: string;
   roles: Array;
   username: string;
 }
+
+export interface StudentComment {
+  role: string;
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+// export interface Comment {
+//   isChecked: boolean;
+//   comment: string;
+//   createTime: string;
+//   id: number;
+//   sessionDate: string;
+//   sessionProblem: string;
+//   studentContribute: string;
+//   isStudentPresent: true;
+//   studentTask: string;
+//   updateTime: string;
+//   studentUser: StudentComment;
+//   course: ModulesAsStudentModule;
+//   commenter: StudentComment;
+// }
+
 export interface Comment {
   isChecked: boolean;
   comment: string;
-  createTime: string;
-  id: number;
+  studentContribution: string | null;
   sessionDate: string;
+  studentPresent: string;
   sessionProblem: string;
-  studentContribute: string;
-  isStudentPresent: true;
   studentTask: string;
-  updateTime: string;
-  studentUser: StudentUser;
-  course: Course;
-  commenterUser: MentorUser;
-}
-
-export interface CommentTable {
-  comment: string;
-  commenterUser: MoodleUser;
-  course: MoodleCourse;
+  studentId: number;
+  moduleId: number;
+  commenterId: number;
+  isDeleted: boolean;
+  id: number;
   createTime: string;
-  id: number;
-  isChecked: boolean;
-  role: string;
-  studentUser: MoodleUser;
-  updateTime: string;
-}
-
-export interface Course {
-  courseName: string;
-  id: number;
+  updateTime: string | null;
+  deleteTime: string | null;
+  commenterRole: string;
+  student: StudentComment;
+  commenter: StudentComment;
+  module: ModulesAsStudentModule;
 }
 
 export interface editCommentProp {
@@ -112,7 +109,7 @@ export interface MoodleUser {
   email: string;
   firstName: string;
   id: number;
-  lastName: string;
+  family: string;
   roles: Array;
   username: string;
   idNumber: string;
@@ -128,8 +125,10 @@ export interface MoodleUser {
   calendarType: string;
   description: string;
   picture: {
-    address: string;
+    imageAddress: string;
   };
+  registrationForm: RegistrationForm | null;
+  statusForm: StatusForm | null;
 }
 //this is just for admin
 export interface moodleJustStudent {
@@ -143,13 +142,25 @@ export interface moodleJustStudent {
 }
 //this is for mentor/ta
 export interface MoodleUserAssignee {
+  user_id: number;
+  role: {
+    name: string;
+    userRole: string;
+    roleId: number;
+  };
+  assigneeContext: {
+    student: {
+      studentUserName: string;
+      studentEmail: string;
+      studentFirstName: string;
+      studentLastName: string;
+      studentCity: string;
+      studentPhone: string;
+      studentMobile: string;
+      studentId: number;
+    };
+  };
   id: number;
-  studentId: number;
-  role: string;
-  studentName: string;
-  firstname: string;
-  lastname: string;
-  studentFamily: string;
 }
 
 export interface LocalStorage {
@@ -162,7 +173,7 @@ export interface LocalStorage {
 
 export interface RegistrationForm {
   id: number;
-  checked: boolean;
+  checked: boolean | null;
   registrationCode: string;
   codeMeli?: string;
   firstName: string;
@@ -178,71 +189,87 @@ export interface RegistrationForm {
   studyField?: string;
   selectedField?: string;
   description?: string;
-  token?: string;
+  careerPathwayOther?: string;
   highSchoolYear?: string;
+  uniSemester?: string;
   refer?: string;
   createTime?: string;
   highSchoolYear?: string;
-  refer?: string;
+  course?: string;
 }
 
 export interface BeforeWeekType {
   registrationForm: RegistrationForm;
-  id: number;
-  acceptWeekChecked: boolean;
+  acceptWeekChecked: boolean | null;
   accessTime: string;
-  algoLevelResult: string;
   avgSalary: string;
-  beforeAcceptDesc: string;
+  applicantAdditionalComments: string;
+  cgpa?: string;
   charity: string;
-  comLevelResult: string;
+  codingKnowledge: ?string;
   computerAccess: string;
-  computerFamiliarity: boolean;
+  computerFamiliarity: string[] | null;
   contCourseApproach: string;
-  courseDescription: string;
-  createTime: string;
   currentField: string;
   currentInstName: string;
-  currentInstType: string;
-  deleteTime: string;
-  deleted: boolean;
+  instituteCurrentType: string;
   eduLevel: string;
   eduStatus: string;
   familiar: string;
-  firstSelectJobRoad: string;
-  freeDailyTime: string;
+  accessTime: string;
   instituteType: string;
-  internetAccess: string;
+  internetAccessDevice: string;
   jobReady: boolean;
   jobStandby: boolean;
-  jobStatus: string;
+  jobStatus: boolean;
   jobTitle: string;
   jobType: string;
   jobVision: string;
   lastInstitute: string;
   limitTime: string;
-  mbtiTest: string;
   motivation: string;
-  noneJobActivation: string;
-  notifyAcceptWeek: string;
   paymentImageAddress: string;
-  programmingCoursePassed: boolean;
+  codingKnowledge: string;
+  questionCity: string;
+  questionStudents: string;
+  questionNumbers: string;
+  questionDiameters: string;
+  questionMultiplication: string;
+  questionWords: string;
+  questionMaths: string;
+  questionEnglishFamiliarity: string;
+  engPara: string;
+  skills: string;
   stuSemester: string;
   stuYear: string;
-  updateTime: string;
-  webDevFamiliarity: boolean;
+  transcriptImageAddress: string;
+  noneJobActivation: string[] | null;
+  webDevFamiliarity: string;
   workTime: string;
-  workshopCont: string;
+  id: 1;
+  levelAlgorithms: number | undefined;
+  levelDataStructures: number | undefined;
+  levelDiscreteMath: number | undefined;
+  levelFlowDiagrams: number | undefined;
+  levelLinearAlgebra: number | undefined;
+  levelLogics: number | undefined;
+  levelProbabilities: number | undefined;
+  isCurrentlyStudent: boolean;
+  employmentTimeCommitment: string;
+  employmentType: string;
+  administrativeComments: string;
+  freeDailyTime: string;
+  internetAccessTiming: string;
 }
 
 interface AfterWeekType {
-  beforeWeekForm: BeforeWeek;
+  beforeWeekForm: BeforeWeekType;
   id: number;
   afterWeekChecked: boolean;
-  algoScore: number;
+  algoScore: string;
   comAccess: string;
   comAccessStatus: string;
-  comScore: number;
+  comScore: string;
   consistCompleteTime: string;
   consistTime: string;
   etcDesc: string;
@@ -250,22 +277,39 @@ interface AfterWeekType {
   finalField: string;
   finalResult: string;
   jobCommit: string;
-  langScore: number;
+  langScore: string;
   limitAndRisk: string;
   predict: string;
   presentStatus: string;
   recommendField: string;
+  recommendFieldMentor: String;
   scholar: boolean;
-  scholarPercentage: number;
+  scholarPercentage: string;
   workCommit: string;
+  algoLevelResult: string;
+  comLevelResult: string;
+  firstSelectJobRoad: string;
+  fundamentalSkillsScore: string;
+  notifyAcceptWeek: string;
+  workshopCont: string;
+  firstSelectJobRoad: string;
+  moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
 }
 
 export interface TableBodyAllType extends RegistrationForm {
-  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: number) => void;
   resultStatus?: string;
   checkBoxDisplay?: boolean;
-  roles: string;
+  idMulti?: number;
+  // roles: string;
   directNav: string;
+  motivation?: string;
+  finalField?: string;
+  jobStandby?: boolean;
+  scholar?: boolean;
+  finalResult?: string;
+  cgpa?: string;
+  index: number;
 }
 
 export interface SeekerStudent {
@@ -273,35 +317,548 @@ export interface SeekerStudent {
   registrationCode: string;
   regForm: RegistrationForm;
   regChecked: boolean;
-  beforeWeekForm: BeforeWeekType;
+  BeforeWeekForm: BeforeWeekType;
   beforeWeekChecked: boolean;
-  afterWeekForm: AfterWeekType;
+  AfterWeekForm: AfterWeekType;
   afterWeekChecked: true;
 }
 
 export interface Profile {
-  aboutMe: string;
-  birthday: string;
-  city: string;
-  country: string;
-  currentJob: string;
-  currentJobLocation: string;
-  custom: string;
-  email: string;
-  firstName: "test1";
+  firstName: string;
+  lastName: string;
   gender: string;
-  github: string;
-  gitlab: string;
-  id: number;
+  birthday: string;
+  country: string;
+  city: string;
+  mobile: string;
+  email: string;
+  role: string;
   imageAddress: string;
   lastEduLevel: string;
-  lastEduLocation: string;
   lastMajor: string;
-  lastName: string;
-  linkedin: string;
-  mobile: string;
-  researchgate: string;
-  role: string;
-  username: string;
+  lastEduLocation: string;
+  currentJob: string;
+  currentJobLocation: string;
   website: string;
+  linkedin: string;
+  gitlab: string;
+  github: string;
+  researchgate: string;
+  custom: string;
+  aboutMe: string;
+  id: number;
+  createTime: string | null;
+  updateTime: string | null;
+  deleteTime: string | null;
+  deleted: boolean;
+  user: {
+    username: string;
+    idnumber: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    mobile: string;
+    institution: string;
+    department: string;
+    address: string;
+    city: string;
+    country: string;
+    lang: string;
+    timezone: string;
+    calendarType: string;
+    id: number;
+  };
 }
+
+export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;
+
+export type OptionsString = { label: string; value: string };
+
+export interface PropEditString {
+  placeholder: string;
+  identifier: string;
+  value: string;
+  handleChange: (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+}
+export interface PropEditBool {
+  placeholder: string;
+  identifier: string;
+  value: any;
+  handleChange: (e: SelectChangeEvent<string | boolean>) => void;
+}
+export interface PropEditCombo {
+  placeholder: string;
+  identifier: string;
+  value: any;
+  options: {
+    value: any;
+    label: string;
+  }[];
+  handleChange: (e: SelectChangeEvent<string>) => void;
+}
+
+export type TableHeaderProps = { headerItems: string[]; status?: any };
+
+//!Education
+// /modules/categories/all
+export interface Instructor {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  roles?: Role[];
+  picture?: any;
+}
+
+export interface TeachingAssistant {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface Mentor {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+
+export interface StudentEdu {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: Picture;
+  roles: Role[];
+}
+export type ModuleType = "core" | "general";
+export type ModuleSubType =
+  | "workshop"
+  | "unassigned"
+  | "english_module"
+  | "interpersonal_skills"
+  | "vocational_skills";
+
+export interface ModuleGroup {
+  name: string;
+  description: any;
+  moduleType: ModuleType;
+  subType: ModuleSubType;
+  isActive: boolean;
+  teachingStatus: any;
+  levelName: any;
+  startDate: any;
+  endDate: any;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+export interface Group {
+  name: string;
+  groupCode: string;
+  description: any;
+  isActive: boolean;
+  startDate: any;
+  endDate: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  modules: ModuleGroup[];
+  instructors: Instructor[];
+  teachingAssistants: TeachingAssistant[];
+  mentors: Mentor[];
+  students: Student[];
+}
+
+export type GroupArray = Group[];
+
+// short Group
+export interface ShortGroup {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  groupCode: string;
+  description: string;
+  isActive: boolean;
+  startDate: string;
+  endDate: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+// /modules/all
+export interface CareerPathway {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: any;
+  isActive: boolean;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+export interface Category {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  groupCode: string;
+  description: string;
+  isActive: boolean;
+  startDate: string;
+  endDate: string;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+}
+
+export interface ModuleAll {
+  name: string;
+  description: any;
+  moduleType: string;
+  subType: ModuleSubType;
+  isActive: boolean;
+  teachingStatus: any;
+  levelName?: string;
+  startDate: any;
+  endDate: any;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+  teachingAssistants: TeachingAssistant[];
+  mentors: Mentor[];
+  students: Student[];
+}
+
+export type ModuleAllArray = ModuleAll[];
+
+//short detail for module core
+export interface ShortCoreModule {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: ModuleSubType;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string;
+  weblinkFinalProject: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+  numberOfHours: string;
+  deadlineFinalProject: any;
+  nonLmsInstructors: string | null;
+}
+
+export interface WorkshopShort {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: ModuleSubType;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: any;
+  startDate: string;
+  endDate?: string;
+  weblinkFeedbackForm?: string;
+  weblinkFinalProject?: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+}
+
+export interface EnglishShort {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string;
+  moduleType: string;
+  subType: ModuleSubType;
+  isActive: boolean;
+  teachingStatus: string;
+  levelName: string;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string;
+  weblinkFinalProject: string;
+  weblinkLmsCourse: string;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  category: Category;
+  careerPathway: CareerPathway;
+  instructors: Instructor[];
+  nonLmsInstructors: string | null;
+}
+
+//type for student
+
+export interface StudentInfo {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  roles: Role[];
+  picture: Picture;
+  infoData: InfoDaum[];
+  modulesAsStudent: ModulesAsStudent[];
+  modulesAsInstructor: ModulesAsInstructor[];
+  modulesAsTA: ModulesAsTa[];
+  modulesAsMentor: ModulesAsMentor[];
+  statusForm: StatusForm;
+}
+
+export interface Role {
+  name: string;
+  userRole: string;
+  description: string;
+  archeType: string;
+  id: number;
+}
+
+export interface Picture {
+  imageAddress: string;
+  pathnamehash: string;
+  userid: any;
+  id: number;
+}
+
+export interface InfoDaum {
+  field: Field;
+  data: string;
+}
+
+export interface Field {
+  name: string;
+  id: number;
+}
+
+export interface ModulesAsStudent {
+  moduleId: number;
+  studentId: number;
+  assessmentId: number;
+  module: ModulesAsStudentModule;
+  assessment: ModulesAsStudentAssessment;
+}
+export interface ModuleAsStudentForDetail extends ModulesAsStudent {
+  student: StudentEdu;
+}
+export interface ModulesAsStudentModule {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssisstantCount: number;
+  name: string;
+  description: string | null;
+  numberOfHours: string | null;
+  moduleType?: string;
+  subType?: string;
+  isActive: boolean;
+  isImported: any;
+  teachingStatus: any;
+  levelName: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: string | null;
+  weblinkFinalProject: string | null;
+  deadlineFinalProject: string | null;
+  weblinkLmsCourse: string | null;
+  id: number;
+  createdAt: string;
+  updatedAt: string | null;
+  category: Category | null;
+  careerPathway: CareerPathway | null;
+  instructors: Instructor[];
+}
+export interface ModulesAsMentorTA {
+  name: string;
+  description: any;
+  numberOfHours: any;
+  moduleType: string;
+  subType: ModuleSubType;
+  isActive: boolean;
+  isImported: any;
+  teachingStatus: any;
+  levelName: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  deadlineFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ModulesAsStudentAssessment {
+  finalProjectWeblink: string;
+  finalProjectGrade: number;
+  finalGrade: number;
+  attendanceQuality: AssessmentScore;
+  homeworkAssessment: AssessmentScore;
+  finalAssessment: AssessmentScore | null;
+  finalStudentStatus?: AssessmentScore;
+  nextModule?: NextModule;
+  attendanceGrade: number | null;
+}
+
+export interface AssessmentScore {
+  value: string;
+  id: number;
+}
+
+export interface StatusForm {
+  afterWeekChecked: boolean;
+  beforeWeekChecked: boolean;
+  description: string | null;
+  regChecked: boolean;
+  registrationCode: string;
+  kaaryarAssessment: any;
+  id: number;
+  trainingStatus: DetailStudentStatus | null;
+  withdrawalReason: DetailStudentStatus | null;
+  nextTrainingStep: DetailStudentStatus | null;
+  referralToFinance: DetailStudentStatus | null;
+}
+
+export interface DetailStudentStatus {
+  value: string;
+  id: number;
+}
+export interface NextModule {
+  name: string;
+  description?: string;
+  numberOfHours: any;
+  moduleType: string;
+  subType: string;
+  isActive: boolean;
+  isImported: any;
+  teachingStatus?: string;
+  levelName: any;
+  startDate: string;
+  endDate?: string;
+  weblinkFeedbackForm?: string;
+  weblinkFinalProject?: string;
+  deadlineFinalProject?: string;
+  weblinkLmsCourse?: string;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ErrorResponse {
+  detail: string | DetailError[];
+  error: { code: number; message: string; status: string };
+}
+
+interface DetailError {
+  loc: string[];
+  msg: string;
+  type: string;
+}
+
+export type OptionYesOrNo = {
+  value: boolean;
+  label: "بله" | "خیر";
+};

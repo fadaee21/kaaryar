@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { editAxios } from "../../api/axios";
-//TODO:look again maybe you don't need to use HOOK, just regular function is ok
+import { useAuth } from "../../context/AuthProvider";
+import { handleError } from "../../utils/handleError";
+import { toast } from "react-toastify";
 interface RelatedLink {
   web?: string;
   linkedin?: string;
@@ -35,6 +38,10 @@ type About = string;
 
 const useEditProfile = () => {
   const [loadingProfile, setLoadingProfile] = useState(false);
+  const {
+    auth: { roles },
+  } = useAuth();
+  const navigate = useNavigate();
   const editProfile = async (
     relatedLink: RelatedLink,
     desiredLink: DesiredLink[],
@@ -61,39 +68,65 @@ const useEditProfile = () => {
       profileCurrentWorkPlace,
     } = userProfile;
 
+    //deleting user profile for next phase
+    // const isDelete = [
+    //   //if these items was empty delete profile
+    //   profileName,
+    //   profileFamily,
+    // ].every((val) => !val);
+    // if (isDelete) {
+    //   try {
+    //     setLoadingProfile(true);
+    //     const res = await removeData(`/user/profile`);
+    //     if (res.status === 204) {
+    //       navigate(`/${roles}/volunteer`);
+    //     }
+    //   } catch (error: any) {
+    //     toast.error(handleError(error));
+    //   } finally {
+    //     setLoadingProfile(false);
+    //   }
+    //   return;
+    // }
+
     try {
       setLoadingProfile(true);
       const res = await editAxios(`/user/profile`, {
         data: {
-          aboutMe: about,
-          birthday: profileBirth,
-          city: profileCity,
-          country: profileCountry,
-          currentJob: profileCurrentJob,
-          currentJobLocation: profileCurrentWorkPlace,
-          custom: JSON.stringify(desiredLink),
-          email: profileEmail,
-          firstName: profileName,
-          gender: profileGender,
-          github: github,
-          gitlab: gitlab,
-          imageAddress: profileImage,
-          lastEduLevel: profileEduLevel,
-          lastEduLocation: profileEduPlace,
-          lastMajor: profileFieldStudy,
-          lastName: profileFamily,
-          linkedin: linkedin,
-          mobile: profileMobile,
-          researchgate: gate,
-          role: profileRole,
-          website: web,
+          profile: {
+            aboutMe: about,
+            birthday: profileBirth,
+            city: profileCity,
+            country: profileCountry,
+            currentJob: profileCurrentJob,
+            currentJobLocation: profileCurrentWorkPlace,
+            custom: JSON.stringify(desiredLink),
+            email: profileEmail,
+            firstName: profileName,
+            gender: profileGender,
+            github: github,
+            gitlab: gitlab,
+            imageAddress: profileImage,
+            lastEduLevel: profileEduLevel,
+            lastEduLocation: profileEduPlace,
+            lastMajor: profileFieldStudy,
+            lastName: profileFamily,
+            linkedin: linkedin,
+            mobile: profileMobile,
+            researchgate: gate,
+            role: profileRole,
+            website: web,
+          },
         },
       });
-      const data = res.data;
-      console.log(data);
-      setLoadingProfile(false);
+
+      if (res.status === 200) {
+        navigate(`/${roles}/volunteer`);
+      }
+      console.log(res);
     } catch (error) {
-      console.log(error);
+      toast.error(handleError(error as any));
+    } finally {
       setLoadingProfile(false);
     }
   };
