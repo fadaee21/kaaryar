@@ -7,14 +7,6 @@
   animation: less 0.35s ease-in-out;
 }
 
-/* @keyframes more {
-  from {
-    transform: rotate(180deg);
-  }
-  to {
-    transform: rotate(0);
-  }
-}*/
 @keyframes less {
   from {
     transform: rotate(0);

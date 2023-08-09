@@ -20,6 +20,7 @@ const RegTableBodyAll = ({
   highSchoolYear,
   refer,
   createTime,
+  index,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
   const { auth } = useAuth();
@@ -31,22 +32,23 @@ const RegTableBodyAll = ({
       }}
     >
       {/* checkbox only show in registration table */}
-      {handleCheckBox && (
-        <StyledTableCell
-          align="left"
-          sx={{ width: "2%", verticalAlign: "center" }}
-        >
-          {/* show check box only if search for null(awaiting to confirm person) */}
-          {checked === null && checkBoxDisplay && (
-            <Checkbox size="small" onChange={(e) => handleCheckBox(e, id)} />
-          )}
-        </StyledTableCell>
-      )}
+
+      <StyledTableCell align="left" sx={{ verticalAlign: "center" }}>
+        {/* show check box only if search for null(awaiting to confirm person) */}
+        {checked === null && checkBoxDisplay && (
+          <Checkbox size="small" onChange={(e) => handleCheckBox?.(e, id)} />
+        )}
+      </StyledTableCell>
 
       <StyledTableCell
-        align="left"
-        sx={{ width: "10%", verticalAlign: "center" }}
+        align="center"
+        sx={{
+          verticalAlign: "center",
+        }}
       >
+        <Typography variant="body2">{index}</Typography>
+      </StyledTableCell>
+      <StyledTableCell align="left" sx={{ verticalAlign: "center" }}>
         <Typography
           variant="body2"
           sx={{
@@ -70,7 +72,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "9%",
           verticalAlign: "center",
         }}
       >
@@ -78,7 +79,7 @@ const RegTableBodyAll = ({
       </StyledTableCell>
       <StyledTableCell
         align="left"
-        sx={{ width: "12%", verticalAlign: "center", cursor: "pointer" }}
+        sx={{ verticalAlign: "center", cursor: "pointer" }}
         onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
       >
         <Typography variant="body2">{firstName + " " + family}</Typography>
@@ -86,7 +87,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "5%",
           verticalAlign: "center",
         }}
       >
@@ -95,7 +95,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "13%",
           verticalAlign: "center",
         }}
       >
@@ -104,7 +103,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -114,7 +112,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "5%",
           verticalAlign: "center",
         }}
       >
@@ -124,7 +121,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "15%",
           verticalAlign: "center",
         }}
       >
@@ -135,7 +131,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "14%",
           verticalAlign: "center",
         }}
       >
@@ -144,7 +139,6 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "15%",
           verticalAlign: "center",
         }}
       >

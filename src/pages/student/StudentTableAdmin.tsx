@@ -22,7 +22,6 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import styleRot from "../../styles/search/searchChevron.module.css";
 import useSWR from "swr";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
@@ -69,7 +68,7 @@ const StudentTableAdmin = () => {
             <Typography variant="h4"> فهرست مهارت آموزان</Typography>
           </Box>
 
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
@@ -81,14 +80,11 @@ const StudentTableAdmin = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? styleRot.rotate180 : styleRot.rotate0}
-                />
-
-                {/* //! export excel */}
               </AccordionSummaryStyled>
+              {/* //! export excel */}
               <ExcelExport
                 fileName={"excel export"}
                 linkAll={`moodle/user/student/all?pageNum=1&pageSize=100000&${adminStudentQuery}`}
@@ -282,7 +278,6 @@ const StudentTableAdmin = () => {
           page={page}
           onChange={(_event, value: number) => {
             setPage(value);
-            setChevronDir(false); //after changing the page close search bar
           }}
         />
       )}

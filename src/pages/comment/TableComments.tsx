@@ -25,7 +25,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import style from "../../styles/search/searchChevron.module.css";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
 import { counterPagination } from "../../utils/counterPagination";
@@ -124,24 +123,22 @@ const Comments = () => {
           <Typography variant="h4"> فهرست نظرات</Typography>
         </Box>
 
-        <AccordionStyled>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "flex-start",
-            }}
-          >
-            <AccordionSummaryStyled
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-              onClick={() => setChevronDir(!chevronDir)}
+        <AccordionStyled expanded={chevronDir}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
             >
-              <Typography variant="button">جستجو</Typography>
-              <ExpandMoreIcon
-                className={chevronDir ? style.rotate180 : style.rotate0}
-              />
-            </AccordionSummaryStyled>
+              <AccordionSummaryStyled
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <Typography variant="button">جستجو</Typography>
+              </AccordionSummaryStyled>
 
             {/* <ExcelExport
                   fileName={"Applicant Info"}

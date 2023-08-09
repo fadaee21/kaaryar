@@ -34,7 +34,6 @@ const Login = () => {
   const roles = auth?.roles?.toString();
   const stateLocation = location.state as any;
   const from = stateLocation?.from?.pathname || `/${roles}/dashboard`;
-  console.log(from);
   const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(
     username,
     password,

@@ -24,12 +24,12 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
-import useGetListLearner from "../../hooks/request/useGetListLearner";
 import { beforeTableHeader } from "../../components/table/helper-header";
-
+import { itemCounterTable } from "../../utils/itemCoutnerTable";
+import useSWR from "swr";
+const pageSize = 20;
 const BeforeWeekTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
@@ -37,23 +37,20 @@ const BeforeWeekTable = () => {
     BeforeWeekType[] | null
   >(null);
 
-  const pageSize = 20;
   const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/exam/before/week/form/count";
 
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
-  const { students, getListLearner, loading } = useGetListLearner(
-    studentBeforeWeek,
-    loadingMulti,
-    page
-  );
 
-  useEffect(() => {
-    getListLearner();
-    window.scrollTo(0, 0);
-    setChevronDir(false); //after changing the page close search bar
-  }, [getListLearner]);
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useSWR(studentBeforeWeek, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
+
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
@@ -66,6 +63,10 @@ const BeforeWeekTable = () => {
     return <LoadingProgress />;
   }
 
+  if (error) {
+    console.log(error);
+  }
+
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -76,7 +77,7 @@ const BeforeWeekTable = () => {
           >
             <Typography variant="h4"> فهرست ارزیابی</Typography>
           </Box>
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
@@ -88,11 +89,9 @@ const BeforeWeekTable = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
               </AccordionSummaryStyled>
               <Box sx={{ ml: "auto" }}>
                 <Button
@@ -164,10 +163,10 @@ const BeforeWeekTable = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentBefore && (
                 <TableBody>
-                  {students?.map((examRegisterUser: BeforeWeekType) => {
+                  {data?.map((examRegisterUser: BeforeWeekType, i: number) => {
                     const {
                       id,
-                      contCourseApproach,
+                      motivation,
                       jobStandby,
                       registrationForm: {
                         province,
@@ -191,7 +190,7 @@ const BeforeWeekTable = () => {
                         province={province}
                         city={city}
                         studyField={studyField}
-                        contCourseApproach={contCourseApproach}
+                        motivation={motivation}
                         jobStandby={jobStandby}
                         family={family}
                         firstName={firstName}
@@ -206,6 +205,7 @@ const BeforeWeekTable = () => {
                         checked={acceptWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
+                        index={itemCounterTable(page, pageSize, i)}
                       />
                     );
                   })}
@@ -213,47 +213,49 @@ const BeforeWeekTable = () => {
               )}
               {/* show content if searching in the box */}
               <TableBody>
-                {searchingStudentBefore?.map((searchingStudentBefore: any) => {
-                  return (
-                    <TableBodyAll
-                      key={searchingStudentBefore.id}
-                      id={searchingStudentBefore.id}
-                      idMulti={searchingStudentBefore.id}
-                      province={
-                        searchingStudentBefore.registrationForm.province
-                      }
-                      city={searchingStudentBefore.registrationForm.city}
-                      studyField={
-                        searchingStudentBefore.registrationForm.studyField
-                      }
-                      contCourseApproach={
-                        searchingStudentBefore.contCourseApproach
-                      }
-                      jobStandby={searchingStudentBefore.jobStandby}
-                      cgpa={
-                        // searchingStudentBefore.cgpa
-                        "-"
-                      }
-                      family={searchingStudentBefore.registrationForm.family}
-                      firstName={
-                        searchingStudentBefore.registrationForm.firstName
-                      }
-                      registrationCode={
-                        searchingStudentBefore.registrationForm.registrationCode
-                      }
-                      codeMeli={
-                        searchingStudentBefore.registrationForm.codeMeli
-                      }
-                      mobile={searchingStudentBefore.registrationForm.mobile}
-                      email={searchingStudentBefore.registrationForm.email}
-                      gender={searchingStudentBefore.registrationForm.gender}
-                      checked={searchingStudentBefore.acceptWeekChecked}
-                      directNav="before-week"
-                      handleCheckBox={handleCheckBox}
-                      checkBoxDisplay={true}
-                    />
-                  );
-                })}
+                {searchingStudentBefore?.map(
+                  (searchingStudentBefore: BeforeWeekType, i: number) => {
+                    return (
+                      <TableBodyAll
+                        key={searchingStudentBefore.id}
+                        id={searchingStudentBefore.id}
+                        idMulti={searchingStudentBefore.id}
+                        province={
+                          searchingStudentBefore.registrationForm.province
+                        }
+                        city={searchingStudentBefore.registrationForm.city}
+                        studyField={
+                          searchingStudentBefore.registrationForm.studyField
+                        }
+                        motivation={searchingStudentBefore.motivation}
+                        jobStandby={searchingStudentBefore.jobStandby}
+                        cgpa={
+                          // searchingStudentBefore.cgpa
+                          "-"
+                        }
+                        family={searchingStudentBefore.registrationForm.family}
+                        firstName={
+                          searchingStudentBefore.registrationForm.firstName
+                        }
+                        registrationCode={
+                          searchingStudentBefore.registrationForm
+                            .registrationCode
+                        }
+                        codeMeli={
+                          searchingStudentBefore.registrationForm.codeMeli
+                        }
+                        mobile={searchingStudentBefore.registrationForm.mobile}
+                        email={searchingStudentBefore.registrationForm.email}
+                        gender={searchingStudentBefore.registrationForm.gender}
+                        checked={searchingStudentBefore.acceptWeekChecked}
+                        directNav="before-week"
+                        handleCheckBox={handleCheckBox}
+                        checkBoxDisplay={true}
+                        index={i + 1}
+                      />
+                    );
+                  }
+                )}
               </TableBody>
             </Table>
           </TableContainer>

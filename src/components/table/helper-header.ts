@@ -1,5 +1,6 @@
 export const registerTableHeader = [
   "",
+  "",
   "وضعیت",
   "کد متقاضی",
   "نام و نام خانوادگی",
@@ -14,6 +15,7 @@ export const registerTableHeader = [
 
 export const beforeTableHeader = [
   "",
+  "",
   "وضعیت",
   "کد متقاضی",
   "نام و نام خانوادگی",
@@ -23,10 +25,11 @@ export const beforeTableHeader = [
   "ایمیل",
   "نمره آزمون",
   "آمادگی کار",
-  "هدف از شرکت",
+  "انگیزه ورود",
 ];
 
 export const afterTableHeader = [
+  "",
   "",
   "وضعیت",
   "کد متقاضی",
@@ -40,6 +43,7 @@ export const afterTableHeader = [
   "رشته نهایی",
 ];
 export const afterTableSkillSeeker = [
+  "",
   "وضعیت",
   "کد متقاضی",
   "نام و نام خانوادگی",

@@ -23,12 +23,12 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
-import useGetListLearner from "../../hooks/request/useGetListLearner";
 import { afterTableHeader } from "../../components/table/helper-header";
+import { itemCounterTable } from "../../utils/itemCoutnerTable";
+import useSWR from "swr";
 
 const AfterWeekTable = () => {
   const [page, setPage] = useState(1);
@@ -42,17 +42,15 @@ const AfterWeekTable = () => {
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
-  const { students, getListLearner, loading } = useGetListLearner(
-    allStudentAfterWeek,
-    loadingMulti,
-    page
-  );
 
-  useEffect(() => {
-    getListLearner();
-    window.scrollTo(0, 0);
-    setChevronDir(false); //after changing the page close search bar
-  }, [getListLearner]);
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useSWR(allStudentAfterWeek, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
+
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
@@ -65,6 +63,10 @@ const AfterWeekTable = () => {
     return <LoadingProgress />;
   }
 
+  if (error) {
+    console.log(error);
+  }
+
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -75,7 +77,7 @@ const AfterWeekTable = () => {
           >
             <Typography variant="h4"> فهرست هفته پذیرش</Typography>
           </Box>
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
@@ -87,11 +89,9 @@ const AfterWeekTable = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
               </AccordionSummaryStyled>
               <Box sx={{ ml: "auto" }}>
                 <Button
@@ -162,7 +162,7 @@ const AfterWeekTable = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentAfter && (
                 <TableBody>
-                  {students?.map((afterWeekStudent: AfterWeekType) => {
+                  {data?.map((afterWeekStudent: AfterWeekType, i: number) => {
                     const {
                       id,
                       finalField,
@@ -206,6 +206,7 @@ const AfterWeekTable = () => {
                         checked={afterWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
+                        index={itemCounterTable(page, pageSize, i)}
                       />
                     );
                   })}
@@ -213,62 +214,65 @@ const AfterWeekTable = () => {
               )}
 
               <TableBody>
-                {searchingStudentAfter?.map((searchingStudentAfter: any) => {
-                  return (
-                    <TableBodyAll
-                      key={searchingStudentAfter.id}
-                      id={searchingStudentAfter.id}
-                      idMulti={searchingStudentAfter.id}
-                      province={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .province
-                      }
-                      city={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .city
-                      }
-                      studyField={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .studyField
-                      }
-                      finalField={searchingStudentAfter.finalField}
-                      scholar={searchingStudentAfter.scholar}
-                      finalResult={searchingStudentAfter.finalResult}
-                      family={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .family
-                      }
-                      firstName={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .firstName
-                      }
-                      registrationCode={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .registrationCode
-                      }
-                      codeMeli={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .codeMeli
-                      }
-                      mobile={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .mobile
-                      }
-                      email={
-                        searchingStudentAfter.beforeWeekForm.registrationForm
-                          .email
-                      }
-                      // gender={
-                      //   searchingStudentAfter.beforeWeekForm.registrationForm
-                      //     .gender
-                      // }
-                      checked={searchingStudentAfter.afterWeekChecked}
-                      directNav="after-week"
-                      handleCheckBox={handleCheckBox}
-                      checkBoxDisplay={true}
-                    />
-                  );
-                })}
+                {searchingStudentAfter?.map(
+                  (searchingStudentAfter: any, i: number) => {
+                    return (
+                      <TableBodyAll
+                        key={searchingStudentAfter.id}
+                        id={searchingStudentAfter.id}
+                        idMulti={searchingStudentAfter.id}
+                        province={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .province
+                        }
+                        city={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .city
+                        }
+                        studyField={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .studyField
+                        }
+                        finalField={searchingStudentAfter.finalField}
+                        scholar={searchingStudentAfter.scholar}
+                        finalResult={searchingStudentAfter.finalResult}
+                        family={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .family
+                        }
+                        firstName={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .firstName
+                        }
+                        registrationCode={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .registrationCode
+                        }
+                        codeMeli={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .codeMeli
+                        }
+                        mobile={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .mobile
+                        }
+                        email={
+                          searchingStudentAfter.beforeWeekForm.registrationForm
+                            .email
+                        }
+                        // gender={
+                        //   searchingStudentAfter.beforeWeekForm.registrationForm
+                        //     .gender
+                        // }
+                        checked={searchingStudentAfter.afterWeekChecked}
+                        directNav="after-week"
+                        handleCheckBox={handleCheckBox}
+                        checkBoxDisplay={true}
+                        index={i + 1}
+                      />
+                    );
+                  }
+                )}
               </TableBody>
             </Table>
           </TableContainer>

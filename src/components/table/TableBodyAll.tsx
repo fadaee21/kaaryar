@@ -1,6 +1,5 @@
 import { Checkbox, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
@@ -10,10 +9,10 @@ const TableBodyAll = ({
   province,
   city,
   // gender,
-  studyField,
+  // studyField,
   finalField,
   jobStandby,
-  contCourseApproach,
+  motivation,
   scholar,
   finalResult,
   selectedField,
@@ -28,11 +27,11 @@ const TableBodyAll = ({
   cgpa,
   handleCheckBox,
   checkBoxDisplay,
+  index,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  console.log(checked);
   return (
     <StyledTableRow
       sx={{
@@ -40,24 +39,26 @@ const TableBodyAll = ({
       }}
     >
       {/* checkbox only show in registration table */}
-      {handleCheckBox && (
-        <StyledTableCell
-          align="left"
-          sx={{ width: "2%", verticalAlign: "center" }}
-        >
-          {/* show check box only if search for null(awaiting to confirm person) */}
-          {checked === null && checkBoxDisplay && (
-            <Checkbox
-              size="small"
-              onChange={(e) => handleCheckBox(e, idMulti!)}
-            />
-          )}
-        </StyledTableCell>
-      )}
+
       <StyledTableCell
-        align="left"
-        sx={{ width: "10%", verticalAlign: "center" }}
+        align="center"
+        sx={{
+          verticalAlign: "center",
+        }}
       >
+        {/* show check box only if search for null(awaiting to confirm person) */}
+        {checked === null && checkBoxDisplay && (
+          <Checkbox
+            size="small"
+            onChange={(e) => handleCheckBox?.(e, idMulti!)}
+          />
+        )}
+      </StyledTableCell>
+
+      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+        <Typography variant="body2">{index}</Typography>
+      </StyledTableCell>
+      <StyledTableCell align="left" sx={{ verticalAlign: "center" }}>
         {/* if (skill-seeker page show  8 status type) else (show 3 status) */}
         {pathname.endsWith("skill-seeker") ? (
           <Typography
@@ -93,7 +94,6 @@ const TableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -101,15 +101,14 @@ const TableBodyAll = ({
       </StyledTableCell>
       <StyledTableCell
         align="center"
-        sx={{ width: "15%", verticalAlign: "center", cursor: "pointer" }}
-        onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
+        sx={{ verticalAlign: "center", cursor: "pointer" }}
+        onClick={() => navigate(`${id}`)}
       >
         <Typography variant="body1">{firstName + " " + family}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -118,7 +117,6 @@ const TableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -127,7 +125,7 @@ const TableBodyAll = ({
       {/* <StyledTableCell
         align="center"
         sx={{
-          width:"10%",
+          
           verticalAlign: "center",
         }}
       >
@@ -136,7 +134,6 @@ const TableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -145,7 +142,6 @@ const TableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -154,7 +150,7 @@ const TableBodyAll = ({
       {/* <StyledTableCell
         align="right"
         sx={{
-          width:"10%",
+          
           verticalAlign: "center",
         }}
       >
@@ -164,7 +160,6 @@ const TableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
       >
@@ -175,7 +170,6 @@ const TableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "8%",
           verticalAlign: "center",
         }}
       >
@@ -187,12 +181,11 @@ const TableBodyAll = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "8%",
           verticalAlign: "center",
         }}
       >
         <Typography variant="body2">
-          {(directNav === "before-week" && (contCourseApproach || "-")) ||
+          {(directNav === "before-week" && (motivation || "-")) ||
             (directNav === "after-week" && (finalField || "-"))}
         </Typography>
       </StyledTableCell>

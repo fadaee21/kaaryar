@@ -1,6 +1,7 @@
 import AsyncSelect from "react-select/async";
 import { getData } from "../../api/axios";
 
+const responseQuantity = "8";
 export const SearchFirstName = ({
   setOutputFirstName,
   outputFirstName,
@@ -13,11 +14,14 @@ export const SearchFirstName = ({
   const fetchData = async (inputValue: string, delayMs: number = 0) => {
     await delay(delayMs);
     try {
-      const response = await getData(searchLink, {
-        params: {
-          firstName: inputValue,
-        },
-      });
+      const response = await getData(
+        searchLink.replace("10000", responseQuantity),
+        {
+          params: {
+            firstName: inputValue,
+          },
+        }
+      );
       if (response.status === 200) {
         return response.data;
       } else {
@@ -41,7 +45,7 @@ export const SearchFirstName = ({
       {searchPage === "reg" && (
         <AsyncSelect
           value={outputFirstName ? { firstName: outputFirstName } : null}
-          defaultOptions={true}
+          // defaultOptions={true}
           getOptionLabel={(e: any) => e.firstName}
           getOptionValue={(e: any) => e.firstName}
           // onInputChange={(e) => setValue(e)}
@@ -68,7 +72,7 @@ export const SearchFirstName = ({
               ? { registrationForm: { firstName: outputFirstName } }
               : null
           }
-          defaultOptions={true}
+          // defaultOptions={true}
           getOptionLabel={(e: any) => e.registrationForm.firstName}
           getOptionValue={(e: any) => e.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
@@ -101,7 +105,7 @@ export const SearchFirstName = ({
                 }
               : null
           }
-          defaultOptions={true}
+          // defaultOptions={true}
           getOptionLabel={(e) => e.beforeWeekForm.registrationForm.firstName}
           getOptionValue={(e) => e.beforeWeekForm.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
@@ -126,7 +130,7 @@ export const SearchFirstName = ({
       {searchPage === "moodle" && (
         <AsyncSelect
           value={outputFirstName ? { firstName: outputFirstName } : null}
-          defaultOptions={true}
+          // defaultOptions={true}
           getOptionLabel={(e: any) => e.firstName}
           getOptionValue={(e: any) => e.firstName}
           // onInputChange={(e) => setValue(e)}

@@ -24,38 +24,32 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
 import TableEmpty from "../../components/table/TableEmpty";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
-import useGetListLearner from "../../hooks/request/useGetListLearner";
-import { registerTableHeader } from "../../components/table/helper-header";
+import useSWR from "swr";
 
+import { registerTableHeader } from "../../components/table/helper-header";
+import { itemCounterTable } from "../../utils/itemCoutnerTable";
+
+const pageSize = 20;
 const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-
   const [searchingStudentRegister, setSearchingStudentRegister] = useState<
     RegistrationForm[] | null
   >(null);
-
-  const pageSize = 20;
   const allStudentReg = `/reg/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const { getApproveMulti, loadingMulti } = useApproveMulti();
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useSWR(allStudentReg, {
+    onSuccess: () => window.scrollTo(0, 0),
+  });
 
-  const { students, getListLearner, loading } = useGetListLearner(
-    allStudentReg,
-    loadingMulti,
-    page
-  );
-
-  useEffect(() => {
-    getListLearner();
-    window.scrollTo(0, 0);
-    setChevronDir(false);
-    // eslint-disable-next-line
-  }, [page, loadingMulti]);
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
@@ -67,7 +61,9 @@ const RegisterFormTable = () => {
   if (loading || loadingMulti) {
     return <LoadingProgress />;
   }
-
+  if (error) {
+    console.log(error);
+  }
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -79,7 +75,7 @@ const RegisterFormTable = () => {
             <Typography variant="h4"> فهرست ثبت نام</Typography>
           </Box>
 
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
@@ -91,11 +87,9 @@ const RegisterFormTable = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
               </AccordionSummaryStyled>
               <Box sx={{ ml: "auto" }}>
                 <Button
@@ -156,7 +150,7 @@ const RegisterFormTable = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentRegister && (
                 <TableBody>
-                  {students.map((RegisterUser: any /*RegistrationForm*/) => {
+                  {data?.map((RegisterUser: RegistrationForm, i: number) => {
                     return (
                       <RegTableBodyAll
                         key={RegisterUser.id}
@@ -175,6 +169,7 @@ const RegisterFormTable = () => {
                         province={RegisterUser.province}
                         createTime={RegisterUser.createTime}
                         course={RegisterUser.course}
+                        index={itemCounterTable(page, pageSize, i)}
                       />
                     );
                   })}
@@ -183,7 +178,7 @@ const RegisterFormTable = () => {
               {/* show content if searching in the box */}
               <TableBody>
                 {searchingStudentRegister?.map(
-                  (searchingStudentRegister: any) => {
+                  (searchingStudentRegister: RegistrationForm, i: number) => {
                     return (
                       <RegTableBodyAll
                         key={searchingStudentRegister?.id}
@@ -206,6 +201,7 @@ const RegisterFormTable = () => {
                         createTime={searchingStudentRegister?.createTime}
                         course={searchingStudentRegister?.course}
                         education={searchingStudentRegister?.education}
+                        index={i + 1}
                       />
                     );
                   }

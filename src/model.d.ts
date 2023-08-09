@@ -303,12 +303,13 @@ export interface TableBodyAllType extends RegistrationForm {
   idMulti?: number;
   // roles: string;
   directNav: string;
-  contCourseApproach?: string;
+  motivation?: string;
   finalField?: string;
   jobStandby?: boolean;
   scholar?: boolean;
   finalResult?: string;
   cgpa?: string;
+  index: number;
 }
 
 export interface SeekerStudent {
@@ -399,7 +400,7 @@ export interface PropEditCombo {
   handleChange: (e: SelectChangeEvent<string>) => void;
 }
 
-export type TableHeaderProps = { headerItems: string[] };
+export type TableHeaderProps = { headerItems: string[]; status?: any };
 
 //!Education
 // /modules/categories/all
@@ -856,3 +857,8 @@ interface DetailError {
   msg: string;
   type: string;
 }
+
+export type OptionYesOrNo = {
+  value: boolean;
+  label: "بله" | "خیر";
+};
