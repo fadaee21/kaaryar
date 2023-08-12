@@ -451,10 +451,11 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 placeholder="آمادگی به کار بعد از اتمام دوره"
               />
 
-              <EditString
+              <EditCombo
+                options={motivationOpt}
                 handleChange={handleChange}
-                value={student?.motivation || ""}
-                identifier="motivation"
+                value={student?.motivationByAdmin || ""}
+                identifier="motivationByAdmin"
                 placeholder="انگیزه اصلی از شرکت در دوره"
               />
               <EditString
