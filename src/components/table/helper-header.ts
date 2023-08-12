@@ -59,6 +59,7 @@ export const afterTableSkillSeeker = [
 
 export const studentTableHeader = [
   "",
+  "",
   "نام و نام خانوادگی",
   "نام کاربری",
   "شهر",

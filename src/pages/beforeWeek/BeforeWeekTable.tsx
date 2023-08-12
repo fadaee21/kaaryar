@@ -27,7 +27,7 @@ import {
 import TableEmpty from "../../components/table/TableEmpty";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import { beforeTableHeader } from "../../components/table/helper-header";
-import { itemCounterTable } from "../../utils/itemCoutnerTable";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 import useSWR from "swr";
 const pageSize = 20;
 const BeforeWeekTable = () => {

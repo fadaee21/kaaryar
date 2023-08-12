@@ -26,7 +26,7 @@ import { Profile } from "../../model";
 import useEditProfile from "../../hooks/request/useEditProfile";
 import TableHeader from "../../components/table/TableHeader";
 import { volunteerTableHeader } from "../../components/table/helper-header";
-import { itemCounterTable } from "../../utils/itemCoutnerTable";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 
 const Volunteer = () => {
   const pageSize = 10;

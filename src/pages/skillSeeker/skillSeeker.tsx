@@ -29,7 +29,7 @@ import { afterTableSkillSeeker } from "../../components/table/helper-header";
 import useSWR from "swr";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
-import { itemCounterTable } from "../../utils/itemCoutnerTable";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 const pageSize = 20;
 const SkillSeeker = () => {
   const [page, setPage] = useState(1);
