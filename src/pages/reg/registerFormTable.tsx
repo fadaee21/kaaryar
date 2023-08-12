@@ -29,7 +29,7 @@ import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import useSWR from "swr";
 
 import { registerTableHeader } from "../../components/table/helper-header";
-import { itemCounterTable } from "../../utils/itemCoutnerTable";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 
 const pageSize = 20;
 const RegisterFormTable = () => {

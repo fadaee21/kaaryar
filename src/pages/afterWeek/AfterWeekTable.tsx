@@ -27,7 +27,7 @@ import TableEmpty from "../../components/table/TableEmpty";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import { afterTableHeader } from "../../components/table/helper-header";
-import { itemCounterTable } from "../../utils/itemCoutnerTable";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 import useSWR from "swr";
 
 const AfterWeekTable = () => {

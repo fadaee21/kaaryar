@@ -28,15 +28,14 @@ import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
 import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const pageSize = 25;
   // const adminStudentQuery =
   //   "orderAscending=false&orderBy=after_week_update_timestamp";
-  const adminStudentQuery =
-    "orderAscending=false&orderBy=regformGroup";
-
+  const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
 
   const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
 
@@ -133,7 +132,7 @@ const StudentTableAdmin = () => {
 
               <TableBody>
                 {(searchingMoodleStudent ? searchingMoodleStudent : data)?.map(
-                  (moodleUser: MoodleUser) => {
+                  (moodleUser: MoodleUser, i: number) => {
                     const {
                       id,
                       firstName,
@@ -151,6 +150,18 @@ const StudentTableAdmin = () => {
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
+                        <StyledTableCell
+                          align="center"
+                          sx={{
+                            verticalAlign: "center",
+                          }}
+                        >
+                          <Typography variant="body2">
+                            {searchingMoodleStudent
+                              ? i + 1
+                              : itemCounterTable(page, pageSize, i)}
+                          </Typography>
+                        </StyledTableCell>
                         <StyledTableCell align="center">
                           {/* //TODO: add picture */}
                           <TablePic picture={picture} lastName={family} />
