@@ -44,6 +44,7 @@ export const afterTableHeader = [
 ];
 export const afterTableSkillSeeker = [
   "",
+  "",
   "وضعیت",
   "کد متقاضی",
   "نام و نام خانوادگی",
