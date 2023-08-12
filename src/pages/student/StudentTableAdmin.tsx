@@ -32,8 +32,12 @@ import { studentTableHeader } from "../../components/table/helper-header";
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const pageSize = 25;
+  // const adminStudentQuery =
+  //   "orderAscending=false&orderBy=after_week_update_timestamp";
   const adminStudentQuery =
-    "orderAscending=false&orderBy=after_week_update_timestamp";
+    "orderAscending=false&orderBy=regformGroup";
+
+
   const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
 
   const studentCount = "moodle/user/student/count";
