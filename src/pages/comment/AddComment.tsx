@@ -1,19 +1,9 @@
-import { Button, Container, Typography } from "@mui/material";
-import { Stack } from "@mui/system";
-import { useEffect, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Container } from "@mui/material";
+import { Navigate, useLocation } from "react-router-dom";
 import AddOrEditComment from "../../components/comment/AddOrEditComment";
-import { StudentId } from "../../model";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AddComment = () => {
-  const [studentId, setStudentId] = useState<StudentId | null>(null);
-  const navigate = useNavigate();
-  const { state, pathname }: any = useLocation();
-
-  useEffect(() => {
-    state && setStudentId({ id: state.student.id });
-  }, [state]);
+  const { state, pathname } = useLocation();
 
   if (!state) {
     //if add url in address bar(not push the button) so you don't have state
@@ -24,24 +14,10 @@ const AddComment = () => {
 
   return (
     <Container maxWidth="lg">
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography variant="h5" gutterBottom>
-          ثبت گزارش برای {student.firstName} {student.lastName}
-        </Typography>
-        <Button
-          onClick={() => navigate(-1)}
-          endIcon={<ArrowBackIcon />}
-          variant="outlined"
-          color="inherit"
-        >
-          بازگشت
-        </Button>
-      </Stack>
-
       <AddOrEditComment
-        studentId={studentId}
         compType={"adding"}
         allComment={null}
+        studentName={student}
       />
     </Container>
   );

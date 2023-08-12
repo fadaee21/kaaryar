@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { editAxios, getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { AfterWeekType, BeforeWeekType } from "../../model";
+import { AfterWeekType } from "../../model";
 import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InitialDataRegistered from "../../components/beforeWeek/InitialDataRegistered";
 import AfterWeekDetailEditComp from "../../components/afterWeek/AfterWeekDetailEditComp";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 const AfterWeekDetailEdit = () => {
   const [student, setStudent] = useState<AfterWeekType | null>(null);
@@ -38,7 +40,7 @@ const AfterWeekDetailEdit = () => {
     e.preventDefault();
     try {
       const response = await editAxios(studentIdAfterWeek, {
-        data: student,
+        data: { form: student },
       });
       if (response.status === 200) {
         navigate(-1);
@@ -46,9 +48,9 @@ const AfterWeekDetailEdit = () => {
       } else {
         console.log(response.data);
       }
-      setLoadingPut(false);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(handleError(error));
+    } finally {
       setLoadingPut(false);
     }
   };
@@ -58,13 +60,13 @@ const AfterWeekDetailEdit = () => {
     setStudent((prev: any) => ({ ...prev, [name]: value }));
   };
   //some properties of beforeWeek must be change in afterWeek
-  const handleChangeBefore = (e: any) => {
-    const { name, value } = e.target;
-    setStudent((prev: any) => ({
-      ...prev,
-      beforeWeekForm: { ...prev.beforeWeekForm, [name]: value },
-    }));
-  };
+  // const handleChangeBefore = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setStudent((prev: any) => ({
+  //     ...prev,
+  //     beforeWeekForm: { ...prev.beforeWeekForm, [name]: value },
+  //   }));
+  // };
 
   useEffect(() => {
     getStudent();
@@ -87,18 +89,18 @@ const AfterWeekDetailEdit = () => {
         }}
       >
         <Button
-          variant="contained"
+          variant="outlined"
+          sx={{ px: 5 }}
+          color="inherit"
           endIcon={<ArrowBackIcon />}
-          color="secondary"
-          size="small"
           onClick={() => navigate(-1)}
         >
           بازگشت
         </Button>
       </Box>
       <Container maxWidth="lg">
-        <InitialDataRegistered
-          student={student?.beforeWeekForm as BeforeWeekType | null}
+        <RegisterFormDetailComp
+          student={student?.beforeWeekForm?.registrationForm}
         />
         <Divider />
         <Box
@@ -128,7 +130,7 @@ const AfterWeekDetailEdit = () => {
           <AfterWeekDetailEditComp
             student={student}
             handleChange={handleChange}
-            handleChangeBefore={handleChangeBefore}
+            // handleChangeBefore={handleChangeBefore}
           />
         </Box>
       </Container>

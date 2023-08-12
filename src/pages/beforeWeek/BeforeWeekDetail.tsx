@@ -2,22 +2,23 @@ import { useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { BeforeWeekType } from "../../model";
+import { BeforeWeekType, RegistrationForm } from "../../model";
 import { Box, Button, Container, Divider, useMediaQuery } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InitialDataRegistered from "../../components/beforeWeek/InitialDataRegistered";
+
 import BeforeWeekDetailShow from "../../components/beforeWeek/BeforeWeekDetailShowComp";
 import AlertDialog from "../../components/modal/AlertDialog";
 import { useApproveWeek } from "../../hooks/request/useApprove";
+import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 
 const BeforeWeekDetail = () => {
-  const [student, setStudent] = useState<BeforeWeekType | null>(null);
+  const [student, setStudent] = useState<BeforeWeekType>();
   const [loading, setLoading] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertType, setAlertType] = useState<
     "approve" | "disApprove" | undefined
   >(undefined);
-  const { successObject, getApproveWeek } = useApproveWeek();
+  const { successObject, getApproveWeek, loadingRegWeek } = useApproveWeek();
   const handleOpenAlert = (alert: "approve" | "disApprove") => {
     console.log(alert);
     setAlertType(alert);
@@ -35,14 +36,13 @@ const BeforeWeekDetail = () => {
     try {
       let response = await getData(studentId);
       setStudent(response.data);
-      setLoading(false);
     } catch (error) {
       //TODO:handle Error
       console.log("catch block of error");
       console.log(error);
-      setLoading(false);
       navigate("/");
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -52,19 +52,15 @@ const BeforeWeekDetail = () => {
   }, []);
 
   const handleApprove = () => {
-    console.log("you trigger approve Before Week");
-    getApproveWeek(id, { acceptWeekChecked: true }, approveLink);
-    navigate(-1)
+    getApproveWeek(id, { setApproved: true }, approveLink);
   };
   const handleDisApprove = () => {
-    console.log("you trigger disApprove Before Week");
-    getApproveWeek(id, { acceptWeekChecked: false }, approveLink);
-    navigate(-1)
+    getApproveWeek(id, { setApproved: false }, approveLink);
   };
 
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
-  if (loading) {
+  if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
 
@@ -78,18 +74,20 @@ const BeforeWeekDetail = () => {
           marginRight: 5,
         }}
       >
-        <Button
-          variant="contained"
-          endIcon={<ArrowBackIcon />}
-          color="secondary"
-          size="small"
-          onClick={() => navigate(-1)}
-        >
-          بازگشت
-        </Button>
+    <Button
+            variant="outlined"
+            sx={{ px: 5 }}
+            color="inherit"
+            endIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            بازگشت
+          </Button>
       </Box>
       <Container maxWidth="lg">
-        <InitialDataRegistered student={student} />
+        <RegisterFormDetailComp
+          student={student?.registrationForm as RegistrationForm}
+        />
         <Divider />
         <BeforeWeekDetailShow
           typeComp="exam"

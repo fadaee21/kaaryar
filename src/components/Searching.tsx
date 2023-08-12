@@ -1,157 +1,163 @@
-import { useState } from "react";
-import AsyncSelect from "react-select/async";
-import { getData } from "../api/axios";
+// import { useState } from "react";
+// import AsyncSelect from "react-select/async";
+// import { getData } from "../api/axios";
 
-//Searching totally change and this component doesn't use any more
+// //Searching totally change and this component doesn't use any more
 
-export const SearchBefore = ({ setSearchingStudentBefore }: any) => {
-  const [inputValue, setValue] = useState("");
+// export const SearchBefore = ({ setSearchingStudentBefore }: any) => {
+//   const [inputValue, setValue] = useState("");
 
-  const fetchData = async (inputValue: string) => {
-    try {
-      const response = await getData("/exam/before/week/search", {
-        params: {
-          keyword: inputValue,
-        },
-      });
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        console.log(response);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+//   const fetchData = async (inputValue: string) => {
+//     try {
+//       const response = await getData("/exam/before/week/search", {
+//         params: {
+//           keyword: inputValue,
+//         },
+//       });
+//       if (response.status === 200) {
+//         return response.data;
+//       } else {
+//         console.log(response);
+//       }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
 
-  const promiseOptions: any = (inputValue: string) =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(fetchData(inputValue));
-      }, 1500);
-    });
+//   const promiseOptions: any = (inputValue: string) =>
+//     new Promise((resolve) => {
+//       setTimeout(() => {
+//         resolve(fetchData(inputValue));
+//       }, 1500);
+//     });
 
-  return (
-    <>
-      <AsyncSelect
-        value={inputValue}
-        defaultOptions={false}
-        getOptionLabel={(e: any) =>
-          e.registrationForm.firstName + " " + e.registrationForm.family
-        }
-        getOptionValue={(e: any) =>
-          e.registrationForm.firstName +
-          e.registrationForm.family +
-          e.registrationForm.codeMeli
-        }
-        onInputChange={(e) => setValue(e)}
-        onChange={(e: any) => setSearchingStudentBefore(e)}
-        cacheOptions
-        loadOptions={promiseOptions}
-        placeholder="جستجو..."
-        noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
-        loadingMessage={() => "لطفا کمی صبر کنید"}
-      />
-    </>
-  );
+//   return (
+//     <>
+//       <AsyncSelect
+//         value={inputValue}
+//         defaultOptions={false}
+//         getOptionLabel={(e: any) =>
+//           e.registrationForm.firstName + " " + e.registrationForm.family
+//         }
+//         getOptionValue={(e: any) =>
+//           e.registrationForm.firstName +
+//           e.registrationForm.family +
+//           e.registrationForm.codeMeli
+//         }
+//         onInputChange={(e) => setValue(e)}
+//         onChange={(e: any) => setSearchingStudentBefore(e)}
+//         cacheOptions
+//         loadOptions={promiseOptions}
+//         placeholder="جستجو..."
+//         noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+//         loadingMessage={() => "لطفا کمی صبر کنید"}
+//       />
+//     </>
+//   );
+// };
+
+// export const SearchAfter = ({ setSearchingStudentAfter }: any) => {
+//   const [inputValue, setValue] = useState("");
+
+//   const fetchData = async (inputValue: string) => {
+//     try {
+//       const response = await getData("/exam/after/week/search", {
+//         params: {
+//           keyword: inputValue,
+//         },
+//       });
+//       if (response.status === 200) {
+//         return response.data;
+//       } else {
+//         console.log(response);
+//       }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   const promiseOptions: any = (inputValue: string) =>
+//     new Promise((resolve) => {
+//       setTimeout(() => {
+//         resolve(fetchData(inputValue));
+//       }, 1500);
+//     });
+
+//   return (
+//     <>
+//       <AsyncSelect
+//         value={inputValue}
+//         defaultOptions={false}
+//         getOptionLabel={(e: any) =>
+//           e.beforeWeekForm.registrationForm.firstName +
+//           " " +
+//           e.beforeWeekForm.registrationForm.family
+//         }
+//         getOptionValue={(e: any) =>
+//           e.beforeWeekForm.registrationForm.firstName +
+//           e.beforeWeekForm.registrationForm.family +
+//           e.beforeWeekForm.registrationForm.codeMeli
+//         }
+//         onInputChange={(e) => setValue(e)}
+//         onChange={(e: any) => setSearchingStudentAfter(e)}
+//         cacheOptions
+//         loadOptions={promiseOptions}
+//         placeholder="جستجو..."
+//         noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+//         loadingMessage={() => "لطفا کمی صبر کنید"}
+//       />
+//     </>
+//   );
+// };
+
+// export const SearchRegister = ({ setSearchingStudentRegister }: any) => {
+//   const [inputValue, setValue] = useState<string | null>(null);
+
+//   const fetchData = async (inputValue: string) => {
+//     try {
+//       const response = await getData("/reg/search", {
+//         params: {
+//           keyword: inputValue,
+//         },
+//       });
+//       if (response.status === 200) {
+//         console.log(response.data);
+//         // setSelectedOption(response.data);
+//         return response.data;
+//       } else {
+//         console.log(response);
+//       }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   const promiseOptions: any = (inputValue: string) =>
+//     new Promise((resolve) => {
+//       setTimeout(() => {
+//         resolve(fetchData(inputValue));
+//       }, 1500);
+//     });
+
+//   return (
+//     <AsyncSelect
+//       value={inputValue}
+//       defaultOptions={false}
+//       getOptionLabel={(e: any) => e.firstName + " " + e.family}
+//       getOptionValue={(e: any) => e.firstName + e.family + e.codeMeli}
+//       onInputChange={(e) => setValue(e)}
+//       onChange={(e: any) => setSearchingStudentRegister(e)}
+//       cacheOptions
+//       loadOptions={promiseOptions}
+//       placeholder="جستجو..."
+//       noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+//       loadingMessage={() => "لطفا کمی صبر کنید"}
+//     />
+//   );
+// };
+
+const Searching = () => {
+  return <div>Searching</div>;
 };
 
-export const SearchAfter = ({ setSearchingStudentAfter }: any) => {
-  const [inputValue, setValue] = useState("");
-
-  const fetchData = async (inputValue: string) => {
-    try {
-      const response = await getData("/exam/after/week/search", {
-        params: {
-          keyword: inputValue,
-        },
-      });
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        console.log(response);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const promiseOptions: any = (inputValue: string) =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(fetchData(inputValue));
-      }, 1500);
-    });
-
-  return (
-    <>
-      <AsyncSelect
-        value={inputValue}
-        defaultOptions={false}
-        getOptionLabel={(e: any) =>
-          e.beforeWeekForm.registrationForm.firstName +
-          " " +
-          e.beforeWeekForm.registrationForm.family
-        }
-        getOptionValue={(e: any) =>
-          e.beforeWeekForm.registrationForm.firstName +
-          e.beforeWeekForm.registrationForm.family +
-          e.beforeWeekForm.registrationForm.codeMeli
-        }
-        onInputChange={(e) => setValue(e)}
-        onChange={(e: any) => setSearchingStudentAfter(e)}
-        cacheOptions
-        loadOptions={promiseOptions}
-        placeholder="جستجو..."
-        noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
-        loadingMessage={() => "لطفا کمی صبر کنید"}
-      />
-    </>
-  );
-};
-
-export const SearchRegister = ({ setSearchingStudentRegister }: any) => {
-  const [inputValue, setValue] = useState<string | null>(null);
-
-  const fetchData = async (inputValue: string) => {
-    try {
-      const response = await getData("/reg/search", {
-        params: {
-          keyword: inputValue,
-        },
-      });
-      if (response.status === 200) {
-        console.log(response.data);
-        // setSelectedOption(response.data);
-        return response.data;
-      } else {
-        console.log(response);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const promiseOptions: any = (inputValue: string) =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(fetchData(inputValue));
-      }, 1500);
-    });
-
-  return (
-    <AsyncSelect
-      value={inputValue}
-      defaultOptions={false}
-      getOptionLabel={(e: any) => e.firstName + " " + e.family}
-      getOptionValue={(e: any) => e.firstName + e.family + e.codeMeli}
-      onInputChange={(e) => setValue(e)}
-      onChange={(e: any) => setSearchingStudentRegister(e)}
-      cacheOptions
-      loadOptions={promiseOptions}
-      placeholder="جستجو..."
-      noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
-      loadingMessage={() => "لطفا کمی صبر کنید"}
-    />
-  );
-};
+export default Searching;

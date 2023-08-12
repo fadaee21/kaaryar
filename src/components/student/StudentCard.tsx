@@ -2,69 +2,72 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { MoodleUserAssignee } from "../../model";
+import { StudentEdu } from "../../model";
 import { Button, CardActions, Divider, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { TablePic2 } from "../table/TablePic";
 
-export default function StudentCard({
-  moodleUser,
-}: {
-  moodleUser: MoodleUserAssignee;
-}) {
-  const { studentId, studentFamily, studentName } = moodleUser;
+interface Props {
+  moodleUser: StudentEdu;
+}
+
+export default function StudentCard({ moodleUser }: Props) {
+  const { firstName, family, email, city, id, mobile, phone } = moodleUser;
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
   //for adding comment i use state as below structure, so i change the name before insert into state navigation, it's necessary for AddComment page
   const student = {
-    firstName: studentName,
-    lastName: studentFamily,
-    id: studentId,
+    firstName: firstName,
+    lastName: family,
   };
 
   return (
-    <Card sx={{ minWidth: 345, pb: 1 }}>
+    <Card
+      sx={{
+        minWidth: 345,
+        height: 300,
+        pb: 1,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <CardHeader
-        avatar={<TablePic2 studentId={studentId} lastName={studentFamily} />}
-        title={studentName + " " + studentFamily}
+        avatar={<TablePic2 studentId={id} lastName={family} />}
+        title={firstName + " " + family}
       />
       <CardContent>
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              phone
-              {/* {email} */}
+              تلفن: {(mobile ?? phone) || " - "}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              email
-              {/* {username} */}
+              ایمیل: {email || " - "}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              location
-              {/* {username} */}
+              شهر: {city || " - "}
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="text.secondary">
+            {/* <Typography variant="body2" color="text.secondary">
               course
-              {/* {username} */}
-            </Typography>
+            </Typography> */}
           </Grid>
         </Grid>
       </CardContent>
-      <Divider variant="middle" sx={{ my: 1 }} />
+      <Divider variant="middle" sx={{ mt: "auto", mb: 2 }} />
       <CardActions>
         <Button
           variant="outlined"
           size="small"
-          onClick={() => navigate(`/${roles}/student/${studentId}`)}
+          onClick={() => navigate(`/${roles}/student/${id}`)}
           fullWidth
         >
           مشاهده اطلاعات فردی
@@ -74,7 +77,7 @@ export default function StudentCard({
           size="small"
           variant="contained"
           onClick={() =>
-            navigate(`/${roles}/student/${studentId}/add-comment/`, {
+            navigate(`/${roles}/student/${id}/add-comment/`, {
               state: {
                 student: student,
               },

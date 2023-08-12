@@ -1,21 +1,16 @@
 import React from "react";
-import {
-  Grid,
-  List,
-  ListItem,
-  Divider,
-  useMediaQuery,
-  Box,
-} from "@mui/material";
-import { BoxExamDetail } from "../../styles/examFormDetail";
+import { Grid, List, ListItem, Divider, useMediaQuery } from "@mui/material";
+import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 import { RegistrationForm } from "../../model";
 import { EditingSelective } from "./EditingSelective";
 import {
+  SelectedFieldOpt,
   acquaintanceOptions,
   eduLevelOptions,
   highSchoolOptions,
   provinceOptions,
+  uniSemesterOptions,
 } from "../search/searchOptions";
 import EditingInput from "./EditingInput";
 
@@ -28,9 +23,9 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   handleChange,
 }) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
-  console.log(student)
+
   return (
-    <BoxExamDetail>
+    <ContentBox>
       <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
         فرم ثبت اطلاعات اولیه
       </DetailTypography>
@@ -48,7 +43,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 handleChange={handleChange}
                 name="token"
                 placeholder="کد متقاضی"
-                state={student?.token || ""}
+                state={student?.registrationCode || ""}
               />
             </ListItem>
             <ListItem>
@@ -70,7 +65,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             <ListItem>
               <EditingSelective
                 handleChange={handleChange}
-                state={student?.province || ""}
+                state={student?.province?.trimEnd() || ""}
                 placeholder="استان"
                 options={provinceOptions}
                 name="province"
@@ -87,21 +82,23 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
 
             <ListItem>
               <EditingSelective
-                options={highSchoolOptions}
-                placeholder="سال دبیرستان"
+                options={acquaintanceOptions}
+                placeholder="نحوه آشنایی"
                 handleChange={handleChange}
-                state={student?.highSchoolYear || ""}
-                name="highSchoolYear"
+                state={student?.familiarity?.trim() || ""}
+                name="familiarity"
               />
             </ListItem>
-            <ListItem>
-              <EditingInput
-                placeholder="نام معرف یا موسسه"
-                handleChange={handleChange}
-                state={student?.refer || ""}
-                name="refer"
-              />
-            </ListItem>
+            {student?.familiarity?.trim() === "other" && (
+              <ListItem>
+                <EditingInput
+                  placeholder="نام معرف یا موسسه"
+                  handleChange={handleChange}
+                  state={student?.refer || ""}
+                  name="refer"
+                />
+              </ListItem>
+            )}
             <ListItem>
               <EditingInput
                 placeholder="سال تولد"
@@ -130,15 +127,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 name="email"
               />
             </ListItem>
-            <ListItem>
-              <EditingSelective
-                options={acquaintanceOptions}
-                placeholder="نحوه آشنایی"
-                handleChange={handleChange}
-                state={student?.familiarity || ""}
-                name="familiarity"
-              />
-            </ListItem>
+
             <ListItem>
               <EditingSelective
                 options={eduLevelOptions}
@@ -149,6 +138,25 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               />
             </ListItem>
             <ListItem>
+              <EditingSelective
+                options={highSchoolOptions}
+                placeholder="سال دبیرستان"
+                handleChange={handleChange}
+                state={student?.highSchoolYear || ""}
+                name="highSchoolYear"
+              />
+            </ListItem>
+            <ListItem>
+              <EditingSelective
+                options={uniSemesterOptions}
+                placeholder="ترم دانشگاه"
+                handleChange={handleChange}
+                state={student?.uniSemester || ""}
+                name="uniSemester"
+              />
+            </ListItem>
+
+            <ListItem>
               <EditingInput
                 placeholder="رشته تحصیلی"
                 handleChange={handleChange}
@@ -157,13 +165,24 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               />
             </ListItem>
             <ListItem>
-              <EditingInput
+              <EditingSelective
+                options={SelectedFieldOpt}
                 placeholder="رشته انتخابی در کاریار"
                 handleChange={handleChange}
                 state={student?.selectedField || ""}
                 name="selectedField"
               />
             </ListItem>
+            {student?.selectedField?.trim() === "other" && (
+              <ListItem>
+                <EditingInput
+                  placeholder="مسیر مورد نظر متقاضی"
+                  handleChange={handleChange}
+                  state={student?.careerPathwayOther || ""}
+                  name="careerPathwayOther"
+                />
+              </ListItem>
+            )}
             <ListItem>
               <EditingInput
                 placeholder="توضیحات سایر"
@@ -174,16 +193,16 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             </ListItem>
           </List>
         </Grid>
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "flex-start",
             marginRight: 5,
           }}
-        ></Box>
+        ></Box> */}
       </Grid>
-    </BoxExamDetail>
+    </ContentBox>
   );
 };
 

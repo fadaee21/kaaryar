@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthProvider";
 import { AllowedRoles } from "../model";
 
 const RequireAuth: React.FC<AllowedRoles> = ({ allowedRoles }) => {
+  //this component check you authorization that which page you can see
   const location = useLocation();
   const { auth } = useAuth();
 

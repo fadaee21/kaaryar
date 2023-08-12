@@ -1,169 +1,103 @@
-import { AxiosError } from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData, postData, editAxios } from "../../api/axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { postData, editAxios } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-import { Course, StudentId, StudentUser } from "../../model";
-
+import { ModulesAsStudentModule } from "../../model";
+import useSWR from "swr";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { useState } from "react";
 export const useAddComment = (
-  course: Course | null,
-  studentId: StudentId | null,
+  course: ModulesAsStudentModule | null,
   comment: string,
   sessionDate: string,
   sessionProblem: string,
   studentTask: string,
-  studentContribute: string,
+  studentContribution: string | null,
   studentPresent: string
 ) => {
-  const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-  const [allCourse, setAllCourse] = useState([]);
-
+  const { id: studentId } = useParams();
   const postCommentLink = `/${roles}/survey/new`;
-  const allCourseLink = `/${roles}/course/all?pageNum=0&pageSize=100`;
+  const allCourseLink = `${roles}/modules/all?pageNum=1&pageSize=100&orderAscending=false&orderBy=name`;
+  const [loading, setLoading] = useState(false);
+  const {
+    data: allCourse,
+    error: errorAllCourse,
+    isLoading: courseLoading,
+  } = useSWR<ModulesAsStudentModule[]>(allCourseLink);
+  if (errorAllCourse) {
+    toast.error(handleError(errorAllCourse));
+  }
 
-  // there is a problem for selecting null as value, handle by this function
-  const StPresentBoolean = () => {
-    switch (studentPresent) {
-      case "بله":
-        return true;
-      case "خیر":
-        return false;
-      default:
-        return null;
-    }
-  };
-
-  const getAllCourse = useCallback(async () => {
-    try {
-      const response = await getData(allCourseLink);
-      setAllCourse(response.data);
-    } catch (error) {
-      console.log(error);
-      navigate("/");
-    }
-  }, []);
-  useEffect(() => {
-    getAllCourse();
-  }, [getAllCourse]);
-
-  // console.log(
-  //   "studentUser:",
-  //   studentId,
-  //   "course:",
-  //   course,
-  //   "comment:",
-  //   comment,
-  //   "sessionDate:",
-  //   sessionDate,
-  //   "studentContribute:",
-  //   studentContribute,
-  //   "studentTask:",
-  //   studentTask,
-  //   "sessionProblem:",
-  //   sessionProblem,
-  //   "studentPresent:",
-  //   StPresentBoolean()
-  // );
   const postComment = async () => {
+    setLoading(true);
     try {
       const response = await postData(postCommentLink, {
         data: {
-          studentUser: studentId,
-          course: course,
-          comment: comment,
-          sessionDate: sessionDate,
-          studentContribute: studentContribute,
-          studentTask: studentTask,
-          sessionProblem: sessionProblem,
-          isStudentPresent: StPresentBoolean(),
+          studentId,
+          moduleId: course?.id,
+          comment,
+          sessionDate,
+          studentContribution,
+          studentTask,
+          sessionProblem,
+          studentPresent,
         },
       });
-
-      if (response.data.state === "exist") {
-        setErrMsg("این نظر قبلا ثبت شده است");
-      }
-      if (response.data.state === "success") {
+      if (response.status === 201) {
         navigate(`/${roles}/all-comments`);
+        return;
       }
-      setErrMsg(" نظر شما ثبت نشد");
-    } catch (error) {
-      const err = error as AxiosError;
-      console.log(err);
-      if (err.response?.status === 401) {
-        setErrMsg("شما مجاز به ثبت  نظر نمی باشید");
+      if (response.data.state === "exist") {
+        toast.error("این نظر قبلا ثبت شده است");
+        return;
       }
-      if (err.response?.status === 403) {
-        setErrMsg("امکان ثبت  نظر شما نیست");
-      }
-      setErrMsg(" نظر شما ثبت نشد");
+      toast.error(" نظر شما ثبت نشد");
+    } catch (error: any) {
+      toast.error(handleError(error));
+    } finally {
+      setLoading(false);
     }
   };
 
-  const putComment = async (
-    id: number | undefined,
-    studentUser: StudentUser | undefined
-  ) => {
-    console.log(
-      "course:",
-      course,
-      "studentUser:",
-      studentUser,
-      "comment:",
-      comment,
-      "sessionDate:",
-      sessionDate,
-      "sessionProblem:",
-      sessionProblem,
-      "studentTask:",
-      studentTask,
-      "studentContribute:",
-      studentContribute,
-      "studentPresent:",
-      studentPresent
-    );
+  const putComment = async (id: number | undefined) => {
     try {
+      setLoading(true);
       const response = await editAxios(`${roles}/survey/${id}`, {
         data: {
-          studentUser: studentUser,
-          course: course,
-          comment: comment,
-          sessionDate: sessionDate,
-          studentContribute: studentContribute,
-          studentTask: studentTask,
-          sessionProblem: sessionProblem,
-          isStudentPresent: StPresentBoolean(),
+          studentId,
+          moduleId: course?.id,
+          comment,
+          sessionDate,
+          studentContribution,
+          studentTask,
+          sessionProblem,
+          studentPresent,
         },
       });
-      const data = await response.data;
-      console.log(data);
-      if (response.data.state === "exist") {
-        setErrMsg("این نظر قبلا ثبت شده است");
-      }
-      if (response.data.state === "success") {
+
+      if (response.status === 200) {
         navigate(`/${roles}/all-comments`);
+        return;
       }
-      setErrMsg(" نظر شما ثبت نشد");
-    } catch (error) {
-      const err = error as AxiosError;
-      console.log(err);
-      if (err.response?.status === 401) {
-        setErrMsg("شما مجاز به ثبت  نظر نمی باشید");
+      if (response.data.state === "exist") {
+        toast.error("این نظر قبلا ثبت شده است");
+        return;
       }
-      if (err.response?.status === 403) {
-        setErrMsg("امکان ثبت  نظر شما نیست");
-      }
-      setErrMsg(" نظر شما ثبت نشد");
+      toast.error(" نظر شما ثبت نشد");
+    } catch (error: any) {
+      toast.error(handleError(error));
+    } finally {
+      setLoading(false);
     }
   };
-
   return {
-    setErrMsg,
+    courseLoading,
     allCourse,
     postComment,
     putComment,
-    errMsg,
+    loading,
   };
 };

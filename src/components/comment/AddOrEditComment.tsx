@@ -1,17 +1,14 @@
-import {
-  Autocomplete,
-  Button,
-  FormHelperText,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { JalaliDatePicker } from "./JalaliDatePicker";
-import React, { useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useAddComment } from "../../hooks/request/useAddComment";
-import { Comment, Course, StudentId } from "../../model";
+import { Comment, ModulesAsStudentModule } from "../../model";
 import { FormBox, SelectBox } from "../../styles/addComment/formBox";
 import Commenting from "./Commenting";
-import dayjs from "dayjs";
+
 import {
   allStudentTask,
   allStudentContribute,
@@ -19,33 +16,30 @@ import {
   allStudentPresent,
   descComment,
 } from "./commentOptions";
-import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
+import { Select, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface AddCommentType {
-  studentId: StudentId | null; //this prop just for adding
   compType: "adding" | "editing";
   allComment: Comment | null; //this prop just for editing
+  studentName: { firstName: string; lastName: string } | null;
 }
 const AddOrEditComment = ({
-  studentId,
   compType,
   allComment,
+  studentName,
 }: AddCommentType) => {
-  const [course, setCourse] = useState<Course | null>(
-    allComment ? allComment.course : null
+  const [course, setCourse] = useState<ModulesAsStudentModule | null>(
+    allComment ? allComment.module : null
   );
   const [studentContribute, setStudentContribute] = useState(
-    allComment ? allComment.studentContribute : ""
+    allComment?.studentContribution ?? ""
   );
   const [studentPresent, setStudentPresent] = useState(
-    allComment
-      ? allComment.isStudentPresent === true
-        ? "بله"
-        : allComment.isStudentPresent === false
-        ? "خیر"
-        : "فقط بخشی از جلسه را حضور داشت"
-      : ""
+    allComment?.studentPresent || ""
   );
+
   const [studentTask, setStudentTask] = useState(
     allComment ? allComment.studentTask : ""
   );
@@ -53,123 +47,50 @@ const AddOrEditComment = ({
     allComment ? allComment.sessionProblem : ""
   );
   const [sessionDate, setSessionDate] = useState<any>(
-    allComment ? new Date(allComment.sessionDate) : dayjs()
+    allComment?.sessionDate ? new Date(allComment.sessionDate) : null
   );
   const [comment, setComment] = useState(allComment ? allComment.comment : "");
 
-  const { setErrMsg, allCourse, postComment, errMsg, putComment } =
+  const { allCourse, postComment, putComment, courseLoading, loading } =
     useAddComment(
       course,
-      studentId,
       comment,
-      sessionDate!.toISOString(),
+      sessionDate?.toISOString(),
       sessionProblem,
       studentTask,
       studentContribute,
       studentPresent
     );
 
-  console.log("Date:", sessionDate);
-  console.log("algorithm:", zeroUTCOffset(sessionDate));
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     compType === "adding" && postComment();
-    compType === "editing" &&
-      putComment(allComment?.id, allComment?.studentUser);
+    compType === "editing" && putComment(allComment?.id);
   };
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [comment, course, setErrMsg, studentId]);
 
   const defaultProps1 = {
     options: allCourse,
-    getOptionLabel: (option: Course) => option.courseName,
+    getOptionLabel: (option: ModulesAsStudentModule) => option.name,
   };
+  const navigate = useNavigate();
 
   return (
-    <FormBox component="form" onSubmit={handleSubmit}>
-      <SelectBox>
-        <Typography variant="body2" gutterBottom>
-          نام دوره
-        </Typography>
-        <Autocomplete
-          {...defaultProps1}
-          disablePortal
-          id="course-name"
-          options={allCourse}
-          renderInput={(params) => <TextField {...params} />}
-          onChange={(event: any, newValue: Course | null) => {
-            setCourse(newValue);
-          }}
-          value={course}
-          isOptionEqualToValue={(option, value) =>
-            option.courseName === value.courseName
-          }
-        />
-      </SelectBox>
-      <SelectBox>
-        <Typography variant="body2" gutterBottom>
-          تاریخ جلسه
-        </Typography>
-        <JalaliDatePicker
-          setSessionDate={setSessionDate}
-          sessionDate={sessionDate}
-        />
-      </SelectBox>
-      <Commenting
-        allChoice={allStudentPresent}
-        description={descComment.allStudentPresent}
-        handleChange={setStudentPresent}
-        id="studentPresent"
-        value={studentPresent}
-      />
-      <Commenting
-        allChoice={allStudentContribute}
-        description={descComment.allStudentContribute}
-        handleChange={setStudentContribute}
-        id="studentContribute"
-        value={studentContribute}
-      />
-      <Commenting
-        allChoice={allStudentTask}
-        description={descComment.allStudentTask}
-        handleChange={setStudentTask}
-        id="studentTask"
-        value={studentTask}
-      />
-      <Commenting
-        allChoice={allSessionProblem}
-        description={descComment.allSessionProblem}
-        handleChange={setSessionProblem}
-        id="sessionProblem"
-        value={sessionProblem}
-      />
-
-      <SelectBox>
-        <Typography variant="body2" gutterBottom>
-          لطفا گزارش کوتاهی از جلسه بنویسید
-          <Typography variant="caption">
-            (احساس خودتان، وضعیت مهارت آموز از نظر شما، تکالیف و پیشنهاداتی که
-            به مهارت آموز داده‌اید و غیره)
+    <form onSubmit={handleSubmit}>
+      <Stack direction="row" alignItems="center">
+        {compType === "adding" ? (
+          <Typography variant="h5" gutterBottom>
+            ثبت گزارش برای {studentName?.firstName} {studentName?.lastName}
           </Typography>
-        </Typography>
-        <TextField
-          fullWidth
-          id="outlined-multiline-static"
-          multiline
-          rows={4}
-          onChange={(e) => setComment(e.target.value)}
-          type="text"
-          autoComplete="off"
-          value={comment}
-        />
-      </SelectBox>
-      <SelectBox>
+        ) : (
+          <Typography variant="h5" gutterBottom>
+            ویرایش گزارش برای {allComment?.student?.firstName}{" "}
+            {allComment?.student?.family}
+          </Typography>
+        )}
         <Button
           variant="contained"
           type="submit"
+          sx={{ px: 5, mr: 2, ml: "auto" }}
           disabled={
             !course ||
             !studentContribute ||
@@ -177,16 +98,108 @@ const AddOrEditComment = ({
             !studentTask ||
             !sessionProblem ||
             !sessionDate ||
-            !comment
+            !comment ||
+            loading
           }
         >
           {compType === "adding" ? "ارسال" : "ویرایش"}
         </Button>
-        <FormHelperText error>
-          <Typography variant="caption">{errMsg ? errMsg : " "}</Typography>
-        </FormHelperText>
-      </SelectBox>
-    </FormBox>
+        <Button
+          onClick={() => navigate(-1)}
+          endIcon={<ArrowBackIcon />}
+          variant="outlined"
+          color="inherit"
+        >
+          بازگشت
+        </Button>
+      </Stack>
+      <FormBox>
+        <SelectBox>
+          <Typography variant="body2" gutterBottom>
+            نام دوره
+          </Typography>
+          {!courseLoading && allCourse ? (
+            <Autocomplete
+              {...defaultProps1}
+              disablePortal
+              id="course-name"
+              options={allCourse}
+              renderInput={(params) => <TextField {...params} />}
+              onChange={(
+                _event: any,
+                newValue: ModulesAsStudentModule | null
+              ) => {
+                setCourse(newValue);
+              }}
+              value={course}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+            />
+          ) : (
+            <Select disabled value={""} />
+          )}
+        </SelectBox>
+
+        <SelectBox>
+          <Typography variant="body2" gutterBottom>
+            تاریخ جلسه
+          </Typography>
+          <JalaliDatePicker
+            setSessionDate={setSessionDate}
+            sessionDate={sessionDate}
+          />
+        </SelectBox>
+        <Commenting
+          allChoice={allStudentPresent}
+          description={descComment.allStudentPresent}
+          handleChange={setStudentPresent}
+          id="studentPresent"
+          value={studentPresent}
+        />
+        <Commenting
+          allChoice={allStudentContribute}
+          description={descComment.allStudentContribute}
+          handleChange={setStudentContribute}
+          id="studentContribute"
+          value={studentContribute}
+        />
+        <Commenting
+          allChoice={allStudentTask}
+          description={descComment.allStudentTask}
+          handleChange={setStudentTask}
+          id="studentTask"
+          value={studentTask}
+        />
+        <Commenting
+          allChoice={allSessionProblem}
+          description={descComment.allSessionProblem}
+          handleChange={setSessionProblem}
+          id="sessionProblem"
+          value={sessionProblem}
+        />
+
+        <SelectBox>
+          <Typography variant="body2" gutterBottom>
+            لطفا گزارش کوتاهی از جلسه بنویسید
+            <Typography variant="caption">
+              (احساس خودتان، وضعیت مهارت آموز از نظر شما، تکالیف و پیشنهاداتی که
+              به مهارت آموز داده‌اید و غیره)
+            </Typography>
+          </Typography>
+          <TextField
+            fullWidth
+            id="outlined-multiline-static"
+            multiline
+            rows={4}
+            onChange={(e) => setComment(e.target.value)}
+            type="text"
+            autoComplete="off"
+            value={comment}
+          />
+        </SelectBox>
+      </FormBox>
+    </form>
   );
 };
 

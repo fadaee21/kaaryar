@@ -1,6 +1,6 @@
 import Container from "@mui/material/Container";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
 import VolunteerDetailComp from "../../components/profile/VolunteerDetailComp";
 
@@ -10,16 +10,17 @@ const VolunteerDetail = () => {
   const { dataCall, getAllData, loadingCall } = useGetData();
   const { username } = useParams();
 
-  const person = `/user/profile/username/${username}`;
-
   useEffect(() => {
+    const person = `/user/profile/username/${username}`;
     getAllData(person);
-  }, []);
+  }, [getAllData, username]);
 
   if (loadingCall) {
     return <LoadingProgress />;
   }
-
+  if (!dataCall.id) {
+    return <Navigate replace to={`/notfound`} />;
+  }
   return (
     <Container maxWidth="lg">
       <VolunteerDetailComp {...dataCall} usernameParam={username} />

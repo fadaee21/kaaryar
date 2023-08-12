@@ -17,20 +17,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { descComment } from "../../components/comment/commentOptions";
-import { dateConverter } from "../../utils/dateConverter";
 import { PaperW } from "../../styles/addComment/formBox";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useState } from "react";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
-import { zeroUTCOffset } from "../../utils/zeroUTCOffset";
+import { useSWRConfig } from "swr";
+import { roleConverter } from "../../utils/roleConverter";
 
 const WatchComment = () => {
   const [open, setOpen] = useState(false);
   const { allComment, loading } = useGetOneComment();
   const [idComment, setIdComment] = useState<number>();
   const { removeComment } = useDeleteComment(idComment);
-
+  const { mutate } = useSWRConfig();
   const navigate = useNavigate();
   const {
     auth: { roles },
@@ -42,16 +42,17 @@ const WatchComment = () => {
     id,
     comment,
     sessionDate,
-    isStudentPresent,
-    studentContribute,
+    studentPresent,
+    studentContribution,
     studentTask,
     sessionProblem,
-    studentUser: { firstName, lastName },
-    commenterUser,
+    student: { firstName, family },
+    commenter,
+    commenterRole,
   } = allComment as Comment;
 
   const handleClickOpenEdit = () => {
-    navigate(`/${roles}/all-comments/${id}/editing`);
+    navigate("editing");
   };
 
   const handleBack = () => navigate(-1);
@@ -61,9 +62,10 @@ const WatchComment = () => {
     setIdComment(id);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setOpen(false);
-    removeComment();
+    await removeComment();
+    mutate(`/${roles}/survey/all`);
     navigate(`/${roles}/all-comments`);
   };
   const handleClose = () => {
@@ -71,7 +73,7 @@ const WatchComment = () => {
   };
 
   return (
-    <>
+    <Box sx={{ mb: 20 }}>
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -80,8 +82,8 @@ const WatchComment = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h6">
-            مشاهده نظر برای {`${firstName} ${lastName}`}
+          <Typography variant="h5">
+            مشاهده نظر برای {`${firstName} ${family}`}
           </Typography>
           <Button
             endIcon={<DeleteIcon />}
@@ -119,14 +121,16 @@ const WatchComment = () => {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={3}>
             <PaperW sx={{ minHeight: "8rem" }}>
-              <Typography variant="body2">نام منتور</Typography>
-              <Typography variant="body1">{`${commenterUser.firstName} ${commenterUser.lastName}`}</Typography>
+              <Typography variant="body2">
+                نام {roleConverter(commenterRole)}
+              </Typography>
+              <Typography variant="body1">{`${commenter.firstName} ${commenter.family}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
             <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">نام مهارت آموز</Typography>
-              <Typography variant="body1">{`${firstName} ${lastName}`}</Typography>
+              <Typography variant="body1">{`${firstName} ${family}`}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={3}>
@@ -134,7 +138,15 @@ const WatchComment = () => {
               <Typography variant="body2">تاریخ جلسه</Typography>
               <Typography variant="body1">
                 {/* in post Date of comment i must change type toISOstring,when fetch Date,it response with one day false! zero utc help to improve this fault */}
-                {dateConverter(zeroUTCOffset(new Date(sessionDate)))}
+                {/* {dateConverter(zeroUTCOffset(new Date(sessionDate)))} */}
+                {sessionDate
+                  ? new Intl.DateTimeFormat("fa", { dateStyle: "full" })
+                      .format(new Date(sessionDate))
+                      .replace(",", "")
+                      .split(" ")
+                      .reverse()
+                      .join(" ")
+                  : "-"}
               </Typography>
             </PaperW>
           </Grid>
@@ -143,13 +155,7 @@ const WatchComment = () => {
               <Typography variant="body2">
                 {descComment.allStudentPresent}
               </Typography>
-              <Typography variant="body1">
-                {isStudentPresent === true
-                  ? "بله"
-                  : isStudentPresent === null
-                  ? "فقط بخشی از جلسه را حضور داشت"
-                  : "خیر"}
-              </Typography>
+              <Typography variant="body1">{studentPresent}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={12}>
@@ -169,7 +175,7 @@ const WatchComment = () => {
               <Typography variant="body2">
                 {descComment.allStudentContribute}
               </Typography>
-              <Typography variant="body1">{studentContribute}</Typography>
+              <Typography variant="body1">{studentContribution}</Typography>
             </PaperW>
           </Grid>
           <Grid item xs={4}>
@@ -209,7 +215,7 @@ const WatchComment = () => {
           <Button onClick={handleClose}>خیر</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Box>
   );
 };
 

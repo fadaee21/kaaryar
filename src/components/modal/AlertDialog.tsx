@@ -4,7 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 // import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { GreyButton } from "../../styles/Button";
 
 export default function AlertDialog({
@@ -32,11 +32,13 @@ export default function AlertDialog({
       {alertType === "approve" && (
         <>
           <DialogTitle id="alert-dialog-title">
-            <Typography sx={{fontWeight:"700"}} variant="h5" component="p">تایید {alertPage}</Typography>
+            <Typography sx={{ fontWeight: "700" }} variant="h5" component="p">
+              تایید {alertPage}
+            </Typography>
           </DialogTitle>
           <DialogContent>
             {/* <DialogContentText id="alert-dialog-description"> */}
-            <Typography variant="h6" component="p"  gutterBottom>
+            <Typography variant="h6" component="p" gutterBottom>
               آیا می خواهید {alertPage} {firstName} {family} را تایید کنید؟
             </Typography>
             <Typography variant="body2">
@@ -58,7 +60,9 @@ export default function AlertDialog({
       {alertType === "disApprove" && (
         <>
           <DialogTitle id="alert-dialog-title">
-            <Typography sx={{fontWeight:"700"}} variant="h5" component="p">رد {alertPage}</Typography>
+            <Typography sx={{ fontWeight: "700" }} variant="h5" component="p">
+              رد {alertPage}
+            </Typography>
           </DialogTitle>
           <DialogContent>
             {/* <DialogContentText id="alert-dialog-description"> */}

@@ -11,37 +11,39 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
-import TableHeader from "../../components/volunteer/table/TableHeader";
 // import {
 //   AccordionStyled,
 //   AccordionSummaryStyled,
 // } from "../../styles/search/accordion";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import style from "../../styles/search/searchChevron.module.css";
-import TableBodyVolunteer from "../../components/volunteer/table/TableBodyVolunteer";
+import TableBodyVolunteer from "../../components/volunteer/TableBodyVolunteer";
 import useGetData from "../../hooks/request/useGetData";
 import { counterPagination } from "../../utils/counterPagination";
 import LoadingProgress from "../../components/LoadingProgress";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { Profile } from "../../model";
 import useEditProfile from "../../hooks/request/useEditProfile";
+import TableHeader from "../../components/table/TableHeader";
+import { volunteerTableHeader } from "../../components/table/helper-header";
+import { itemCounterTable } from "../../utils/itemCoutnerTable";
 
 const Volunteer = () => {
   const pageSize = 10;
-  const addressLink = `/user/profile/all?pageNum=0&pageSize=${pageSize - 1}`;
+  const [page, setPage] = useState(1);
+  const addressLink = `/user/profile/all?pageNum=${page}&pageSize=${pageSize}`;
   const { dataCall, getAllData, loadingCall } = useGetData();
 
   // const [searchingVolunteer, setSearchingVolunteer] = useState([]);
   // const [volunteers, setvolunteers] = useState([]);
   // const [chevronDir, setChevronDir] = useState(false);
-  const [page, setPage] = useState(1);
   const volunteerCount = "/user/profile/count";
   const [, counterPage] = useCountPagination(volunteerCount);
   const { loadingProfile } = useEditProfile();
 
   useEffect(() => {
     getAllData(addressLink);
-  }, []);
+  }, [addressLink, getAllData]);
 
   if (loadingCall || loadingProfile) {
     return <LoadingProgress />;
@@ -78,7 +80,7 @@ const Volunteer = () => {
               </AccordionSummaryStyled> */}
             <ExcelExport
               fileName={"Applicant Info"}
-              linkAll="/user/profile/all?pageNum=0&pageSize=100"
+              linkAll="/user/profile/all?pageNum=1&pageSize=100"
               searchData={null}
               useIn="volunteer"
             />
@@ -101,7 +103,7 @@ const Volunteer = () => {
           {/* </AccordionStyled> */}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader />
+              <TableHeader headerItems={volunteerTableHeader} />
               {/*//! while searching show the search content */}
               {/* {!searchingVolunteer && ( */}
               {/* <TableBody>
@@ -110,14 +112,15 @@ const Volunteer = () => {
               {/* )} */}
 
               <TableBody>
-                {dataCall?.map((item: Profile) => (
+                {dataCall?.map((item: Profile, i: number) => (
                   <TableBodyVolunteer
                     key={item.id}
                     firstName={item.firstName}
                     lastName={item.lastName}
-                    username={item.username}
+                    username={item.user.username}
                     role={item.role}
                     id={item.id}
+                    counter={itemCounterTable(page, pageSize, i)}
                   />
                 ))}
               </TableBody>

@@ -1,26 +1,14 @@
-import React from "react";
-import { getData } from "../../api/axios";
+import { toast } from "react-toastify";
+import useSWR from "swr";
+import { handleError } from "../../utils/handleError";
 
 const useCountPagination = (counting: string) => {
-  const [counterPage, setCounterPage] = React.useState<string>("");
-  const [loading, setLoading] = React.useState(true);
-  React.useEffect(() => {
-    const getCountComment = async () => {
-      setLoading(true);
-      try {
-        let { data } = await getData(counting);
-        setCounterPage(data.message);
-        setLoading(false);
-      } catch (error) {
-        console.log("Page Counter", error);
-        setLoading(false);
-      }
-    };
-    getCountComment();
-    window.scroll(0, 0);
-    // eslint-disable-next-line
-  }, []);
-  return [loading, counterPage];
+  const { data: counterPage, isLoading: loading } = useSWR(counting, {
+    onSuccess: () => window.scrollTo(0, 0),
+    onError: (error) => toast.error(handleError(error)),
+  });
+
+  return [loading, counterPage?.count];
 };
 
 export default useCountPagination;

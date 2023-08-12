@@ -3,11 +3,10 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useGetData from "../../hooks/request/useGetData";
-import { CommentTable } from "../../model";
+import { Comment } from "../../model";
 import { BoxDashboard, PaperDashboard } from "../../styles/dashboard";
-import { dateConverter } from "../../utils/dateConverter";
 import LoadingProgress from "../LoadingProgress";
-const allCommentLink = `total/all?pageNum=0&pageSize=3`;
+const allCommentLink = `total/all?pageNum=1&pageSize=3`;
 
 const LastOpinionDash = () => {
   const {
@@ -15,14 +14,14 @@ const LastOpinionDash = () => {
     loadingCall,
     getAllData,
   }: {
-    dataCall: CommentTable[];
+    dataCall: Comment[];
     loadingCall: boolean;
     getAllData: (address: string) => Promise<void>;
   } = useGetData();
   const navigate = useNavigate();
   useEffect(() => {
     getAllData(allCommentLink);
-  }, []);
+  }, [getAllData]);
 
   if (loadingCall) {
     return (
@@ -37,7 +36,7 @@ const LastOpinionDash = () => {
       <BoxDashboard>
         <Typography variant="body1">آخرین نظرات</Typography>
       </BoxDashboard>
-      {dataCall?.map((item: CommentTable) => (
+      {dataCall?.map((item: Comment) => (
         <Box
           sx={{
             display: "flex",
@@ -47,9 +46,15 @@ const LastOpinionDash = () => {
           key={item.id}
         >
           <Typography variant="body2">
-            {item.commenterUser.firstName} {item.commenterUser.lastName} برای{" "}
-            {item.studentUser.firstName} {item.studentUser.lastName}
-            {item.createTime && ` در ${dateConverter(item.createTime)}`}
+            {item.commenter?.firstName} {item.commenter?.family} برای{" "}
+            {item.student.firstName} {item.student.family}
+            {item.createTime &&
+              ` در ${new Intl.DateTimeFormat("fa-iran", { dateStyle: "full" })
+                .format(new Date(item.createTime))
+                .replace(",", "")
+                .split(" ")
+                .reverse()
+                .join(" ")}`}
           </Typography>
           <Button
             size="small"

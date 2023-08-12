@@ -8,16 +8,16 @@ import {
   TableContainer,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import TableHeaderG from "../../components/graduate/table/TableHeaderG";
 import TableBodyG from "../../components/graduate/table/TableBodyG";
+import TableHeader from "../../components/table/TableHeader";
+import { graduateTableHeader } from "../../components/table/helper-header";
 
 const GraduateTable = () => {
   const [chevronDir, setChevronDir] = useState(false);
@@ -32,7 +32,7 @@ const GraduateTable = () => {
             <Typography variant="h4"> فهرست فارغ‌التحصیلان</Typography>
           </Box>
 
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
@@ -44,11 +44,9 @@ const GraduateTable = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
               </AccordionSummaryStyled>
 
               <ExcelExport
@@ -81,7 +79,7 @@ const GraduateTable = () => {
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeaderG />
+              <TableHeader headerItems={graduateTableHeader} />
               <TableBody>
                 <TableBodyG />
               </TableBody>

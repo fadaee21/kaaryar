@@ -1,5 +1,4 @@
-import StudentPage from "./pages/studentMoodle/StudentPage";
-import StudentListMoodleTable from "./pages/studentMoodle/StudentListMoodleTable";
+import StudentAssignee from "./pages/student/StudentTableAssignee";
 import Comments from "./pages/comment/TableComments";
 import AddComment from "./pages/comment/AddComment";
 import BeforeWeekTable from "./pages/beforeWeek/BeforeWeekTable";
@@ -9,28 +8,38 @@ import AfterWeekTable from "./pages/afterWeek/AfterWeekTable";
 import RegisterFormTable from "./pages/reg/registerFormTable";
 import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
-
-// import DashboardIcon from "@mui/icons-material/Dashboard";
-// import PeopleIcon from "@mui/icons-material/People";
-// import CommentIcon from "@mui/icons-material/Comment";
-// import AddCommentIcon from "@mui/icons-material/AddComment";
-// import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-// import HowToRegIcon from "@mui/icons-material/HowToReg";
-// import PortraitIcon from "@mui/icons-material/Portrait";
-import AdmissionFormDetail from "./pages/afterWeek/AfterWeekDetail";
-import AdmissionFormDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
-import justTest from "./pages/justTest";
+import AfterWeekDetail from "./pages/afterWeek/AfterWeekDetail";
+import AfterWeekDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
 import UserProfile from "./pages/profile/UserProfile";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
 import EditComments from "./pages/comment/EditComments";
-import StudentOfAdmin from "./pages/studentMoodle/StudentOfAdmin";
-import Dashboard from "./pages/dashboard/Dashboard";
+import Dashboard from "./pages/dashboard/DashboardMentorTa";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import Volunteer from "./pages/volunteer/Volunteer";
 import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
 import GraduateProfile from "./pages/graduate/GraduateProfile";
 import GraduateTable from "./pages/graduate/GraduateTable";
+import NotFound from "./pages/NotFound";
+import skillSeekerDetail from "./pages/skillSeeker/skillSeekerDetail";
+import GroupsTable from "./pages/groups/GroupsTable";
+import GroupDetail from "./pages/groups/GroupDetail";
+import LanguageDetail from "./pages/generalModuleCourses/language/LanguageDetail";
+import GeneralEducationTable from "./pages/generalModuleCourses/GeneralEducationTable";
+import AddGroup from "./pages/groups/AddGroup";
+import GroupEdit from "./pages/groups/GroupEdit";
+import AddNewCourse from "./pages/addNewCourse/AddNewCourse";
+import CoreModuleCoursesTable from "./pages/coreModuleCourses/CoreModuleCoursesTable";
+import CoreModuleCourseDetail from "./pages/coreModuleCourses/CoreModuleCourseDetail";
+import CoreModuleCourseEdit from "./pages/coreModuleCourses/CoreModuleCourseEdit";
+import GeneralCourseEdit from "./pages/generalModuleCourses/GeneralCourseEdit";
+import GeneralDetail from "./pages/generalModuleCourses/GeneralDetail";
+import StudentAdminDetail from "./pages/student/StudentDetail";
+import StudentEditStatus from "./pages/student/StudentEditStatus";
+import StudentCoreDetail from "./pages/student/StudentCoreDetail";
+import StudentTableAdmin from "./pages/student/StudentTableAdmin";
+import StudentGeneralEdit from "./pages/student/StudentGeneralEdit";
+import StudentCoreEdit from "./pages/student/StudentCoreEdit";
 
 const ListRoutes = [
   //! ta________________________________
@@ -47,7 +56,7 @@ const ListRoutes = [
     path: "ta/student",
     name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
-    component: StudentListMoodleTable,
+    component: StudentAssignee,
     showInNav: true,
     role: "ta",
     key: "ta2",
@@ -55,10 +64,18 @@ const ListRoutes = [
   {
     path: "ta/student/:id",
     name: " ",
-    component: StudentPage,
+    component: StudentAdminDetail,
     showInNav: false,
     role: "ta",
     key: "ta3",
+  },
+  {
+    path: "ta/student/:student_id/:module_id/core-detail",
+    name: " ",
+    component: StudentCoreDetail,
+    showInNav: false,
+    role: "ta",
+    key: "ta4-coreDetail",
   },
   {
     path: "ta/all-comments",
@@ -120,15 +137,7 @@ const ListRoutes = [
     role: "ta",
     key: "ta11",
   },
-  {
-    path: "ta/all-comments",
-    name: "نظرات",
-    // icon: <CommentIcon />,
-    component: Comments,
-    showInNav: true,
-    role: "ta",
-    key: "ta5",
-  },
+
   // mentor____________________________________________
   {
     path: "mentor/dashboard",
@@ -143,7 +152,7 @@ const ListRoutes = [
     path: "mentor/student",
     name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
-    component: StudentListMoodleTable,
+    component: StudentAssignee,
     showInNav: true,
     role: "mentor",
     key: "mentor2",
@@ -151,10 +160,18 @@ const ListRoutes = [
   {
     path: "mentor/student/:id",
     name: " ",
-    component: StudentPage,
+    component: StudentAdminDetail,
     showInNav: false,
     role: "mentor",
     key: "mentor3",
+  },
+  {
+    path: "mentor/student/:student_id/:module_id/core-detail",
+    name: " ",
+    component: StudentCoreDetail,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor4-coreDetail",
   },
 
   {
@@ -299,7 +316,7 @@ const ListRoutes = [
   {
     path: "admin/after-week/:id",
     name: " ",
-    component: AdmissionFormDetail,
+    component: AfterWeekDetail,
     showInNav: false,
     role: "admin",
     key: "admin9",
@@ -307,7 +324,7 @@ const ListRoutes = [
   {
     path: "admin/after-week-edit/:id",
     name: " ",
-    component: AdmissionFormDetailEdit,
+    component: AfterWeekDetailEdit,
     showInNav: false,
     role: "admin",
     key: "admin10",
@@ -332,7 +349,7 @@ const ListRoutes = [
     path: "admin/student",
     name: "فهرست مهارت آموزان",
     // icon: <PeopleIcon />,
-    component: StudentOfAdmin,
+    component: StudentTableAdmin,
     showInNav: true,
     role: "admin",
     key: "admin13",
@@ -340,10 +357,42 @@ const ListRoutes = [
   {
     path: "admin/student/:id",
     name: " ",
-    component: StudentPage,
+    component: StudentAdminDetail,
     showInNav: false,
     role: "admin",
-    key: "admin14",
+    key: "admin14-newEdited",
+  },
+  {
+    path: "admin/student/:student_id/:module_id/core-detail",
+    name: " ",
+    component: StudentCoreDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-coreDetail",
+  },
+  {
+    path: "admin/student/:student_id/:module_id/core-detail/edit",
+    name: " ",
+    component: StudentCoreEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-coreDetail-edit",
+  },
+  {
+    path: "admin/student/:student_id/:module_id/general-edit",
+    name: " ",
+    component: StudentGeneralEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-generalEdit",
+  },
+  {
+    path: "admin/student/:id/edit-status",
+    name: " ",
+    component: StudentEditStatus,
+    showInNav: false,
+    role: "admin",
+    key: "admin14-newEdited-se",
   },
   {
     path: "admin/volunteer",
@@ -386,7 +435,7 @@ const ListRoutes = [
     name: "",
     // icon: <AddCommentIcon />,
     //for this address,using afterWeekDetail, may someday need to change
-    component: AdmissionFormDetail,
+    component: skillSeekerDetail,
     showInNav: false,
     role: "admin",
     key: "admin18",
@@ -410,15 +459,129 @@ const ListRoutes = [
     role: "admin",
     key: "admin21",
   },
-
   {
-    path: "test",
+    path: "admin/groups",
+    name: "فهرست گروه‌ها",
+    // icon:<></>,
+    component: GroupsTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin22",
+  },
+  {
+    path: "admin/groups/:groupId",
     name: "",
-    // icon: <AddCommentIcon />,
-    component: justTest,
+    // icon:<></>,
+    component: GroupDetail,
     showInNav: false,
     role: "admin",
-    key: "test11111111111",
+    key: "admin22-d",
+  },
+  {
+    path: "admin/groups/edit/:groupId",
+    name: "",
+    // icon:<></>,
+    component: GroupEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-e",
+  },
+  {
+    path: "admin/groups/add-group",
+    name: "",
+    // icon:<></>,
+    component: AddGroup,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-a",
+  },
+  {
+    path: "admin/core-course",
+    name: "فهرست دوره‌های تخصصی",
+    // icon:<></>,
+    component: CoreModuleCoursesTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin23",
+  },
+  {
+    path: "admin/core-course/:coreId",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-d",
+  },
+  {
+    path: "admin/core-course/edit/:coreId",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-d",
+  },
+  {
+    path: "admin/general-course",
+    name: "فهرست آموزش‌های عمومی",
+    // icon:<></>,
+    component: GeneralEducationTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin24",
+  },
+  {
+    path: "admin/language-course/:id",
+    name: "",
+    // icon:<></>,
+    component: LanguageDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-d",
+  },
+  {
+    path: "admin/add-new-course",
+    name: "افزودن دوره جدید",
+    // icon:<></>,
+    component: AddNewCourse,
+    showInNav: true,
+    role: "admin",
+    key: "admin25",
+  },
+  // {
+  //   path: "admin/workshops",
+  //   name: "فهرست کارگاه‌های جانبی",
+  //   // icon:<></>,
+  //   component: Workshops,
+  //   showInNav: true,
+  //   role: "admin",
+  //   key: "admin25",
+  // },
+  {
+    path: "admin/general-course/:id",
+    name: "",
+    // icon:<></>,
+    component: GeneralDetail,
+    showInNav: false,
+    role: "admin",
+    key: "admin25-d",
+  },
+  {
+    path: "admin/general-course/edit/:id",
+    name: "",
+    // icon:<></>,
+    component: GeneralCourseEdit,
+    showInNav: false,
+    role: "admin",
+    key: "admin25-e",
+  },
+
+  {
+    path: "notfound",
+    component: NotFound,
+    showInNav: false,
+    key: "notFound",
   },
 ];
 
