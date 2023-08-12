@@ -673,12 +673,12 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="انگیزه اصلی از شرکت در دوره"
-                  secondary={student?.motivation}
+                  secondary={student?.motivationByAdmin ?? "-"}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="آمادگی به کار بعد از اتمام دوره--"
+                  primary="آمادگی به کار بعد از اتمام دوره"
                   secondary={student?.jobStandby ? "بله" : "خیر"}
                 />
               </ListItem>

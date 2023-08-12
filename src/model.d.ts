@@ -260,6 +260,7 @@ export interface BeforeWeekType {
   administrativeComments: string;
   freeDailyTime: string;
   internetAccessTiming: string;
+  motivationByAdmin: string | null;
 }
 
 interface AfterWeekType {

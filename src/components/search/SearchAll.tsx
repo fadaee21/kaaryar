@@ -21,7 +21,12 @@ import {
 } from "./searchOptions";
 // import { EditComboStudent } from "../student/EditComboStudent";
 // import TrainingStatusSearch from "./SearchSelect2";
-import { DetailStudentStatus, Group, ModuleAll, OptionYesOrNo } from "../../model";
+import {
+  DetailStudentStatus,
+  Group,
+  ModuleAll,
+  OptionYesOrNo,
+} from "../../model";
 import SearchSelect2 from "./SearchSelect2";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
@@ -81,7 +86,7 @@ const SearchAll: ({
     null
   );
   const [motivation, setMotivation] = useState<string | null>(null);
-  const [jobStandby, setJobStandby] = useState<OptionYesOrNo|null>(null);
+  const [jobStandby, setJobStandby] = useState<OptionYesOrNo | null>(null);
   const [cgpa, setCgpa] = useState<string | null>(null);
   const [disabledButton, setDisabledButton] = useState(false);
   const [searchLink, setSearchLink] = useState("");
@@ -133,7 +138,8 @@ const SearchAll: ({
   const afterWeekSearch =
     "/exam/after/week/search/param?pageNum=1&pageSize=10000";
   const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
-  const moodleSearch = "/moodle/search/param?pageNum=1&pageSize=10000";
+  const moodleSearch =
+    "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
     if (searchPage === "moodle") {
