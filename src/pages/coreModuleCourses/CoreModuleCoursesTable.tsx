@@ -14,7 +14,6 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import style from "../../styles/search/searchChevron.module.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import TableHeader from "../../components/table/TableHeader";
@@ -55,7 +54,7 @@ const CoreModuleCoursesTable = () => {
             <Typography variant="h4">فهرست دوره‌های تخصصی</Typography>
           </Box>
 
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir} > 
             <Box
               sx={{
                 display: "flex",
@@ -67,11 +66,9 @@ const CoreModuleCoursesTable = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
               </AccordionSummaryStyled>
 
               {/* <ExcelExport

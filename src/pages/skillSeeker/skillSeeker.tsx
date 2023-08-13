@@ -29,12 +29,14 @@ import { afterTableSkillSeeker } from "../../components/table/helper-header";
 import useSWR from "swr";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import { itemCounterTable } from "../../utils/itemCounterTable";
+const pageSize = 20;
 const SkillSeeker = () => {
   const [page, setPage] = useState(1);
   // const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
   const navigate = useNavigate();
-  const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=20`;
+  const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/status/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
@@ -111,7 +113,7 @@ const SkillSeeker = () => {
               {/*//! while searching show the search content */}
               {!searchingStudentSeeker && (
                 <TableBody>
-                  {data?.map((seekerStudent: SeekerStudent) => {
+                  {data?.map((seekerStudent: SeekerStudent, i: number) => {
                     // console.log(seekerStudent);
                     const {
                       id,
@@ -147,6 +149,7 @@ const SkillSeeker = () => {
                           beforeWeekChecked,
                           regChecked
                         )}
+                        index={itemCounterTable(page, pageSize, i)}
                       />
                     );
                   })}
@@ -155,7 +158,7 @@ const SkillSeeker = () => {
 
               <TableBody>
                 {searchingStudentSeeker?.map(
-                  (searchingStudentSeeker: SeekerStudent) => {
+                  (searchingStudentSeeker: SeekerStudent, i: number) => {
                     const {
                       id,
                       regForm,
@@ -185,6 +188,7 @@ const SkillSeeker = () => {
                           beforeWeekChecked,
                           regChecked
                         )}
+                        index={i + 1}
                       />
                     );
                   }

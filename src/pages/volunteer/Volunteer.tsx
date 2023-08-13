@@ -26,6 +26,7 @@ import { Profile } from "../../model";
 import useEditProfile from "../../hooks/request/useEditProfile";
 import TableHeader from "../../components/table/TableHeader";
 import { volunteerTableHeader } from "../../components/table/helper-header";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 
 const Volunteer = () => {
   const pageSize = 10;
@@ -119,7 +120,7 @@ const Volunteer = () => {
                     username={item.user.username}
                     role={item.role}
                     id={item.id}
-                    counter={page * pageSize + (i + 1) - pageSize}
+                    counter={itemCounterTable(page, pageSize, i)}
                   />
                 ))}
               </TableBody>

@@ -32,7 +32,13 @@ const Login = () => {
   // eslint-disable-next-line
   const { auth } = useAuth();
   const roles = auth?.roles?.toString();
-  const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
+  const stateLocation = location.state as any;
+  const from = stateLocation?.from?.pathname || `/${roles}/dashboard`;
+  const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(
+    username,
+    password,
+    from
+  );
   const [tokenValidation, loadingVal] = useGetValidationToken();
 
   useEffect(() => {

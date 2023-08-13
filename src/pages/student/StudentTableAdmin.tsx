@@ -22,19 +22,21 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import styleRot from "../../styles/search/searchChevron.module.css";
 import useSWR from "swr";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
 import TableHeader from "../../components/table/TableHeader";
 import { studentTableHeader } from "../../components/table/helper-header";
+import { itemCounterTable } from "../../utils/itemCounterTable";
 
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const pageSize = 25;
-  const adminStudentQuery =
-    "orderAscending=false&orderBy=after_week_update_timestamp";
+  // const adminStudentQuery =
+  //   "orderAscending=false&orderBy=after_week_update_timestamp";
+  const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
+
   const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
 
   const studentCount = "moodle/user/student/count";
@@ -69,7 +71,7 @@ const StudentTableAdmin = () => {
             <Typography variant="h4"> فهرست مهارت آموزان</Typography>
           </Box>
 
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
@@ -81,14 +83,11 @@ const StudentTableAdmin = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? styleRot.rotate180 : styleRot.rotate0}
-                />
-
-                {/* //! export excel */}
               </AccordionSummaryStyled>
+              {/* //! export excel */}
               <ExcelExport
                 fileName={"excel export"}
                 linkAll={`moodle/user/student/all?pageNum=1&pageSize=100000&${adminStudentQuery}`}
@@ -133,7 +132,7 @@ const StudentTableAdmin = () => {
 
               <TableBody>
                 {(searchingMoodleStudent ? searchingMoodleStudent : data)?.map(
-                  (moodleUser: MoodleUser) => {
+                  (moodleUser: MoodleUser, i: number) => {
                     const {
                       id,
                       firstName,
@@ -151,6 +150,18 @@ const StudentTableAdmin = () => {
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
+                        <StyledTableCell
+                          align="center"
+                          sx={{
+                            verticalAlign: "center",
+                          }}
+                        >
+                          <Typography variant="body2">
+                            {searchingMoodleStudent
+                              ? i + 1
+                              : itemCounterTable(page, pageSize, i)}
+                          </Typography>
+                        </StyledTableCell>
                         <StyledTableCell align="center">
                           {/* //TODO: add picture */}
                           <TablePic picture={picture} lastName={family} />
@@ -282,7 +293,6 @@ const StudentTableAdmin = () => {
           page={page}
           onChange={(_event, value: number) => {
             setPage(value);
-            setChevronDir(false); //after changing the page close search bar
           }}
         />
       )}

@@ -27,7 +27,7 @@ import {
 import { useAuth } from "../context/AuthProvider";
 import { ListItemText, Menu, MenuItem, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import style from "../styles/search/searchChevron.module.css";
+import style from "../styles/sideBar/searchChevron.module.css";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Face6Icon from "@mui/icons-material/Face6";
 import LogoLight from "./LogoLightSVG";

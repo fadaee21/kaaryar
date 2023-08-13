@@ -4,7 +4,7 @@ import { getData } from "../../api/axios";
 import { SearchFirstName } from "./SearchFirstName";
 import { SearchFamily } from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
-import SearchSelect from "./SearchSelect";
+import SearchSelect, { EditBooleanSearch } from "./SearchSelect";
 import SearchString from "./SearchString";
 import SearchIcon from "@mui/icons-material/Search";
 import { GreyButton } from "../../styles/Button";
@@ -21,10 +21,16 @@ import {
 } from "./searchOptions";
 // import { EditComboStudent } from "../student/EditComboStudent";
 // import TrainingStatusSearch from "./SearchSelect2";
-import { DetailStudentStatus, Group, ModuleAll } from "../../model";
+import {
+  DetailStudentStatus,
+  Group,
+  ModuleAll,
+  OptionYesOrNo,
+} from "../../model";
 import SearchSelect2 from "./SearchSelect2";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import { motivationOpt } from "../beforeWeek/helper";
 // import { ApprovalStatus } from "../../model";
 // import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
@@ -53,6 +59,7 @@ const SearchAll: ({
   searchPage,
   chevronDir,
 }) => {
+  const [loading, setLoading] = useState(false);
   const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
   const [outputFamily, setOutputFamily] = useState<string | null>(null);
   const [referState, setReferState] = useState<string | null>(null);
@@ -65,6 +72,7 @@ const SearchAll: ({
 
   const [provincesState, setProvincesState] = useState<string | null>(null);
   const [cityState, setCityState] = useState<string | null>(null);
+  //status of items: there is 3 phases for searching - "pending" - "approved" - "rejected" , these all is available only for search, if you render the table, response can be _acceptWeekChecked: true|false|null_ don't mess it up
   const [approvalStatus, setApprovalStatus] = useState<string | null>(null);
   const [acquaintance, setAcquaintance] = useState<string | null>(null);
   const [eduLevel, setEduLevel] = useState<string | null>(null);
@@ -77,7 +85,8 @@ const SearchAll: ({
   const [contCourseApproach, setContCourseApproach] = useState<string | null>(
     null
   );
-  const [jobStandby, setJobStandby] = useState<string | null>(null);
+  const [motivation, setMotivation] = useState<string | null>(null);
+  const [jobStandby, setJobStandby] = useState<OptionYesOrNo | null>(null);
   const [cgpa, setCgpa] = useState<string | null>(null);
   const [disabledButton, setDisabledButton] = useState(false);
   const [searchLink, setSearchLink] = useState("");
@@ -124,10 +133,13 @@ const SearchAll: ({
       : null
   );
 
-  const beforeWeekSearch = "/exam/before/week/search/param";
-  const afterWeekSearch = "/exam/after/week/search/param";
-  const regSearch = "/reg/search/param";
-  const moodleSearch = "/moodle/search/param";
+  const beforeWeekSearch =
+    "/exam/before/week/search/param?pageNum=1&pageSize=10000";
+  const afterWeekSearch =
+    "/exam/after/week/search/param?pageNum=1&pageSize=10000";
+  const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
+  const moodleSearch =
+    "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
     if (searchPage === "moodle") {
@@ -172,9 +184,11 @@ const SearchAll: ({
       kaaryarAssessment,
       module,
       group,
+      motivation,
     ].some(Boolean);
     setDisabledButton(buttonStatus);
   }, [
+    motivation,
     group,
     module,
     kaaryarAssessment,
@@ -201,12 +215,8 @@ const SearchAll: ({
     scholar,
   ]);
 
-  //if AccordionDetails is close, do nothing(fetching data and mounting component)
-  if (!chevronDir) {
-    return <></>;
-  }
-
   const fetchData = async (obj: any) => {
+    setLoading(true);
     try {
       const response = await getData(searchLink, {
         params: obj,
@@ -223,11 +233,14 @@ const SearchAll: ({
     } catch (error: any) {
       console.log(error);
       toast.error(handleError(error));
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSearch = () => {
     fetchData({
+      motivation,
       firstName: outputFirstName?.trim(),
       family: outputFamily?.trim(),
       refer: referState,
@@ -246,7 +259,7 @@ const SearchAll: ({
       scholarshipStatus: scholar,
       finalField,
       contCourseApproach,
-      jobStandby,
+      jobStandby: jobStandby?.value,
       cgpa,
       trainingStatusID: trainingStatus?.id,
       nextTrainingStepID: nextTrainingStep?.id,
@@ -258,6 +271,7 @@ const SearchAll: ({
   };
 
   const clearSearch = () => {
+    setMotivation(null);
     setOutputFirstName(null);
     setOutputFamily(null);
     setReferState(null);
@@ -416,17 +430,19 @@ const SearchAll: ({
             />
           </Grid>
           <Grid item xs={3}>
-            <SearchString
-              state={jobStandby}
-              setState={setJobStandby}
-              label="آمادگی به کار"
+            <EditBooleanSearch
+              // identifier={"jobStandby"}
+              handleChange={(e: any) => setJobStandby(e)}
+              placeholder="آمادگی به کار"
+              value={jobStandby}
             />
           </Grid>
           <Grid item xs={3}>
-            <SearchString
-              state={contCourseApproach}
-              setState={setContCourseApproach}
-              label="هدف از شرکت"
+            <SearchSelect
+              state={motivation}
+              setState={setMotivation}
+              placeholder="انگیزه ورود"
+              options={motivationOpt}
             />
           </Grid>
         </>
@@ -538,12 +554,12 @@ const SearchAll: ({
       <Grid item flex={1}>
         <Button
           sx={{ width: "100%" }}
-          endIcon={<SearchIcon sx={{ rotate: "90deg" }} />}
+          endIcon={!loading && <SearchIcon sx={{ rotate: "90deg" }} />}
           variant="outlined"
           onClick={handleSearch}
-          disabled={disabledButton}
+          disabled={disabledButton || loading}
         >
-          جستجو
+          {loading ? "در حال جستجو..." : "جستجو"}
         </Button>
       </Grid>
     </Grid>
