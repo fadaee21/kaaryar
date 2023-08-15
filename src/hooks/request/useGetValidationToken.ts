@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
+import Cookies from 'js-cookie';
 import { getData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 
@@ -28,9 +28,8 @@ const useGetValidationToken = () => {
         throw new Error("your token is not valid anymore, please log in again");
       }
     };
-    const cookie = new Cookies();
-    const token = cookie.get("token");
-
+    
+    const token = Cookies.get("token");
     //if roles array is empty,you don't need send request to validate token
     if (token) {
       getValid();

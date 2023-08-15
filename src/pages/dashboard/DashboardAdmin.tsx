@@ -25,12 +25,6 @@ const DashboardAdmin = () => {
         <Grid item xs={12} sm={6}>
           <LastOpinionDash />
         </Grid>
-        {/* <Grid item xs={12} sm={6}>
-              <OngoingCourseDash />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TeachingCourseDash />
-            </Grid> */}
         <Grid item xs={12} sm={6}>
           <StudentListDash />
         </Grid>

@@ -31,13 +31,13 @@ import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 const pageSize = 20;
+const examFormCount = "/status/form/count";
 const SkillSeeker = () => {
   const [page, setPage] = useState(1);
   // const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
   const navigate = useNavigate();
   const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=${pageSize}`;
-  const examFormCount = "/status/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
   const { data, isLoading, error } = useSWR(allStudentSeeker, {
@@ -121,6 +121,7 @@ const SkillSeeker = () => {
                       afterWeekChecked,
                       beforeWeekChecked,
                       regChecked,
+                      AfterWeekForm,
                     } = seekerStudent;
 
                     return (
@@ -150,13 +151,15 @@ const SkillSeeker = () => {
                           regChecked
                         )}
                         index={itemCounterTable(page, pageSize, i)}
+                        finalResult={AfterWeekForm?.finalResult}
+                        finalField={AfterWeekForm?.finalField}
                       />
                     );
                   })}
                 </TableBody>
               )}
 
-              <TableBody>
+              {/* <TableBody>
                 {searchingStudentSeeker?.map(
                   (searchingStudentSeeker: SeekerStudent, i: number) => {
                     const {
@@ -165,6 +168,7 @@ const SkillSeeker = () => {
                       afterWeekChecked,
                       beforeWeekChecked,
                       regChecked,
+                      AfterWeekForm,
                     } = searchingStudentSeeker;
                     return (
                       <TableBodyAll
@@ -189,11 +193,13 @@ const SkillSeeker = () => {
                           regChecked
                         )}
                         index={i + 1}
+                        finalResult={AfterWeekForm?.finalResult}
+                        finalField={AfterWeekForm?.finalField}
                       />
                     );
                   }
                 )}
-              </TableBody>
+              </TableBody> */}
             </Table>
           </TableContainer>
         </Container>
