@@ -29,16 +29,11 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const location = useLocation();
-  // eslint-disable-next-line
   const { auth } = useAuth();
   const roles = auth?.roles?.toString();
   const stateLocation = location.state as any;
   const from = stateLocation?.from?.pathname || `/${roles}/dashboard`;
-  const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(
-    username,
-    password,
-    from
-  );
+  const { handleLogin, errMsg, setErrMsg } = useSubmitLogin(username, password);
   const [tokenValidation, loadingVal] = useGetValidationToken();
 
   useEffect(() => {
@@ -63,12 +58,8 @@ const Login = () => {
 
   return (
     <>
-      {auth && tokenValidation ? (
-        <Navigate
-          to={`/${roles}/dashboard`}
-          state={{ from: location }}
-          replace
-        />
+      {tokenValidation ? (
+        <Navigate to={from} replace />
       ) : (
         <BackgroundImage backgd={backgd}>
           <Container maxWidth="md" sx={{ py: 9 }}>

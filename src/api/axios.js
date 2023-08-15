@@ -1,5 +1,6 @@
 import axios from "axios";
-import Cookies from "universal-cookie";
+import Cookies from "js-cookie";
+
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.baseURL = "https://kaaryar.hossein.codes/";
 // axios.defaults.baseURL = "https://kaaryardev.hossein.codes/";
@@ -26,11 +27,11 @@ export const editAxios = axios.create({
   method: "PUT",
 });
 
-const cookie = new Cookies();
+
 
 getData.interceptors.request.use(
   (request) => {
-    request.headers.common["Authorization"] = cookie.get("token");
+    request.headers.common["Authorization"] = Cookies.get("token");
     return request;
   },
   (error) => {
@@ -40,7 +41,7 @@ getData.interceptors.request.use(
 
 postData.interceptors.request.use(
   (request) => {
-    request.headers.common["Authorization"] = cookie.get("token");
+    request.headers.common["Authorization"] = Cookies.get("token");
     return request;
   },
   (error) => {
@@ -49,7 +50,7 @@ postData.interceptors.request.use(
 );
 editAxios.interceptors.request.use(
   (request) => {
-    request.headers.common["Authorization"] = cookie.get("token");
+    request.headers.common["Authorization"] = Cookies.get("token");
     return request;
   },
   (error) => {
@@ -58,7 +59,7 @@ editAxios.interceptors.request.use(
 );
 removeData.interceptors.request.use(
   (request) => {
-    request.headers.common["Authorization"] = cookie.get("token");
+    request.headers.common["Authorization"] = Cookies.get("token");
     return request;
   },
   (error) => {

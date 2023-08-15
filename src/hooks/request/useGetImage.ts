@@ -1,24 +1,43 @@
-import React, { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 
 const useGetImage = (address: string) => {
-  const [pic, setPic] = React.useState<string | undefined>();
+  const [pic, setPic] = useState<string | undefined>();
+  const [error, setError] = useState<string | undefined>();
+  const [loading, setLoading] = useState(false);
+
   const getPicture = useCallback(
     async (pictureURL: string) => {
       try {
-        let response = await getData(`${address}/${pictureURL}`, {
-          responseType: "arraybuffer", //so important!!
+        setLoading(true);
+        setError(undefined);
+
+        const response = await getData(`${address}/${pictureURL}`, {
+          responseType: "arraybuffer",
         });
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+
+        const url = URL.createObjectURL(new Blob([response.data]));
         setPic(url);
       } catch (error) {
-        console.log(error);
+        setError("Error fetching image.");
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     },
     [address]
   );
 
-  return { pic, getPicture };
+  useEffect(() => {
+    return () => {
+      // Cleanup function to revoke object URL when component unmounts
+      if (pic) {
+        URL.revokeObjectURL(pic);
+      }
+    };
+  }, [pic]);
+
+  return { pic, error, loading, getPicture };
 };
 
 export default useGetImage;

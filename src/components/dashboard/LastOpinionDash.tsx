@@ -1,27 +1,18 @@
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/material";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useGetData from "../../hooks/request/useGetData";
+import useSWR from "swr"
 import { Comment } from "../../model";
 import { BoxDashboard, PaperDashboard } from "../../styles/dashboard";
 import LoadingProgress from "../LoadingProgress";
 const allCommentLink = `total/all?pageNum=1&pageSize=3`;
 
 const LastOpinionDash = () => {
-  const {
-    dataCall,
-    loadingCall,
-    getAllData,
-  }: {
-    dataCall: Comment[];
-    loadingCall: boolean;
-    getAllData: (address: string) => Promise<void>;
-  } = useGetData();
+  const { data: dataCall, isLoading: loadingCall } = useSWR<Comment[]>(
+    allCommentLink
+  )
   const navigate = useNavigate();
-  useEffect(() => {
-    getAllData(allCommentLink);
-  }, [getAllData]);
+
 
   if (loadingCall) {
     return (

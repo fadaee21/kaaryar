@@ -1,5 +1,5 @@
 import { Button, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getData } from "../../api/axios";
 import { SearchFirstName } from "./SearchFirstName";
 import { SearchFamily } from "./SearchFamily";
@@ -40,9 +40,18 @@ interface SearchAllType {
   setSearchingStudentAfter?: any;
   setSearchingStudentRegister?: any;
   setSearchingMoodleStudent?: any;
-  searchPage: string;
+  searchPage: "moodle" | "beforeWeek" | "afterWeek" | "reg";
   chevronDir: boolean;
 }
+
+const beforeWeekSearch =
+"/exam/before/week/search/param?pageNum=1&pageSize=10000";
+const afterWeekSearch =
+"/exam/after/week/search/param?pageNum=1&pageSize=10000";
+const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
+const moodleSearch =
+"/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
+
 
 const SearchAll: ({
   setSearchingStudentBefore,
@@ -102,44 +111,36 @@ const SearchAll: ({
   const [module, setModule] = useState<ModuleAll | null>(null);
   const [group, setGroup] = useState<Group | null>(null);
 
+  const fetchMoodlePage = useMemo(
+    () => searchPage === "moodle" && chevronDir,
+    [searchPage, chevronDir]
+  );
+
   const { data: trainingStatusData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/training-status/values/all"
-      : null // get trainingData only for moodle search student
+    fetchMoodlePage ? "/status/training-status/values/all" : null // get trainingData only for moodle search student
   );
   const { data: nextTrainingStepData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/next-training-step/values/all"
-      : null
+    fetchMoodlePage ? "/status/next-training-step/values/all" : null
   );
   const { data: referralToFinanceData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/referral-finance/values/all"
-      : null
+    fetchMoodlePage ? "/status/referral-finance/values/all" : null
   );
   const { data: KaaryarAssessmentData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/kaaryar-assessment/values/all"
-      : null
+    fetchMoodlePage ? "/status/kaaryar-assessment/values/all" : null
   );
   const { data: ModuleData } = useSWR<ModuleAll[]>(
-    searchPage === "moodle" && chevronDir
+    fetchMoodlePage
       ? "/modules/short-details/all?orderAscending=true&orderBy=name"
       : null
   );
+
   const { data: groupData } = useSWR<Group[]>(
-    searchPage === "moodle" && chevronDir
+    fetchMoodlePage || searchPage === "reg"
       ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
       : null
   );
 
-  const beforeWeekSearch =
-    "/exam/before/week/search/param?pageNum=1&pageSize=10000";
-  const afterWeekSearch =
-    "/exam/after/week/search/param?pageNum=1&pageSize=10000";
-  const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
-  const moodleSearch =
-    "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
+
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
     if (searchPage === "moodle") {
@@ -215,28 +216,43 @@ const SearchAll: ({
     scholar,
   ]);
 
-  const fetchData = async (obj: any) => {
-    setLoading(true);
-    try {
-      const response = await getData(searchLink, {
-        params: obj,
-      });
-      if (response.status === 200) {
-        //for each search you need specific setState
-        searchPage === "moodle" && setSearchingMoodleStudent(response.data);
-        searchPage === "beforeWeek" && setSearchingStudentBefore(response.data);
-        searchPage === "afterWeek" && setSearchingStudentAfter(response.data);
-        searchPage === "reg" && setSearchingStudentRegister(response.data);
-      } else {
-        console.log(response);
+
+const fetchData = async (obj: any) => {
+  setLoading(true);
+
+  try {
+    const response = await getData(searchLink, {
+      params: obj,
+    });
+
+    if (response.status === 200) {
+      switch (searchPage) {
+        case "moodle":
+          setSearchingMoodleStudent(response.data);
+          break;
+        case "beforeWeek":
+          setSearchingStudentBefore(response.data);
+          break;
+        case "afterWeek":
+          setSearchingStudentAfter(response.data);
+          break;
+        case "reg":
+          setSearchingStudentRegister(response.data);
+          break;
+        default:
+          break;
       }
-    } catch (error: any) {
-      console.log(error);
-      toast.error(handleError(error));
-    } finally {
-      setLoading(false);
+    } else {
+      console.log(response);
     }
-  };
+  } catch (error: any) {
+    console.log(error);
+    toast.error(handleError(error));
+  } finally {
+    setLoading(false);
+  }
+};
+ 
 
   const handleSearch = () => {
     fetchData({
@@ -343,14 +359,26 @@ const SearchAll: ({
         </Grid>
       )}
       {searchPage === "reg" && (
-        <Grid item xs={3}>
-          <SearchSelect
-            state={eduLevel}
-            setState={setEduLevel}
-            options={eduLevelOptions}
-            placeholder="میزان تحصیلات"
-          />
-        </Grid>
+        <>
+          <Grid item xs={3}>
+            <SearchSelect
+              state={eduLevel}
+              setState={setEduLevel}
+              options={eduLevelOptions}
+              placeholder="میزان تحصیلات"
+            />
+          </Grid>
+          {groupData && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={group as any}
+                setState={setGroup as any}
+                options={groupData.map((i) => ({ id: i.id, value: i.name }))}
+                placeholder="نام گروه"
+              />
+            </Grid>
+          )}
+        </>
       )}
       {searchPage === "reg" && (
         <Grid item xs={3}>

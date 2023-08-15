@@ -306,6 +306,7 @@ export interface TableBodyAllType extends RegistrationForm {
   directNav: string;
   motivation?: string;
   finalField?: string;
+  finalResults?: string;
   jobStandby?: boolean;
   scholar?: boolean;
   finalResult?: string;
@@ -318,9 +319,9 @@ export interface SeekerStudent {
   registrationCode: string;
   regForm: RegistrationForm;
   regChecked: boolean;
-  BeforeWeekForm: BeforeWeekType;
+  BeforeWeekForm?: BeforeWeekType;
   beforeWeekChecked: boolean;
-  AfterWeekForm: AfterWeekType;
+  AfterWeekForm?: AfterWeekType;
   afterWeekChecked: true;
 }
 
