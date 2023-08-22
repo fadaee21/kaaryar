@@ -2,10 +2,10 @@ import Container from "@mui/material/Container";
 import useSWR from "swr";
 import { Navigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import VolunteerDetailComp from "../../components/profile/VolunteerDetailComp";
 import { Profile } from "../../model";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import VolunteerDetailComp from "../../components/volunteer/VolunteerDetailComp";
 
 const VolunteerDetail = () => {
   const { username } = useParams();

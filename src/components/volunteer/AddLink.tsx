@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -101,4 +101,4 @@ const AddLink = ({ setDesiredLink, desiredLink }: Prop) => {
   );
 };
 
-export default AddLink;
+export default memo(AddLink);

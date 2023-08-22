@@ -22,11 +22,12 @@ const TableBodyAll = ({
   directNav,
   checked,
   resultStatus,
-  cgpa,
+  contCourseApproach,
   handleCheckBox,
   checkBoxDisplay,
   index,
   finalResults,
+  course
 }: TableBodyAllType) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -59,7 +60,7 @@ const TableBodyAll = ({
   );
 
   const showFieldCgpa =
-    (directNav === "before-week" && (cgpa || "-")) ||
+    (directNav === "before-week" && (contCourseApproach || "-")) ||
     (directNav === "after-week" && (finalResult || "-")) ||
     (directNav === "skill-seeker" && (selectedField || "-"));
 
@@ -104,6 +105,9 @@ const TableBodyAll = ({
         onClick={() => navigate(`${id}`)}
       >
         <Typography variant="body1">{firstName + " " + family}</Typography>
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        <Typography variant="body2">{course || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center">
         <Typography variant="body2">{province || "-"}</Typography>

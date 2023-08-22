@@ -1,6 +1,5 @@
 import { Checkbox, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
@@ -12,7 +11,6 @@ const RegTableBodyAll = ({
   firstName,
   registrationCode,
   province,
-  directNav,
   familiarity,
   checked,
   handleCheckBox,
@@ -23,8 +21,6 @@ const RegTableBodyAll = ({
   index,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
   return (
     <StyledTableRow
       sx={{
@@ -80,7 +76,7 @@ const RegTableBodyAll = ({
       <StyledTableCell
         align="left"
         sx={{ verticalAlign: "center", cursor: "pointer" }}
-        onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
+        onClick={() => navigate(`${id}`)}
       >
         <Typography variant="body2">{firstName + " " + family}</Typography>
       </StyledTableCell>

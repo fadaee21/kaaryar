@@ -19,6 +19,7 @@ export const beforeTableHeader = [
   "وضعیت",
   "کد متقاضی",
   "نام و نام خانوادگی",
+  "گروه",
   "استان",
   "شهر",
   "شماره همراه",
@@ -34,6 +35,7 @@ export const afterTableHeader = [
   "وضعیت",
   "کد متقاضی",
   "نام و نام خانوادگی",
+  "گروه",
   "استان",
   "شهر",
   "شماره همراه",
@@ -48,6 +50,7 @@ export const afterTableSkillSeeker = [
   "وضعیت",
   "کد متقاضی",
   "نام و نام خانوادگی",
+  "گروه",
   "استان",
   "شهر",
   "شماره همراه",
@@ -202,4 +205,15 @@ export const interpersonalStudent = [
   "وضعیت انجام تکالیف",
   "ارزیابی نهایی",
   "ویرایش",
+];
+
+export const notifyHeader = [
+  "type",
+  "name",
+  "subject",
+  "body",
+  "isActive",
+  "templateId",
+  "createdAt",
+  "updatedAt",
 ];

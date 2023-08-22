@@ -95,14 +95,14 @@ const AfterWeekDetail = () => {
         />
         <Divider />
         <BeforeWeekDetailShowComp
-          typeComp="admission"
+          typeComp="afterWeek"
           student={student?.beforeWeekForm as BeforeWeekType}
           matches={matches}
           id={id}
         />
         <Divider />
         <AfterWeekDetailShowComp
-          typeComp="admission"
+          typeComp="afterWeek"
           student={student}
           matches={matches}
           id={id}

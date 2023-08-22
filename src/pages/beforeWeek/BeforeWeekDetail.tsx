@@ -90,7 +90,7 @@ const BeforeWeekDetail = () => {
         />
         <Divider />
         <BeforeWeekDetailShow
-          typeComp="exam"
+          typeComp="beforeWeek"
           student={student}
           matches={matches}
           id={id}

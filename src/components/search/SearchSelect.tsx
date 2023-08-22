@@ -40,7 +40,6 @@ export const EditBooleanSearch = ({
   handleChange,
   value,
 }: any) => {
-  console.log(value);
   const content = (
     <Select
       value={value}

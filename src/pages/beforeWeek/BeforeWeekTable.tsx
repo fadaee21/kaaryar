@@ -125,12 +125,46 @@ const BeforeWeekTable = () => {
                   رد کردن گروهی
                 </Button>
                 <ExcelExport
-                  fileName={"Applicant Info"}
+                  fileName={"Before Week Table"}
                   linkAll="/exam/before/week/form/all?pageNum=1&pageSize=100000"
                   useIn="before"
-                  searchData={searchingStudentBefore?.map(
-                    (i) => i.registrationForm
-                  )}
+                  searchData={searchingStudentBefore?.map((before) => {
+                    const {
+                      motivation,
+                      jobStandby,
+                      contCourseApproach,
+                      registrationForm: {
+                        province,
+                        city,
+                        family,
+                        firstName,
+                        registrationCode,
+                        mobile,
+                        email,
+                        course,
+                      },
+                      acceptWeekChecked,
+                    } = before;
+
+                    return {
+                      وضعیت:
+                        acceptWeekChecked === true
+                          ? `تایید شده`
+                          : acceptWeekChecked === null
+                          ? `در انتظار تایید`
+                          : `رد شده`,
+                      "کد متقاضی": registrationCode,
+                      "نام و نام خانوادگی": firstName + " " + family,
+                      گروه: course,
+                      استان: province,
+                      شهر: city,
+                      "شماره همراه": mobile,
+                      ایمیل: email,
+                      "نمره آزمون": contCourseApproach,
+                      "آمادگی کار": jobStandby ? "بله" : "خیر",
+                      "انگیزه ورود": motivation,
+                    };
+                  })}
                 />
               </Box>
             </Box>
@@ -160,10 +194,9 @@ const BeforeWeekTable = () => {
                 <TableHeader headerItems={beforeTableHeader} />
               )}
 
-              {/*//! while searching show the search content */}
-              {!searchingStudentBefore && (
-                <TableBody>
-                  {data?.map((examRegisterUser: BeforeWeekType, i: number) => {
+              <TableBody>
+                {(searchingStudentBefore ?? data)?.map(
+                  (examRegisterUser: BeforeWeekType, i: number) => {
                     const {
                       id,
                       motivation,
@@ -174,13 +207,13 @@ const BeforeWeekTable = () => {
                         family,
                         firstName,
                         registrationCode,
-                        codeMeli,
                         mobile,
                         email,
-                        gender,
                         studyField,
+                        course,
                       },
                       acceptWeekChecked,
+                      contCourseApproach,
                     } = examRegisterUser;
 
                     return (
@@ -195,63 +228,15 @@ const BeforeWeekTable = () => {
                         family={family}
                         firstName={firstName}
                         registrationCode={registrationCode}
-                        codeMeli={codeMeli}
                         mobile={mobile}
                         email={email}
-                        gender={gender}
                         directNav="before-week"
-                        // cgpa={cgpa}
-                        cgpa="-" //TODO:cgpa is not correct it must be change
+                        contCourseApproach={contCourseApproach}
                         checked={acceptWeekChecked}
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
                         index={itemCounterTable(page, pageSize, i)}
-                      />
-                    );
-                  })}
-                </TableBody>
-              )}
-              {/* show content if searching in the box */}
-              <TableBody>
-                {searchingStudentBefore?.map(
-                  (searchingStudentBefore: BeforeWeekType, i: number) => {
-                    return (
-                      <TableBodyAll
-                        key={searchingStudentBefore.id}
-                        id={searchingStudentBefore.id}
-                        idMulti={searchingStudentBefore.id}
-                        province={
-                          searchingStudentBefore.registrationForm.province
-                        }
-                        city={searchingStudentBefore.registrationForm.city}
-                        studyField={
-                          searchingStudentBefore.registrationForm.studyField
-                        }
-                        motivation={searchingStudentBefore.motivation}
-                        jobStandby={searchingStudentBefore.jobStandby}
-                        cgpa={
-                          // searchingStudentBefore.cgpa
-                          "-"
-                        }
-                        family={searchingStudentBefore.registrationForm.family}
-                        firstName={
-                          searchingStudentBefore.registrationForm.firstName
-                        }
-                        registrationCode={
-                          searchingStudentBefore.registrationForm
-                            .registrationCode
-                        }
-                        codeMeli={
-                          searchingStudentBefore.registrationForm.codeMeli
-                        }
-                        mobile={searchingStudentBefore.registrationForm.mobile}
-                        email={searchingStudentBefore.registrationForm.email}
-                        gender={searchingStudentBefore.registrationForm.gender}
-                        checked={searchingStudentBefore.acceptWeekChecked}
-                        directNav="before-week"
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={true}
-                        index={i + 1}
+                        course={course}
                       />
                     );
                   }

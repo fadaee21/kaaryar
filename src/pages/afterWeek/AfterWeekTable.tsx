@@ -125,11 +125,47 @@ const AfterWeekTable = () => {
                   رد کردن گروهی
                 </Button>
                 <ExcelExport
-                  fileName={"Applicant Info"}
+                  fileName={"After Week Table"}
                   linkAll="/exam/after/week/form/all?pageNum=1&pageSize=100000"
-                  searchData={searchingStudentAfter?.map(
-                    (i) => i.beforeWeekForm.registrationForm
-                  )}
+                  searchData={searchingStudentAfter?.map((after) => {
+                    const {
+                      finalField,
+                      scholar,
+                      finalResult,
+                      beforeWeekForm: {
+                        registrationForm: {
+                          province,
+                          city,
+                          family,
+                          firstName,
+                          registrationCode,
+                          mobile,
+                          email,
+                          course,
+                        },
+                      },
+                      afterWeekChecked,
+                    } = after;
+
+                    return {
+                      وضعیت:
+                        afterWeekChecked === true
+                          ? `تایید شده`
+                          : afterWeekChecked === null
+                          ? `در انتظار تایید`
+                          : `رد شده`,
+                      "کد متقاضی": registrationCode,
+                      "نام و نام خانوادگی": firstName + " " + family,
+                      گروه: course,
+                      استان: province,
+                      شهر: city,
+                      "شماره همراه": mobile,
+                      ایمیل: email,
+                      "نتیجه نهایی": finalResult,
+                      بورسیه: scholar ? "دارد" : "ندارد",
+                      "رشته نهایی": finalField,
+                    };
+                  })}
                   useIn="after"
                 />
               </Box>
@@ -158,11 +194,9 @@ const AfterWeekTable = () => {
               {searchingStudentAfter?.length !== 0 && (
                 <TableHeader headerItems={afterTableHeader} />
               )}
-
-              {/*//! while searching show the search content */}
-              {!searchingStudentAfter && (
-                <TableBody>
-                  {data?.map((afterWeekStudent: AfterWeekType, i: number) => {
+              <TableBody>
+                {(searchingStudentAfter ?? data)?.map(
+                  (afterWeekStudent: AfterWeekType, i: number) => {
                     const {
                       id,
                       finalField,
@@ -180,6 +214,7 @@ const AfterWeekTable = () => {
                           email,
                           // gender,
                           studyField,
+                          course,
                         },
                       },
                       afterWeekChecked,
@@ -207,68 +242,7 @@ const AfterWeekTable = () => {
                         handleCheckBox={handleCheckBox}
                         checkBoxDisplay={false}
                         index={itemCounterTable(page, pageSize, i)}
-                      />
-                    );
-                  })}
-                </TableBody>
-              )}
-
-              <TableBody>
-                {searchingStudentAfter?.map(
-                  (searchingStudentAfter: any, i: number) => {
-                    return (
-                      <TableBodyAll
-                        key={searchingStudentAfter.id}
-                        id={searchingStudentAfter.id}
-                        idMulti={searchingStudentAfter.id}
-                        province={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .province
-                        }
-                        city={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .city
-                        }
-                        studyField={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .studyField
-                        }
-                        finalField={searchingStudentAfter.finalField}
-                        scholar={searchingStudentAfter.scholar}
-                        finalResult={searchingStudentAfter.finalResult}
-                        family={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .family
-                        }
-                        firstName={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .firstName
-                        }
-                        registrationCode={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .registrationCode
-                        }
-                        codeMeli={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .codeMeli
-                        }
-                        mobile={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .mobile
-                        }
-                        email={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .email
-                        }
-                        // gender={
-                        //   searchingStudentAfter.beforeWeekForm.registrationForm
-                        //     .gender
-                        // }
-                        checked={searchingStudentAfter.afterWeekChecked}
-                        directNav="after-week"
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={true}
-                        index={i + 1}
+                        course={course}
                       />
                     );
                   }

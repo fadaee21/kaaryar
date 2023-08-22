@@ -6,30 +6,26 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
-import useGetImage from "../../hooks/request/useGetImage";
-import { AfterWeekType } from "../../model";
+import { AfterWeekType, TypeComp } from "../../model";
 import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
-// import FinalResult from "./FinalResult";
-import ImageModal from "../ImageModal";
 import { getLabel } from "../../utils/getLabel";
 import { SelectedFieldOpt } from "../search/searchOptions";
-const LookUpLink = React.lazy(() => import("./LookUpLink"));
-// import UploadImage from "../UploadImage";
+import ImageManager from "../beforeWeek/ImageManager";
+import { lazy } from "react";
+const LookUpLink = lazy(() => import("./LookUpLink"));
 
 interface AfterWeekStudentShow {
   student: AfterWeekType | undefined;
   matches: boolean;
   id: string | undefined;
-  typeComp: "exam" | "admission" | "student";
+  typeComp: TypeComp;
   successObject?: string;
   handleOpenAlert?: (alert: "approve" | "disApprove") => void;
   refreshingPage?: () => void;
@@ -45,30 +41,52 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   refreshingPage,
 }) => {
   const navigate = useNavigate();
-  // this component use for skill-seeker page also,in that page you don't need approve button.handling this by location
-  const location = useLocation();
-  const seekerPage =
-    location.pathname.includes("skill-seeker") ||
-    location.pathname.includes("student");
-
   const { auth } = useAuth();
   const roles = auth.roles.toString();
 
-  const { pic, getPicture } = useGetImage("/moodle/payment/img/user/");
-
-  // const sField = student?.beforeWeekForm?.registrationForm?.selectedField;
   const cField = student?.beforeWeekForm?.registrationForm?.careerPathwayOther;
-  const st = student?.moodleUser;
-  React.useEffect(() => {
-    st && getPicture(st.id.toString());
-  }, [getPicture, st]);
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const ButtonGroupComp = () => {
+    const isDisabled =
+      student?.afterWeekChecked !== null ||
+      successObject === "afterWeekChecked" ||
+      typeComp !== "afterWeek";
+
+    const navigateToEdit = () => {
+      navigate(`/${roles}/after-week-edit/${id}`);
+    };
+
+    return (
+      <ButtonGroup
+        variant="contained"
+        color="secondary"
+        size="large"
+        aria-label="small button group"
+        disabled={isDisabled}
+        sx={{
+          display: typeComp === "afterWeek" ? "show" : "none",
+        }}
+      >
+        <Button onClick={navigateToEdit}>ویرایش</Button>
+        <Button
+          variant="contained"
+          onClick={() => handleOpenAlert?.("approve")}
+        >
+          تایید کردن
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleOpenAlert?.("disApprove")}
+        >
+          رد کردن
+        </Button>
+      </ButtonGroup>
+    );
+  };
+
   return (
     <>
-      {!seekerPage && (
+      {typeComp === "afterWeek" && (
         <LookUpLink student={student} id={id} refreshingPage={refreshingPage} />
       )}
       <Box
@@ -83,37 +101,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           فرم ثبت نام هفته پذیرش
         </Typography>
 
-        {!seekerPage && (
-          <ButtonGroup
-            variant="contained"
-            color="secondary"
-            size="large"
-            aria-label="small button group"
-            disabled={
-              student?.afterWeekChecked !== null ||
-              successObject === "afterWeekChecked"
-                ? true
-                : false
-            }
-            sx={{ ...(typeComp === "admission" && { display: "show" }) }}
-          >
-            <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
-              ویرایش
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => handleOpenAlert?.("approve")}
-            >
-              تایید کردن
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => handleOpenAlert?.("disApprove")}
-            >
-              رد کردن
-            </Button>
-          </ButtonGroup>
-        )}
+        <ButtonGroupComp />
       </Box>
       {/* فرم ثبت نام هفته پذیرش */}
       <ContentBox
@@ -196,30 +184,15 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="عکس فیش واریزی" />
-                {pic && (
-                  <ListItemAvatar
-                    onClick={handleOpen}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <Box
-                      component={"img"}
-                      alt="payment image"
-                      src={pic}
-                      sx={{ width: 150, height: "100%", borderRadius: 2 }}
-                    />
-                  </ListItemAvatar>
-                )}
-              </ListItem>
-              {/* upload image that doesn't need anymore */}
-              {/* <ListItem>
-                <UploadImage
+                <ImageManager
+                  propImage={student?.paymentImageAddress}
                   id={id}
-                  disableProp={
-                    student?.afterWeekChecked ||
-                    successObject === "afterWeekChecked"
-                  }
+                  checked={student?.afterWeekChecked} //Disabling the button for those who have been approved
+                  removeLink="/exam/after/week/image/payment"
+                  uploadLink="/exam/after/week/image/payment/upload"
+                  buttonsActivation={typeComp !== "afterWeek"}
                 />
-              </ListItem> */}
+              </ListItem>
             </List>
           </Grid>
         </Grid>
@@ -395,7 +368,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       </ContentBox> */}
 
       {/* link after week student to moodle student */}
-      {/* {!seekerPage && (
+      {/* {type && (
         <FinalResult
           approvedStu={student?.afterWeekChecked}
           finalResult={student?.finalResult}
@@ -479,39 +452,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           mb: 5,
         }}
       >
-        {!seekerPage && (
-          <ButtonGroup
-            variant="contained"
-            color="secondary"
-            size="large"
-            aria-label="small button group"
-            disabled={
-              student?.afterWeekChecked !== null ||
-              successObject === "afterWeekChecked"
-                ? true
-                : false
-            }
-            sx={{ ...(typeComp === "admission" && { display: "show" }) }}
-          >
-            <Button onClick={() => navigate(`/${roles}/after-week-edit/${id}`)}>
-              ویرایش
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => handleOpenAlert?.("approve")}
-            >
-              تایید کردن
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => handleOpenAlert?.("disApprove")}
-            >
-              رد کردن
-            </Button>
-          </ButtonGroup>
-        )}
+        <ButtonGroupComp />
       </Box>
-      <ImageModal pic={pic} open={open} handleClose={handleClose} />
     </>
   );
 };

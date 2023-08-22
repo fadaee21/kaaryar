@@ -2,8 +2,8 @@ import FileSaver from "file-saver";
 import { utils, write } from "sheetjs-style/xlsx.mini";
 import { Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-
 import { getData } from "../api/axios";
+import { seekerStateFinder } from "../utils/seekerStateFinder";
 
 export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
   const fileType =
@@ -22,18 +22,111 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
     try {
       let response = await getData(linkAll);
       let allData = await response.data;
-
       switch (useIn) {
         case "reg":
-          exportToCSV(allData, fileName);
+          const regObj = allData.map((reg) => ({
+            وضعیت:
+              reg.checked === true
+                ? `تایید شده`
+                : reg.checked === null
+                ? `در انتظار تایید`
+                : `رد شده`,
+            " کد متقاضی": reg.registrationCode,
+            "نام و نام خانوادگی": reg.firstName + " " + reg.family,
+            گروه: reg.course,
+            "میزان تحصیلات": reg.education,
+            "سال دبیرستان": reg.highSchoolYear,
+            استان: reg.province,
+            "نحوه آشنایی با کاریار": reg.familiarity,
+            "نام معرف یا موسسه": reg.refer,
+            "تاریخ ارسال فرم":
+              reg.createTime &&
+              new Intl.DateTimeFormat("fa").format(new Date(reg.createTime)),
+          }));
+
+          exportToCSV(regObj, fileName);
           break;
         case "before":
-          const a = allData.map((i) => i.registrationForm);
-          exportToCSV(a, fileName);
+          const beforeObj = allData.map((before) => {
+            const {
+              motivation,
+              jobStandby,
+              contCourseApproach,
+              registrationForm: {
+                province,
+                city,
+                family,
+                firstName,
+                registrationCode,
+                mobile,
+                email,
+                course,
+              },
+              acceptWeekChecked,
+            } = before;
+
+            return {
+              وضعیت:
+                acceptWeekChecked === true
+                  ? `تایید شده`
+                  : acceptWeekChecked === null
+                  ? `در انتظار تایید`
+                  : `رد شده`,
+              "کد متقاضی": registrationCode,
+              "نام و نام خانوادگی": firstName + " " + family,
+              گروه: course,
+              استان: province,
+              شهر: city,
+              "شماره همراه": mobile,
+              ایمیل: email,
+              "نمره آزمون": contCourseApproach,
+              "آمادگی کار": jobStandby ? "بله" : "خیر",
+              "انگیزه ورود": motivation,
+            };
+          });
+          exportToCSV(beforeObj, fileName);
           break;
         case "after":
-          const b = allData.map((i) => i.beforeWeekForm?.registrationForm);
-          exportToCSV(b, fileName);
+          const afterObj = allData.map((after) => {
+            const {
+              finalField,
+              scholar,
+              finalResult,
+              beforeWeekForm: {
+                registrationForm: {
+                  province,
+                  city,
+                  family,
+                  firstName,
+                  registrationCode,
+                  mobile,
+                  email,
+                  course,
+                },
+              },
+              afterWeekChecked,
+            } = after;
+
+            return {
+              وضعیت:
+                afterWeekChecked === true
+                  ? `تایید شده`
+                  : afterWeekChecked === null
+                  ? `در انتظار تایید`
+                  : `رد شده`,
+              "کد متقاضی": registrationCode,
+              "نام و نام خانوادگی": firstName + " " + family,
+              گروه: course,
+              استان: province,
+              شهر: city,
+              "شماره همراه": mobile,
+              ایمیل: email,
+              "نتیجه نهایی": finalResult,
+              بورسیه: scholar ? "دارد" : "ندارد",
+              "رشته نهایی": finalField,
+            };
+          });
+          exportToCSV(afterObj, fileName);
           break;
         case "volunteer":
           let e = [];
@@ -44,13 +137,34 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
           exportToCSV(e, fileName);
           break;
         case "seeker":
-          const c = allData.map(
-            (i) =>
-              i.beforeWeekForm?.registrationForm !== undefined &&
-              i.beforeWeekForm?.registrationForm
-          );
-          //TODO:there is a lot of undefined objects it cause error, after removing these objects remove this condition
-          exportToCSV(c, fileName);
+          const seekerObj = allData.map((seekerStudent) => {
+            const {
+              regForm,
+              afterWeekChecked,
+              beforeWeekChecked,
+              regChecked,
+              AfterWeekForm,
+            } = seekerStudent;
+
+            return {
+              وضعیت: seekerStateFinder(
+                afterWeekChecked,
+                beforeWeekChecked,
+                regChecked
+              ),
+              "کد متقاضی": regForm.registrationCode,
+              "نام و نام خانوادگی": regForm.firstName + " " + regForm.family,
+              گروه: regForm.course,
+              استان: regForm.province,
+              شهر: regForm.city,
+              "شماره همراه": regForm.mobile,
+              ایمیل: regForm.email,
+              "رشته انتخابی": regForm?.selectedField,
+              "رشته نهایی": AfterWeekForm?.finalField,
+              "نتیجه نهایی": AfterWeekForm?.finalResult,
+            };
+          });
+          exportToCSV(seekerObj, fileName);
           break;
         case "studentListMoodleTable":
           const g = allData.map((i) => i);
@@ -65,9 +179,9 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
             گروه: i.registrationForm.course,
             "مؤسسه معرف": i.registrationForm.refer,
             "وضعیت آموزش": i.statusForm?.trainingStatus?.value,
-            "قدم آتی آموزش":i.statusForm?.nextTrainingStep?.value,
-            "ارجاع به واحد مالی":i.statusForm?.referralToFinance?.value,
-            "ارزیابی کاریار":i.statusForm?.kaaryarAssessment?.value
+            "قدم آتی آموزش": i.statusForm?.nextTrainingStep?.value,
+            "ارجاع به واحد مالی": i.statusForm?.referralToFinance?.value,
+            "ارزیابی کاریار": i.statusForm?.kaaryarAssessment?.value,
           }));
           exportToCSV(d, fileName);
           // console.log(d);

@@ -10,13 +10,13 @@ import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 import AfterWeekDetail from "./pages/afterWeek/AfterWeekDetail";
 import AfterWeekDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
-import UserProfile from "./pages/profile/UserProfile";
+import VolunteerEdit from "./pages/volunteer/VolunteerEdit";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
 import EditComments from "./pages/comment/EditComments";
 import Dashboard from "./pages/dashboard/DashboardMentorTa";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
-import Volunteer from "./pages/volunteer/Volunteer";
+import VolunteerTable from "./pages/volunteer/VolunteerTable";
 import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
 import GraduateProfile from "./pages/graduate/GraduateProfile";
 import GraduateTable from "./pages/graduate/GraduateTable";
@@ -40,6 +40,7 @@ import StudentCoreDetail from "./pages/student/StudentCoreDetail";
 import StudentTableAdmin from "./pages/student/StudentTableAdmin";
 import StudentGeneralEdit from "./pages/student/StudentGeneralEdit";
 import StudentCoreEdit from "./pages/student/StudentCoreEdit";
+import Notify from "./pages/notify/Notify";
 
 const ListRoutes = [
   //! ta________________________________
@@ -98,7 +99,7 @@ const ListRoutes = [
   {
     path: "ta/profile",
     name: " ",
-    component: UserProfile,
+    component: VolunteerEdit,
     showInNav: false,
     role: "ta",
     key: "ta7",
@@ -123,7 +124,7 @@ const ListRoutes = [
     path: "ta/volunteer",
     name: "فهرست پروفایل داوطلبان",
     // icon:<></>,
-    component: Volunteer,
+    component: VolunteerTable,
     showInNav: true,
     role: "ta",
     key: "ta10",
@@ -186,7 +187,7 @@ const ListRoutes = [
   {
     path: "mentor/profile",
     name: " ",
-    component: UserProfile,
+    component: VolunteerEdit,
     showInNav: false,
     role: "mentor",
     key: "mentor7",
@@ -211,7 +212,7 @@ const ListRoutes = [
     path: "mentor/volunteer",
     name: "فهرست پروفایل داوطلبان",
     // icon:<></>,
-    component: Volunteer,
+    component: VolunteerTable,
     showInNav: true,
     role: "mentor",
     key: "mentor10",
@@ -332,7 +333,7 @@ const ListRoutes = [
   {
     path: "admin/profile",
     name: " ",
-    component: UserProfile,
+    component: VolunteerEdit,
     showInNav: false,
     role: "admin",
     key: "admin11",
@@ -398,7 +399,7 @@ const ListRoutes = [
     path: "admin/volunteer",
     name: "فهرست پروفایل داوطلبان",
     // icon:<></>,
-    component: Volunteer,
+    component: VolunteerTable,
     showInNav: true,
     role: "admin",
     key: "admin15",
@@ -575,6 +576,15 @@ const ListRoutes = [
     showInNav: false,
     role: "admin",
     key: "admin25-e",
+  },
+  {
+    path: "admin/notify",
+    name: "ایمیل ها و پیامک ها",
+    // icon:<></>,
+    component: Notify,
+    showInNav: true,
+    role: "admin",
+    key: "admin26",
   },
 
   {

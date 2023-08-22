@@ -45,13 +45,12 @@ interface SearchAllType {
 }
 
 const beforeWeekSearch =
-"/exam/before/week/search/param?pageNum=1&pageSize=10000";
+  "/exam/before/week/search/param?pageNum=1&pageSize=10000";
 const afterWeekSearch =
-"/exam/after/week/search/param?pageNum=1&pageSize=10000";
+  "/exam/after/week/search/param?pageNum=1&pageSize=10000";
 const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
 const moodleSearch =
-"/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
-
+  "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
 
 const SearchAll: ({
   setSearchingStudentBefore,
@@ -135,11 +134,10 @@ const SearchAll: ({
   );
 
   const { data: groupData } = useSWR<Group[]>(
-    fetchMoodlePage || searchPage === "reg"
+    chevronDir
       ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
       : null
   );
-
 
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
@@ -216,43 +214,41 @@ const SearchAll: ({
     scholar,
   ]);
 
+  const fetchData = async (obj: any) => {
+    setLoading(true);
 
-const fetchData = async (obj: any) => {
-  setLoading(true);
+    try {
+      const response = await getData(searchLink, {
+        params: obj,
+      });
 
-  try {
-    const response = await getData(searchLink, {
-      params: obj,
-    });
-
-    if (response.status === 200) {
-      switch (searchPage) {
-        case "moodle":
-          setSearchingMoodleStudent(response.data);
-          break;
-        case "beforeWeek":
-          setSearchingStudentBefore(response.data);
-          break;
-        case "afterWeek":
-          setSearchingStudentAfter(response.data);
-          break;
-        case "reg":
-          setSearchingStudentRegister(response.data);
-          break;
-        default:
-          break;
+      if (response.status === 200) {
+        switch (searchPage) {
+          case "moodle":
+            setSearchingMoodleStudent(response.data);
+            break;
+          case "beforeWeek":
+            setSearchingStudentBefore(response.data);
+            break;
+          case "afterWeek":
+            setSearchingStudentAfter(response.data);
+            break;
+          case "reg":
+            setSearchingStudentRegister(response.data);
+            break;
+          default:
+            break;
+        }
+      } else {
+        console.log(response);
       }
-    } else {
-      console.log(response);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(handleError(error));
+    } finally {
+      setLoading(false);
     }
-  } catch (error: any) {
-    console.log(error);
-    toast.error(handleError(error));
-  } finally {
-    setLoading(false);
-  }
-};
- 
+  };
 
   const handleSearch = () => {
     fetchData({
@@ -368,16 +364,6 @@ const fetchData = async (obj: any) => {
               placeholder="میزان تحصیلات"
             />
           </Grid>
-          {groupData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={group as any}
-                setState={setGroup as any}
-                options={groupData.map((i) => ({ id: i.id, value: i.name }))}
-                placeholder="نام گروه"
-              />
-            </Grid>
-          )}
         </>
       )}
       {searchPage === "reg" && (
@@ -556,19 +542,20 @@ const fetchData = async (obj: any) => {
               />
             </Grid>
           )}
-          {groupData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={group as any}
-                setState={setGroup as any}
-                options={groupData.map((i) => ({ id: i.id, value: i.name }))}
-                placeholder="نام گروه"
-              />
-            </Grid>
-          )}
         </>
       )}
-
+      <>
+        {groupData && (
+          <Grid item xs={3}>
+            <SearchSelect2
+              state={group as any}
+              setState={setGroup as any}
+              options={groupData.map((i) => ({ id: i.id, value: i.name }))}
+              placeholder="نام گروه"
+            />
+          </Grid>
+        )}
+      </>
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
           sx={{ width: "100%" }}

@@ -85,9 +85,34 @@ const SkillSeeker = () => {
               <ExcelExport
                 fileName={"Applicant Info"}
                 linkAll="/status/form/all?pageNum=1&pageSize=100000"
-                searchData={searchingStudentSeeker?.map(
-                  (i) => i.BeforeWeekForm?.registrationForm
-                )}
+                searchData={searchingStudentSeeker?.map((seekerStudent) => {
+                  const {
+                    regForm,
+                    afterWeekChecked,
+                    beforeWeekChecked,
+                    regChecked,
+                    AfterWeekForm,
+                  } = seekerStudent;
+
+                  return {
+                    وضعیت: seekerStateFinder(
+                      afterWeekChecked,
+                      beforeWeekChecked,
+                      regChecked
+                    ),
+                    "کد متقاضی": regForm.registrationCode,
+                    "نام و نام خانوادگی":
+                      regForm.firstName + " " + regForm.family,
+                    گروه: regForm.course,
+                    استان: regForm.province,
+                    شهر: regForm.city,
+                    "شماره همراه": regForm.mobile,
+                    ایمیل: regForm.email,
+                    "رشته انتخابی": regForm?.selectedField,
+                    "رشته نهایی": AfterWeekForm?.finalField,
+                    "نتیجه نهایی": AfterWeekForm?.finalResult,
+                  };
+                })}
                 useIn="seeker"
               />
             </Box>
@@ -114,7 +139,6 @@ const SkillSeeker = () => {
               {!searchingStudentSeeker && (
                 <TableBody>
                   {data?.map((seekerStudent: SeekerStudent, i: number) => {
-                    // console.log(seekerStudent);
                     const {
                       id,
                       regForm,
@@ -132,11 +156,9 @@ const SkillSeeker = () => {
                         family={regForm?.family}
                         firstName={regForm?.firstName}
                         registrationCode={regForm?.registrationCode}
-                        // codeMeli={regForm?.codeMeli}
                         mobile={regForm?.mobile}
                         email={regForm?.email}
                         directNav="skill-seeker"
-                        gender={regForm?.gender}
                         province={regForm?.province}
                         city={regForm?.city}
                         studyField={regForm?.studyField}
@@ -153,6 +175,7 @@ const SkillSeeker = () => {
                         index={itemCounterTable(page, pageSize, i)}
                         finalResult={AfterWeekForm?.finalResult}
                         finalField={AfterWeekForm?.finalField}
+                        course={regForm?.course}
                       />
                     );
                   })}

@@ -5,15 +5,14 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { BeforeWeekType } from "../../model";
+import { BeforeWeekType, TypeComp } from "../../model";
 import { ContentBox } from "../../styles/examFormDetail";
 import { DetailTypography } from "../../styles/studentDetail";
 import {
@@ -27,15 +26,14 @@ import {
   questionCityOpt,
 } from "./helper";
 import { getLabel } from "../../utils/getLabel";
-import ImageModal from "../ImageModal";
-import useGetImage from "../../hooks/request/useGetImage";
+import ImageManager from "./ImageManager";
 
 interface ExamStudent {
   student: BeforeWeekType | undefined;
   matches: boolean;
   id: string | undefined;
   //typeComp:help to check which page use and show or not show button group
-  typeComp: "exam" | "admission" | "student";
+  typeComp: TypeComp;
   successObject?: string;
   handleOpenAlert?: (alert: "approve" | "disApprove") => void;
 }
@@ -51,20 +49,43 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
+  const ButtonGroupComp = () => {
+    const isDisabled =
+      student?.acceptWeekChecked !== null ||
+      successObject === "acceptWeekChecked" ||
+      typeComp !== "beforeWeek";
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+    const navigateToEdit = () => {
+      navigate(`/${roles}/before-week-edit/${id}`);
+    };
 
-  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
-
-  const transcript = student?.transcriptImageAddress;
-  React.useEffect(() => {
-    if (!transcript) {
-      return;
-    }
-    getPicture(transcript);
-  }, [getPicture, transcript]);
+    return (
+      <ButtonGroup
+        variant="contained"
+        color="secondary"
+        size="large"
+        aria-label="small button group"
+        sx={{
+          display: typeComp === "beforeWeek" ? "show" : "none",
+        }}
+        disabled={isDisabled}
+      >
+        <Button onClick={navigateToEdit}>ویرایش</Button>
+        <Button
+          variant="contained"
+          onClick={() => handleOpenAlert?.("approve")}
+        >
+          تایید کردن
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleOpenAlert?.("disApprove")}
+        >
+          رد کردن
+        </Button>
+      </ButtonGroup>
+    );
+  };
 
   return (
     <>
@@ -81,36 +102,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           فرم آزمون (فرم درخواست ثبت نام دردوره های آموزشی مطعوف به اشتغال
           کاریار)
         </Typography>
-        {/* ButtonGroup */}
-        <ButtonGroup
-          variant="contained"
-          color="secondary"
-          size="large"
-          aria-label="small button group"
-          sx={{ ...(typeComp === "admission" && { display: "none" }) }}
-          disabled={
-            student?.acceptWeekChecked !== null ||
-            successObject === "acceptWeekChecked"
-              ? true
-              : false
-          }
-        >
-          <Button onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}>
-            ویرایش
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleOpenAlert?.("approve")}
-          >
-            تایید کردن
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleOpenAlert?.("disApprove")}
-          >
-            رد کردن
-          </Button>
-        </ButtonGroup>
+        <ButtonGroupComp />
       </Box>
       {/*اطلاعات تحصیلی*/}
       <ContentBox
@@ -189,7 +181,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="کارنامه تحصیلی" />
-                {pic && (
+                {/* {pic && (
                   <ListItemAvatar
                     onClick={handleOpen}
                     sx={{ cursor: "pointer" }}
@@ -201,7 +193,15 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                       sx={{ width: 150, height: "100%", borderRadius: 2 }}
                     />
                   </ListItemAvatar>
-                )}
+                )} */}
+                <ImageManager
+                  propImage={student?.transcriptImageAddress}
+                  id={id}
+                  checked={student?.acceptWeekChecked} //Disabling the button for those who have been approved
+                  removeLink="/exam/before/week/image/transcript"
+                  uploadLink="/exam/before/week/image/transcript/upload"
+                  buttonsActivation={typeComp !== "beforeWeek"}
+                />
               </ListItem>
             </List>
           </Grid>
@@ -686,7 +686,6 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </ContentBox>
-      {/* ButtonGroup */}
       <Box
         sx={{
           display: "flex",
@@ -695,43 +694,8 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           mb: 5,
         }}
       >
-        <ButtonGroup
-          variant="contained"
-          color="secondary"
-          size="large"
-          aria-label="small button group"
-          sx={{
-            ...((typeComp === "admission" || typeComp === "student") && {
-              display: "none",
-            }),
-          }}
-          disabled={
-            student?.acceptWeekChecked !== null ||
-            successObject === "acceptWeekChecked"
-              ? true
-              : false
-          }
-        >
-          <Button onClick={() => navigate(`/${roles}/before-week-edit/${id}`)}>
-            ویرایش
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleOpenAlert?.("approve")}
-          >
-            تایید کردن
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              handleOpenAlert && handleOpenAlert("disApprove");
-            }}
-          >
-            رد کردن
-          </Button>
-        </ButtonGroup>
+        <ButtonGroupComp />
       </Box>
-      <ImageModal pic={pic} open={open} handleClose={handleClose} />
     </>
   );
 };

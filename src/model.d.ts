@@ -1,5 +1,5 @@
 export type RoleType = "admin" | "mentor" | "ta" | "teacher" | null;
-
+export type TypeComp = "beforeWeek" | "afterWeek" | "seeker" | "student";
 export interface AuthType {
   username: string;
   password?: string;
@@ -228,7 +228,7 @@ export interface BeforeWeekType {
   lastInstitute: string;
   limitTime: string;
   motivation: string;
-  paymentImageAddress: string;
+  // paymentImageAddress: string;
   codingKnowledge: string;
   questionCity: string;
   questionStudents: string;
@@ -264,7 +264,6 @@ export interface BeforeWeekType {
 }
 
 interface AfterWeekType {
-  beforeWeekForm: BeforeWeekType;
   id: number;
   afterWeekChecked: boolean;
   algoScore: string;
@@ -291,10 +290,12 @@ interface AfterWeekType {
   comLevelResult: string;
   firstSelectJobRoad: string;
   fundamentalSkillsScore: string;
+  paymentImageAddress: string;
   notifyAcceptWeek: string;
   workshopCont: string;
   firstSelectJobRoad: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
+  beforeWeekForm: BeforeWeekType;
 }
 
 export interface TableBodyAllType extends RegistrationForm {
@@ -310,7 +311,7 @@ export interface TableBodyAllType extends RegistrationForm {
   jobStandby?: boolean;
   scholar?: boolean;
   finalResult?: string;
-  cgpa?: string;
+  contCourseApproach?: string;
   index: number;
 }
 
@@ -346,31 +347,40 @@ export interface Profile {
   gitlab: string;
   github: string;
   researchgate: string;
-  custom: string;
+  custom: string | null;
   aboutMe: string;
   id: number;
   createTime: string | null;
   updateTime: string | null;
   deleteTime: string | null;
   deleted: boolean;
-  user: {
-    username: string;
-    idnumber: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    mobile: string;
-    institution: string;
-    department: string;
-    address: string;
-    city: string;
-    country: string;
-    lang: string;
-    timezone: string;
-    calendarType: string;
-    id: number;
-  };
+  user: UserProfile;
+  picture: Picture | null;
+}
+export interface UserProfile {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+export interface Picture {
+  file_hash: string;
+  file_name: string;
+  file_type: string;
+  file_extension: string;
+  file_size: number;
 }
 
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;
@@ -864,3 +874,14 @@ export type OptionYesOrNo = {
   value: boolean;
   label: "بله" | "خیر";
 };
+
+export interface Notify {
+  type: string;
+  name: string;
+  subject: string;
+  body: string;
+  isActive: boolean;
+  templateId: number;
+  createdAt: string;
+  updatedAt: string;
+}

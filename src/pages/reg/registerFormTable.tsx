@@ -115,8 +115,29 @@ const RegisterFormTable = () => {
                   رد کردن گروهی
                 </Button>
                 <ExcelExport
-                  fileName={"Applicant Info"}
-                  searchData={searchingStudentRegister?.map((i) => i)}
+                  fileName={"Register Form Table"}
+                  searchData={searchingStudentRegister?.map((registerUser) => ({
+                    وضعیت:
+                      registerUser.checked === true
+                        ? `تایید شده`
+                        : registerUser.checked === null
+                        ? `در انتظار تایید`
+                        : `رد شده`,
+                    " کد متقاضی": registerUser.registrationCode,
+                    "نام و نام خانوادگی":
+                      registerUser.firstName + " " + registerUser.family,
+                    گروه: registerUser.course,
+                    "میزان تحصیلات": registerUser.education,
+                    "سال دبیرستان": registerUser.highSchoolYear,
+                    استان: registerUser.province,
+                    "نحوه آشنایی با کاریار": registerUser.familiarity,
+                    "نام معرف یا موسسه": registerUser.refer,
+                    "تاریخ ارسال فرم":
+                      registerUser.createTime &&
+                      new Intl.DateTimeFormat("fa").format(
+                        new Date(registerUser.createTime)
+                      ),
+                  }))}
                   linkAll="/reg/form/all?pageNum=1&pageSize=100000"
                   useIn="reg"
                 />

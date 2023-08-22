@@ -8,10 +8,10 @@ const style = {
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
   boxShadow: 24,
-  borderRadius: 4,
+  borderRadius: 3,
   border: "2px solid lightgray",
-  p: 4,
-  outline:0
+  p: 0.5,
+  outline: 0,
 };
 
 export default function ImageModal({ pic, open, handleClose }: any) {
@@ -26,9 +26,14 @@ export default function ImageModal({ pic, open, handleClose }: any) {
         <Box sx={style}>
           <Box
             component={"img"}
-            alt="payment image"
             src={pic}
-            sx={{ width: 600, height: "100%", borderRadius: 2 }}
+            sx={{
+              width: 800,
+              height: "100%",
+              borderRadius: 2,
+              margin: "auto",
+              display: "block",
+            }}
           />
         </Box>
       </Modal>
