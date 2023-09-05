@@ -169,12 +169,12 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                       secondary={student?.currentInstName}
                     />
                   </ListItem>
-                  <ListItem>
+                  {/* <ListItem>
                     <ListItemText
                       primary="رشته تحصیلی فعلی"
                       secondary={student?.currentField}
                     />
-                  </ListItem>
+                  </ListItem> */}
                 </>
               )}
               <ListItem
@@ -270,7 +270,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                         ? student?.noneJobActivation.map((item, index) =>
                             !item.includes("همه موارد") ? (
                               <Typography
-                                sx={{ display: "inline-block" }}
+                                sx={{ display: "block" }}
                                 component="span"
                                 variant="subtitle2"
                                 key={index}
@@ -673,12 +673,12 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="انگیزه اصلی از شرکت در دوره"
-                  secondary={student?.motivationByAdmin ?? "-"}
+                  secondary={student?.motivation?? "-"}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="آمادگی به کار بعد از اتمام دوره"
+                  primary="آمادگی اشتغال به محض اتمام دوره کاریار"
                   secondary={student?.jobStandby ? "بله" : "خیر"}
                 />
               </ListItem>

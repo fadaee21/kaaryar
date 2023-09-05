@@ -39,9 +39,9 @@ const LastOpinionDash = () => {
           <Typography variant="body2">
             {item.commenter?.firstName} {item.commenter?.family} برای{" "}
             {item.student.firstName} {item.student.family}
-            {item.createTime &&
+            {item.createdAt &&
               ` در ${new Intl.DateTimeFormat("fa-iran", { dateStyle: "full" })
-                .format(new Date(item.createTime))
+                .format(new Date(item.createdAt))
                 .replace(",", "")
                 .split(" ")
                 .reverse()

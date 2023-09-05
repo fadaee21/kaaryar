@@ -4,8 +4,8 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Container } from "@mui/material";
-import Email from "./email/Email";
-import Sms from "./sms/Sms";
+import EmailTable from "./email/EmailTable";
+import SMSTable from "./sms/SMSTable";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,10 +41,10 @@ export default function Notify() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <Email />
+            <EmailTable />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Sms />
+            <SMSTable />
           </TabPanel>
         </Container>
       </Box>

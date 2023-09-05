@@ -9,7 +9,6 @@ import Cookies from "js-cookie";
 const loginURL = "/oauth2/token";
 export const useSubmitLogin = (username: string, password: string) => {
   const { setAuth } = useAuth();
-  // const cookies = new Cookies();
   const [errMsg, setErrMsg] = useState("");
   let bodyContent = `username=${username}&password=${password}`;
 

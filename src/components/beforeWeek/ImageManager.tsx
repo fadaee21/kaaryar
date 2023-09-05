@@ -2,6 +2,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import useGetImage from "../../hooks/request/useGetImage";
 import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DownloadIcon from "@mui/icons-material/Download";
 import { toast } from "react-toastify";
 import ImageModal from "../ImageModal";
 import { saveAs } from "file-saver";
@@ -38,7 +39,7 @@ const ImageManager = ({
   useEffect(() => {
     // if (!propImage) return;
     getPicture(propImage || "");
-    setDataImageState(propImage);//it looks redundant but it's necessary
+    setDataImageState(propImage); //it looks redundant but it's necessary
   }, [getPicture, propImage]);
 
   const pickImage = async (e: React.ChangeEvent<any>) => {
@@ -120,6 +121,7 @@ const ImageManager = ({
               حذف این عکس
             </Button>
             <Button
+              endIcon={<DownloadIcon />}
               variant="outlined"
               sx={{ px: 4, mb: 1, height: "fit-content" }}
               onClick={() =>
@@ -131,7 +133,7 @@ const ImageManager = ({
                 )
               }
             >
-              ذخیره
+              دانلود
             </Button>
           </Stack>
         </>

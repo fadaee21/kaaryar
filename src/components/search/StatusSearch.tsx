@@ -1,4 +1,5 @@
 // import { ApprovalStatus } from "../../model";
+import { memo } from "react";
 import Select from "react-select";
 // import { statusOptions } from "./searchOptions";
 interface Prop {
@@ -31,4 +32,4 @@ const StatusSearch = ({
   );
 };
 
-export default StatusSearch;
+export default memo(StatusSearch);

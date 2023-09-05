@@ -29,6 +29,10 @@ import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import { afterTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 import useSWR from "swr";
+import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { persianDate } from "../../utils/persianDate";
 
 const AfterWeekTable = () => {
   const [page, setPage] = useState(1);
@@ -41,15 +45,16 @@ const AfterWeekTable = () => {
   const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
-  const { getApproveMulti, loadingMulti } = useApproveMulti();
 
   const {
     data,
     isLoading: loading,
     error,
+    mutate,
   } = useSWR(allStudentAfterWeek, {
     onSuccess: () => window.scrollTo(0, 0),
   });
+  const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
@@ -64,7 +69,10 @@ const AfterWeekTable = () => {
   }
 
   if (error) {
-    console.log(error);
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
@@ -202,6 +210,7 @@ const AfterWeekTable = () => {
                       finalField,
                       scholar,
                       finalResult,
+                      decidedAt,
                       beforeWeekForm: {
                         registrationForm: {
                           province,
@@ -240,9 +249,14 @@ const AfterWeekTable = () => {
                         // gender={gender}
                         checked={afterWeekChecked}
                         handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={false}
-                        index={itemCounterTable(page, pageSize, i)}
+                        checkBoxDisplay={!!searchingStudentAfter}
+                        index={
+                          searchingStudentAfter
+                            ? i + 1
+                            : itemCounterTable(page, pageSize, i)
+                        }
                         course={course}
+                        decidedAt={persianDate(decidedAt)}
                       />
                     );
                   }

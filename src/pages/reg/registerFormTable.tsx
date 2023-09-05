@@ -30,6 +30,9 @@ import useSWR from "swr";
 
 import { registerTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { Navigate } from "react-router-dom";
 
 const pageSize = 20;
 const RegisterFormTable = () => {
@@ -41,14 +44,15 @@ const RegisterFormTable = () => {
   const allStudentReg = `/reg/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
-  const { getApproveMulti, loadingMulti } = useApproveMulti();
   const {
     data,
     isLoading: loading,
     error,
+    mutate,
   } = useSWR(allStudentReg, {
     onSuccess: () => window.scrollTo(0, 0),
   });
+  const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
@@ -62,7 +66,10 @@ const RegisterFormTable = () => {
     return <LoadingProgress />;
   }
   if (error) {
-    console.log(error);
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
   return (
     <Box sx={{ m: 2 }}>
@@ -128,14 +135,15 @@ const RegisterFormTable = () => {
                       registerUser.firstName + " " + registerUser.family,
                     گروه: registerUser.course,
                     "میزان تحصیلات": registerUser.education,
+                    شهر: registerUser.city,
                     "سال دبیرستان": registerUser.highSchoolYear,
                     استان: registerUser.province,
                     "نحوه آشنایی با کاریار": registerUser.familiarity,
                     "نام معرف یا موسسه": registerUser.refer,
                     "تاریخ ارسال فرم":
-                      registerUser.createTime &&
+                      registerUser.createdAt &&
                       new Intl.DateTimeFormat("fa").format(
-                        new Date(registerUser.createTime)
+                        new Date(registerUser.createdAt)
                       ),
                   }))}
                   linkAll="/reg/form/all?pageNum=1&pageSize=100000"
@@ -168,61 +176,34 @@ const RegisterFormTable = () => {
                 <TableHeader headerItems={registerTableHeader} />
               )}
 
-              {/*//! while searching show the search content */}
-              {!searchingStudentRegister && (
-                <TableBody>
-                  {data?.map((RegisterUser: RegistrationForm, i: number) => {
+              <TableBody>
+                {(searchingStudentRegister ?? data)?.map(
+                  (RegisterUser: RegistrationForm, i: number) => {
                     return (
                       <RegTableBodyAll
                         key={RegisterUser.id}
                         id={RegisterUser.id}
                         family={RegisterUser.family}
                         firstName={RegisterUser.firstName}
-                        registrationCode={RegisterUser.registrationCode}
+                        // registrationCode={RegisterUser.registrationCode}
                         directNav="register-form"
                         checked={RegisterUser.checked}
                         handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={false}
+                        checkBoxDisplay={!!searchingStudentRegister} //if you have any searching student show checkbox in table
                         education={RegisterUser.education}
                         refer={RegisterUser.refer}
                         highSchoolYear={RegisterUser.highSchoolYear}
                         familiarity={RegisterUser.familiarity}
                         province={RegisterUser.province}
-                        createTime={RegisterUser.createTime}
+                        city={RegisterUser.city}
+                        createdAt={RegisterUser.createdAt}
                         course={RegisterUser.course}
-                        index={itemCounterTable(page, pageSize, i)}
-                      />
-                    );
-                  })}
-                </TableBody>
-              )}
-              {/* show content if searching in the box */}
-              <TableBody>
-                {searchingStudentRegister?.map(
-                  (searchingStudentRegister: RegistrationForm, i: number) => {
-                    return (
-                      <RegTableBodyAll
-                        key={searchingStudentRegister?.id}
-                        id={searchingStudentRegister?.id}
-                        family={searchingStudentRegister?.family}
-                        firstName={searchingStudentRegister?.firstName}
-                        registrationCode={
-                          searchingStudentRegister?.registrationCode
+                        index={
+                          searchingStudentRegister
+                            ? i + 1
+                            : itemCounterTable(page, pageSize, i)
                         }
-                        directNav="register-form"
-                        checked={searchingStudentRegister?.checked}
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={true}
-                        refer={searchingStudentRegister?.refer}
-                        highSchoolYear={
-                          searchingStudentRegister?.highSchoolYear
-                        }
-                        familiarity={searchingStudentRegister?.familiarity}
-                        province={searchingStudentRegister?.province}
-                        createTime={searchingStudentRegister?.createTime}
-                        course={searchingStudentRegister?.course}
-                        education={searchingStudentRegister?.education}
-                        index={i + 1}
+                        decidedAt={RegisterUser.decidedAt}
                       />
                     );
                   }

@@ -1,5 +1,6 @@
 import Select from "react-select";
 import { DetailStudentStatus } from "../../model";
+import { memo } from "react";
 
 interface SearchType {
   setState: React.Dispatch<React.SetStateAction<DetailStudentStatus | null>>;
@@ -14,25 +15,33 @@ const SearchSelect2 = ({
   options,
   placeholder,
 }: SearchType) => {
+  const getOptionLabel = (option: { value: string }) => option.value;
+  const getOptionValue = (option: { id: { toString: () => string } }) =>
+    option.id.toString();
+  const handleChange = (selectedOption: DetailStudentStatus | null) =>
+    setState(selectedOption);
+  const customStyles = {
+    control: (baseStyles: any) => ({
+      ...baseStyles,
+      height: "3rem",
+    }),
+    menu: (provided: any) => ({ ...provided, zIndex: 2 }),
+  };
+  const selectId = `select-${placeholder.substring(0, 2)}`;
+
   return (
     <Select
       value={state}
       maxMenuHeight={150}
-      id={`select-${placeholder.substring(0, 2)}`}
-      getOptionLabel={(e) => e.value}
-      getOptionValue={(e) => e.id.toString()}
+      id={selectId}
+      getOptionLabel={getOptionLabel}
+      getOptionValue={getOptionValue}
       options={options}
       placeholder={placeholder}
-      onChange={(e) => setState(e)}
-      styles={{
-        control: (baseStyles) => ({
-          ...baseStyles,
-          height: "3rem",
-        }),
-        menu: (provided) => ({ ...provided, zIndex: 2 }),
-      }}
+      onChange={handleChange}
+      styles={customStyles}
     />
   );
 };
 
-export default SearchSelect2;
+export default memo(SearchSelect2);

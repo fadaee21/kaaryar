@@ -62,7 +62,7 @@ export interface StudentComment {
 // export interface Comment {
 //   isChecked: boolean;
 //   comment: string;
-//   createTime: string;
+//   createdAt: string;
 //   id: number;
 //   sessionDate: string;
 //   sessionProblem: string;
@@ -88,7 +88,7 @@ export interface Comment {
   commenterId: number;
   isDeleted: boolean;
   id: number;
-  createTime: string;
+  createdAt: string;
   updateTime: string | null;
   deleteTime: string | null;
   commenterRole: string;
@@ -174,7 +174,7 @@ export interface LocalStorage {
 export interface RegistrationForm {
   id: number;
   checked: boolean | null;
-  registrationCode: string;
+  registrationCode?: string;
   codeMeli?: string;
   firstName: string;
   family: string;
@@ -193,9 +193,10 @@ export interface RegistrationForm {
   highSchoolYear?: string;
   uniSemester?: string;
   refer?: string;
-  createTime?: string;
+  createdAt?: string;
   highSchoolYear?: string;
   course?: string;
+  decidedAt?: string | null;
 }
 
 export interface BeforeWeekType {
@@ -261,6 +262,7 @@ export interface BeforeWeekType {
   freeDailyTime: string;
   internetAccessTiming: string;
   motivationByAdmin: string | null;
+  decidedAt?: string;
 }
 
 interface AfterWeekType {
@@ -296,13 +298,14 @@ interface AfterWeekType {
   firstSelectJobRoad: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
   beforeWeekForm: BeforeWeekType;
+  decidedAt?: string;
 }
 
 export interface TableBodyAllType extends RegistrationForm {
   handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: number) => void;
   resultStatus?: string;
   checkBoxDisplay?: boolean;
-  idMulti?: number;
+  // idMulti?: number;
   // roles: string;
   directNav: string;
   motivation?: string;
@@ -350,7 +353,7 @@ export interface Profile {
   custom: string | null;
   aboutMe: string;
   id: number;
-  createTime: string | null;
+  createdAt: string | null;
   updateTime: string | null;
   deleteTime: string | null;
   deleted: boolean;

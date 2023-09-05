@@ -5,17 +5,27 @@ import {
   Table,
   TableBody,
   TableContainer,
-  Typography,
+  // Typography,
 } from "@mui/material";
 import useSWR from "swr";
 import TableHeader from "../../../components/table/TableHeader";
 import TableBodyNotify from "../../../components/notify/TableBodyNotify";
-import { notifyHeader } from "../../../components/table/helper-header";
+import { smsHeader } from "../../../components/table/helper-header";
 import { Notify } from "../../../model";
-const EMAIL_URL = "communications/emails/all";
-const Email = () => {
-  const { data: emails, isLoading, error } = useSWR<Notify[]>(EMAIL_URL);
-
+import LoadingProgress from "../../../components/LoadingProgress";
+import { Navigate } from "react-router-dom";
+import { handleError } from "../../../utils/handleError";
+import { toast } from "react-toastify";
+const SMS_URL = "communications/sms/all";
+const SMSTable = () => {
+  const { data: sms, isLoading, error } = useSWR<Notify[]>(SMS_URL);
+  if (isLoading) return <LoadingProgress/>;
+  if (error) {
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
+  }
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -24,7 +34,7 @@ const Email = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            {/* <Typography variant="h4"> فهرست ایمیل‌ها</Typography> */}
+            {/* <Typography variant="h4"> فهرست پیامک‌ها</Typography> */}
             {/* <Button
             variant="outlined"
             sx={{ px: 4 }}
@@ -36,10 +46,10 @@ const Email = () => {
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={notifyHeader} />
+              <TableHeader headerItems={smsHeader} />
               <TableBody>
-                {emails?.map((emails) => (
-                  <TableBodyNotify key={emails.templateId} notifyData={emails} />
+                {sms?.map((i) => (
+                  <TableBodyNotify key={i.templateId} notifyData={i} typeComp="sms"/>
                 ))}
               </TableBody>
             </Table>
@@ -53,4 +63,4 @@ const Email = () => {
   );
 };
 
-export default Email;
+export default SMSTable;

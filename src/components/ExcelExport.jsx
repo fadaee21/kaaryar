@@ -40,8 +40,8 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
             "نحوه آشنایی با کاریار": reg.familiarity,
             "نام معرف یا موسسه": reg.refer,
             "تاریخ ارسال فرم":
-              reg.createTime &&
-              new Intl.DateTimeFormat("fa").format(new Date(reg.createTime)),
+              reg.createdAt &&
+              new Intl.DateTimeFormat("fa").format(new Date(reg.createdAt)),
           }));
 
           exportToCSV(regObj, fileName);

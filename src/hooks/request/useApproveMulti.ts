@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { editAxios } from "../../api/axios";
+import { KeyedMutator } from "swr";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
-const useApproveMulti = () => {
+const useApproveMulti = (mutate: KeyedMutator<any>) => {
   const [loadingMulti, setLoadingMulti] = useState(false);
 
   const getApproveMulti = async (
@@ -19,13 +22,17 @@ const useApproveMulti = () => {
       });
       console.log(response.data.state, approveLink);
       if (response.status === 200) {
+        mutate();
+        toast.success("درخواست با موفقیت انجام شد");
+        console.log(response.data);
+      } else {
+        toast.error("درخواست ناموفق بود");
         console.log(response.data);
       }
-      console.log(response.data);
     } catch (error) {
+      toast.error(handleError(error as any));
       console.log(error);
     }
-
     setLoadingMulti(false);
   };
 

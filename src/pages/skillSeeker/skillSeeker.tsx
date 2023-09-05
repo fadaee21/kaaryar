@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 // import SearchAll from "../../components/search/SearchAll";
@@ -36,7 +36,6 @@ const SkillSeeker = () => {
   const [page, setPage] = useState(1);
   // const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
-  const navigate = useNavigate();
   const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const [, counterPage] = useCountPagination(examFormCount);
 
@@ -50,7 +49,9 @@ const SkillSeeker = () => {
 
   if (error) {
     toast.error(handleError(error));
-    navigate("/");
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
@@ -176,53 +177,12 @@ const SkillSeeker = () => {
                         finalResult={AfterWeekForm?.finalResult}
                         finalField={AfterWeekForm?.finalField}
                         course={regForm?.course}
+                        
                       />
                     );
                   })}
                 </TableBody>
               )}
-
-              {/* <TableBody>
-                {searchingStudentSeeker?.map(
-                  (searchingStudentSeeker: SeekerStudent, i: number) => {
-                    const {
-                      id,
-                      regForm,
-                      afterWeekChecked,
-                      beforeWeekChecked,
-                      regChecked,
-                      AfterWeekForm,
-                    } = searchingStudentSeeker;
-                    return (
-                      <TableBodyAll
-                        key={id}
-                        id={id}
-                        birthDate={regForm?.birthDate}
-                        family={regForm?.family}
-                        firstName={regForm?.firstName}
-                        registrationCode={regForm?.registrationCode}
-                        mobile={regForm?.mobile}
-                        email={regForm?.email}
-                        gender={regForm?.gender}
-                        province={regForm?.province}
-                        city={regForm?.city}
-                        studyField={regForm?.studyField}
-                        selectedField={regForm?.selectedField}
-                        checked={searchingStudentSeeker.afterWeekChecked}
-                        directNav="skill-seeker"
-                        resultStatus={seekerStateFinder(
-                          afterWeekChecked,
-                          beforeWeekChecked,
-                          regChecked
-                        )}
-                        index={i + 1}
-                        finalResult={AfterWeekForm?.finalResult}
-                        finalField={AfterWeekForm?.finalField}
-                      />
-                    );
-                  }
-                )}
-              </TableBody> */}
             </Table>
           </TableContainer>
         </Container>

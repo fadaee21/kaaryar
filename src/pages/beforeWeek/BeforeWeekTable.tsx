@@ -29,6 +29,10 @@ import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import { beforeTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 import useSWR from "swr";
+import { persianDate } from "../../utils/persianDate";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { Navigate } from "react-router-dom";
 const pageSize = 20;
 const BeforeWeekTable = () => {
   const [page, setPage] = useState(1);
@@ -41,18 +45,20 @@ const BeforeWeekTable = () => {
   const examFormCount = "/exam/before/week/form/count";
 
   const [, counterPage] = useCountPagination(examFormCount);
-  const { getApproveMulti, loadingMulti } = useApproveMulti();
 
   const {
     data,
     isLoading: loading,
     error,
+    mutate,
   } = useSWR(studentBeforeWeek, {
     onSuccess: () => window.scrollTo(0, 0),
   });
+  const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
+  console.log(ids);
   useEffect(() => {
     setSearchingStudentBefore(null);
     setIds([]);
@@ -64,7 +70,10 @@ const BeforeWeekTable = () => {
   }
 
   if (error) {
-    console.log(error);
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
@@ -142,6 +151,7 @@ const BeforeWeekTable = () => {
                         mobile,
                         email,
                         course,
+                        createdAt,
                       },
                       acceptWeekChecked,
                     } = before;
@@ -163,6 +173,7 @@ const BeforeWeekTable = () => {
                       "نمره آزمون": contCourseApproach,
                       "آمادگی کار": jobStandby ? "بله" : "خیر",
                       "انگیزه ورود": motivation,
+                      "تاریخ ارسال فرم": persianDate(createdAt),
                     };
                   })}
                 />
@@ -201,16 +212,18 @@ const BeforeWeekTable = () => {
                       id,
                       motivation,
                       jobStandby,
+                      decidedAt,
                       registrationForm: {
                         province,
                         city,
                         family,
                         firstName,
-                        registrationCode,
+                        // registrationCode,
                         mobile,
                         email,
                         studyField,
                         course,
+                        createdAt,
                       },
                       acceptWeekChecked,
                       contCourseApproach,
@@ -227,16 +240,22 @@ const BeforeWeekTable = () => {
                         jobStandby={jobStandby}
                         family={family}
                         firstName={firstName}
-                        registrationCode={registrationCode}
+                        // registrationCode={registrationCode}
                         mobile={mobile}
                         email={email}
                         directNav="before-week"
                         contCourseApproach={contCourseApproach}
                         checked={acceptWeekChecked}
                         handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={false}
-                        index={itemCounterTable(page, pageSize, i)}
+                        checkBoxDisplay={!!searchingStudentBefore}
+                        index={
+                          searchingStudentBefore
+                            ? i + 1
+                            : itemCounterTable(page, pageSize, i)
+                        }
                         course={course}
+                        createdAt={persianDate(createdAt)}
+                        decidedAt={persianDate(decidedAt)}
                       />
                     );
                   }

@@ -1,8 +1,8 @@
 import { Button, Grid } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { getData } from "../../api/axios";
-import { SearchFirstName } from "./SearchFirstName";
-import { SearchFamily } from "./SearchFamily";
+import SearchFirstName from "./SearchFirstName";
+import SearchFamily from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
 import SearchSelect, { EditBooleanSearch } from "./SearchSelect";
 import SearchString from "./SearchString";
@@ -31,6 +31,9 @@ import SearchSelect2 from "./SearchSelect2";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { motivationOpt } from "../beforeWeek/helper";
+// import DateRangeSelector from "./DateRangeSelector";
+import { JalaliDatePicker } from "../comment/JalaliDatePicker";
+import { Dayjs } from "dayjs";
 // import { ApprovalStatus } from "../../model";
 // import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
@@ -109,7 +112,10 @@ const SearchAll: ({
     useState<DetailStudentStatus | null>(null);
   const [module, setModule] = useState<ModuleAll | null>(null);
   const [group, setGroup] = useState<Group | null>(null);
-
+  const [createdAtFrom, setCreatedAtFrom] = useState<Date | Dayjs | null>(null);
+  const [createdAtTo, setCreatedAtTo] = useState<Date | Dayjs | null>(null);
+  const [decidedAtFrom, setDecidedAtFrom] = useState<Date | Dayjs | null>(null);
+  const [decidedAtTo, setDecidedAtTo] = useState<Date | Dayjs | null>(null);
   const fetchMoodlePage = useMemo(
     () => searchPage === "moodle" && chevronDir,
     [searchPage, chevronDir]
@@ -159,6 +165,10 @@ const SearchAll: ({
   //disable search and clear buttons
   useEffect(() => {
     const buttonStatus = ![
+      createdAtTo,
+      createdAtFrom,
+      decidedAtTo,
+      decidedAtFrom,
       outputFirstName,
       outputFamily,
       referState,
@@ -212,32 +222,29 @@ const SearchAll: ({
     referState,
     registerCodeState,
     scholar,
+    createdAtTo,
+    createdAtFrom,
+    decidedAtTo,
+    decidedAtFrom,
   ]);
 
   const fetchData = async (obj: any) => {
     setLoading(true);
-
     try {
       const response = await getData(searchLink, {
         params: obj,
       });
 
       if (response.status === 200) {
-        switch (searchPage) {
-          case "moodle":
-            setSearchingMoodleStudent(response.data);
-            break;
-          case "beforeWeek":
-            setSearchingStudentBefore(response.data);
-            break;
-          case "afterWeek":
-            setSearchingStudentAfter(response.data);
-            break;
-          case "reg":
-            setSearchingStudentRegister(response.data);
-            break;
-          default:
-            break;
+        const searchPageActions = {
+          moodle: setSearchingMoodleStudent,
+          beforeWeek: setSearchingStudentBefore,
+          afterWeek: setSearchingStudentAfter,
+          reg: setSearchingStudentRegister,
+        };
+        const action = searchPageActions[searchPage];
+        if (action) {
+          action(response.data);
         }
       } else {
         console.log(response);
@@ -252,6 +259,10 @@ const SearchAll: ({
 
   const handleSearch = () => {
     fetchData({
+      createdAtTo: createdAtTo?.toISOString(),
+      createdAtFrom: createdAtFrom?.toISOString(),
+      decidedAtTo: decidedAtTo?.toISOString(),
+      decidedAtFrom: decidedAtFrom?.toISOString(),
       motivation,
       firstName: outputFirstName?.trim(),
       family: outputFamily?.trim(),
@@ -283,6 +294,10 @@ const SearchAll: ({
   };
 
   const clearSearch = () => {
+    setCreatedAtFrom(null);
+    setCreatedAtTo(null);
+    setDecidedAtFrom(null);
+    setDecidedAtTo(null);
     setMotivation(null);
     setOutputFirstName(null);
     setOutputFamily(null);
@@ -556,6 +571,39 @@ const SearchAll: ({
           </Grid>
         )}
       </>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setCreatedAtFrom}
+          sessionDate={createdAtFrom}
+          label="از تاریخ - ایجاد"
+          usageType="searching"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setCreatedAtTo}
+          sessionDate={createdAtTo}
+          label="تا تاریخ - ایجاد"
+          usageType="searching"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setDecidedAtFrom}
+          sessionDate={decidedAtFrom}
+          label="از تاریخ - تأیید/رد"
+          usageType="searching"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setDecidedAtTo}
+          sessionDate={decidedAtTo}
+          label="تا تاریخ - تأیید/رد"
+          usageType="searching"
+        />
+      </Grid>
+      {/* //buttons */}
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
           sx={{ width: "100%" }}
@@ -581,4 +629,4 @@ const SearchAll: ({
   );
 };
 
-export default SearchAll;
+export default memo(SearchAll);

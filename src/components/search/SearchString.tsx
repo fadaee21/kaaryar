@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { SearchField } from "../../styles/search/searchField";
 interface SearchType {
   setState: React.Dispatch<React.SetStateAction<string | null>>;
@@ -18,4 +19,4 @@ const SearchString = ({ setState, state, label }: SearchType) => {
   );
 };
 
-export default SearchString;
+export default memo(SearchString);

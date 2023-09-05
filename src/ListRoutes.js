@@ -41,6 +41,8 @@ import StudentTableAdmin from "./pages/student/StudentTableAdmin";
 import StudentGeneralEdit from "./pages/student/StudentGeneralEdit";
 import StudentCoreEdit from "./pages/student/StudentCoreEdit";
 import Notify from "./pages/notify/Notify";
+import EditEmail from "./pages/notify/email/EditEmail";
+import EditSMS from "./pages/notify/sms/EditSMS";
 
 const ListRoutes = [
   //! ta________________________________
@@ -585,6 +587,24 @@ const ListRoutes = [
     showInNav: true,
     role: "admin",
     key: "admin26",
+  },
+  {
+    path: "admin/notify/email/:notifyId",
+    name: "ایمیل ها و پیامک ها",
+    // icon:<></>,
+    component: EditEmail,
+    showInNav: false,
+    role: "admin",
+    key: "admin26-a",
+  },
+  {
+    path: "admin/notify/sms/:notifyId",
+    name: "ایمیل ها و پیامک ها",
+    // icon:<></>,
+    component: EditSMS,
+    showInNav: false,
+    role: "admin",
+    key: "admin26-b",
   },
 
   {

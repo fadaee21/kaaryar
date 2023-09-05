@@ -2,22 +2,22 @@ export const registerTableHeader = [
   "",
   "",
   "وضعیت",
-  "کد متقاضی",
   "نام و نام خانوادگی",
   "گروه",
   "میزان تحصیلات",
   "سال دبیرستان",
   "استان",
+  "شهر",
   "نحوه آشنایی با کاریار",
   "نام معرف یا موسسه",
   "تاریخ ارسال فرم",
+  "تاریخ تأیید/رد ",
 ];
 
 export const beforeTableHeader = [
   "",
   "",
   "وضعیت",
-  "کد متقاضی",
   "نام و نام خانوادگی",
   "گروه",
   "استان",
@@ -27,13 +27,14 @@ export const beforeTableHeader = [
   "نمره آزمون",
   "آمادگی کار",
   "انگیزه ورود",
+  "تاریخ ارسال فرم",
+  "تاریخ تأیید/رد ",
 ];
 
 export const afterTableHeader = [
   "",
   "",
   "وضعیت",
-  "کد متقاضی",
   "نام و نام خانوادگی",
   "گروه",
   "استان",
@@ -43,12 +44,12 @@ export const afterTableHeader = [
   "نتیجه نهایی",
   "بورسیه",
   "رشته نهایی",
+  "تاریخ تأیید/رد ",
 ];
 export const afterTableSkillSeeker = [
   "",
   "",
   "وضعیت",
-  "کد متقاضی",
   "نام و نام خانوادگی",
   "گروه",
   "استان",
@@ -207,13 +208,20 @@ export const interpersonalStudent = [
   "ویرایش",
 ];
 
-export const notifyHeader = [
-  "type",
-  "name",
-  "subject",
-  "body",
-  "isActive",
-  "templateId",
-  "createdAt",
-  "updatedAt",
+export const emailHeader = [
+  "مرحله ارسال",
+  "عنوان ایمیل",
+  // "body",
+  "وضعیت",
+  // "templateId",
+  "تاریخ ایجاد",
+  "تاریخ ویرایش",
+];
+export const smsHeader = [
+  "مرحله ارسال",
+  // "body",
+  "وضعیت",
+  // "templateId",
+  "تاریخ ایجاد",
+  "تاریخ ویرایش",
 ];
