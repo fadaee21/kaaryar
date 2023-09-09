@@ -627,8 +627,8 @@ export interface ShortCoreModule {
   isActive: boolean;
   teachingStatus: string;
   levelName: any;
-  startDate: string;
-  endDate: string;
+  startDate: Date | dayjs.Dayjs | null;
+  endDate: Date | dayjs.Dayjs | null;
   weblinkFeedbackForm: string;
   weblinkFinalProject: string;
   weblinkLmsCourse: string;

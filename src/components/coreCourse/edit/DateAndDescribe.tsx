@@ -26,8 +26,12 @@ const DateAndDescribe = ({
   numberOfHours,
   subType,
 }: Props) => {
-  const [startDateState, setStartDateState] = useState<any>(startDate);
-  const [endDateState, setEndDateState] = useState<any>(endDate);
+  const [startDateState, setStartDateState] = useState<any>(
+    startDate ? new Date(startDate) : null
+  );
+  const [endDateState, setEndDateState] = useState<any>(
+    endDate ? new Date(endDate) : null
+  );
   const [descriptionState, setDescriptionState] = useState(
     description || undefined
   );

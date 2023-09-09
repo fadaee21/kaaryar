@@ -137,8 +137,6 @@ const WatchComment = () => {
             <PaperW sx={{ minHeight: "8rem" }}>
               <Typography variant="body2">تاریخ جلسه</Typography>
               <Typography variant="body1">
-                {/* in post Date of comment i must change type toISOstring,when fetch Date,it response with one day false! zero utc help to improve this fault */}
-                {/* {dateConverter(zeroUTCOffset(new Date(sessionDate)))} */}
                 {sessionDate
                   ? new Intl.DateTimeFormat("fa", { dateStyle: "full" })
                       .format(new Date(sessionDate))

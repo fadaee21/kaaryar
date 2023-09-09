@@ -18,8 +18,8 @@ export const JalaliDatePicker = memo(
       date instanceof Date && !isNaN(date.getTime());
     const handleDateChange = (date: any) => {
       if (isValidDate(date)) {
-        const iranDate = dayjs(date).startOf("day").add(10, "hours").toDate();
-        setSessionDate?.(iranDate);
+        const endOfDate = dayjs(date).endOf("day").toDate();
+        setSessionDate?.(endOfDate);
       } else {
         setSessionDate?.(null);
       }

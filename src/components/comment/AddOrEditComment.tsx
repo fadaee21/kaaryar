@@ -55,7 +55,7 @@ const AddOrEditComment = ({
     useAddComment(
       course,
       comment,
-      sessionDate?.toISOString(),
+      sessionDate,
       sessionProblem,
       studentTask,
       studentContribute,

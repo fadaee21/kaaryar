@@ -33,7 +33,7 @@ import { handleError } from "../../utils/handleError";
 import { motivationOpt } from "../beforeWeek/helper";
 // import DateRangeSelector from "./DateRangeSelector";
 import { JalaliDatePicker } from "../comment/JalaliDatePicker";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 // import { ApprovalStatus } from "../../model";
 // import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
@@ -256,13 +256,14 @@ const SearchAll: ({
       setLoading(false);
     }
   };
-
   const handleSearch = () => {
     fetchData({
       createdAtTo: createdAtTo?.toISOString(),
-      createdAtFrom: createdAtFrom?.toISOString(),
+      createdAtFrom:
+        createdAtFrom && dayjs(createdAtFrom).startOf("day").toISOString(),
       decidedAtTo: decidedAtTo?.toISOString(),
-      decidedAtFrom: decidedAtFrom?.toISOString(),
+      decidedAtFrom:
+        decidedAtFrom && dayjs(decidedAtFrom).startOf("day").toISOString(),
       motivation,
       firstName: outputFirstName?.trim(),
       family: outputFamily?.trim(),
@@ -575,7 +576,7 @@ const SearchAll: ({
         <JalaliDatePicker
           setSessionDate={setCreatedAtFrom}
           sessionDate={createdAtFrom}
-          label="از تاریخ - ایجاد"
+          label="از (تاریخ ارسال فرم)"
           usageType="searching"
         />
       </Grid>
@@ -583,7 +584,7 @@ const SearchAll: ({
         <JalaliDatePicker
           setSessionDate={setCreatedAtTo}
           sessionDate={createdAtTo}
-          label="تا تاریخ - ایجاد"
+          label="تا (تاریخ ارسال فرم)"
           usageType="searching"
         />
       </Grid>
@@ -591,7 +592,7 @@ const SearchAll: ({
         <JalaliDatePicker
           setSessionDate={setDecidedAtFrom}
           sessionDate={decidedAtFrom}
-          label="از تاریخ - تأیید/رد"
+          label="از (تاریخ تأیید/رد)"
           usageType="searching"
         />
       </Grid>
@@ -599,7 +600,7 @@ const SearchAll: ({
         <JalaliDatePicker
           setSessionDate={setDecidedAtTo}
           sessionDate={decidedAtTo}
-          label="تا تاریخ - تأیید/رد"
+          label="تا (تاریخ ارسال فرم)"
           usageType="searching"
         />
       </Grid>
@@ -630,3 +631,5 @@ const SearchAll: ({
 };
 
 export default memo(SearchAll);
+
+
