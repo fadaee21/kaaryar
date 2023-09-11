@@ -192,7 +192,7 @@ const Comments = () => {
                       align="center"
                       sx={{ width: "10%", verticalAlign: "center" }}
                     >
-                      {persianDate(createTime)}
+                      {persianDate(createdAt)}
                     </StyledTableCell> */}
                     <StyledTableCell
                       component="th"

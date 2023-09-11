@@ -163,7 +163,7 @@ const CoreModuleCourseCompEdit = ({ coreDetail }: Prop) => {
             >
               {data?.map((item) => (
                 <MenuItem key={item.id} value={`${item.id} + ${item.name}`}>
-                  {/*the reason of scheme of value: i need both name and id while MenuItem just let me send a single string or number */}
+                  {/*the reason of value structure: i need both name and id while MenuItem just let me send a single string or number */}
                   {item.name}
                 </MenuItem>
               ))}

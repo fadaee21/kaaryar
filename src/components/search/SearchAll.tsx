@@ -1,8 +1,8 @@
 import { Button, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { getData } from "../../api/axios";
-import { SearchFirstName } from "./SearchFirstName";
-import { SearchFamily } from "./SearchFamily";
+import SearchFirstName from "./SearchFirstName";
+import SearchFamily from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
 import SearchSelect, { EditBooleanSearch } from "./SearchSelect";
 import SearchString from "./SearchString";
@@ -31,6 +31,11 @@ import SearchSelect2 from "./SearchSelect2";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { motivationOpt } from "../beforeWeek/helper";
+// import DateRangeSelector from "./DateRangeSelector";
+import { JalaliDatePicker } from "../comment/JalaliDatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
+
 // import { ApprovalStatus } from "../../model";
 // import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
@@ -40,9 +45,17 @@ interface SearchAllType {
   setSearchingStudentAfter?: any;
   setSearchingStudentRegister?: any;
   setSearchingMoodleStudent?: any;
-  searchPage: string;
+  searchPage: "moodle" | "beforeWeek" | "afterWeek" | "reg";
   chevronDir: boolean;
 }
+
+const beforeWeekSearch =
+  "/exam/before/week/search/param?pageNum=1&pageSize=10000";
+const afterWeekSearch =
+  "/exam/after/week/search/param?pageNum=1&pageSize=10000";
+const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
+const moodleSearch =
+  "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
 
 const SearchAll: ({
   setSearchingStudentBefore,
@@ -101,45 +114,33 @@ const SearchAll: ({
     useState<DetailStudentStatus | null>(null);
   const [module, setModule] = useState<ModuleAll | null>(null);
   const [group, setGroup] = useState<Group | null>(null);
+  const [createdAtFrom, setCreatedAtFrom] = useState<Date | Dayjs | null>(null);
+  const [createdAtTo, setCreatedAtTo] = useState<Date | Dayjs | null>(null);
+  const [decidedAtFrom, setDecidedAtFrom] = useState<Date | Dayjs | null>(null);
+  const [decidedAtTo, setDecidedAtTo] = useState<Date | Dayjs | null>(null);
+  const fetchMoodlePage = useMemo(
+    () => searchPage === "moodle" && chevronDir,
+    [searchPage, chevronDir]
+  );
 
-  const { data: trainingStatusData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/training-status/values/all"
-      : null // get trainingData only for moodle search student
-  );
-  const { data: nextTrainingStepData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/next-training-step/values/all"
-      : null
-  );
-  const { data: referralToFinanceData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/referral-finance/values/all"
-      : null
-  );
-  const { data: KaaryarAssessmentData } = useSWR<DetailStudentStatus[]>(
-    searchPage === "moodle" && chevronDir
-      ? "/status/kaaryar-assessment/values/all"
-      : null
-  );
   const { data: ModuleData } = useSWR<ModuleAll[]>(
-    searchPage === "moodle" && chevronDir
+    fetchMoodlePage
       ? "/modules/short-details/all?orderAscending=true&orderBy=name"
       : null
   );
+  const {
+    trainingData,
+    nextStepData,
+    referralToFinanceData,
+    kaaryarAssessmentData,
+  } = useGetStatusStudent(fetchMoodlePage);
+
   const { data: groupData } = useSWR<Group[]>(
-    searchPage === "moodle" && chevronDir
+    chevronDir
       ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
       : null
   );
 
-  const beforeWeekSearch =
-    "/exam/before/week/search/param?pageNum=1&pageSize=10000";
-  const afterWeekSearch =
-    "/exam/after/week/search/param?pageNum=1&pageSize=10000";
-  const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
-  const moodleSearch =
-    "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
     if (searchPage === "moodle") {
@@ -160,6 +161,10 @@ const SearchAll: ({
   //disable search and clear buttons
   useEffect(() => {
     const buttonStatus = ![
+      createdAtTo,
+      createdAtFrom,
+      decidedAtTo,
+      decidedAtFrom,
       outputFirstName,
       outputFamily,
       referState,
@@ -213,6 +218,10 @@ const SearchAll: ({
     referState,
     registerCodeState,
     scholar,
+    createdAtTo,
+    createdAtFrom,
+    decidedAtTo,
+    decidedAtFrom,
   ]);
 
   const fetchData = async (obj: any) => {
@@ -221,12 +230,18 @@ const SearchAll: ({
       const response = await getData(searchLink, {
         params: obj,
       });
+
       if (response.status === 200) {
-        //for each search you need specific setState
-        searchPage === "moodle" && setSearchingMoodleStudent(response.data);
-        searchPage === "beforeWeek" && setSearchingStudentBefore(response.data);
-        searchPage === "afterWeek" && setSearchingStudentAfter(response.data);
-        searchPage === "reg" && setSearchingStudentRegister(response.data);
+        const searchPageActions = {
+          moodle: setSearchingMoodleStudent,
+          beforeWeek: setSearchingStudentBefore,
+          afterWeek: setSearchingStudentAfter,
+          reg: setSearchingStudentRegister,
+        };
+        const action = searchPageActions[searchPage];
+        if (action) {
+          action(response.data);
+        }
       } else {
         console.log(response);
       }
@@ -237,9 +252,14 @@ const SearchAll: ({
       setLoading(false);
     }
   };
-
   const handleSearch = () => {
     fetchData({
+      createdAtTo: createdAtTo?.toISOString(),
+      createdAtFrom:
+        createdAtFrom && dayjs(createdAtFrom).startOf("day").toISOString(),
+      decidedAtTo: decidedAtTo?.toISOString(),
+      decidedAtFrom:
+        decidedAtFrom && dayjs(decidedAtFrom).startOf("day").toISOString(),
       motivation,
       firstName: outputFirstName?.trim(),
       family: outputFamily?.trim(),
@@ -271,6 +291,10 @@ const SearchAll: ({
   };
 
   const clearSearch = () => {
+    setCreatedAtFrom(null);
+    setCreatedAtTo(null);
+    setDecidedAtFrom(null);
+    setDecidedAtTo(null);
     setMotivation(null);
     setOutputFirstName(null);
     setOutputFamily(null);
@@ -343,14 +367,16 @@ const SearchAll: ({
         </Grid>
       )}
       {searchPage === "reg" && (
-        <Grid item xs={3}>
-          <SearchSelect
-            state={eduLevel}
-            setState={setEduLevel}
-            options={eduLevelOptions}
-            placeholder="میزان تحصیلات"
-          />
-        </Grid>
+        <>
+          <Grid item xs={3}>
+            <SearchSelect
+              state={eduLevel}
+              setState={setEduLevel}
+              options={eduLevelOptions}
+              placeholder="میزان تحصیلات"
+            />
+          </Grid>
+        </>
       )}
       {searchPage === "reg" && (
         <Grid item xs={3}>
@@ -418,6 +444,38 @@ const SearchAll: ({
               />
             </Grid>
           )} */}
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtFrom}
+              sessionDate={createdAtFrom}
+              label="از (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtTo}
+              sessionDate={createdAtTo}
+              label="تا (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setDecidedAtFrom}
+              sessionDate={decidedAtFrom}
+              label="از (تاریخ تأیید/رد)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setDecidedAtTo}
+              sessionDate={decidedAtTo}
+              label="تا (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
         </>
       )}
       {searchPage === "beforeWeek" && (
@@ -478,22 +536,22 @@ const SearchAll: ({
 
       {searchPage === "moodle" && (
         <>
-          {trainingStatusData && (
+          {trainingData && (
             <Grid item xs={3}>
               <SearchSelect2
                 state={trainingStatus}
                 setState={setTrainingStatus}
-                options={trainingStatusData}
+                options={trainingData}
                 placeholder="وضعیت آموزش"
               />
             </Grid>
           )}
-          {nextTrainingStepData && (
+          {nextStepData && (
             <Grid item xs={3}>
               <SearchSelect2
                 state={nextTrainingStep}
                 setState={setNextTrainingStep}
-                options={nextTrainingStepData}
+                options={nextStepData}
                 placeholder="قدم آتی آموزش"
               />
             </Grid>
@@ -508,12 +566,12 @@ const SearchAll: ({
               />
             </Grid>
           )}
-          {KaaryarAssessmentData && (
+          {kaaryarAssessmentData && (
             <Grid item xs={3}>
               <SearchSelect2
                 state={kaaryarAssessment}
                 setState={setKaaryarAssessment}
-                options={KaaryarAssessmentData}
+                options={kaaryarAssessmentData}
                 placeholder="ارزیابی کاریار"
               />
             </Grid>
@@ -528,19 +586,22 @@ const SearchAll: ({
               />
             </Grid>
           )}
-          {groupData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={group as any}
-                setState={setGroup as any}
-                options={groupData.map((i) => ({ id: i.id, value: i.name }))}
-                placeholder="نام گروه"
-              />
-            </Grid>
-          )}
         </>
       )}
+      <>
+        {groupData && (
+          <Grid item xs={3}>
+            <SearchSelect2
+              state={group as any}
+              setState={setGroup as any}
+              options={groupData.map((i) => ({ id: i.id, value: i.name }))}
+              placeholder="نام گروه"
+            />
+          </Grid>
+        )}
+      </>
 
+      {/* //buttons */}
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
           sx={{ width: "100%" }}
@@ -566,4 +627,4 @@ const SearchAll: ({
   );
 };
 
-export default SearchAll;
+export default memo(SearchAll);

@@ -1,22 +1,17 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { userLogin } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 import { RoleType } from "../../model";
-import Cookies from "universal-cookie";
-
-export const useSubmitLogin = (
-  username: string,
-  password: string,
-  from: string
-) => {
-  const loginURL = "/oauth2/token";
+import { handleError } from "../../utils/handleError";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+const loginURL = "/oauth2/token";
+export const useSubmitLogin = (username: string, password: string) => {
   const { setAuth } = useAuth();
-  const navigate = useNavigate();
-  const cookies = new Cookies();
   const [errMsg, setErrMsg] = useState("");
   let bodyContent = `username=${username}&password=${password}`;
+
   const handleLogin = async () => {
     try {
       const response = await userLogin(loginURL, {
@@ -25,24 +20,27 @@ export const useSubmitLogin = (
         },
         data: bodyContent,
       });
+
       if (response.status === 201) {
-        cookies.set("token", response?.data?.authorization, {
+        const {
+          authorization,
+          profile: { id, roles },
+        } = response.data;
+
+        Cookies.set("token", authorization, {
           path: "/",
-          // expires: new Date(Date.now() + 3600 * 24 * 1000),
+          expires: 0.5,
           secure: true,
-          maxAge: 3600 * 12,
           sameSite: "strict",
         });
 
-        const res = response.data.profile.roles;
-        const roleResponseServer: RoleType =
-          res.indexOf("manager") >= 0
-            ? "admin"
-            : res.indexOf("mentor") >= 0
-            ? "mentor"
-            : res.indexOf("teachingassistant") >= 0
-            ? "ta"
-            : null;
+        const roleResponseServer: RoleType = roles.includes("manager")
+          ? "admin"
+          : roles.includes("mentor")
+          ? "mentor"
+          : roles.includes("teachingassistant")
+          ? "ta"
+          : null;
 
         if (!roleResponseServer) {
           setErrMsg("شما مجاز به ورود در سامانه نمی باشید ");
@@ -50,18 +48,12 @@ export const useSubmitLogin = (
         }
 
         setAuth({
-          id: response.data.profile.id,
+          id,
           username,
           roles: [roleResponseServer],
         });
-
-        navigate(from, {
-          replace: true,
-        });
       }
     } catch (error) {
-      //TODO:handle Error
-      console.log(error);
       const err = error as AxiosError;
       if (!err?.response) {
         setErrMsg("پاسخی از سرور دریافت نشد");
@@ -71,6 +63,7 @@ export const useSubmitLogin = (
         setErrMsg("نام کاربری یا پسورد را اشتباه وارد کرده اید");
       } else {
         setErrMsg("ورود ناموفق");
+        toast.error(handleError(error as any));
       }
     }
   };

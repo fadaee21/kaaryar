@@ -99,12 +99,12 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 placeholder="نام موسسه آموزشی تحصیلات حال حاضر"
                 value={student?.currentInstName || ""}
               />
-              <EditString
+              {/* <EditString
                 handleChange={handleChange}
                 identifier="currentField"
                 placeholder="رشته تحصیلی فعلی"
                 value={student?.currentField || ""}
-              />
+              /> */}
             </>
           )}
         </Grid>
@@ -157,6 +157,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 label="مشغولیت های فعلی"
                 identifier="noneJobActivation"
                 options={noneJobActivationOpt}
+                valueOfSelectAll={4}
               />
             )}
           </List>
@@ -209,6 +210,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               label="آشنایی کار با کامپیوتر"
               identifier="computerFamiliarity"
               options={computerFamiliarityOpt}
+              valueOfSelectAll={6}
             />
           </List>
         </Grid>
@@ -444,7 +446,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 identifier="eduStatus"
                 placeholder="وضعیت تحصیلی"
               /> */}
-              <EditBoolean
+              {/* <EditBoolean
                 handleChange={handleChange}
                 identifier="jobReady"
                 value={student?.jobReady ?? ""}
@@ -457,7 +459,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 value={student?.motivationByAdmin || ""}
                 identifier="motivationByAdmin"
                 placeholder="انگیزه اصلی از شرکت در دوره"
-              />
+              /> */}
               <EditString
                 handleChange={handleChange}
                 value={student?.administrativeComments || ""}

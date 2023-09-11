@@ -9,7 +9,7 @@ import {
   TableContainer,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 // import {
 //   AccordionStyled,
@@ -18,7 +18,6 @@ import { ExcelExport } from "../../components/ExcelExport";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import style from "../../styles/search/searchChevron.module.css";
 import TableBodyVolunteer from "../../components/volunteer/TableBodyVolunteer";
-import useGetData from "../../hooks/request/useGetData";
 import { counterPagination } from "../../utils/counterPagination";
 import LoadingProgress from "../../components/LoadingProgress";
 import useCountPagination from "../../hooks/request/useCountPagination";
@@ -27,12 +26,17 @@ import useEditProfile from "../../hooks/request/useEditProfile";
 import TableHeader from "../../components/table/TableHeader";
 import { volunteerTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
+<<<<<<< HEAD:src/pages/volunteer/Volunteer.tsx
 
+=======
+import useSWR from "swr";
+>>>>>>> develop:src/pages/volunteer/VolunteerTable.tsx
 const Volunteer = () => {
   const pageSize = 10;
   const [page, setPage] = useState(1);
   const addressLink = `/user/profile/all?pageNum=${page}&pageSize=${pageSize}`;
-  const { dataCall, getAllData, loadingCall } = useGetData();
+  const { data: dataCall, isLoading: loadingCall } =
+    useSWR<Profile[]>(addressLink);
 
   // const [searchingVolunteer, setSearchingVolunteer] = useState([]);
   // const [volunteers, setvolunteers] = useState([]);
@@ -40,10 +44,6 @@ const Volunteer = () => {
   const volunteerCount = "/user/profile/count";
   const [, counterPage] = useCountPagination(volunteerCount);
   const { loadingProfile } = useEditProfile();
-
-  useEffect(() => {
-    getAllData(addressLink);
-  }, [addressLink, getAllData]);
 
   if (loadingCall || loadingProfile) {
     return <LoadingProgress />;
@@ -112,7 +112,7 @@ const Volunteer = () => {
               {/* )} */}
 
               <TableBody>
-                {dataCall?.map((item: Profile, i: number) => (
+                {dataCall?.map((item, i: number) => (
                   <TableBodyVolunteer
                     key={item.id}
                     firstName={item.firstName}
@@ -141,7 +141,7 @@ const Volunteer = () => {
         variant="outlined"
         shape="rounded"
         page={page}
-        onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
+        onChange={(_event: ChangeEvent<unknown>, value: number) => {
           setPage(value);
         }}
       />

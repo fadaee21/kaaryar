@@ -34,6 +34,7 @@ const SkillSeekerDetail = () => {
     navigate(-1);
   }
   const { AfterWeekForm, BeforeWeekForm, regForm } = student || {};
+  
 
   return (
     <>
@@ -61,7 +62,7 @@ const SkillSeekerDetail = () => {
           <>
             <Divider />
             <BeforeWeekDetailShowComp
-              typeComp="admission"
+              typeComp="seeker"
               student={BeforeWeekForm}
               matches={matches}
               id={id}
@@ -73,7 +74,7 @@ const SkillSeekerDetail = () => {
           <>
             <Divider />
             <AfterWeekDetailShowComp
-              typeComp="admission"
+              typeComp="seeker"
               student={AfterWeekForm}
               matches={matches}
               id={id}

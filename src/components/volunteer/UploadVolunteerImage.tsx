@@ -1,11 +1,12 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, Typography } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
-import { postData } from "../../api/axios";
-import useGetImage from "../../hooks/request/useGetImage";
-import { toast } from "react-toastify";
 
-const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
+import { toast } from "react-toastify";
+import useGetImage from "../../hooks/request/useGetImage";
+import { editAxios, removeData } from "../../api/axios";
+
+const UploadVolunteerImage = ({ setUserProfile, imageServer,id }: any) => {
   const [profileImage, setProfileImage] = useState<any>(null);
   const [, setSuccess] = useState(false);
   const [showImage, setShowImage] = useState(false); // handling showing image or not
@@ -13,7 +14,7 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
   const imageUploading = async (dataContent: FormData) => {
     setSuccess(false);
     try {
-      const response = await postData(`/user/profile/image/upload/avatar`, {
+      const response = await editAxios(`/user/profile/image/upload`, {
         data: dataContent,
       });
       const data = await response.data;
@@ -24,7 +25,14 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
     } catch (error) {
       console.log(error);
     }
-    //error or success message handling
+  };
+
+  const removeImage = async (id: number) => {
+    try {
+      await removeData(`/user/profile/image/${id}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -48,8 +56,8 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
     }
     setShowImage(true);
     let dataContent = new FormData();
-    dataContent.append("file", image);
-    console.log(dataContent);
+    dataContent.append("image", image);
+    // console.log(dataContent);
     imageUploading(dataContent);
     setProfileImage(image);
   };
@@ -77,12 +85,14 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
               variant="outlined"
               color="error"
               onClick={() => {
+                removeImage(id);
                 setProfileImage(null);
                 setUserProfile((prev: any) => ({
                   ...prev,
                   profileImage: "",
                 }));
                 setShowImage(false);
+
               }}
               sx={{ px: 4, mb: 1, height: "fit-content" }}
               endIcon={<DeleteIcon />}
@@ -151,4 +161,4 @@ const UploadProfileImage = ({ setUserProfile, imageServer }: any) => {
   );
 };
 
-export default memo(UploadProfileImage);
+export default memo(UploadVolunteerImage);

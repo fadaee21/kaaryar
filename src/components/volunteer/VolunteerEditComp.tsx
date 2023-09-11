@@ -1,65 +1,92 @@
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import Selector from "../../pages/profile/Selector";
-
 import { useNavigate } from "react-router-dom";
 import useEditProfile from "../../hooks/request/useEditProfile";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useState } from "react";
-import UploadProfileImage from "../../pages/profile/UploadProfileImage";
+import UploadVolunteerImage from "./UploadVolunteerImage";
 import { DesireBox, ContentBoxHeader, StackTitle } from "../../styles/profile";
 import { Box, Button, Container, Typography } from "@mui/material";
-import AddLink, { DesireLink } from "../../pages/profile/AddLink";
+import AddLink, { DesireLink } from "./AddLink";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Profile } from "../../model";
-
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
+import Selector from "./Selector";
 
 interface ProfileData {
   profileData: Profile | null;
 }
 
-const UserInfo = ({ profileData }: ProfileData) => {
-  const [userProfile, setUserProfile] = useState({
-    profileName: profileData?.firstName || "",
-    profileFamily: profileData?.lastName || "",
-    profileGender: profileData?.gender || "",
-    profileBirth: profileData?.birthday || "",
-    profileCountry: profileData?.country || "",
-    profileCity: profileData?.city || "",
-    profileMobile: profileData?.mobile || "",
-    profileEmail: profileData?.email || "",
-    profileRole: profileData?.role || "",
-    profileImage: profileData?.imageAddress || "",
-    profileEduLevel: profileData?.lastEduLevel || "",
-    profileFieldStudy: profileData?.lastMajor || "",
-    profileEduPlace: profileData?.lastEduLocation || "",
-    profileCurrentJob: profileData?.currentJob || "",
-    profileCurrentWorkPlace: profileData?.currentJobLocation || "",
-  });
+const VolunteerEditComp = ({ profileData }: ProfileData) => {
+  const {
+    firstName,
+    lastName,
+    gender,
+    birthday,
+    country,
+    city,
+    mobile,
+    email,
+    role,
+    picture,
+    lastEduLevel,
+    lastMajor,
+    lastEduLocation,
+    currentJob,
+    currentJobLocation,
+    custom,
+    website,
+    linkedin,
+    github,
+    gitlab,
+    researchgate,
+    aboutMe,
+    id,
+  } = profileData || {};
+
+  const [userProfile, setUserProfile] = useState(() => ({
+    profileName: firstName || "",
+    profileFamily: lastName || "",
+    profileGender: gender || "",
+    profileBirth: birthday || "",
+    profileCountry: country || "",
+    profileCity: city || "",
+    profileMobile: mobile || "",
+    profileEmail: email || "",
+    profileRole: role || "",
+    profileImage: picture?.file_hash || "",
+    profileEduLevel: lastEduLevel || "",
+    profileFieldStudy: lastMajor || "",
+    profileEduPlace: lastEduLocation || "",
+    profileCurrentJob: currentJob || "",
+    profileCurrentWorkPlace: currentJobLocation || "",
+  }));
   const handleChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserProfile((prev: any) => ({ ...prev, [name]: value }));
+    setUserProfile((prevProfile) => ({ ...prevProfile, [name]: value }));
   };
   //in desiredLink for handling the functionality i add "id" and "first" to object,notice that you shouldn't post these two items to server
-  const [desiredLink, setDesiredLink] = useState<DesireLink[]>(
-    profileData?.custom ? JSON.parse(profileData.custom) : []
-  );
-  const [relatedLink, setRelatedLink] = useState({
-    web: profileData?.website || "",
-    linkedin: profileData?.linkedin || "",
-    github: profileData?.github || "",
-    gitlab: profileData?.gitlab || "",
-    gate: profileData?.researchgate || "",
+  const [desiredLink, setDesiredLink] = useState<DesireLink[]>(() => {
+    if (custom) {
+      return JSON.parse(custom);
+    }
+    return [];
   });
-  const [about, setAbout] = useState(profileData?.aboutMe || "");
+  const [relatedLink, setRelatedLink] = useState(() => ({
+    web: website || "",
+    linkedin: linkedin || "",
+    github: github || "",
+    gitlab: gitlab || "",
+    gate: researchgate || "",
+  }));
+  const [about, setAbout] = useState(aboutMe || "");
 
   const handleChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRelatedLink((prev: any) => ({ ...prev, [name]: value }));
+    setRelatedLink((prevLinks) => ({ ...prevLinks, [name]: value }));
   };
   const { editProfile, loadingProfile } = useEditProfile();
 
@@ -208,9 +235,10 @@ const UserInfo = ({ profileData }: ProfileData) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <UploadProfileImage
+            <UploadVolunteerImage
               imageServer={userProfile.profileImage}
               setUserProfile={setUserProfile}
+              id={id}
             />
           </Grid>
         </Grid>
@@ -376,4 +404,4 @@ const UserInfo = ({ profileData }: ProfileData) => {
   );
 };
 
-export default UserInfo;
+export default VolunteerEditComp;

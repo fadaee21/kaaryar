@@ -89,7 +89,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 name="familiarity"
               />
             </ListItem>
-            {student?.familiarity?.trim() === "other" && (
+            {/* {student?.familiarity?.trim() === "other" && ( */}
               <ListItem>
                 <EditingInput
                   placeholder="نام معرف یا موسسه"
@@ -98,7 +98,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                   name="refer"
                 />
               </ListItem>
-            )}
+            {/* )} */}
             <ListItem>
               <EditingInput
                 placeholder="سال تولد"
@@ -173,7 +173,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                 name="selectedField"
               />
             </ListItem>
-            {student?.selectedField?.trim() === "other" && (
+            {/* {student?.selectedField?.trim() === "other" && ( */}
               <ListItem>
                 <EditingInput
                   placeholder="مسیر مورد نظر متقاضی"
@@ -182,7 +182,7 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
                   name="careerPathwayOther"
                 />
               </ListItem>
-            )}
+            {/* )} */}
             <ListItem>
               <EditingInput
                 placeholder="توضیحات سایر"

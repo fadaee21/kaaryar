@@ -15,7 +15,7 @@ import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { AccordionStyled } from "../../styles/search/accordion";
 import useSWR from "swr";
 import TableHeader from "../../components/table/TableHeader";
-import { studentTableHeader } from "../../components/table/helper-header";
+import { assigneeStudentTableHeader } from "../../components/table/helper-header";
 import TablePic from "../../components/table/TablePic";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
@@ -71,9 +71,9 @@ const StudentTableAssignee = () => {
           </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={studentTableHeader} />
+              <TableHeader headerItems={assigneeStudentTableHeader} />
               <TableBody>
-                {data?.map((moodleUser: MoodleUser) => {
+                {data?.map((moodleUser: MoodleUser, i: number) => {
                   const {
                     id,
                     firstName,
@@ -91,6 +91,16 @@ const StudentTableAssignee = () => {
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => navigate(`${id}`)}
+                      >
+                        <Typography variant="body2">{i + 1}</Typography>
+                      </StyledTableCell>
                       <StyledTableCell align="center">
                         <TablePic picture={picture} lastName={family} />
                       </StyledTableCell>
@@ -144,7 +154,7 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {registrationForm?.course}
+                          {registrationForm?.course ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -164,7 +174,7 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.trainingStatus?.value || "-"}
+                          {statusForm?.trainingStatus?.value ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -174,7 +184,7 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.nextTrainingStep?.value || "-"}
+                          {statusForm?.nextTrainingStep?.value ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -184,7 +194,7 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.referralToFinance?.value || "-"}
+                          {statusForm?.referralToFinance?.value ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -194,7 +204,7 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.kaaryarAssessment?.value || "-"}
+                          {statusForm?.kaaryarAssessment?.value ?? "-"}
                         </Typography>
                       </StyledTableCell>
                     </StyledTableRow>

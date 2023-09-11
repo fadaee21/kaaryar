@@ -1,5 +1,5 @@
 export type RoleType = "admin" | "mentor" | "ta" | "teacher" | null;
-
+export type TypeComp = "beforeWeek" | "afterWeek" | "seeker" | "student";
 export interface AuthType {
   username: string;
   password?: string;
@@ -62,7 +62,7 @@ export interface StudentComment {
 // export interface Comment {
 //   isChecked: boolean;
 //   comment: string;
-//   createTime: string;
+//   createdAt: string;
 //   id: number;
 //   sessionDate: string;
 //   sessionProblem: string;
@@ -88,7 +88,7 @@ export interface Comment {
   commenterId: number;
   isDeleted: boolean;
   id: number;
-  createTime: string;
+  createdAt: string;
   updateTime: string | null;
   deleteTime: string | null;
   commenterRole: string;
@@ -129,6 +129,7 @@ export interface MoodleUser {
   };
   registrationForm: RegistrationForm | null;
   statusForm: StatusForm | null;
+  careerPathway: CareerPathway | null;
 }
 //this is just for admin
 export interface moodleJustStudent {
@@ -174,7 +175,7 @@ export interface LocalStorage {
 export interface RegistrationForm {
   id: number;
   checked: boolean | null;
-  registrationCode: string;
+  registrationCode?: string;
   codeMeli?: string;
   firstName: string;
   family: string;
@@ -193,9 +194,10 @@ export interface RegistrationForm {
   highSchoolYear?: string;
   uniSemester?: string;
   refer?: string;
-  createTime?: string;
+  createdAt?: string;
   highSchoolYear?: string;
   course?: string;
+  decidedAt?: string | null;
 }
 
 export interface BeforeWeekType {
@@ -228,7 +230,7 @@ export interface BeforeWeekType {
   lastInstitute: string;
   limitTime: string;
   motivation: string;
-  paymentImageAddress: string;
+  // paymentImageAddress: string;
   codingKnowledge: string;
   questionCity: string;
   questionStudents: string;
@@ -261,10 +263,10 @@ export interface BeforeWeekType {
   freeDailyTime: string;
   internetAccessTiming: string;
   motivationByAdmin: string | null;
+  decidedAt?: string;
 }
 
 interface AfterWeekType {
-  beforeWeekForm: BeforeWeekType;
   id: number;
   afterWeekChecked: boolean;
   algoScore: string;
@@ -291,25 +293,30 @@ interface AfterWeekType {
   comLevelResult: string;
   firstSelectJobRoad: string;
   fundamentalSkillsScore: string;
+  paymentImageAddress: string;
   notifyAcceptWeek: string;
   workshopCont: string;
   firstSelectJobRoad: string;
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
+  beforeWeekForm: BeforeWeekType;
+  decidedAt?: string;
+  careerPathway: CareerPathway | null;
 }
 
 export interface TableBodyAllType extends RegistrationForm {
   handleCheckBox?: (e: React.ChangeEvent<HTMLInputElement>, id: number) => void;
   resultStatus?: string;
   checkBoxDisplay?: boolean;
-  idMulti?: number;
+  // idMulti?: number;
   // roles: string;
   directNav: string;
   motivation?: string;
   finalField?: string;
+  finalResults?: string;
   jobStandby?: boolean;
   scholar?: boolean;
   finalResult?: string;
-  cgpa?: string;
+  contCourseApproach?: string;
   index: number;
 }
 
@@ -318,9 +325,9 @@ export interface SeekerStudent {
   registrationCode: string;
   regForm: RegistrationForm;
   regChecked: boolean;
-  BeforeWeekForm: BeforeWeekType;
+  BeforeWeekForm?: BeforeWeekType;
   beforeWeekChecked: boolean;
-  AfterWeekForm: AfterWeekType;
+  AfterWeekForm?: AfterWeekType;
   afterWeekChecked: true;
 }
 
@@ -345,31 +352,40 @@ export interface Profile {
   gitlab: string;
   github: string;
   researchgate: string;
-  custom: string;
+  custom: string | null;
   aboutMe: string;
   id: number;
-  createTime: string | null;
+  createdAt: string | null;
   updateTime: string | null;
   deleteTime: string | null;
   deleted: boolean;
-  user: {
-    username: string;
-    idnumber: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    mobile: string;
-    institution: string;
-    department: string;
-    address: string;
-    city: string;
-    country: string;
-    lang: string;
-    timezone: string;
-    calendarType: string;
-    id: number;
-  };
+  user: UserProfile;
+  picture: Picture | null;
+}
+export interface UserProfile {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+export interface Picture {
+  file_hash: string;
+  file_name: string;
+  file_type: string;
+  file_extension: string;
+  file_size: number;
 }
 
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "all" | null;
@@ -402,6 +418,15 @@ export interface PropEditCombo {
 }
 
 export type TableHeaderProps = { headerItems: string[]; status?: any };
+interface RowHeaderStudent {
+  id: number;
+  label: string;
+  minWidth: number;
+  align: "right" | "left" | "inherit" | "center" | "justify" | undefined;
+}
+export type TableHeaderStudentProps = {
+  studentHeaderItems: RowHeaderStudent[];
+};
 
 //!Education
 // /modules/categories/all
@@ -552,11 +577,11 @@ export interface CareerPathway {
   mentorCount: number;
   teachingAssisstantCount: number;
   name: string;
-  description: any;
+  description: string;
   isActive: boolean;
   id: number;
   createdAt: string;
-  updatedAt: any;
+  updatedAt: string | null;
 }
 export interface Category {
   instructorCount: number;
@@ -613,8 +638,8 @@ export interface ShortCoreModule {
   isActive: boolean;
   teachingStatus: string;
   levelName: any;
-  startDate: string;
-  endDate: string;
+  startDate: Date | dayjs.Dayjs | null;
+  endDate: Date | dayjs.Dayjs | null;
   weblinkFeedbackForm: string;
   weblinkFinalProject: string;
   weblinkLmsCourse: string;
@@ -815,7 +840,7 @@ export interface StatusForm {
   description: string | null;
   regChecked: boolean;
   registrationCode: string;
-  kaaryarAssessment: any;
+  kaaryarAssessment: DetailStudentStatus | null;
   id: number;
   trainingStatus: DetailStudentStatus | null;
   withdrawalReason: DetailStudentStatus | null;
@@ -863,3 +888,14 @@ export type OptionYesOrNo = {
   value: boolean;
   label: "بله" | "خیر";
 };
+
+export interface Notify {
+  type: string;
+  name: string;
+  subject: string;
+  body: string;
+  isActive: boolean;
+  templateId: number;
+  createdAt: string;
+  updatedAt: string;
+}

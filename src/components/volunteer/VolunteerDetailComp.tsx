@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -22,11 +22,10 @@ import ListItemButton from "@mui/material/ListItemButton";
 import LanguageIcon from "@mui/icons-material/Language";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
@@ -64,6 +63,7 @@ const VolunteerDetailComp = ({
   researchgate,
   role,
   website,
+  picture,
 }: VolDetailType) => {
   const navigate = useNavigate();
   const {
@@ -76,8 +76,8 @@ const VolunteerDetailComp = ({
 
   const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   useEffect(() => {
-    getPicture(imageAddress);
-  }, [getPicture, imageAddress]);
+    picture && getPicture(picture.file_hash);
+  }, [getPicture, picture]);
 
   return (
     <>
@@ -154,7 +154,7 @@ const VolunteerDetailComp = ({
                 <List>
                   {birthday && (
                     <ListItem>
-                        <ListIcon>
+                      <ListIcon>
                         <CalendarTodayIcon sx={{ fontSize: 16 }} />
                       </ListIcon>
                       <ListText primary={`متولد ${birthday}`} />
@@ -162,7 +162,7 @@ const VolunteerDetailComp = ({
                   )}
                   {(city || country) && (
                     <ListItem>
-                        <ListIcon>
+                      <ListIcon>
                         <LocationOnOutlinedIcon sx={{ fontSize: 16 }} />
                       </ListIcon>
                       <ListText primary={`ساکن ${country}، ${city}`} />
@@ -170,7 +170,7 @@ const VolunteerDetailComp = ({
                   )}
                   {mobile && (
                     <ListItem>
-                        <ListIcon>
+                      <ListIcon>
                         <PhoneEnabledIcon sx={{ fontSize: 16 }} />
                       </ListIcon>
                       <ListText primary={mobile} />
@@ -178,7 +178,7 @@ const VolunteerDetailComp = ({
                   )}
                   {email && (
                     <ListItem>
-                        <ListIcon>
+                      <ListIcon>
                         <EmailOutlinedIcon sx={{ fontSize: 16 }} />
                       </ListIcon>
                       <ListText primary={email} />

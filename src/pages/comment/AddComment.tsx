@@ -4,7 +4,7 @@ import AddOrEditComment from "../../components/comment/AddOrEditComment";
 
 const AddComment = () => {
   const { state, pathname } = useLocation();
-
+  // I prefer this approach because it prevents mentors from adding comments to students who are not within their assigned group.
   if (!state) {
     //if add url in address bar(not push the button) so you don't have state
     //return to the student detail
@@ -14,11 +14,7 @@ const AddComment = () => {
 
   return (
     <Container maxWidth="lg">
-      <AddOrEditComment
-        compType={"adding"}
-        allComment={null}
-        studentName={student}
-      />
+      <AddOrEditComment compType={"adding"} studentName={student} />
     </Container>
   );
 };

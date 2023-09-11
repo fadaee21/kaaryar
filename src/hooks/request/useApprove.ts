@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { editAxios } from "../../api/axios";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 export const useApproveWeek = () => {
   const [successObject, setSuccessObject] = useState("");
@@ -22,9 +24,11 @@ export const useApproveWeek = () => {
         const obj = Object.keys(approveObj)[0];
         setSuccessObject(obj);
       } else {
+        toast.error("درخواست ناموفق بود");
         console.log(response);
       }
     } catch (error) {
+      toast.error(handleError(error as any));
       console.log(error);
     }
     navigate(-1);
@@ -65,9 +69,11 @@ export const useApproveReg = () => {
         setLoadingRegApprove(false);
         return setSuccess(true);
       }
+      toast.error("درخواست ناموفق بود");
       setSuccess(false);
       console.log(response.data);
     } catch (error) {
+      toast.error(handleError(error as any));
       console.log(error);
       setSuccess(false);
     }

@@ -1,5 +1,5 @@
+import { memo } from "react";
 import Select from "react-select";
-
 
 interface SearchType {
   setState: React.Dispatch<React.SetStateAction<string | null>>;
@@ -33,33 +33,30 @@ const SearchSelect = ({
   );
 };
 
-export default SearchSelect;
+export default memo(SearchSelect);
 
-export const EditBooleanSearch = ({
-  placeholder,
-  handleChange,
-  value,
-}: any) => {
-  console.log(value);
-  const content = (
-    <Select
-      value={value}
-      onChange={handleChange}
-      options={[
-        { value: true, label: "بله" },
-        { value: false, label: "خیر" },
-      ]}
-      // getOptionLabel={(e) => e.label}
-      // getOptionValue={(e) => e.value}
-      placeholder={placeholder}
-      styles={{
-        control: (baseStyles) => ({
-          ...baseStyles,
-          height: "3rem",
-        }),
-        menu: (provided) => ({ ...provided, zIndex: 2 }),
-      }}
-    />
-  );
-  return content;
-};
+export const EditBooleanSearch = memo(
+  ({ placeholder, handleChange, value }: any) => {
+    const content = (
+      <Select
+        value={value}
+        onChange={handleChange}
+        options={[
+          { value: true, label: "بله" },
+          { value: false, label: "خیر" },
+        ]}
+        // getOptionLabel={(e) => e.label}
+        // getOptionValue={(e) => e.value}
+        placeholder={placeholder}
+        styles={{
+          control: (baseStyles) => ({
+            ...baseStyles,
+            height: "3rem",
+          }),
+          menu: (provided) => ({ ...provided, zIndex: 2 }),
+        }}
+      />
+    );
+    return content;
+  }
+);

@@ -22,7 +22,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface AddCommentType {
   compType: "adding" | "editing";
-  allComment: Comment | null; //this prop just for editing
+  allComment?: Comment; //this prop just for editing
   studentName: { firstName: string; lastName: string } | null;
 }
 const AddOrEditComment = ({
@@ -55,7 +55,7 @@ const AddOrEditComment = ({
     useAddComment(
       course,
       comment,
-      sessionDate?.toISOString(),
+      sessionDate,
       sessionProblem,
       studentTask,
       studentContribute,

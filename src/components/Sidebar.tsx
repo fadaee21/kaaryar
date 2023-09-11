@@ -3,7 +3,6 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import Cookies from "universal-cookie";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -31,6 +30,7 @@ import style from "../styles/sideBar/searchChevron.module.css";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Face6Icon from "@mui/icons-material/Face6";
 import LogoLight from "./LogoLightSVG";
+import Cookies from "js-cookie";
 
 export default function Sidebar({ listRoutes }: any) {
   const theme = useTheme();
@@ -49,12 +49,12 @@ export default function Sidebar({ listRoutes }: any) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const cookie = new Cookies();
+  
 
   const handleExit = () => {
     handleClose();
     navigate("/");
-    cookie.remove("token", { path: "/", sameSite: "strict" });
+    Cookies.remove("token", { path: "/", sameSite: "strict" });
     setAuth({ roles: [], username: "", id: null });
   };
 

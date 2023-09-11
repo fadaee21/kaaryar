@@ -1,24 +1,28 @@
 import Container from "@mui/material/Container";
-import { useEffect } from "react";
+import useSWR from "swr";
 import { Navigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import VolunteerDetailComp from "../../components/profile/VolunteerDetailComp";
-
-import useGetData from "../../hooks/request/useGetData";
+import { Profile } from "../../model";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import VolunteerDetailComp from "../../components/volunteer/VolunteerDetailComp";
 
 const VolunteerDetail = () => {
-  const { dataCall, getAllData, loadingCall } = useGetData();
   const { username } = useParams();
-
-  useEffect(() => {
-    const person = `/user/profile/username/${username}`;
-    getAllData(person);
-  }, [getAllData, username]);
+  const {
+    data: dataCall,
+    isLoading: loadingCall,
+    error: errorCall,
+  } = useSWR<Profile>(`/user/profile/username/${username}`);
 
   if (loadingCall) {
     return <LoadingProgress />;
   }
-  if (!dataCall.id) {
+  if (errorCall) {
+    toast.error(handleError(errorCall));
+    return <Navigate to="/" replace />;
+  }
+  if (!dataCall?.id) {
     return <Navigate replace to={`/notfound`} />;
   }
   return (

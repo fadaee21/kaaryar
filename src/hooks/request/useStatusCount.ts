@@ -1,34 +1,16 @@
-import { useEffect, useState } from "react";
-import { getData } from "../../api/axios";
+import useSWR from "swr";
 import { ApprovalStatus } from "../../model";
+import { handleError } from "../../utils/handleError";
+import { toast } from "react-toastify";
 
 const useStatusCount = (apiLink: string, status: ApprovalStatus) => {
-  const [loadingStatus, setLoadingStatus] = useState(true);
-  const [statusNum, setStatusNum] = useState<number>();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoadingStatus(true);
-      try {
-        const response = await getData(apiLink, {
-          params: { status },
-        });
-        setStatusNum(response.data.count);
-        // if (response.status === 200) {
-        //   console.log(response.data);
-        // } else {
-        //   console.log(response);
-        // }
-        setLoadingStatus(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [apiLink, status]);
-
-  return [loadingStatus, statusNum];
+  const {
+    data: statusNum,
+    error,
+    isLoading: loadingStatus,
+  } = useSWR(`${apiLink}?status=${status}`);
+  if (error) toast.error(handleError(error));
+  return [loadingStatus, statusNum?.count];
 };
 
 export default useStatusCount;

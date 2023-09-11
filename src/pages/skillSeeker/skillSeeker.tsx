@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 // import SearchAll from "../../components/search/SearchAll";
@@ -31,13 +31,12 @@ import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 const pageSize = 20;
+const examFormCount = "/status/form/count";
 const SkillSeeker = () => {
   const [page, setPage] = useState(1);
   // const [chevronDir, setChevronDir] = useState(false);
   const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
-  const navigate = useNavigate();
   const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=${pageSize}`;
-  const examFormCount = "/status/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
   const { data, isLoading, error } = useSWR(allStudentSeeker, {
@@ -50,7 +49,9 @@ const SkillSeeker = () => {
 
   if (error) {
     toast.error(handleError(error));
-    navigate("/");
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
@@ -85,9 +86,34 @@ const SkillSeeker = () => {
               <ExcelExport
                 fileName={"Applicant Info"}
                 linkAll="/status/form/all?pageNum=1&pageSize=100000"
-                searchData={searchingStudentSeeker?.map(
-                  (i) => i.BeforeWeekForm?.registrationForm
-                )}
+                searchData={searchingStudentSeeker?.map((seekerStudent) => {
+                  const {
+                    regForm,
+                    afterWeekChecked,
+                    beforeWeekChecked,
+                    regChecked,
+                    AfterWeekForm,
+                  } = seekerStudent;
+
+                  return {
+                    وضعیت: seekerStateFinder(
+                      afterWeekChecked,
+                      beforeWeekChecked,
+                      regChecked
+                    ),
+                    "کد متقاضی": regForm.registrationCode,
+                    "نام و نام خانوادگی":
+                      regForm.firstName + " " + regForm.family,
+                    گروه: regForm.course,
+                    استان: regForm.province,
+                    شهر: regForm.city,
+                    "شماره همراه": regForm.mobile,
+                    ایمیل: regForm.email,
+                    "رشته انتخابی": regForm?.selectedField,
+                    "رشته نهایی": AfterWeekForm?.finalField,
+                    "نتیجه نهایی": AfterWeekForm?.finalResult,
+                  };
+                })}
                 useIn="seeker"
               />
             </Box>
@@ -114,13 +140,13 @@ const SkillSeeker = () => {
               {!searchingStudentSeeker && (
                 <TableBody>
                   {data?.map((seekerStudent: SeekerStudent, i: number) => {
-                    // console.log(seekerStudent);
                     const {
                       id,
                       regForm,
                       afterWeekChecked,
                       beforeWeekChecked,
                       regChecked,
+                      AfterWeekForm,
                     } = seekerStudent;
 
                     return (
@@ -131,11 +157,9 @@ const SkillSeeker = () => {
                         family={regForm?.family}
                         firstName={regForm?.firstName}
                         registrationCode={regForm?.registrationCode}
-                        // codeMeli={regForm?.codeMeli}
                         mobile={regForm?.mobile}
                         email={regForm?.email}
                         directNav="skill-seeker"
-                        gender={regForm?.gender}
                         province={regForm?.province}
                         city={regForm?.city}
                         studyField={regForm?.studyField}
@@ -150,50 +174,15 @@ const SkillSeeker = () => {
                           regChecked
                         )}
                         index={itemCounterTable(page, pageSize, i)}
+                        finalResult={AfterWeekForm?.finalResult}
+                        finalField={AfterWeekForm?.finalField}
+                        course={regForm?.course}
+                        
                       />
                     );
                   })}
                 </TableBody>
               )}
-
-              <TableBody>
-                {searchingStudentSeeker?.map(
-                  (searchingStudentSeeker: SeekerStudent, i: number) => {
-                    const {
-                      id,
-                      regForm,
-                      afterWeekChecked,
-                      beforeWeekChecked,
-                      regChecked,
-                    } = searchingStudentSeeker;
-                    return (
-                      <TableBodyAll
-                        key={id}
-                        id={id}
-                        birthDate={regForm?.birthDate}
-                        family={regForm?.family}
-                        firstName={regForm?.firstName}
-                        registrationCode={regForm?.registrationCode}
-                        mobile={regForm?.mobile}
-                        email={regForm?.email}
-                        gender={regForm?.gender}
-                        province={regForm?.province}
-                        city={regForm?.city}
-                        studyField={regForm?.studyField}
-                        selectedField={regForm?.selectedField}
-                        checked={searchingStudentSeeker.afterWeekChecked}
-                        directNav="skill-seeker"
-                        resultStatus={seekerStateFinder(
-                          afterWeekChecked,
-                          beforeWeekChecked,
-                          regChecked
-                        )}
-                        index={i + 1}
-                      />
-                    );
-                  }
-                )}
-              </TableBody>
             </Table>
           </TableContainer>
         </Container>

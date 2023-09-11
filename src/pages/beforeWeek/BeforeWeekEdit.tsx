@@ -14,6 +14,7 @@ const BeforeWeekDetailEdit = () => {
   const [student, setStudent] = useState<BeforeWeekType | undefined>();
   const [loadingGet, setLoadingGet] = useState(true);
   const [loadingPut, setLoadingPut] = useState(false);
+  
   //lift up the state to be able to send as computerFamiliarity
   const [compFamCheckBox, setCompFamCheckBox] = useState<string[]>([]);
   const [noneJobActivationCheckBox, setNoneJobActivationCheckBox] = useState<
@@ -167,6 +168,7 @@ const BeforeWeekDetailEdit = () => {
             handleChange={handleChange}
             setCompFamCheckBox={setCompFamCheckBox}
             setNoneJobActivationCheckBox={setNoneJobActivationCheckBox}
+            
           />
         </Box>
       </Container>

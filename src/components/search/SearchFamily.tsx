@@ -1,8 +1,9 @@
 import AsyncSelect from "react-select/async";
 import { getData } from "../../api/axios";
+import { memo } from "react";
 
 const responseQuantity = "8";
-export const SearchFamily = ({
+const SearchFamily = ({
   setOutputFamily,
   outputFamily,
   searchPage,
@@ -151,3 +152,4 @@ export const SearchFamily = ({
     </>
   );
 };
+export default memo(SearchFamily);

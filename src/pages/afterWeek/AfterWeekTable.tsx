@@ -29,6 +29,10 @@ import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import { afterTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 import useSWR from "swr";
+import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { persianDate } from "../../utils/persianDate";
 
 const AfterWeekTable = () => {
   const [page, setPage] = useState(1);
@@ -41,15 +45,16 @@ const AfterWeekTable = () => {
   const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
-  const { getApproveMulti, loadingMulti } = useApproveMulti();
 
   const {
     data,
     isLoading: loading,
     error,
+    mutate,
   } = useSWR(allStudentAfterWeek, {
     onSuccess: () => window.scrollTo(0, 0),
   });
+  const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
@@ -64,7 +69,10 @@ const AfterWeekTable = () => {
   }
 
   if (error) {
-    console.log(error);
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
@@ -125,11 +133,47 @@ const AfterWeekTable = () => {
                   رد کردن گروهی
                 </Button>
                 <ExcelExport
-                  fileName={"Applicant Info"}
+                  fileName={"After Week Table"}
                   linkAll="/exam/after/week/form/all?pageNum=1&pageSize=100000"
-                  searchData={searchingStudentAfter?.map(
-                    (i) => i.beforeWeekForm.registrationForm
-                  )}
+                  searchData={searchingStudentAfter?.map((after) => {
+                    const {
+                      finalField,
+                      scholar,
+                      finalResult,
+                      beforeWeekForm: {
+                        registrationForm: {
+                          province,
+                          city,
+                          family,
+                          firstName,
+                          registrationCode,
+                          mobile,
+                          email,
+                          course,
+                        },
+                      },
+                      afterWeekChecked,
+                    } = after;
+
+                    return {
+                      وضعیت:
+                        afterWeekChecked === true
+                          ? `تایید شده`
+                          : afterWeekChecked === null
+                          ? `در انتظار تایید`
+                          : `رد شده`,
+                      "کد متقاضی": registrationCode,
+                      "نام و نام خانوادگی": firstName + " " + family,
+                      گروه: course,
+                      استان: province,
+                      شهر: city,
+                      "شماره همراه": mobile,
+                      ایمیل: email,
+                      "نتیجه نهایی": finalResult,
+                      بورسیه: scholar ? "دارد" : "ندارد",
+                      "رشته نهایی": finalField,
+                    };
+                  })}
                   useIn="after"
                 />
               </Box>
@@ -158,16 +202,15 @@ const AfterWeekTable = () => {
               {searchingStudentAfter?.length !== 0 && (
                 <TableHeader headerItems={afterTableHeader} />
               )}
-
-              {/*//! while searching show the search content */}
-              {!searchingStudentAfter && (
-                <TableBody>
-                  {data?.map((afterWeekStudent: AfterWeekType, i: number) => {
+              <TableBody>
+                {(searchingStudentAfter ?? data)?.map(
+                  (afterWeekStudent: AfterWeekType, i: number) => {
                     const {
                       id,
                       finalField,
                       scholar,
                       finalResult,
+                      decidedAt,
                       beforeWeekForm: {
                         registrationForm: {
                           province,
@@ -180,6 +223,7 @@ const AfterWeekTable = () => {
                           email,
                           // gender,
                           studyField,
+                          course,
                         },
                       },
                       afterWeekChecked,
@@ -205,70 +249,14 @@ const AfterWeekTable = () => {
                         // gender={gender}
                         checked={afterWeekChecked}
                         handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={false}
-                        index={itemCounterTable(page, pageSize, i)}
-                      />
-                    );
-                  })}
-                </TableBody>
-              )}
-
-              <TableBody>
-                {searchingStudentAfter?.map(
-                  (searchingStudentAfter: any, i: number) => {
-                    return (
-                      <TableBodyAll
-                        key={searchingStudentAfter.id}
-                        id={searchingStudentAfter.id}
-                        idMulti={searchingStudentAfter.id}
-                        province={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .province
+                        checkBoxDisplay={!!searchingStudentAfter}
+                        index={
+                          searchingStudentAfter
+                            ? i + 1
+                            : itemCounterTable(page, pageSize, i)
                         }
-                        city={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .city
-                        }
-                        studyField={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .studyField
-                        }
-                        finalField={searchingStudentAfter.finalField}
-                        scholar={searchingStudentAfter.scholar}
-                        finalResult={searchingStudentAfter.finalResult}
-                        family={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .family
-                        }
-                        firstName={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .firstName
-                        }
-                        registrationCode={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .registrationCode
-                        }
-                        codeMeli={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .codeMeli
-                        }
-                        mobile={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .mobile
-                        }
-                        email={
-                          searchingStudentAfter.beforeWeekForm.registrationForm
-                            .email
-                        }
-                        // gender={
-                        //   searchingStudentAfter.beforeWeekForm.registrationForm
-                        //     .gender
-                        // }
-                        checked={searchingStudentAfter.afterWeekChecked}
-                        directNav="after-week"
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={true}
-                        index={i + 1}
+                        course={course}
+                        decidedAt={persianDate(decidedAt)}
                       />
                     );
                   }

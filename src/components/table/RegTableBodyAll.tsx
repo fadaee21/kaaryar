@@ -1,6 +1,5 @@
 import { Checkbox, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
@@ -10,21 +9,33 @@ const RegTableBodyAll = ({
   education,
   family,
   firstName,
-  registrationCode,
+  // registrationCode,
   province,
-  directNav,
   familiarity,
   checked,
   handleCheckBox,
   checkBoxDisplay,
   highSchoolYear,
   refer,
-  createTime,
+  createdAt,
   index,
+  city,
+  decidedAt,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  const backgroundColor =
+    checked === true
+      ? "#64dd1720"
+      : checked === null
+      ? "#ffab0045"
+      : "#ff174420";
+  const familiarityText = familiarity === "other" ? "سایر" : familiarity || "-";
+  const formattedcreatedAt =
+    createdAt && new Intl.DateTimeFormat("fa").format(new Date(createdAt));
+  const formattedDecidedTime = decidedAt
+    ? new Intl.DateTimeFormat("fa").format(new Date(decidedAt))
+    : "-";
+
   return (
     <StyledTableRow
       sx={{
@@ -55,11 +66,7 @@ const RegTableBodyAll = ({
             textAlign: "center",
             borderRadius: "5px",
             boxShadow: "0px 1px 2.5px",
-            ...(checked === true
-              ? { backgroundColor: "#64dd1720" }
-              : checked === null
-              ? { backgroundColor: "#ffab0045" }
-              : { backgroundColor: "#ff174420" }),
+            backgroundColor,
           }}
         >
           {checked === true
@@ -69,18 +76,18 @@ const RegTableBodyAll = ({
             : `رد شده`}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell
+      {/* <StyledTableCell
         align="center"
         sx={{
           verticalAlign: "center",
         }}
       >
         <Typography variant="body2">{registrationCode}</Typography>
-      </StyledTableCell>
+      </StyledTableCell> */}
       <StyledTableCell
         align="left"
         sx={{ verticalAlign: "center", cursor: "pointer" }}
-        onClick={() => navigate(`/${roles}/${directNav}/${id}`)}
+        onClick={() => navigate(`${id}`)}
       >
         <Typography variant="body2">{firstName + " " + family}</Typography>
       </StyledTableCell>
@@ -117,6 +124,14 @@ const RegTableBodyAll = ({
       >
         <Typography variant="body2">{province || "-"}</Typography>
       </StyledTableCell>
+      <StyledTableCell
+        align="center"
+        sx={{
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">{city || "-"}</Typography>
+      </StyledTableCell>
 
       <StyledTableCell
         align="center"
@@ -124,9 +139,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">
-          {familiarity === "other" ? "سایر" : familiarity || "-"}
-        </Typography>
+        <Typography variant="body2">{familiarityText}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -142,10 +155,15 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">
-          {createTime &&
-            new Intl.DateTimeFormat("fa").format(new Date(createTime))}
-        </Typography>
+        <Typography variant="body2">{formattedcreatedAt}</Typography>
+      </StyledTableCell>
+      <StyledTableCell
+        align="center"
+        sx={{
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">{formattedDecidedTime}</Typography>
       </StyledTableCell>
     </StyledTableRow>
   );
