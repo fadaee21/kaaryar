@@ -30,12 +30,9 @@ import useSWR from "swr";
 
 import { registerTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
-<<<<<<< HEAD
-=======
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { Navigate } from "react-router-dom";
->>>>>>> develop
 
 const pageSize = 20;
 const RegisterFormTable = () => {

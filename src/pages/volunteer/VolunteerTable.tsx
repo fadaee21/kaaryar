@@ -26,11 +26,7 @@ import useEditProfile from "../../hooks/request/useEditProfile";
 import TableHeader from "../../components/table/TableHeader";
 import { volunteerTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
-<<<<<<< HEAD:src/pages/volunteer/Volunteer.tsx
-
-=======
 import useSWR from "swr";
->>>>>>> develop:src/pages/volunteer/VolunteerTable.tsx
 const Volunteer = () => {
   const pageSize = 10;
   const [page, setPage] = useState(1);

@@ -23,14 +23,8 @@ import useSWR from "swr";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
-<<<<<<< HEAD
-import TableHeader from "../../components/table/TableHeader";
-import { studentTableHeader } from "../../components/table/helper-header";
-import { itemCounterTable } from "../../utils/itemCounterTable";
-=======
 import { TableHeaderStudent } from "../../components/table/TableHeader";
 import { adminStudentTableHeader } from "../../components/table/helper-header";
->>>>>>> develop
 
 import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
 const pageSize = 25;
@@ -40,18 +34,6 @@ const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
 const STUDENT_COUNT = "moodle/user/student/count";
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
-<<<<<<< HEAD
-  const pageSize = 25;
-  // const adminStudentQuery =
-  //   "orderAscending=false&orderBy=after_week_update_timestamp";
-  const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
-
-  const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
-
-  const studentCount = "moodle/user/student/count";
-  const [, counterPage] = useCountPagination(studentCount);
-=======
->>>>>>> develop
   const [chevronDir, setChevronDir] = useState(false);
   const ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
   const [, counterPage] = useCountPagination(STUDENT_COUNT);
@@ -135,11 +117,6 @@ const StudentTableAdmin = () => {
           {/* //!for empty response of search return TableEmpty */}
           {searchingMoodleStudent?.length === 0 && <TableEmpty />}
 
-<<<<<<< HEAD
-              <TableBody>
-                {(searchingMoodleStudent ? searchingMoodleStudent : data)?.map(
-                  (moodleUser: MoodleUser, i: number) => {
-=======
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer
             //  sx={{ maxHeight: 440 }}
@@ -157,7 +134,6 @@ const StudentTableAdmin = () => {
                     ? searchingMoodleStudent
                     : data
                   )?.map((moodleUser: MoodleUser, i: number) => {
->>>>>>> develop
                     const {
                       id,
                       firstName,
@@ -172,131 +148,6 @@ const StudentTableAdmin = () => {
                     return (
                       <StudentAdminRowTable
                         key={id}
-<<<<<<< HEAD
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {searchingMoodleStudent
-                              ? i + 1
-                              : itemCounterTable(page, pageSize, i)}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <TablePic picture={picture} lastName={family} />
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => navigate(`${id}`)}
-                        >
-                          <Typography variant="body1">
-                            {firstName + " " + family}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2" textAlign={"center"}>
-                            {username}
-                          </Typography>
-                        </StyledTableCell>
-
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.city || city || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.province || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.course}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.refer || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.trainingStatus?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.nextTrainingStep?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.referralToFinance?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.kaaryarAssessment?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                      </StyledTableRow>
-=======
                         id={id}
                         firstName={firstName}
                         family={family}
@@ -311,7 +162,6 @@ const StudentTableAdmin = () => {
                         page={page}
                         pageSize={pageSize}
                       />
->>>>>>> develop
                     );
                   })}
                 </TableBody>
