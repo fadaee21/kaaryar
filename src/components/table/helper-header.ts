@@ -1,3 +1,5 @@
+import { RowHeaderStudent } from "../../model";
+
 export const registerTableHeader = [
   "",
   "",
@@ -61,19 +63,44 @@ export const afterTableSkillSeeker = [
   "نتیجه نهایی",
 ];
 
-export const studentTableHeader = [
+export const assigneeStudentTableHeader = [
   "",
   "",
   "نام و نام خانوادگی",
   "نام کاربری",
-  "شهر",
-  "استان",
   "گروه",
-  " مؤسسه معرف",
+  "استان",
+  "شهر",
+  "معرف",
+  "مسیر آموزشی",
+  " دوره کنونی",
+  "مربی حل تمرین",
+  "منتور",
   "وضعیت آموزش",
   "قدم آتی آموزش",
   "ارجاع به واحد مالی",
   "ارزیابی کاریار",
+  "عملیات",
+];
+
+export const adminStudentTableHeader: RowHeaderStudent[] = [
+  { id: 1, label: "", minWidth: 20, align: "center" },
+  { id: 2, label: "", minWidth: 20, align: "center" },
+  { id: 3, label: "نام و نام خانوادگی", minWidth: 200, align: "center" },
+  { id: 4, label: "نام کاربری", minWidth: 100, align: "center" },
+  { id: 5, label: "گروه", minWidth: 100, align: "center" },
+  { id: 6, label: "استان", minWidth: 100, align: "center" },
+  { id: 7, label: "شهر", minWidth: 100, align: "center" },
+  { id: 8, label: "معرف", minWidth: 100, align: "center" },
+  { id: 9, label: "مسیر آموزشی", minWidth: 120, align: "center" },
+  { id: 10, label: " دوره کنونی", minWidth: 100, align: "center" },
+  { id: 11, label: "مربی حل تمرین", minWidth: 120, align: "center" },
+  { id: 12, label: "منتور", minWidth: 100, align: "center" },
+  { id: 13, label: "وضعیت آموزش", minWidth: 200, align: "center" },
+  { id: 14, label: "قدم آتی آموزش", minWidth: 200, align: "center" },
+  { id: 15, label: "ارجاع به واحد مالی", minWidth: 200, align: "center" },
+  { id: 16, label: "ارزیابی کاریار", minWidth: 200, align: "center" },
+  { id: 17, label: "عملیات", minWidth: 530, align: "left" },
 ];
 
 export const volunteerTableHeader = ["", "نام داوطلب", "نقش", "عملیات"];

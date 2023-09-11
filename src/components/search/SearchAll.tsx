@@ -34,6 +34,8 @@ import { motivationOpt } from "../beforeWeek/helper";
 // import DateRangeSelector from "./DateRangeSelector";
 import { JalaliDatePicker } from "../comment/JalaliDatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
+
 // import { ApprovalStatus } from "../../model";
 // import SearchScholar from "./SearchScholar";
 // import SearchGender from "./SearchGender";
@@ -121,23 +123,17 @@ const SearchAll: ({
     [searchPage, chevronDir]
   );
 
-  const { data: trainingStatusData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/training-status/values/all" : null // get trainingData only for moodle search student
-  );
-  const { data: nextTrainingStepData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/next-training-step/values/all" : null
-  );
-  const { data: referralToFinanceData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/referral-finance/values/all" : null
-  );
-  const { data: KaaryarAssessmentData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/kaaryar-assessment/values/all" : null
-  );
   const { data: ModuleData } = useSWR<ModuleAll[]>(
     fetchMoodlePage
       ? "/modules/short-details/all?orderAscending=true&orderBy=name"
       : null
   );
+  const {
+    trainingData,
+    nextStepData,
+    referralToFinanceData,
+    kaaryarAssessmentData,
+  } = useGetStatusStudent(fetchMoodlePage);
 
   const { data: groupData } = useSWR<Group[]>(
     chevronDir
@@ -448,6 +444,38 @@ const SearchAll: ({
               />
             </Grid>
           )} */}
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtFrom}
+              sessionDate={createdAtFrom}
+              label="از (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtTo}
+              sessionDate={createdAtTo}
+              label="تا (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setDecidedAtFrom}
+              sessionDate={decidedAtFrom}
+              label="از (تاریخ تأیید/رد)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setDecidedAtTo}
+              sessionDate={decidedAtTo}
+              label="تا (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
         </>
       )}
       {searchPage === "beforeWeek" && (
@@ -508,22 +536,22 @@ const SearchAll: ({
 
       {searchPage === "moodle" && (
         <>
-          {trainingStatusData && (
+          {trainingData && (
             <Grid item xs={3}>
               <SearchSelect2
                 state={trainingStatus}
                 setState={setTrainingStatus}
-                options={trainingStatusData}
+                options={trainingData}
                 placeholder="وضعیت آموزش"
               />
             </Grid>
           )}
-          {nextTrainingStepData && (
+          {nextStepData && (
             <Grid item xs={3}>
               <SearchSelect2
                 state={nextTrainingStep}
                 setState={setNextTrainingStep}
-                options={nextTrainingStepData}
+                options={nextStepData}
                 placeholder="قدم آتی آموزش"
               />
             </Grid>
@@ -538,12 +566,12 @@ const SearchAll: ({
               />
             </Grid>
           )}
-          {KaaryarAssessmentData && (
+          {kaaryarAssessmentData && (
             <Grid item xs={3}>
               <SearchSelect2
                 state={kaaryarAssessment}
                 setState={setKaaryarAssessment}
-                options={KaaryarAssessmentData}
+                options={kaaryarAssessmentData}
                 placeholder="ارزیابی کاریار"
               />
             </Grid>
@@ -572,38 +600,7 @@ const SearchAll: ({
           </Grid>
         )}
       </>
-      <Grid item xs={3}>
-        <JalaliDatePicker
-          setSessionDate={setCreatedAtFrom}
-          sessionDate={createdAtFrom}
-          label="از (تاریخ ارسال فرم)"
-          usageType="searching"
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <JalaliDatePicker
-          setSessionDate={setCreatedAtTo}
-          sessionDate={createdAtTo}
-          label="تا (تاریخ ارسال فرم)"
-          usageType="searching"
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <JalaliDatePicker
-          setSessionDate={setDecidedAtFrom}
-          sessionDate={decidedAtFrom}
-          label="از (تاریخ تأیید/رد)"
-          usageType="searching"
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <JalaliDatePicker
-          setSessionDate={setDecidedAtTo}
-          sessionDate={decidedAtTo}
-          label="تا (تاریخ ارسال فرم)"
-          usageType="searching"
-        />
-      </Grid>
+
       {/* //buttons */}
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
@@ -631,5 +628,3 @@ const SearchAll: ({
 };
 
 export default memo(SearchAll);
-
-

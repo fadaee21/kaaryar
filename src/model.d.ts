@@ -129,6 +129,7 @@ export interface MoodleUser {
   };
   registrationForm: RegistrationForm | null;
   statusForm: StatusForm | null;
+  careerPathway: CareerPathway | null;
 }
 //this is just for admin
 export interface moodleJustStudent {
@@ -299,6 +300,7 @@ interface AfterWeekType {
   moodleUser?: MoodleUser; //i'm not sure yet is possibly exist for all or not
   beforeWeekForm: BeforeWeekType;
   decidedAt?: string;
+  careerPathway: CareerPathway | null;
 }
 
 export interface TableBodyAllType extends RegistrationForm {
@@ -416,6 +418,15 @@ export interface PropEditCombo {
 }
 
 export type TableHeaderProps = { headerItems: string[]; status?: any };
+interface RowHeaderStudent {
+  id: number;
+  label: string;
+  minWidth: number;
+  align: "right" | "left" | "inherit" | "center" | "justify" | undefined;
+}
+export type TableHeaderStudentProps = {
+  studentHeaderItems: RowHeaderStudent[];
+};
 
 //!Education
 // /modules/categories/all
@@ -566,11 +577,11 @@ export interface CareerPathway {
   mentorCount: number;
   teachingAssisstantCount: number;
   name: string;
-  description: any;
+  description: string;
   isActive: boolean;
   id: number;
   createdAt: string;
-  updatedAt: any;
+  updatedAt: string | null;
 }
 export interface Category {
   instructorCount: number;
@@ -829,7 +840,7 @@ export interface StatusForm {
   description: string | null;
   regChecked: boolean;
   registrationCode: string;
-  kaaryarAssessment: any;
+  kaaryarAssessment: DetailStudentStatus | null;
   id: number;
   trainingStatus: DetailStudentStatus | null;
   withdrawalReason: DetailStudentStatus | null;

@@ -176,7 +176,10 @@ const StudentDetail = () => {
         <StudentDetailMore studentDetail={data?.infoData} />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <StatusStudent statusForm={data?.statusForm} />
+        <StatusStudent
+          careerPathway={afterBeforeData?.careerPathway}
+          statusForm={data?.statusForm}
+        />
       </TabPanel>
       <TabPanel value={value} index={5}>
         <CoreCourseStudent

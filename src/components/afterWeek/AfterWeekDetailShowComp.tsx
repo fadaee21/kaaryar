@@ -43,12 +43,12 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-
-  const cField = student?.beforeWeekForm?.registrationForm?.careerPathwayOther;
+  if (!student) return null;
+  const cField = student.beforeWeekForm?.registrationForm?.careerPathwayOther;
 
   const ButtonGroupComp = () => {
     const isDisabled =
-      student?.afterWeekChecked !== null ||
+      student.afterWeekChecked !== null ||
       successObject === "afterWeekChecked" ||
       typeComp !== "afterWeek";
 
@@ -106,7 +106,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       {/* فرم ثبت نام هفته پذیرش */}
       <ContentBox
         colorActive={
-          student?.afterWeekChecked || successObject === "afterWeekChecked"
+          student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -123,22 +123,22 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="وضعیت شرکت در کارگاه معارفه"
-                  secondary={student?.workshopCont}
+                  secondary={student.workshopCont}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
-                  secondary={student?.notifyAcceptWeek}
+                  secondary={student.notifyAcceptWeek}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="انتخاب اولیه مسیر شغلی"
                   secondary={
-                    student?.firstSelectJobRoad?.trim() === "other"
+                    student.firstSelectJobRoad?.trim() === "other"
                       ? "سایر"
-                      : getLabel(student?.firstSelectJobRoad, SelectedFieldOpt)
+                      : getLabel(student.firstSelectJobRoad, SelectedFieldOpt)
                   }
                 />
               </ListItem>
@@ -158,26 +158,26 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="نتیجه تعیین سطح کامپیوتر"
-                  secondary={student?.comLevelResult}
+                  secondary={student.comLevelResult}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نتیجه تعیین سطح زبان انگلیسی"
-                  secondary={student?.langScore}
+                  secondary={student.langScore}
                 />
               </ListItem>
 
               <ListItem>
                 <ListItemText
                   primary="تعیین سطح الگوریتم و ریاضی"
-                  secondary={student?.algoScore}
+                  secondary={student.algoScore}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="نمره مهارت‌های پایه"
-                  secondary={student?.fundamentalSkillsScore}
+                  secondary={student.fundamentalSkillsScore}
                 />
               </ListItem>
               <ListItem
@@ -185,9 +185,9 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               >
                 <ListItemText primary="عکس فیش واریزی" />
                 <ImageManager
-                  propImage={student?.paymentImageAddress}
+                  propImage={student.paymentImageAddress}
                   id={id}
-                  checked={student?.afterWeekChecked} //Disabling the button for those who have been approved
+                  checked={student.afterWeekChecked} //Disabling the button for those who have been approved
                   removeLink="/exam/after/week/image/payment"
                   uploadLink="/exam/after/week/image/payment/upload"
                   buttonsActivation={typeComp !== "afterWeek"}
@@ -200,7 +200,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       {/* کارنامه هفته پذیرش */}
       <ContentBox
         colorActive={
-          student?.afterWeekChecked || successObject === "afterWeekChecked"
+          student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -217,13 +217,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="نتیجه تعیین سطح الگوریتم"
-                  secondary={student?.algoLevelResult}
+                  secondary={student.algoLevelResult}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="وضعیت حضور و غیاب"
-                  secondary={student?.presentStatus}
+                  secondary={student.presentStatus}
                 />
               </ListItem>
             </List>
@@ -233,7 +233,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       {/* نظرات سرگروه */}
       <ContentBox
         colorActive={
-          student?.afterWeekChecked || successObject === "afterWeekChecked"
+          student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -250,19 +250,19 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="اختصاص زمان کافی به کاریار"
-                  secondary={student?.consistCompleteTime}
+                  secondary={student.consistCompleteTime}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="وضعیت دسترسی به کامپیوتر و اینترنت"
-                  secondary={student?.comAccessStatus}
+                  secondary={student.comAccessStatus}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="پیش بینی ریزش"
-                  secondary={student?.predict}
+                  secondary={student.predict}
                 />
               </ListItem>
             </List>
@@ -272,19 +272,19 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="تعهد به کار"
-                  secondary={student?.jobCommit}
+                  secondary={student.jobCommit}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="رشته پیشنهادی سرگروه"
-                  secondary={student?.recommendField}
+                  secondary={student.recommendField}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="سایر ریسک‌ها و محدودیت‌ها"
-                  secondary={student?.etcDesc}
+                  secondary={student.etcDesc}
                 />
               </ListItem>
             </List>
@@ -294,7 +294,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       {/* نظرات منتور */}
       <ContentBox
         colorActive={
-          student?.afterWeekChecked || successObject === "afterWeekChecked"
+          student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -311,13 +311,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="اختصاص زمان کافی به کاریار"
-                  secondary={student?.consistTime}
+                  secondary={student.consistTime}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="رشته پیشنهادی منتور"
-                  secondary={student?.recommendFieldMentor}
+                  secondary={student.recommendFieldMentor}
                 />
               </ListItem>
             </List>
@@ -327,13 +327,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="تعهد به کار"
-                  secondary={student?.workCommit}
+                  secondary={student.workCommit}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="سایر ریسک‌ها و محدودیت‌ها"
-                  secondary={student?.limitAndRisk}
+                  secondary={student.limitAndRisk}
                 />
               </ListItem>
             </List>
@@ -342,7 +342,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       </ContentBox>
       {/* <ContentBox
         colorActive={
-          student?.afterWeekChecked || successObject === "afterWeekChecked"
+          student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
@@ -359,7 +359,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="اخلاق فردی و حرفه ای"
-                  secondary={student?.ethics}
+                  secondary={student.ethics}
                 />
               </ListItem>
             </List>
@@ -370,8 +370,8 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       {/* link after week student to moodle student */}
       {/* {type && (
         <FinalResult
-          approvedStu={student?.afterWeekChecked}
-          finalResult={student?.finalResult}
+          approvedStu={student.afterWeekChecked}
+          finalResult={student.finalResult}
           id={id}
         />
       )} */}
@@ -381,7 +381,6 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       </Typography>
       <ContentBox>
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
-
         <Divider
           variant="middle"
           flexItem
@@ -391,19 +390,18 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           <Grid item xs={12} md={6}>
             <List>
               <ListItem>
-                <ListItemText secondary={student?.finalResult} />
+                <ListItemText secondary={student.finalResult} />
               </ListItem>
             </List>
           </Grid>
         </Grid>
       </ContentBox>
-
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         ثبت نام نهایی
       </Typography>
       <ContentBox
         colorActive={
-          student?.afterWeekChecked || successObject === "afterWeekChecked"
+          student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
         <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
@@ -419,14 +417,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="بورسیه دارد؟"
-                  secondary={student?.scholar ? "بله" : "خیر"}
+                  secondary={student.scholar ? "بله" : "خیر"}
                 />
               </ListItem>
-              {student?.scholar && (
+              {student.scholar && (
                 <ListItem>
                   <ListItemText
                     primary="درصد بورسیه"
-                    secondary={student?.scholarPercentage}
+                    secondary={student.scholarPercentage}
                   />
                 </ListItem>
               )}
@@ -437,7 +435,17 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
               <ListItem>
                 <ListItemText
                   primary="رشته نهایی "
-                  secondary={student?.finalField}
+                  secondary={student.finalField}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="مسیر آموزشی"
+                  secondary={student.careerPathway?.name || "-"}
                 />
               </ListItem>
             </List>

@@ -157,6 +157,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 label="مشغولیت های فعلی"
                 identifier="noneJobActivation"
                 options={noneJobActivationOpt}
+                valueOfSelectAll={4}
               />
             )}
           </List>
@@ -209,6 +210,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
               label="آشنایی کار با کامپیوتر"
               identifier="computerFamiliarity"
               options={computerFamiliarityOpt}
+              valueOfSelectAll={6}
             />
           </List>
         </Grid>

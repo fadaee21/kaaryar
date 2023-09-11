@@ -8,14 +8,11 @@ import {
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import SearchAll from "../../components/search/SearchAll";
-import TablePic from "../../components/table/TablePic";
 // import { useAuth } from "../../context/AuthProvider";
 import { MoodleUser } from "../../model";
-import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -26,39 +23,35 @@ import useSWR from "swr";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
-import TableHeader from "../../components/table/TableHeader";
-import { studentTableHeader } from "../../components/table/helper-header";
-import { itemCounterTable } from "../../utils/itemCounterTable";
+import { TableHeaderStudent } from "../../components/table/TableHeader";
+import { adminStudentTableHeader } from "../../components/table/helper-header";
 
+import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
+const pageSize = 25;
+// const adminStudentQuery =
+//   "orderAscending=false&orderBy=after_week_update_timestamp";
+const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
+const STUDENT_COUNT = "moodle/user/student/count";
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
-  const pageSize = 25;
-  // const adminStudentQuery =
-  //   "orderAscending=false&orderBy=after_week_update_timestamp";
-  const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
-
-  const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
-
-  const studentCount = "moodle/user/student/count";
-  const [, counterPage] = useCountPagination(studentCount);
   const [chevronDir, setChevronDir] = useState(false);
+  const ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
+  const [, counterPage] = useCountPagination(STUDENT_COUNT);
   const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
     any[] | null
   >(null);
 
-  const { data, isLoading, error } = useSWR(adminStudent, {
+  const { data, isLoading, error } = useSWR(ADMIN_STUDENT_URL, {
     onSuccess: () => window.scrollTo(0, 0),
   });
 
-  // const { auth } = useAuth();
-  // const roles = auth.roles.toString();
-  const navigate = useNavigate();
-
-  if (isLoading) {
-    return <LoadingProgress />;
-  }
+  if (isLoading) return <LoadingProgress />;
   if (error) {
-    navigate("/");
+    return (
+      <Typography sx={{ display: "flex", justifyContent: "center" }}>
+        Error: {error.message}
+      </Typography>
+    );
   }
   return (
     <Box sx={{ m: 2 }}>
@@ -123,16 +116,24 @@ const StudentTableAdmin = () => {
           </AccordionStyled>
           {/* //!for empty response of search return TableEmpty */}
           {searchingMoodleStudent?.length === 0 && <TableEmpty />}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              {/* //!for empty response of search don't return TableHeader */}
-              {searchingMoodleStudent?.length !== 0 && (
-                <TableHeader headerItems={studentTableHeader} />
-              )}
 
-              <TableBody>
-                {(searchingMoodleStudent ? searchingMoodleStudent : data)?.map(
-                  (moodleUser: MoodleUser, i: number) => {
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            <TableContainer
+            //  sx={{ maxHeight: 440 }}
+            >
+              <Table stickyHeader aria-label="simple table">
+                {/* //!for empty response of search don't return TableHeader */}
+                {searchingMoodleStudent?.length !== 0 && (
+                  <TableHeaderStudent
+                    studentHeaderItems={adminStudentTableHeader}
+                  />
+                )}
+
+                <TableBody>
+                  {(searchingMoodleStudent
+                    ? searchingMoodleStudent
+                    : data
+                  )?.map((moodleUser: MoodleUser, i: number) => {
                     const {
                       id,
                       firstName,
@@ -142,140 +143,31 @@ const StudentTableAdmin = () => {
                       city,
                       statusForm,
                       registrationForm,
+                      careerPathway,
                     } = moodleUser;
                     return (
-                      <StyledTableRow
+                      <StudentAdminRowTable
                         key={id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {searchingMoodleStudent
-                              ? i + 1
-                              : itemCounterTable(page, pageSize, i)}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {/* //TODO: add picture */}
-                          <TablePic picture={picture} lastName={family} />
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => navigate(`${id}`)}
-                        >
-                          <Typography variant="body1">
-                            {firstName + " " + family}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2" textAlign={"center"}>
-                            {username}
-                          </Typography>
-                        </StyledTableCell>
-
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.city || city || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.province || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.course}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.refer || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.trainingStatus?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.nextTrainingStep?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.referralToFinance?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.kaaryarAssessment?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                      </StyledTableRow>
+                        id={id}
+                        firstName={firstName}
+                        family={family}
+                        username={username}
+                        picture={picture}
+                        city={city}
+                        statusForm={statusForm}
+                        registrationForm={registrationForm}
+                        careerPathway={careerPathway}
+                        i={i}
+                        searchingMoodleStudent={searchingMoodleStudent}
+                        page={page}
+                        pageSize={pageSize}
+                      />
                     );
-                  }
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         </Container>
       </Box>
       {!searchingMoodleStudent && (

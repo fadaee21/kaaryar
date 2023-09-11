@@ -15,7 +15,7 @@ import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { AccordionStyled } from "../../styles/search/accordion";
 import useSWR from "swr";
 import TableHeader from "../../components/table/TableHeader";
-import { studentTableHeader } from "../../components/table/helper-header";
+import { assigneeStudentTableHeader } from "../../components/table/helper-header";
 import TablePic from "../../components/table/TablePic";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
@@ -71,7 +71,7 @@ const StudentTableAssignee = () => {
           </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={studentTableHeader} />
+              <TableHeader headerItems={assigneeStudentTableHeader} />
               <TableBody>
                 {data?.map((moodleUser: MoodleUser, i: number) => {
                   const {
