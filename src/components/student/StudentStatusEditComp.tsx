@@ -16,14 +16,22 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { EditComboStudent } from "./EditComboStudent";
 import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
 import useSubmitStatusStudent from "../../hooks/request/useSubmitStatusStudent";
+import CareerPathway from "../addNewCourseComp/CareerPathway";
 
-interface Prop {
+interface Props {
   statusForm: StatusForm | undefined;
   firstName: string | undefined;
   family: string | undefined;
+  careerPathwayId: string;
 }
 
-const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
+const StudentStatusEditComp = ({
+  statusForm,
+  family,
+  firstName,
+  careerPathwayId,
+}: Props) => {
+  console.log(careerPathwayId);
   const navigate = useNavigate();
   const [trainingStatus, setTrainingStatus] = useState(
     statusForm?.trainingStatus?.id.toString() || ""
@@ -87,11 +95,12 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
             type="submit"
             sx={{ px: 5, ml: "auto" }}
             disabled={
-              loading ||
-              !trainingStatus ||
-              !nextTrainingStep ||
-              !referralToFinance ||
-              !kaaryarAssessment
+              loading
+              //  ||
+              // !trainingStatus ||
+              // !nextTrainingStep ||
+              // !referralToFinance ||
+              // !kaaryarAssessment
             }
           >
             ذخیره
@@ -182,6 +191,16 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
                 }
                 label="ارزیابی کاریار"
                 val={kaaryarAssessment}
+              />
+            </ListItem>
+            <ListItem>
+              <CareerPathway
+                careerPathwayId={careerPathwayId}
+                errMsg={false}
+                label="مسیر آموزشی"
+                setCareerPathwayId={() => {}}
+                disabled={true}
+                helperText={"این فیلد تنها از بخش پذیرش قابل ویرایش است."}
               />
             </ListItem>
           </List>

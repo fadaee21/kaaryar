@@ -6,12 +6,15 @@ import { RoleType } from "../../model";
 import { handleError } from "../../utils/handleError";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useLocation, useNavigate } from "react-router-dom";
 const loginURL = "/oauth2/token";
 export const useSubmitLogin = (username: string, password: string) => {
   const { setAuth } = useAuth();
   const [errMsg, setErrMsg] = useState("");
   let bodyContent = `username=${username}&password=${password}`;
-
+  const navigate = useNavigate();
+  const location = useLocation();
+  const stateLocation = location.state as any;
   const handleLogin = async () => {
     try {
       const response = await userLogin(loginURL, {
@@ -52,8 +55,13 @@ export const useSubmitLogin = (username: string, password: string) => {
           username,
           roles: [roleResponseServer],
         });
+        const from =
+          stateLocation?.from?.pathname || `/${roleResponseServer}/dashboard`;
+        console.log(from);
+        navigate(from, { replace: true });
       }
     } catch (error) {
+      console.log(error);
       const err = error as AxiosError;
       if (!err?.response) {
         setErrMsg("پاسخی از سرور دریافت نشد");

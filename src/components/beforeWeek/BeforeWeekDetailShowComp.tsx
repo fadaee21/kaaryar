@@ -1,7 +1,6 @@
 import {
   Button,
   ButtonGroup,
-  Divider,
   Grid,
   List,
   ListItem,
@@ -11,10 +10,7 @@ import {
 import { Box } from "@mui/system";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
 import { BeforeWeekType, TypeComp } from "../../model";
-import { ContentBox } from "../../styles/examFormDetail";
-import { DetailTypography } from "../../styles/studentDetail";
 import {
   accessTimeOpt,
   employmentTimeCommitmentOpt,
@@ -27,10 +23,10 @@ import {
 } from "./helper";
 import { getLabel } from "../../utils/getLabel";
 import ImageManager from "./ImageManager";
+import LayoutReg from "../layout/LayoutReg";
 
 interface ExamStudent {
   student: BeforeWeekType | undefined;
-  matches: boolean;
   id: string | undefined;
   //typeComp:help to check which page use and show or not show button group
   typeComp: TypeComp;
@@ -40,15 +36,13 @@ interface ExamStudent {
 
 const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
   student,
-  matches,
   id,
   typeComp,
   successObject,
   handleOpenAlert,
 }) => {
   const navigate = useNavigate();
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+
   const ButtonGroupComp = () => {
     const isDisabled =
       student?.acceptWeekChecked !== null ||
@@ -56,7 +50,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
       typeComp !== "beforeWeek";
 
     const navigateToEdit = () => {
-      navigate(`/${roles}/before-week-edit/${id}`);
+      navigate("edit");
     };
 
     return (
@@ -105,19 +99,12 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
         <ButtonGroupComp />
       </Box>
       {/*اطلاعات تحصیلی*/}
-      <ContentBox
+      <LayoutReg
+        title="اطلاعات تحصیلی"
         colorActive={
           student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          اطلاعات تحصیلی
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -206,18 +193,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/*وضعیت اشتغال*/}
-      <ContentBox colorActive={student?.acceptWeekChecked}>
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          وضعیت اشتغال
-        </DetailTypography>
-
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
+      <LayoutReg title="وضعیت اشتغال" colorActive={student?.acceptWeekChecked}>
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -331,17 +309,13 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/*دسترسی به کامپیوتر*/}
-      <ContentBox colorActive={student?.acceptWeekChecked}>
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          دسترسی به کامپیوتر
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
+
+      <LayoutReg
+        title="دسترسی به کامپیوتر"
+        colorActive={student?.acceptWeekChecked}
+      >
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -408,17 +382,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/*مدیریت زمان*/}
-      <ContentBox colorActive={student?.acceptWeekChecked}>
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          مدیریت زمان
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
+      <LayoutReg title="مدیریت زمان" colorActive={student?.acceptWeekChecked}>
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -441,18 +407,13 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/*مهارت های پایه*/}
-      <ContentBox colorActive={student?.acceptWeekChecked}>
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          مهارت های پایه
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
 
+      <LayoutReg
+        title="مهارت های پایه"
+        colorActive={student?.acceptWeekChecked}
+      >
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -525,17 +486,12 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/*سرفصل های ریاضی*/}
-      <ContentBox colorActive={student?.acceptWeekChecked}>
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          سرفصل های ریاضی
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
+      <LayoutReg
+        title="سرفصل های ریاضی"
+        colorActive={student?.acceptWeekChecked}
+      >
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -588,18 +544,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/*توضیحات*/}
-      <ContentBox colorActive={student?.acceptWeekChecked}>
-        <DetailTypography
-          variant="h6"
-          sx={{ minWidth: "14rem" }}
-        ></DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
+      <LayoutReg colorActive={student?.acceptWeekChecked}>
         <Grid container>
           <Grid item xs={9}>
             <List>
@@ -612,7 +559,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/*ارزیابی قبل از پذیرش*/}
       <Box
         sx={{
@@ -625,19 +572,11 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           ارزیابی قبل از پذیرش
         </Typography>
       </Box>
-      <ContentBox
+      <LayoutReg
         colorActive={
           student?.acceptWeekChecked || successObject === "acceptWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
-
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
-
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -673,7 +612,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               <ListItem>
                 <ListItemText
                   primary="انگیزه اصلی از شرکت در دوره"
-                  secondary={student?.motivation?? "-"}
+                  secondary={student?.motivation ?? "-"}
                 />
               </ListItem>
               <ListItem>
@@ -685,7 +624,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       <Box
         sx={{
           display: "flex",

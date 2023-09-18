@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   ButtonGroup,
-  Divider,
   Grid,
   List,
   ListItem,
@@ -10,20 +9,16 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
-
 import { AfterWeekType, TypeComp } from "../../model";
-import { ContentBox } from "../../styles/examFormDetail";
-import { DetailTypography } from "../../styles/studentDetail";
 import { getLabel } from "../../utils/getLabel";
 import { SelectedFieldOpt } from "../search/searchOptions";
 import ImageManager from "../beforeWeek/ImageManager";
 import { lazy } from "react";
+import LayoutReg from "../layout/LayoutReg";
 const LookUpLink = lazy(() => import("./LookUpLink"));
 
 interface AfterWeekStudentShow {
   student: AfterWeekType | undefined;
-  matches: boolean;
   id: string | undefined;
   typeComp: TypeComp;
   successObject?: string;
@@ -33,7 +28,6 @@ interface AfterWeekStudentShow {
 
 const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   student,
-  matches,
   id,
   typeComp,
   successObject,
@@ -41,19 +35,17 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   refreshingPage,
 }) => {
   const navigate = useNavigate();
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
   if (!student) return null;
   const cField = student.beforeWeekForm?.registrationForm?.careerPathwayOther;
 
   const ButtonGroupComp = () => {
-    const isDisabled =
-      student.afterWeekChecked !== null ||
-      successObject === "afterWeekChecked" ||
-      typeComp !== "afterWeek";
+    const disabling =
+      successObject === "afterWeekChecked" || typeComp !== "afterWeek";
+    const isDisabledEdit = student.afterWeekChecked === false || disabling;
+    const isDisabled = student.afterWeekChecked !== null || disabling;
 
     const navigateToEdit = () => {
-      navigate(`/${roles}/after-week-edit/${id}`);
+      navigate("edit");
     };
 
     return (
@@ -62,21 +54,24 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         color="secondary"
         size="large"
         aria-label="small button group"
-        disabled={isDisabled}
         sx={{
           display: typeComp === "afterWeek" ? "show" : "none",
         }}
       >
-        <Button onClick={navigateToEdit}>ویرایش</Button>
+        <Button disabled={isDisabledEdit} onClick={navigateToEdit}>
+          ویرایش
+        </Button>
         <Button
           variant="contained"
           onClick={() => handleOpenAlert?.("approve")}
+          disabled={isDisabled}
         >
           تایید کردن
         </Button>
         <Button
           variant="contained"
           onClick={() => handleOpenAlert?.("disApprove")}
+          disabled={isDisabled}
         >
           رد کردن
         </Button>
@@ -104,19 +99,12 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         <ButtonGroupComp />
       </Box>
       {/* فرم ثبت نام هفته پذیرش */}
-      <ContentBox
+      <LayoutReg
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"
         }
+        title=" نتیجه کارگاه معارفه"
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          نتیجه کارگاه معارفه
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -196,21 +184,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/* کارنامه هفته پذیرش */}
-      <ContentBox
+      <LayoutReg
+        title="کارنامه هفته پذیرش"
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          کارنامه هفته پذیرش
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -229,21 +210,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/* نظرات سرگروه */}
-      <ContentBox
+      <LayoutReg
+        title="نظرات سرگروه"
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          نظرات سرگروه
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -290,21 +264,14 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/* نظرات منتور */}
-      <ContentBox
+      <LayoutReg
+        title="نظرات منتور"
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }}>
-          نظرات منتور
-        </DetailTypography>
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -339,7 +306,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       {/* <ContentBox
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"
@@ -379,13 +346,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         نتیجه نهایی
       </Typography>
-      <ContentBox>
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
+      <LayoutReg>
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -395,22 +356,15 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       <Typography variant="h6" sx={{ fontWeight: "bolder", my: 5 }}>
         ثبت نام نهایی
       </Typography>
-      <ContentBox
+      <LayoutReg
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"
         }
       >
-        <DetailTypography variant="h6" sx={{ minWidth: "14rem" }} />
-
-        <Divider
-          variant="middle"
-          flexItem
-          orientation={matches ? "vertical" : "horizontal"}
-        />
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
@@ -451,7 +405,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </ContentBox>
+      </LayoutReg>
       <Box
         sx={{
           display: "flex",

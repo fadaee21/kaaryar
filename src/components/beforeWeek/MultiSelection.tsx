@@ -31,7 +31,7 @@ const MultiSelection = ({
     if (checkBoxVal.includes("همه موارد") || checkBoxVal.length === valueOfSelectAll) {
       setCheckBoxVal(options);
     }
-  }, [checkBoxVal, options]);
+  }, [checkBoxVal, options, valueOfSelectAll]);
 
   const handleChangeCheckBox = useCallback(
     (value: string) => () => {

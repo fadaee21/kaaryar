@@ -12,10 +12,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Navigate, useNavigate } from "react-router-dom";
 import { editAxios } from "../../../api/axios";
 import { convertArrToStr, getNameAndId } from "../../../utils/courseMethod";
-import { RELATED_PATH } from "../../addNewCourseComp/CoreFields";
 import { statusCourseOpt } from "../../../pages/addNewCourse/addNewCourseHelper";
 import { toast } from "react-toastify";
 import { handleError } from "../../../utils/handleError";
+import { RELATED_PATH } from "../../addNewCourseComp/CareerPathway";
 
 interface Prop {
   coreDetail: ShortCoreModule | undefined;

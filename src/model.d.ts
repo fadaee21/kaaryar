@@ -59,21 +59,6 @@ export interface StudentComment {
   calendarType: string;
   id: number;
 }
-// export interface Comment {
-//   isChecked: boolean;
-//   comment: string;
-//   createdAt: string;
-//   id: number;
-//   sessionDate: string;
-//   sessionProblem: string;
-//   studentContribute: string;
-//   isStudentPresent: true;
-//   studentTask: string;
-//   updateTime: string;
-//   studentUser: StudentComment;
-//   course: ModulesAsStudentModule;
-//   commenter: StudentComment;
-// }
 
 export interface Comment {
   isChecked: boolean;
@@ -105,32 +90,6 @@ export interface editCommentProp {
   setRefreshByEdit: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export interface MoodleUser {
-  email: string;
-  firstName: string;
-  id: number;
-  family: string;
-  roles: Array;
-  username: string;
-  idNumber: string;
-  phone: string;
-  mobile: string;
-  institution: string;
-  department: string;
-  address: string;
-  city: string;
-  country: string;
-  lang: string;
-  timezone: string;
-  calendarType: string;
-  description: string;
-  picture: {
-    imageAddress: string;
-  };
-  registrationForm: RegistrationForm | null;
-  statusForm: StatusForm | null;
-  careerPathway: CareerPathway | null;
-}
 //this is just for admin
 export interface moodleJustStudent {
   id: number;
@@ -174,6 +133,7 @@ export interface LocalStorage {
 
 export interface RegistrationForm {
   id: number;
+  careerPathwayId?: number;
   checked: boolean | null;
   registrationCode?: string;
   codeMeli?: string;
@@ -198,6 +158,7 @@ export interface RegistrationForm {
   highSchoolYear?: string;
   course?: string;
   decidedAt?: string | null;
+  careerPathway?: CareerPathway;
 }
 
 export interface BeforeWeekType {
@@ -268,7 +229,8 @@ export interface BeforeWeekType {
 
 interface AfterWeekType {
   id: number;
-  afterWeekChecked: boolean;
+  careerPathwayId: number | null;
+  afterWeekChecked: boolean| null;
   algoScore: string;
   comAccess: string;
   comAccessStatus: string;
@@ -407,13 +369,16 @@ export interface PropEditBool {
   handleChange: (e: SelectChangeEvent<string | boolean>) => void;
 }
 export interface PropEditCombo {
+  disabled?: boolean;
   placeholder: string;
   identifier: string;
   value: any;
-  options: {
-    value: any;
-    label: string;
-  }[];
+  options:
+    | {
+        value: any;
+        label: string;
+      }[]
+    | undefined;
   handleChange: (e: SelectChangeEvent<string>) => void;
 }
 
@@ -840,12 +805,12 @@ export interface StatusForm {
   description: string | null;
   regChecked: boolean;
   registrationCode: string;
-  kaaryarAssessment: DetailStudentStatus | null;
+  kaaryarAssessment: DetailStudentStatus;
   id: number;
-  trainingStatus: DetailStudentStatus | null;
-  withdrawalReason: DetailStudentStatus | null;
-  nextTrainingStep: DetailStudentStatus | null;
-  referralToFinance: DetailStudentStatus | null;
+  trainingStatus: DetailStudentStatus;
+  withdrawalReason: DetailStudentStatus;
+  nextTrainingStep: DetailStudentStatus;
+  referralToFinance: DetailStudentStatus;
 }
 
 export interface DetailStudentStatus {
@@ -898,4 +863,79 @@ export interface Notify {
   templateId: number;
   createdAt: string;
   updatedAt: string;
+}
+
+//admin student table
+interface Personnel {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+}
+export interface CurrentAssignedMentorTa {
+  personnel: Personnel;
+  personnelRole: string;
+  assignmentId: number | null;
+}
+export interface CurrentModuleAsStudent {
+  name: string;
+  description: any;
+  numberOfHours?: number;
+  moduleType?: string;
+  subType?: string;
+  isActive: boolean;
+  isImported: any;
+  teachingStatus?: string;
+  levelName: any;
+  nonLmsInstructors: any;
+  startDate: string;
+  endDate: string;
+  weblinkFeedbackForm: any;
+  weblinkFinalProject: any;
+  deadlineFinalProject: any;
+  weblinkLmsCourse: any;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface MoodleUser {
+  email: string;
+  firstName: string;
+  id: number;
+  family: string;
+  roles: Array;
+  username: string;
+  idNumber: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  description: string;
+  picture: {
+    imageAddress: string;
+  };
+  registrationForm: RegistrationForm | null;
+  statusForm: StatusForm | null;
+  careerPathway: CareerPathway | null;
+  currentAssignedMentor: CurrentAssignedMentorTa | null;
+  currentAssignedTA: CurrentAssignedMentorTa | null;
+  currentModuleAsStudent: CurrentModuleAsStudent;
 }

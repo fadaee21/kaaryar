@@ -139,7 +139,7 @@ export const fieldOptions = [
   },
 ];
 
-export const SelectedFieldOpt = [
+export const SelectedFieldOpt = [ //ttttttttttt
   { label: "مسیر آموزش و اشتغال برنامه‌نویسی", value: "backEnd" },
   { label: "مسیر آموزش و اشتغال تحلیل داده", value: "DB" },
   { label: "مسیر آموزش و اشتغال اموراداری", value: "icdl" },

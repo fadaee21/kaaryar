@@ -138,25 +138,21 @@ const SearchAllCourse = ({
           />
         )}
       </Grid>
+      {moduleSubType === "unassigned" && (
+        <Grid item xs={3}>
+          <SelectiveSearchCourse
+            state={careerPathway}
+            setState={setCareerPathway}
+            options={careerPathwayOptions?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            }))}
+            placeholder="مسیر مرتبط"
+          />
+        </Grid>
+      )}
       {["workshop", "english_module"].every((i) => i !== moduleSubType) && (
         <>
-          {["interpersonal_skills", "english_module"].every(
-            (i) =>
-              i !== moduleSubType && (
-                <Grid item xs={3}>
-                  <SelectiveSearchCourse
-                    state={careerPathway}
-                    setState={setCareerPathway}
-                    options={careerPathwayOptions?.map((item) => ({
-                      value: item.id,
-                      label: item.name,
-                    }))}
-                    placeholder="مسیر مرتبط"
-                  />
-                </Grid>
-              )
-          )}
-
           <Grid item xs={3}>
             <SelectiveSearchCourse
               state={statusCourse}

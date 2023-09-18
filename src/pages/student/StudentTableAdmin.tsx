@@ -27,11 +27,13 @@ import { TableHeaderStudent } from "../../components/table/TableHeader";
 import { adminStudentTableHeader } from "../../components/table/helper-header";
 
 import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
+
 const pageSize = 25;
 // const adminStudentQuery =
 //   "orderAscending=false&orderBy=after_week_update_timestamp";
 const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
 const STUDENT_COUNT = "moodle/user/student/count";
+
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
@@ -117,11 +119,22 @@ const StudentTableAdmin = () => {
           {/* //!for empty response of search return TableEmpty */}
           {searchingMoodleStudent?.length === 0 && <TableEmpty />}
 
-          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <Paper
+            sx={{
+              width: "100%",
+              overflow: "auto",
+              position: "relative",
+              zIndex: 0,
+            }}
+          >
             <TableContainer
             //  sx={{ maxHeight: 440 }}
             >
-              <Table stickyHeader aria-label="simple table">
+              <Table
+                stickyHeader
+                aria-label="simple table"
+                sx={{ tableLayout: "auto" }}
+              >
                 {/* //!for empty response of search don't return TableHeader */}
                 {searchingMoodleStudent?.length !== 0 && (
                   <TableHeaderStudent
@@ -144,6 +157,9 @@ const StudentTableAdmin = () => {
                       statusForm,
                       registrationForm,
                       careerPathway,
+                      currentAssignedMentor,
+                      currentAssignedTA,
+                      currentModuleAsStudent,
                     } = moodleUser;
                     return (
                       <StudentAdminRowTable
@@ -161,6 +177,9 @@ const StudentTableAdmin = () => {
                         searchingMoodleStudent={searchingMoodleStudent}
                         page={page}
                         pageSize={pageSize}
+                        currentAssignedMentor={currentAssignedMentor}
+                        currentAssignedTA={currentAssignedTA}
+                        currentModuleAsStudent={currentModuleAsStudent}
                       />
                     );
                   })}
