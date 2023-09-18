@@ -10,8 +10,6 @@ import { Box, Container } from "@mui/system";
 import { useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import SearchAll from "../../components/search/SearchAll";
-// import { useAuth } from "../../context/AuthProvider";
 import { MoodleUser } from "../../model";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -27,6 +25,7 @@ import { TableHeaderStudent } from "../../components/table/TableHeader";
 import { adminStudentTableHeader } from "../../components/table/helper-header";
 
 import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
+import SearchAllStudent from "../../components/student/search-student/SearchAllStudent";
 
 const pageSize = 25;
 // const adminStudentQuery =
@@ -108,7 +107,12 @@ const StudentTableAdmin = () => {
                   my: 3,
                 }}
               >
-                <SearchAll
+                {/* <SearchAll
+                  setSearchingMoodleStudent={setSearchingMoodleStudent}
+                  searchPage="moodle"
+                  chevronDir={chevronDir}
+                /> */}
+                <SearchAllStudent
                   setSearchingMoodleStudent={setSearchingMoodleStudent}
                   searchPage="moodle"
                   chevronDir={chevronDir}

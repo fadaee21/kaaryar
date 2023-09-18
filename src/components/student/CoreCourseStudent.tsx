@@ -81,11 +81,11 @@ const RowTable = ({ module, assessment }: ModulesAsStudent) => {
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+      {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">
           {endDate ? persianDate(endDate) : "-"}
         </Typography>
-      </StyledTableCell>
+      </StyledTableCell> */}
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{finalGrade ? finalGrade : "-"}</Typography>
       </StyledTableCell>
