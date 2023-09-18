@@ -15,11 +15,11 @@ const useGetValidationToken = () => {
         const endpoint = `/${roles === "admin" ? "manager" : roles}/test`;
         const response = await getData(endpoint);
         setTokenValidation(response.status === 200);
-        setLoadingVal(true);
       } catch (error: any) {
         setTokenValidation(false);
-        setLoadingVal(true);
         throw new Error("Your token is not valid anymore, please log in again");
+      }finally{
+        setLoadingVal(true);
       }
     };
     const token = Cookies.get("token");

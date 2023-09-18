@@ -1,35 +1,43 @@
-import React from "react";
-import { StyledTableCell } from "../../../styles/table";
-import { Typography } from "@mui/material";
 import { StatusForm } from "../../../model";
+import {
+  StyledTableCellAdmin,
+  StyledTypographyAdmin,
+} from "../../../styles/adminTable";
 type Props = { statusForm: StatusForm | null };
 const RowViewStatus = ({ statusForm }: Props) => {
+  // if (!statusForm) return null;
+  const {
+    referralToFinance,
+    nextTrainingStep,
+    kaaryarAssessment,
+    trainingStatus,
+  } = statusForm || {};
   return (
     <>
       {/* "وضعیت آموزش" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
-          {statusForm?.trainingStatus?.value || "-"}
-        </Typography>
-      </StyledTableCell>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin textAlign={"center"} variant="body2">
+          {trainingStatus?.id === 1 ? "-" : trainingStatus?.value}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "قدم آتی آموزش" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
-          {statusForm?.nextTrainingStep?.value || "-"}
-        </Typography>
-      </StyledTableCell>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
+          {nextTrainingStep?.id === 1 ? "-" : nextTrainingStep?.value}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "ارجاع به واحد مالی" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
-          {statusForm?.referralToFinance?.value || "-"}
-        </Typography>
-      </StyledTableCell>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
+          {referralToFinance?.id === 1 ? "-" : referralToFinance?.value}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "ارزیابی کاریار" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
-          {statusForm?.kaaryarAssessment?.value || "-"}
-        </Typography>
-      </StyledTableCell>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
+          {kaaryarAssessment?.id === 1 ? "-" : kaaryarAssessment?.value}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
     </>
   );
 };

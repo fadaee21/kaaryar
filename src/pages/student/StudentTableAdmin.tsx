@@ -10,8 +10,6 @@ import { Box, Container } from "@mui/system";
 import { useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import SearchAll from "../../components/search/SearchAll";
-// import { useAuth } from "../../context/AuthProvider";
 import { MoodleUser } from "../../model";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -27,11 +25,14 @@ import { TableHeaderStudent } from "../../components/table/TableHeader";
 import { adminStudentTableHeader } from "../../components/table/helper-header";
 
 import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
+import SearchAllStudent from "../../components/student/search-student/SearchAllStudent";
+
 const pageSize = 25;
 // const adminStudentQuery =
 //   "orderAscending=false&orderBy=after_week_update_timestamp";
 const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
 const STUDENT_COUNT = "moodle/user/student/count";
+
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
@@ -106,7 +107,12 @@ const StudentTableAdmin = () => {
                   my: 3,
                 }}
               >
-                <SearchAll
+                {/* <SearchAll
+                  setSearchingMoodleStudent={setSearchingMoodleStudent}
+                  searchPage="moodle"
+                  chevronDir={chevronDir}
+                /> */}
+                <SearchAllStudent
                   setSearchingMoodleStudent={setSearchingMoodleStudent}
                   searchPage="moodle"
                   chevronDir={chevronDir}
@@ -117,11 +123,22 @@ const StudentTableAdmin = () => {
           {/* //!for empty response of search return TableEmpty */}
           {searchingMoodleStudent?.length === 0 && <TableEmpty />}
 
-          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <Paper
+            sx={{
+              width: "100%",
+              overflow: "auto",
+              position: "relative",
+              zIndex: 0,
+            }}
+          >
             <TableContainer
             //  sx={{ maxHeight: 440 }}
             >
-              <Table stickyHeader aria-label="simple table">
+              <Table
+                stickyHeader
+                aria-label="simple table"
+                sx={{ tableLayout: "auto" }}
+              >
                 {/* //!for empty response of search don't return TableHeader */}
                 {searchingMoodleStudent?.length !== 0 && (
                   <TableHeaderStudent
@@ -144,6 +161,9 @@ const StudentTableAdmin = () => {
                       statusForm,
                       registrationForm,
                       careerPathway,
+                      currentAssignedMentor,
+                      currentAssignedTA,
+                      currentModuleAsStudent,
                     } = moodleUser;
                     return (
                       <StudentAdminRowTable
@@ -161,6 +181,9 @@ const StudentTableAdmin = () => {
                         searchingMoodleStudent={searchingMoodleStudent}
                         page={page}
                         pageSize={pageSize}
+                        currentAssignedMentor={currentAssignedMentor}
+                        currentAssignedTA={currentAssignedTA}
+                        currentModuleAsStudent={currentModuleAsStudent}
                       />
                     );
                   })}

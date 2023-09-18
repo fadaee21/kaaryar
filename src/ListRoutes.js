@@ -292,7 +292,7 @@ const ListRoutes = [
     key: "admin5",
   },
   {
-    path: "admin/before-week-edit/:id",
+    path: "admin/before-week/:id/edit",
     name: " ",
     component: BeforeWeekDetailEdit,
     showInNav: false,
@@ -309,7 +309,7 @@ const ListRoutes = [
     key: "admin7",
   },
   {
-    path: "admin/register-form-edit/:id",
+    path: "admin/register-form/:id/edit",
     name: " ",
     component: RegisterFormDetailEdit,
     showInNav: false,
@@ -325,7 +325,7 @@ const ListRoutes = [
     key: "admin9",
   },
   {
-    path: "admin/after-week-edit/:id",
+    path: "admin/after-week/:id/edit",
     name: " ",
     component: AfterWeekDetailEdit,
     showInNav: false,

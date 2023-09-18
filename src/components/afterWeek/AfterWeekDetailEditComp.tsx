@@ -1,16 +1,7 @@
 import React from "react";
-import {
-  FormControl,
-  Grid,
-  Input,
-  InputLabel,
-  List,
-  ListItem,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import { AfterWeekType, PropEditCombo, PropEditString } from "../../model";
-import { SelectedFieldOpt, fieldOptions, finalResults } from "../search/searchOptions";
+import { Grid, List } from "@mui/material";
+import { AfterWeekType } from "../../model";
+import { fieldOptions, finalResults } from "../search/searchOptions";
 import {
   comAccessStatusOpt,
   notifyAcceptWeekOpt,
@@ -21,6 +12,11 @@ import {
   workshopContOpt,
   yesOrNo,
 } from "./helper";
+import useSWR from "swr";
+import { RELATED_PATH, RelatedPath } from "../addNewCourseComp/CareerPathway";
+import EditString from "../ui-comp/EditString";
+import { EditingSelective } from "../ui-comp/EditingSelective";
+import LayoutReg from "../layout/LayoutReg";
 
 interface AfterWeekStudentEdit {
   student: AfterWeekType | null;
@@ -31,300 +27,265 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
   student,
   handleChange,
 }) => {
+  const { data } = useSWR<RelatedPath[]>(RELATED_PATH);
+
+  if (student?.afterWeekChecked) {
+    return (
+      <LayoutReg title="ثبت نام نهایی">
+        <Grid container rowGap={5} sx={{ my: 2 }}>
+          <Grid item xs={12} md={6}>
+            <List>
+              {data && (
+                <EditingSelective
+                  handleChange={handleChange}
+                  placeholder="مسیر آموزشی نهایی"
+                  options={data.map((i) => ({ label: i.name, value: i.id }))}
+                  value={student?.careerPathwayId}
+                  identifier="careerPathwayId"
+                />
+              )}
+            </List>
+          </Grid>
+        </Grid>
+      </LayoutReg>
+    );
+  }
+
   return (
     <>
       {/* فرم ثبت نام هفته پذیرش */}
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditCombo
-              handleChange={handleChange}
-              identifier="workshopCont"
-              options={workshopContOpt}
-              placeholder="وضعیت شرکت در کارگاه معارفه"
-              value={student?.workshopCont}
-            />
-            <EditCombo
-              handleChange={handleChange}
-              identifier="notifyAcceptWeek"
-              options={notifyAcceptWeekOpt}
-              placeholder="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
-              value={student?.notifyAcceptWeek}
-            />
-            <EditCombo
-              handleChange={handleChange}
-              identifier="firstSelectJobRoad"
-              placeholder="انتخاب اولیه مسیر شغلی"
-              options={SelectedFieldOpt}
-              value={student?.firstSelectJobRoad || ""}
-            />
-          </List>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditString
-              handleChange={handleChange}
-              identifier="comLevelResult"
-              placeholder="نتیجه تعیین سطح کامپیوتر"
-              value={student?.comLevelResult || ""}
-            />
-            <EditString
-              handleChange={handleChange}
-              identifier="langScore"
-              placeholder="نتیجه تعیین سطح زبان انگلیسی"
-              value={student?.langScore || ""}
-            />
-            <EditString
-              handleChange={handleChange}
-              identifier="algoScore"
-              placeholder="تعیین سطح الگوریتم و ریاضی"
-              value={student?.algoScore || ""}
-            />
-            <EditString
-              handleChange={handleChange}
-              identifier="fundamentalSkillsScore"
-              placeholder="نمره مهارت‌های پایه"
-              value={student?.fundamentalSkillsScore || ""}
-            />
-          </List>
-        </Grid>
-      </Grid>
-      {/* کارنامه هفته پذیرش */}
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditString
-              handleChange={handleChange}
-              identifier="algoLevelResult"
-              placeholder="نتیجه تعیین سطح الگوریتم"
-              value={student?.algoLevelResult || ""}
-            />
-            <EditCombo
-              options={presentStatusOpt}
-              handleChange={handleChange}
-              identifier="presentStatus"
-              placeholder="وضعیت حضور و غیاب"
-              value={student?.presentStatus || ""}
-            />
-          </List>
-        </Grid>
-        {/* <Grid item xs={12} md={6}>
-          <List></List>
-        </Grid> */}
-      </Grid>
-      {/* نظرات سرگروه */}
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditCombo
-              placeholder="اختصاص زمان کافی به کاریار - سرگروه"
-              handleChange={handleChange}
-              identifier="consistCompleteTime"
-              value={student?.consistCompleteTime}
-              options={yesOrNo}
-            />
-            <EditCombo
-              placeholder="وضعیت دسترسی به کامپیوتر و اینترنت"
-              handleChange={handleChange}
-              identifier="comAccessStatus"
-              value={student?.comAccessStatus}
-              options={comAccessStatusOpt}
-            />
-            <EditString
-              placeholder="پیش بینی ریزش"
-              handleChange={handleChange}
-              identifier="predict"
-              value={student?.predict || ""}
-            />
-          </List>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditCombo
-              placeholder="تعهد به کار- سرگروه"
-              handleChange={handleChange}
-              identifier="jobCommit"
-              value={student?.jobCommit}
-              options={yesOrNo}
-            />
-            <EditCombo
-              placeholder="رشته پیشنهادی سرگروه"
-              handleChange={handleChange}
-              identifier="recommendField"
-              value={student?.recommendField}
-              options={recommendFieldOpt}
-            />
-            <EditString
-              placeholder="سایر ریسک‌ها و محدودیت‌ها - سرگروه"
-              handleChange={handleChange}
-              identifier="etcDesc"
-              value={student?.etcDesc || ""}
-            />
-          </List>
-        </Grid>
-      </Grid>
-      {/* نظرات منتور */}
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditCombo
-              handleChange={handleChange}
-              value={student?.consistTime}
-              placeholder="اختصاص زمان کافی به کاریار"
-              options={yesOrNo}
-              identifier="consistTime"
-            />
-            <EditCombo
-              handleChange={handleChange}
-              value={student?.recommendFieldMentor}
-              placeholder="رشته پیشنهادی منتور"
-              options={recommendFieldMentorOpt}
-              identifier="recommendFieldMentor"
-            />
-          </List>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditCombo
-              handleChange={handleChange}
-              value={student?.workCommit}
-              placeholder="تعهد به کار"
-              identifier="workCommit"
-              options={yesOrNo}
-            />
-            <EditString
-              handleChange={handleChange}
-              value={student?.limitAndRisk || ""}
-              placeholder="سایر ریسک‌ها و محدودیت‌ها"
-              identifier="limitAndRisk"
-            />
-          </List>
-        </Grid>
-      </Grid>
-      {/* نهایی */}
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditCombo
-              handleChange={handleChange}
-              placeholder="نتیجه نهایی"
-              options={finalResults}
-              value={student?.finalResult}
-              identifier="finalResult"
-            />
-          </List>
-        </Grid>
-      </Grid>
-      <Grid container rowGap={5} sx={{ my: 2 }}>
-        <Grid item xs={12} md={6}>
-          <List>
-            <EditCombo
-              handleChange={handleChange}
-              identifier="scholar"
-              value={student?.scholar ?? ""}
-              placeholder="بورسیه دارد؟"
-              options={scholarOpt}
-            />
-            {student?.scholar && (
+      <LayoutReg title="نتیجه کارگاه معارفه">
+        <Grid container rowGap={5} sx={{ my: 2 }}>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditingSelective
+                handleChange={handleChange}
+                identifier="workshopCont"
+                options={workshopContOpt}
+                placeholder="وضعیت شرکت در کارگاه معارفه"
+                value={student?.workshopCont}
+              />
+              <EditingSelective
+                handleChange={handleChange}
+                identifier="notifyAcceptWeek"
+                options={notifyAcceptWeekOpt}
+                placeholder="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
+                value={student?.notifyAcceptWeek}
+              />
+              {data && (
+                <EditingSelective
+                  handleChange={handleChange}
+                  identifier=""
+                  placeholder="--انتخاب اولیه مسیر شغلی"
+                  options={data.map((i) => ({ label: i.name, value: i.id }))}
+                  value={student?.firstSelectJobRoad || ""}
+                  disabled={true}
+                />
+              )}
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
               <EditString
                 handleChange={handleChange}
-                value={student?.scholarPercentage || ""}
-                placeholder="درصد بورسیه"
-                identifier="scholarPercentage"
+                identifier="comLevelResult"
+                placeholder="نتیجه تعیین سطح کامپیوتر"
+                value={student?.comLevelResult || ""}
               />
-            )}
-
-            <EditCombo
-              handleChange={handleChange}
-              identifier="finalField"
-              value={student?.finalField ?? ""}
-              options={fieldOptions}
-              placeholder="رشته نهایی"
-            />
-          </List>
+              <EditString
+                handleChange={handleChange}
+                identifier="langScore"
+                placeholder="نتیجه تعیین سطح زبان انگلیسی"
+                value={student?.langScore || ""}
+              />
+              <EditString
+                handleChange={handleChange}
+                identifier="algoScore"
+                placeholder="تعیین سطح الگوریتم و ریاضی"
+                value={student?.algoScore || ""}
+              />
+              <EditString
+                handleChange={handleChange}
+                identifier="fundamentalSkillsScore"
+                placeholder="نمره مهارت‌های پایه"
+                value={student?.fundamentalSkillsScore || ""}
+              />
+            </List>
+          </Grid>
         </Grid>
-      </Grid>
+      </LayoutReg>
+      {/* کارنامه هفته پذیرش */}
+      <LayoutReg title="کارنامه هفته پذیرش">
+        <Grid container rowGap={5} sx={{ my: 2 }}>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditString
+                handleChange={handleChange}
+                identifier="algoLevelResult"
+                placeholder="نتیجه تعیین سطح الگوریتم"
+                value={student?.algoLevelResult || ""}
+              />
+              <EditingSelective
+                options={presentStatusOpt}
+                handleChange={handleChange}
+                identifier="presentStatus"
+                placeholder="وضعیت حضور و غیاب"
+                value={student?.presentStatus || ""}
+              />
+            </List>
+          </Grid>
+          {/* <Grid item xs={12} md={6}>
+          <List></List>
+        </Grid> */}
+        </Grid>
+      </LayoutReg>
+      {/* نظرات سرگروه */}
+      <LayoutReg title="نظرات سرگروه">
+        <Grid container rowGap={5} sx={{ my: 2 }}>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditingSelective
+                placeholder="اختصاص زمان کافی به کاریار - سرگروه"
+                handleChange={handleChange}
+                identifier="consistCompleteTime"
+                value={student?.consistCompleteTime}
+                options={yesOrNo}
+              />
+              <EditingSelective
+                placeholder="وضعیت دسترسی به کامپیوتر و اینترنت"
+                handleChange={handleChange}
+                identifier="comAccessStatus"
+                value={student?.comAccessStatus}
+                options={comAccessStatusOpt}
+              />
+              <EditString
+                placeholder="پیش بینی ریزش"
+                handleChange={handleChange}
+                identifier="predict"
+                value={student?.predict || ""}
+              />
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditingSelective
+                placeholder="تعهد به کار- سرگروه"
+                handleChange={handleChange}
+                identifier="jobCommit"
+                value={student?.jobCommit}
+                options={yesOrNo}
+              />
+              <EditingSelective
+                placeholder="رشته پیشنهادی سرگروه"
+                handleChange={handleChange}
+                identifier="recommendField"
+                value={student?.recommendField}
+                options={recommendFieldOpt}
+              />
+              <EditString
+                placeholder="سایر ریسک‌ها و محدودیت‌ها - سرگروه"
+                handleChange={handleChange}
+                identifier="etcDesc"
+                value={student?.etcDesc || ""}
+              />
+            </List>
+          </Grid>
+        </Grid>
+      </LayoutReg>
+      {/* نظرات منتور */}
+      <LayoutReg title="نظرات منتور">
+        <Grid container rowGap={5} sx={{ my: 2 }}>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditingSelective
+                handleChange={handleChange}
+                value={student?.consistTime}
+                placeholder="اختصاص زمان کافی به کاریار"
+                options={yesOrNo}
+                identifier="consistTime"
+              />
+              <EditingSelective
+                handleChange={handleChange}
+                value={student?.recommendFieldMentor}
+                placeholder="رشته پیشنهادی منتور"
+                options={recommendFieldMentorOpt}
+                identifier="recommendFieldMentor"
+              />
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditingSelective
+                handleChange={handleChange}
+                value={student?.workCommit}
+                placeholder="تعهد به کار"
+                identifier="workCommit"
+                options={yesOrNo}
+              />
+              <EditString
+                handleChange={handleChange}
+                value={student?.limitAndRisk || ""}
+                placeholder="سایر ریسک‌ها و محدودیت‌ها"
+                identifier="limitAndRisk"
+              />
+            </List>
+          </Grid>
+        </Grid>
+      </LayoutReg>
+      {/* نهایی */}
+      <LayoutReg title="ثبت نام نهایی">
+        <Grid container rowGap={5} sx={{ my: 2 }}>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditingSelective
+                handleChange={handleChange}
+                placeholder="نتیجه نهایی"
+                options={finalResults}
+                value={student?.finalResult}
+                identifier="finalResult"
+              />
+              {data && (
+                <EditingSelective
+                  handleChange={handleChange}
+                  placeholder="مسیر آموزشی نهایی"
+                  options={data.map((i) => ({ label: i.name, value: i.id }))}
+                  value={student?.careerPathwayId}
+                  identifier="careerPathwayId"
+                />
+              )}
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditingSelective
+                handleChange={handleChange}
+                identifier="scholar"
+                value={student?.scholar ?? ""}
+                placeholder="بورسیه دارد؟"
+                options={scholarOpt}
+              />
+              {student?.scholar && (
+                <EditString
+                  handleChange={handleChange}
+                  value={student?.scholarPercentage || ""}
+                  placeholder="درصد بورسیه"
+                  identifier="scholarPercentage"
+                />
+              )}
+
+              <EditingSelective
+                handleChange={handleChange}
+                identifier="finalField"
+                value={student?.finalField ?? ""}
+                options={fieldOptions}
+                placeholder="رشته نهایی"
+              />
+            </List>
+          </Grid>
+        </Grid>
+      </LayoutReg>
     </>
   );
 };
 
 export default AfterWeekDetailEditComp;
-
-const EditString = ({
-  placeholder,
-  identifier,
-  value,
-  handleChange,
-}: PropEditString) => {
-  const content = (
-    <ListItem>
-      <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-        <InputLabel htmlFor={identifier}>{placeholder}</InputLabel>
-        <Input
-          id={identifier}
-          value={value}
-          onChange={handleChange}
-          name={identifier}
-        />
-      </FormControl>
-    </ListItem>
-  );
-  return content;
-};
-
-const EditCombo = ({
-  placeholder,
-  identifier,
-  value,
-  handleChange,
-  options,
-}: PropEditCombo) => {
-  const content = (
-    <ListItem>
-      <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-        <InputLabel id={identifier}>{placeholder}</InputLabel>
-        <Select
-          labelId={identifier}
-          id={identifier}
-          onChange={handleChange}
-          name={identifier}
-          value={value}
-        >
-          {options.map((option: any, i: any) => (
-            <MenuItem key={i} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </ListItem>
-  );
-
-  return content;
-};
-
-// const EditBoolean = ({
-//   placeholder,
-//   handleChange,
-//   identifier,
-//   value,
-// }: PropEditBool) => {
-//   const content = (
-//     <ListItem>
-//       <FormControl fullWidth sx={{ width: "40ch" }} variant="standard">
-//         <InputLabel htmlFor={identifier}>{placeholder}</InputLabel>
-//         <Select
-//           labelId={identifier}
-//           id={identifier}
-//           onChange={handleChange}
-//           name={identifier}
-//           value={value}
-//         >
-//           <MenuItem value={true as any}>بله</MenuItem>
-//           <MenuItem value={false as any}>خیر</MenuItem>
-//         </Select>
-//       </FormControl>
-//     </ListItem>
-//   );
-//   return content;
-// };

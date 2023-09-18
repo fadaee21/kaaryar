@@ -1,7 +1,6 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
-import Layout from "./pages/Layout";
+import Layout from "./components/layout/Layout";
 import ListRoutes from "./ListRoutes";
 import { PersistLogin } from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";

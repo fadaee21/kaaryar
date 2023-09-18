@@ -1,11 +1,10 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { DetailStudentStatus, StatusForm } from "../../../model";
-import { StyledTableCell } from "../../../styles/table";
 import { EditComboStudent } from "../EditComboStudent";
 import { useSWRConfig } from "swr";
 import { editAxios } from "../../../api/axios";
 import { toast } from "react-toastify";
-import { handleError } from "../../../utils/handleError";
+import { StyledTableCellAdmin } from "../../../styles/adminTable";
 
 type Props = {
   statusForm: StatusForm | null;
@@ -49,7 +48,7 @@ const RowEditStatus = forwardRef(
       statusForm?.kaaryarAssessment?.id.toString() || ""
     );
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitEditing = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setSubmitLoading(true);
       try {
@@ -82,13 +81,16 @@ const RowEditStatus = forwardRef(
     };
 
     useImperativeHandle(ref, () => ({
-      handleSubmit,
+      handleSubmitEditing,
     }));
 
     return (
       <>
         {/* "وضعیت آموزش" */}
-        <StyledTableCell align="center">
+        <StyledTableCellAdmin
+          sx={{ minWidth: 160, maxWidth: 300 }}
+          align="center"
+        >
           <EditComboStudent
             data={trainingData}
             identifier="trainingStatus"
@@ -96,9 +98,12 @@ const RowEditStatus = forwardRef(
             label="وضعیت آموزش"
             val={trainingStatus}
           />
-        </StyledTableCell>
+        </StyledTableCellAdmin>
         {/* "قدم آتی آموزش" */}
-        <StyledTableCell align="center">
+        <StyledTableCellAdmin
+          sx={{ minWidth: 160, maxWidth: 300 }}
+          align="center"
+        >
           <EditComboStudent
             data={nextStepData}
             identifier="nextTrainingStep"
@@ -106,9 +111,12 @@ const RowEditStatus = forwardRef(
             label="قدم آتی آموزش"
             val={nextTrainingStep}
           />
-        </StyledTableCell>
+        </StyledTableCellAdmin>
         {/* "ارجاع به واحد مالی" */}
-        <StyledTableCell align="center">
+        <StyledTableCellAdmin
+          sx={{ minWidth: 160, maxWidth: 300 }}
+          align="center"
+        >
           <EditComboStudent
             data={referralToFinanceData}
             identifier="referralToFinance"
@@ -118,9 +126,12 @@ const RowEditStatus = forwardRef(
             label="ارجاع به واحد مالی"
             val={referralToFinance}
           />
-        </StyledTableCell>
+        </StyledTableCellAdmin>
         {/* "ارزیابی کاریار" */}
-        <StyledTableCell align="center">
+        <StyledTableCellAdmin
+          sx={{ minWidth: 160, maxWidth: 300 }}
+          align="center"
+        >
           <EditComboStudent
             data={kaaryarAssessmentData}
             identifier="kaaryarAssessment"
@@ -130,7 +141,7 @@ const RowEditStatus = forwardRef(
             label="ارزیابی کاریار"
             val={kaaryarAssessment}
           />
-        </StyledTableCell>
+        </StyledTableCellAdmin>
       </>
     );
   }

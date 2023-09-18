@@ -1,6 +1,10 @@
 import { TableHead } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { TableHeaderProps, TableHeaderStudentProps } from "../../model";
+import {
+  StyledTableCellAdmin,
+  StyledTableRowAdmin,
+} from "../../styles/adminTable";
 
 const TableHeader = ({ headerItems }: TableHeaderProps) => {
   return (
@@ -22,17 +26,17 @@ export const TableHeaderStudent = ({
 }: TableHeaderStudentProps) => {
   return (
     <TableHead>
-      <StyledTableRow>
+      <StyledTableRowAdmin>
         {studentHeaderItems.map((item) => (
-          <StyledTableCell
+          <StyledTableCellAdmin
             align={item.align}
             key={item.id}
-            sx={{ minWidth: item.minWidth }}
+            sx={{ minWidth: "max-content", whiteSpace: "nowrap" }}
           >
             {item.label}
-          </StyledTableCell>
+          </StyledTableCellAdmin>
         ))}
-      </StyledTableRow>
+      </StyledTableRowAdmin>
     </TableHead>
   );
 };

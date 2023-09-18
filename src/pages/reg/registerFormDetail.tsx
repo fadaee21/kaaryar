@@ -7,7 +7,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 import { RegistrationForm } from "../../model";
 import { useApproveReg } from "../../hooks/request/useApprove";
-import { useAuth } from "../../context/AuthProvider";
 import AlertDialog from "../../components/modal/AlertDialog";
 
 const RegisterFormDetail = () => {
@@ -25,9 +24,6 @@ const RegisterFormDetail = () => {
   const handleCloseAlert = () => setOpenAlert(false);
   const navigate = useNavigate();
   const { id } = useParams();
-
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
   const { getApproveReg, success, loadingRegApprove } = useApproveReg();
   const studentId = `/reg/form/${id}`;
   const approveLink = "/reg/form/approve";
@@ -80,11 +76,7 @@ const RegisterFormDetail = () => {
           size="small"
           aria-label="small button group"
         >
-          <Button
-            onClick={() => navigate(`/${roles}/register-form-edit/${id}`)}
-          >
-            ویرایش
-          </Button>
+          <Button onClick={() => navigate("edit")}>ویرایش</Button>
           <Button
             variant="contained"
             onClick={() => handleOpenAlert("approve")}

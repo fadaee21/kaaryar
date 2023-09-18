@@ -1,5 +1,5 @@
 import { Button, Grid } from "@mui/material";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { getData } from "../../api/axios";
 import SearchFirstName from "./SearchFirstName";
 import SearchFamily from "./SearchFamily";
@@ -19,34 +19,47 @@ import {
   scholarOptions,
   statusOptions,
 } from "./searchOptions";
-// import { EditComboStudent } from "../student/EditComboStudent";
-// import TrainingStatusSearch from "./SearchSelect2";
-import {
-  DetailStudentStatus,
-  Group,
-  ModuleAll,
-  OptionYesOrNo,
-} from "../../model";
+
+import { Group, OptionYesOrNo } from "../../model";
 import SearchSelect2 from "./SearchSelect2";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { motivationOpt } from "../beforeWeek/helper";
-// import DateRangeSelector from "./DateRangeSelector";
 import { JalaliDatePicker } from "../comment/JalaliDatePicker";
 import dayjs, { Dayjs } from "dayjs";
-import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
-
-// import { ApprovalStatus } from "../../model";
-// import SearchScholar from "./SearchScholar";
-// import SearchGender from "./SearchGender";
 
 interface SearchAllType {
   setSearchingStudentBefore?: any;
   setSearchingStudentAfter?: any;
   setSearchingStudentRegister?: any;
-  setSearchingMoodleStudent?: any;
-  searchPage: "moodle" | "beforeWeek" | "afterWeek" | "reg";
+  searchPage: "beforeWeek" | "afterWeek" | "reg";
   chevronDir: boolean;
+}
+interface ObjTypeSearch {
+  createdAtTo: string | undefined;
+  createdAtFrom: string | null;
+  decidedAtTo: string | undefined;
+  decidedAtFrom: string | null;
+  motivation: string | null;
+  firstName: string | undefined;
+  family: string | undefined;
+  refer: string | null;
+  highSchoolYear: string | null;
+  registrationCode: string | null;
+  city: string | null;
+  province: string | null;
+  mobile: string | null;
+  email: string | null;
+  education: string | null;
+  familiarity: string | null;
+  approvalStatus: string | null;
+  finalResult: string | null;
+  scholarshipStatus: string | null;
+  finalField: string | null;
+  contCourseApproach: string | null;
+  jobStandby: boolean | undefined;
+  cgpa: string | null;
+  groupID: number | undefined;
 }
 
 const beforeWeekSearch =
@@ -54,21 +67,17 @@ const beforeWeekSearch =
 const afterWeekSearch =
   "/exam/after/week/search/param?pageNum=1&pageSize=10000";
 const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
-const moodleSearch =
-  "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
 
 const SearchAll: ({
   setSearchingStudentBefore,
   setSearchingStudentAfter,
   setSearchingStudentRegister,
-  setSearchingMoodleStudent,
   searchPage,
   chevronDir,
 }: SearchAllType) => JSX.Element = ({
   setSearchingStudentBefore,
   setSearchingStudentAfter,
   setSearchingStudentRegister,
-  setSearchingMoodleStudent,
   searchPage,
   chevronDir,
 }) => {
@@ -82,16 +91,12 @@ const SearchAll: ({
   );
   const [mobileState, setMobileState] = useState<string | null>(null);
   const [emailState, setEmailState] = useState<string | null>(null);
-
   const [provincesState, setProvincesState] = useState<string | null>(null);
   const [cityState, setCityState] = useState<string | null>(null);
   //status of items: there is 3 phases for searching - "pending" - "approved" - "rejected" , these all is available only for search, if you render the table, response can be _acceptWeekChecked: true|false|null_ don't mess it up
   const [approvalStatus, setApprovalStatus] = useState<string | null>(null);
   const [acquaintance, setAcquaintance] = useState<string | null>(null);
   const [eduLevel, setEduLevel] = useState<string | null>(null);
-
-  // const [gender, setGender] = useState<"مرد" | "زن" | null>(null);
-  // const [studyField, setStudyField] = useState<string | null>(null);
   const [finalResult, setFinalResult] = useState<string | null>(null);
   const [scholar, setScholar] = useState<string | null>(null);
   const [finalField, setFinalField] = useState<string | null>(null);
@@ -103,37 +108,11 @@ const SearchAll: ({
   const [cgpa, setCgpa] = useState<string | null>(null);
   const [disabledButton, setDisabledButton] = useState(false);
   const [searchLink, setSearchLink] = useState("");
-
-  const [trainingStatus, setTrainingStatus] =
-    useState<DetailStudentStatus | null>(null);
-  const [nextTrainingStep, setNextTrainingStep] =
-    useState<DetailStudentStatus | null>(null);
-  const [referralToFinance, setReferralToFinance] =
-    useState<DetailStudentStatus | null>(null);
-  const [kaaryarAssessment, setKaaryarAssessment] =
-    useState<DetailStudentStatus | null>(null);
-  const [module, setModule] = useState<ModuleAll | null>(null);
   const [group, setGroup] = useState<Group | null>(null);
   const [createdAtFrom, setCreatedAtFrom] = useState<Date | Dayjs | null>(null);
   const [createdAtTo, setCreatedAtTo] = useState<Date | Dayjs | null>(null);
   const [decidedAtFrom, setDecidedAtFrom] = useState<Date | Dayjs | null>(null);
   const [decidedAtTo, setDecidedAtTo] = useState<Date | Dayjs | null>(null);
-  const fetchMoodlePage = useMemo(
-    () => searchPage === "moodle" && chevronDir,
-    [searchPage, chevronDir]
-  );
-
-  const { data: ModuleData } = useSWR<ModuleAll[]>(
-    fetchMoodlePage
-      ? "/modules/short-details/all?orderAscending=true&orderBy=name"
-      : null
-  );
-  const {
-    trainingData,
-    nextStepData,
-    referralToFinanceData,
-    kaaryarAssessmentData,
-  } = useGetStatusStudent(fetchMoodlePage);
 
   const { data: groupData } = useSWR<Group[]>(
     chevronDir
@@ -143,10 +122,6 @@ const SearchAll: ({
 
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
-    if (searchPage === "moodle") {
-      setSearchLink(moodleSearch);
-      return;
-    }
     if (searchPage === "beforeWeek") {
       setSearchLink(beforeWeekSearch);
       return;
@@ -183,11 +158,6 @@ const SearchAll: ({
       contCourseApproach,
       jobStandby,
       cgpa,
-      trainingStatus,
-      nextTrainingStep,
-      referralToFinance,
-      kaaryarAssessment,
-      module,
       group,
       motivation,
     ].some(Boolean);
@@ -195,11 +165,6 @@ const SearchAll: ({
   }, [
     motivation,
     group,
-    module,
-    kaaryarAssessment,
-    referralToFinance,
-    nextTrainingStep,
-    trainingStatus,
     acquaintance,
     approvalStatus,
     cgpa,
@@ -224,7 +189,7 @@ const SearchAll: ({
     decidedAtFrom,
   ]);
 
-  const fetchData = async (obj: any) => {
+  const fetchData = async (obj: ObjTypeSearch) => {
     setLoading(true);
     try {
       const response = await getData(searchLink, {
@@ -233,7 +198,6 @@ const SearchAll: ({
 
       if (response.status === 200) {
         const searchPageActions = {
-          moodle: setSearchingMoodleStudent,
           beforeWeek: setSearchingStudentBefore,
           afterWeek: setSearchingStudentAfter,
           reg: setSearchingStudentRegister,
@@ -273,19 +237,12 @@ const SearchAll: ({
       education: eduLevel,
       familiarity: acquaintance,
       approvalStatus,
-      // gender,
-      // studyField,
       finalResult,
       scholarshipStatus: scholar,
       finalField,
       contCourseApproach,
       jobStandby: jobStandby?.value,
       cgpa,
-      trainingStatusID: trainingStatus?.id,
-      nextTrainingStepID: nextTrainingStep?.id,
-      referralToFinanceID: referralToFinance?.id,
-      kaaryarAssessmentID: kaaryarAssessment?.id,
-      moduleID: module?.id,
       groupID: group?.id,
     });
   };
@@ -308,22 +265,13 @@ const SearchAll: ({
     setProvincesState(null);
     setCityState(null);
     setApprovalStatus(null);
-    // setGender(null);
-    // setStudyField(null);
     setFinalResult(null);
     setScholar(null);
     setFinalField(null);
     setContCourseApproach(null);
     setJobStandby(null);
     setCgpa(null);
-    setTrainingStatus(null);
-    setNextTrainingStep(null);
-    setReferralToFinance(null);
-    setKaaryarAssessment(null);
-    setModule(null);
     setGroup(null);
-    // searchPage !== "moodle" && setApprovalStatus(null);
-    searchPage === "moodle" && setSearchingMoodleStudent(null);
     searchPage === "beforeWeek" && setSearchingStudentBefore(null);
     searchPage === "afterWeek" && setSearchingStudentAfter(null);
     searchPage === "reg" && setSearchingStudentRegister(null);
@@ -347,56 +295,13 @@ const SearchAll: ({
           searchLink={searchLink}
         />
       </Grid>
-      {["reg", "moodle"].includes(searchPage) && (
-        <Grid item xs={3}>
-          <SearchString
-            state={referState}
-            setState={setReferState}
-            label="نام معرف یا موسسه"
-          />
-        </Grid>
-      )}
-      {searchPage === "reg" && (
-        <Grid item xs={3}>
-          <SearchSelect
-            state={highSchoolState}
-            setState={setHighSchoolState}
-            options={highSchoolOptions2}
-            placeholder="سال دبیرستان"
-          />
-        </Grid>
-      )}
-      {searchPage === "reg" && (
-        <>
-          <Grid item xs={3}>
-            <SearchSelect
-              state={eduLevel}
-              setState={setEduLevel}
-              options={eduLevelOptions}
-              placeholder="میزان تحصیلات"
-            />
-          </Grid>
-        </>
-      )}
-      {searchPage === "reg" && (
-        <Grid item xs={3}>
-          <SearchSelect
-            state={acquaintance}
-            setState={setAcquaintance}
-            options={acquaintanceOptions}
-            placeholder="نحوه آشنایی"
-          />
-        </Grid>
-      )}
-      {searchPage !== "moodle" && (
-        <Grid item xs={3}>
-          <SearchString
-            state={registerCodeState}
-            setState={setRegisterCodeState}
-            label="کد متقاضی"
-          />
-        </Grid>
-      )}
+      <Grid item xs={3}>
+        <SearchString
+          state={registerCodeState}
+          setState={setRegisterCodeState}
+          label="کد متقاضی"
+        />
+      </Grid>
       <Grid item xs={3}>
         <SearchString
           setState={setMobileState}
@@ -425,55 +330,45 @@ const SearchAll: ({
         <SearchString state={cityState} setState={setCityState} label="شهر" />
       </Grid>
 
-      {searchPage !== "moodle" && (
+      <Grid item xs={3}>
+        <StatusSearch
+          setState={setApprovalStatus}
+          state={approvalStatus}
+          statusOptions={statusOptions}
+          placeholder="وضعیت"
+        />
+      </Grid>
+      {searchPage === "reg" && (
         <>
           <Grid item xs={3}>
-            <StatusSearch
-              setState={setApprovalStatus}
-              state={approvalStatus}
-              statusOptions={statusOptions}
-              placeholder="وضعیت"
-            />
-          </Grid>
-          {/* {searchPage !== "reg" && (
-            <Grid item xs={3}>
-              <SearchString
-                state={studyField}
-                setState={setStudyField}
-                label="رشته تحصیلی"
-              />
-            </Grid>
-          )} */}
-          <Grid item xs={3}>
-            <JalaliDatePicker
-              setSessionDate={setCreatedAtFrom}
-              sessionDate={createdAtFrom}
-              label="از (تاریخ ارسال فرم)"
-              usageType="searching"
+            <SearchString
+              state={referState}
+              setState={setReferState}
+              label="نام معرف یا موسسه"
             />
           </Grid>
           <Grid item xs={3}>
-            <JalaliDatePicker
-              setSessionDate={setCreatedAtTo}
-              sessionDate={createdAtTo}
-              label="تا (تاریخ ارسال فرم)"
-              usageType="searching"
+            <SearchSelect
+              state={eduLevel}
+              setState={setEduLevel}
+              options={eduLevelOptions}
+              placeholder="میزان تحصیلات"
             />
           </Grid>
           <Grid item xs={3}>
-            <JalaliDatePicker
-              setSessionDate={setDecidedAtFrom}
-              sessionDate={decidedAtFrom}
-              label="از (تاریخ تأیید/رد)"
-              usageType="searching"
+            <SearchSelect
+              state={highSchoolState}
+              setState={setHighSchoolState}
+              options={highSchoolOptions2}
+              placeholder="سال دبیرستان"
             />
           </Grid>
           <Grid item xs={3}>
-            <JalaliDatePicker
-              setSessionDate={setDecidedAtTo}
-              sessionDate={decidedAtTo}
-              label="تا (تاریخ ارسال فرم)"
-              usageType="searching"
+            <SearchSelect
+              state={acquaintance}
+              setState={setAcquaintance}
+              options={acquaintanceOptions}
+              placeholder="نحوه آشنایی"
             />
           </Grid>
         </>
@@ -533,61 +428,6 @@ const SearchAll: ({
           </Grid>
         </>
       )}
-
-      {searchPage === "moodle" && (
-        <>
-          {trainingData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={trainingStatus}
-                setState={setTrainingStatus}
-                options={trainingData}
-                placeholder="وضعیت آموزش"
-              />
-            </Grid>
-          )}
-          {nextStepData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={nextTrainingStep}
-                setState={setNextTrainingStep}
-                options={nextStepData}
-                placeholder="قدم آتی آموزش"
-              />
-            </Grid>
-          )}
-          {referralToFinanceData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={referralToFinance}
-                setState={setReferralToFinance}
-                options={referralToFinanceData}
-                placeholder="ارجاع به واحد مالی"
-              />
-            </Grid>
-          )}
-          {kaaryarAssessmentData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={kaaryarAssessment}
-                setState={setKaaryarAssessment}
-                options={kaaryarAssessmentData}
-                placeholder="ارزیابی کاریار"
-              />
-            </Grid>
-          )}
-          {ModuleData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={module as any}
-                setState={setModule as any}
-                options={ModuleData.map((i) => ({ id: i.id, value: i.name }))}
-                placeholder="نام دوره"
-              />
-            </Grid>
-          )}
-        </>
-      )}
       <>
         {groupData && (
           <Grid item xs={3}>
@@ -600,6 +440,38 @@ const SearchAll: ({
           </Grid>
         )}
       </>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setCreatedAtFrom}
+          sessionDate={createdAtFrom}
+          label="از (تاریخ ارسال فرم)"
+          usageType="searching"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setCreatedAtTo}
+          sessionDate={createdAtTo}
+          label="تا (تاریخ ارسال فرم)"
+          usageType="searching"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setDecidedAtFrom}
+          sessionDate={decidedAtFrom}
+          label="از (تاریخ تأیید/رد)"
+          usageType="searching"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setDecidedAtTo}
+          sessionDate={decidedAtTo}
+          label="تا (تاریخ ارسال فرم)"
+          usageType="searching"
+        />
+      </Grid>
 
       {/* //buttons */}
       <Grid item xs={3} sx={{ ml: "auto" }}>

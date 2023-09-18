@@ -9,7 +9,6 @@ import {
   Tab,
   Tabs,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import LoadingProgress from "../../components/LoadingProgress";
 import { AfterWeekType, StudentInfo } from "../../model";
@@ -17,7 +16,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useGetImage from "../../hooks/request/useGetImage";
 import { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-// import RegisterInfo from "../../components/student/RegisterInfo";
 import StudentDetailMore from "../../components/student/StudentDetailMore";
 
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
@@ -57,7 +55,6 @@ const StudentDetail = () => {
       getPicture(image);
     }
   }, [image, getPicture]);
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
   if (isLoading) {
     return <LoadingProgress />;
@@ -152,7 +149,6 @@ const StudentDetail = () => {
               <BeforeWeekDetailShowComp
                 typeComp="student"
                 student={afterBeforeData?.beforeWeekForm}
-                matches={matches}
                 id={id}
               />
             )}
@@ -167,7 +163,6 @@ const StudentDetail = () => {
           <AfterWeekDetailShowComp
             typeComp="student"
             student={afterBeforeData}
-            matches={matches}
             id={id}
           />
         )}

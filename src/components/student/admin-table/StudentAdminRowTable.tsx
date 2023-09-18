@@ -1,17 +1,33 @@
-import { StyledTableCell, StyledTableRow } from "../../../styles/table";
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import TablePic from "../../table/TablePic";
 import { itemCounterTable } from "../../../utils/itemCounterTable";
 import { FormEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CareerPathway, RegistrationForm, StatusForm } from "../../../model";
+import {
+  CareerPathway,
+  CurrentAssignedMentorTa,
+  CurrentModuleAsStudent,
+  Profile,
+  RegistrationForm,
+  StatusForm,
+} from "../../../model";
 import EditingButtons from "./EditingButtons";
 import ViewButtons from "./ViewButtons";
 import RowViewStatus from "./RowViewStatus";
 import RowEditStatus from "./RowEditStatus";
 import useGetStatusStudent from "../../../hooks/request/useGetStatusStudent";
 import { yellow } from "@mui/material/colors";
+import {
+  StyledTableCellAdmin,
+  StyledTableRowAdmin,
+  StyledTypographyAdmin,
+  // StyledTypographyAdmin,
+} from "../../../styles/adminTable";
+import RowViewAssigning from "./RowViewAssigning";
+import RowEditAssigning from "./RowEditAssigning";
+import useSWR from "swr";
 // import LoadingProgress from "../../LoadingProgress";
+const PROFILE_VOLUNTEER = "/user/profile/all";
 interface Props {
   id: number;
   firstName: string;
@@ -28,6 +44,9 @@ interface Props {
   searchingMoodleStudent: any[] | null;
   page: number;
   pageSize: number;
+  currentAssignedMentor: CurrentAssignedMentorTa | null;
+  currentAssignedTA: CurrentAssignedMentorTa | null;
+  currentModuleAsStudent: CurrentModuleAsStudent;
 }
 const StudentAdminRowTable = ({
   id,
@@ -43,44 +62,79 @@ const StudentAdminRowTable = ({
   searchingMoodleStudent,
   page,
   pageSize,
+  currentAssignedMentor,
+  currentAssignedTA,
+  currentModuleAsStudent,
 }: Props) => {
   const [editingMode, setEditingMode] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [assigningMode, setAssigningMode] = useState(false);
+  const [mode, setMode] = useState<"edit" | "assign" | null>(null); // there is only one confirm changes button for handling edit and assign
   const navigate = useNavigate();
-  const toggleEditingMode = () => setEditingMode((i) => !i);
+  const toggleEditingMode = () => {
+    setEditingMode((i) => !i);
+    setMode("edit");
+  };
+  const toggleAssigningMode = () => {
+    setAssigningMode((i) => !i);
+    setMode("assign");
+  };
   const {
     trainingData,
     nextStepData,
     referralToFinanceData,
     kaaryarAssessmentData,
   } = useGetStatusStudent(true);
-
-  const childRef = useRef<{
-    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  const { data: volunteerData } = useSWR<Profile[]>(PROFILE_VOLUNTEER, {});
+  const childRefEditing = useRef<{
+    handleSubmitEditing: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   }>();
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) =>
-    childRef.current?.handleSubmit(e);
+  const childRefAssigning = useRef<{
+    handleSubmitAssigning: (
+      e: React.FormEvent<HTMLFormElement>
+    ) => Promise<void>;
+  }>();
+  const handleSubmitEditing = async (e: FormEvent<HTMLFormElement>) =>
+    childRefEditing.current?.handleSubmitEditing(e);
+  const handleSubmitAssigning = async (e: FormEvent<HTMLFormElement>) =>
+    childRefAssigning.current?.handleSubmitAssigning(e);
+
+  const mentorFullName = currentAssignedMentor
+    ? currentAssignedMentor.personnel.firstName +
+      " " +
+      currentAssignedMentor.personnel.family
+    : "-";
+  const taFullName = currentAssignedTA
+    ? currentAssignedTA.personnel.firstName +
+      " " +
+      currentAssignedTA.personnel.family
+    : "-";
+  const currentModule = currentModuleAsStudent
+    ? currentModuleAsStudent.name
+    : "-";
 
   return (
-    <StyledTableRow
+    <StyledTableRowAdmin
       key={id}
       sx={{
-        ...(editingMode ? { backgroundColor: `${yellow[50]} !important` } : {}),
+        ...(editingMode || assigningMode
+          ? { backgroundColor: `${yellow[50]} !important` }
+          : {}),
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
       {/* ردیف */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
           {searchingMoodleStudent ? i + 1 : itemCounterTable(page, pageSize, i)}
-        </Typography>
-      </StyledTableCell>
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* عکس */}
-      <StyledTableCell align="center">
+      <StyledTableCellAdmin align="center">
         <TablePic picture={picture} lastName={family} />
-      </StyledTableCell>
+      </StyledTableCellAdmin>
       {/* "نام و نام خانوادگی" */}
-      <StyledTableCell
+      <StyledTableCellAdmin
         align="center"
         sx={{
           verticalAlign: "center",
@@ -88,60 +142,76 @@ const StudentAdminRowTable = ({
         }}
         onClick={() => navigate(`${id}`)}
       >
-        <Typography variant="body1">{firstName + " " + family}</Typography>
-      </StyledTableCell>
+        <StyledTypographyAdmin variant="body1">
+          {firstName + " " + family}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "نام کاربری" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2" textAlign={"center"}>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2" textAlign={"center"}>
           {username}
-        </Typography>
-      </StyledTableCell>
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "گروه" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">{registrationForm?.course}</Typography>
-      </StyledTableCell>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
+          {registrationForm?.course}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "استان" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
           {registrationForm?.province || "-"}
-        </Typography>
-      </StyledTableCell>
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "شهر" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
           {registrationForm?.city || city || "-"}
-        </Typography>
-      </StyledTableCell>
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "معرف" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2">
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
           {registrationForm?.refer || "-"}
-        </Typography>
-      </StyledTableCell>
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "مسیر آموزشی" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2" textAlign={"center"}>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2" textAlign={"center"}>
           {careerPathway?.name ?? "-"}
-        </Typography>
-      </StyledTableCell>
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* " دوره کنونی" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2" textAlign={"center"}>
-          -
-        </Typography>
-      </StyledTableCell>
-      {/* "مربی حل تمرین" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2" textAlign={"center"}>
-          -
-        </Typography>
-      </StyledTableCell>
-      {/* "منتور" */}
-      <StyledTableCell align="center">
-        <Typography variant="body2" textAlign={"center"}>
-          -
-        </Typography>
-      </StyledTableCell>
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin
+          maxWidth={200}
+          variant="body2"
+          textAlign={"center"}
+        >
+          {statusForm?.trainingStatus?.id !== 2 ? "-" : currentModule}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
+      {assigningMode ? (
+        <RowEditAssigning
+          volunteerData={volunteerData}
+          ta={currentAssignedTA}
+          mentor={currentAssignedMentor}
+          firstName={firstName}
+          family={family}
+          ref={childRefAssigning}
+          page={page}
+          setSubmitLoading={setSubmitLoading}
+          id={id}
+          moduleId={currentModuleAsStudent.id}
+        />
+      ) : (
+        <RowViewAssigning
+          taFullName={taFullName}
+          mentorFullName={mentorFullName}
+        />
+      )}
+
       {editingMode ? (
         <RowEditStatus
           statusForm={statusForm}
@@ -151,7 +221,7 @@ const StudentAdminRowTable = ({
           kaaryarAssessmentData={kaaryarAssessmentData}
           firstName={firstName}
           family={family}
-          ref={childRef}
+          ref={childRefEditing}
           page={page}
           setSubmitLoading={setSubmitLoading}
         />
@@ -159,20 +229,27 @@ const StudentAdminRowTable = ({
         <RowViewStatus statusForm={statusForm} />
       )}
       {/* "عملیات" */}
-      <StyledTableCell align="center">
+      <StyledTableCellAdmin align="center" sx={{ maxWidth: 520 }}>
         <Stack spacing={1} direction="row">
-          {editingMode ? (
+          {editingMode || assigningMode ? (
             <EditingButtons
               toggleEditingMode={toggleEditingMode}
-              handleClick={handleSubmit}
+              toggleAssigningMode={toggleAssigningMode}
+              handleClickEditing={handleSubmitEditing}
+              handleClickAssigning={handleSubmitAssigning}
               submitLoading={submitLoading}
+              mode={mode}
             />
           ) : (
-            <ViewButtons toggleEditingMode={toggleEditingMode} />
+            <ViewButtons
+              toggleEditingMode={toggleEditingMode}
+              toggleAssigningMode={toggleAssigningMode}
+              statusForm={statusForm}
+            />
           )}
         </Stack>
-      </StyledTableCell>
-    </StyledTableRow>
+      </StyledTableCellAdmin>
+    </StyledTableRowAdmin>
   );
 };
 
