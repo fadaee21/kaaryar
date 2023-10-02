@@ -30,7 +30,7 @@ export const JalaliDatePicker = memo(
           label={label}
           onChange={handleDateChange}
           readOnly={usageType === "watching"}
-          value={sessionDate as any}
+          value={sessionDate as Date | dayjs.Dayjs | null}
           timezone="Asia/Tehran"
           slotProps={
             usageType === "searching"

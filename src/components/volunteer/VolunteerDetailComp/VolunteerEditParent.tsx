@@ -1,13 +1,16 @@
 import useSWR from "swr";
-import LoadingProgress from "../../components/LoadingProgress";
+import LoadingProgress from "../../LoadingProgress";
 import { toast } from "react-toastify";
-import { handleError } from "../../utils/handleError";
+import { handleError } from "../../../utils/handleError";
 import { Navigate } from "react-router-dom";
-import VolunteerEditComp from "../../components/volunteer/VolunteerEditComp";
+import VolunteerEditComp from "./VolunteerEditComp";
 import { useRef } from "react";
-import { getData } from "../../api/axios";
+import { getData } from "../../../api/axios";
 const url = "/user/profile";
-const UserProfile = () => {
+interface Props{
+  setEditingProfile: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const VolunteerEditParent = ({setEditingProfile}:Props) => {
   const random = useRef(Date.now());
   const { data, isLoading, error } = useSWR(
     [url, random],
@@ -33,7 +36,7 @@ const UserProfile = () => {
       </>
     );
   }
-  return <VolunteerEditComp profileData={data} />;
+  return <VolunteerEditComp profileData={data} setEditingProfile={setEditingProfile} />;
 };
 
-export default UserProfile;
+export default VolunteerEditParent;

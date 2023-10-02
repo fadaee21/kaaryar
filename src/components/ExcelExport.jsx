@@ -4,8 +4,11 @@ import { Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { getData } from "../api/axios";
 import { seekerStateFinder } from "../utils/seekerStateFinder";
+import { useState } from "react";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
+  const [loading, setLoading] = useState(false);
   const fileType =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
@@ -19,6 +22,7 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
   };
 
   const exportAllFunc = async () => {
+    setLoading(true)
     try {
       let response = await getData(linkAll);
       let allData = await response.data;
@@ -34,7 +38,9 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
             " کد متقاضی": reg.registrationCode,
             "نام و نام خانوادگی": reg.firstName + " " + reg.family,
             گروه: reg.course,
+            "رشته تحصیلی": reg.studyField,
             "میزان تحصیلات": reg.education,
+            شهر: reg.city,
             "سال دبیرستان": reg.highSchoolYear,
             استان: reg.province,
             "نحوه آشنایی با کاریار": reg.familiarity,
@@ -42,6 +48,16 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
             "تاریخ ارسال فرم":
               reg.createdAt &&
               new Intl.DateTimeFormat("fa").format(new Date(reg.createdAt)),
+            "سال تولد":
+              reg.birthDate &&
+              new Intl.DateTimeFormat("fa").format(new Date(reg.birthDate)),
+            "نحوه آشنایی": reg.familiarity,
+            "شماره همراه": reg.mobile,
+            ایمیل: reg.email,
+            "ترم دانشگاه": reg.uniSemester,
+            "رشته انتخابی در کاریار ": reg.selectedField,
+            "مسیر مورد نظر متقاضی": reg.careerPathwayOther,
+            "توضیحات سایر": reg.description,
           }));
 
           exportToCSV(regObj, fileName);
@@ -192,6 +208,8 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
       }
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -203,9 +221,10 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
     <Button
       sx={{ ml: "auto" }}
       color="secondary"
-      endIcon={<FileDownloadIcon />}
+      endIcon={loading ? <CircularProgress size={20} color="inherit" />:<FileDownloadIcon size={20}  />}
       variant="contained"
       onClick={searchData ? handleClick : exportAllFunc}
+      // disabled={loading}
     >
       خروجی اکسل
     </Button>

@@ -19,6 +19,8 @@ const StudentCoreEdit = () => {
       <StudentCoreDetailEdit
         assessment={data?.assessment}
         student={data?.student}
+        personnelAssignment={data?.personnelAssignment}
+        trainingStatus={data?.student.statusForm.trainingStatus}
       />
     </Container>
   );

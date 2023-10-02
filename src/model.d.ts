@@ -230,7 +230,7 @@ export interface BeforeWeekType {
 interface AfterWeekType {
   id: number;
   careerPathwayId: number | null;
-  afterWeekChecked: boolean| null;
+  afterWeekChecked: boolean | null;
   algoScore: string;
   comAccess: string;
   comAccessStatus: string;
@@ -294,16 +294,17 @@ export interface SeekerStudent {
 }
 
 export interface Profile {
+  isActive: boolean;
   firstName: string;
   lastName: string;
-  gender: string;
+  gender?: string;
   birthday: string;
   country: string;
   city: string;
   mobile: string;
   email: string;
   role: string;
-  imageAddress: string;
+  imageAddress?: string;
   lastEduLevel: string;
   lastMajor: string;
   lastEduLocation: string;
@@ -314,16 +315,54 @@ export interface Profile {
   gitlab: string;
   github: string;
   researchgate: string;
-  custom: string | null;
+  custom?: string;
   aboutMe: string;
   id: number;
-  createdAt: string | null;
-  updateTime: string | null;
-  deleteTime: string | null;
+  createdAt: string;
+  updatedAt?: string;
+  deleteTime?: string;
   deleted: boolean;
-  user: UserProfile;
-  picture: Picture | null;
+  user: User;
+  picture?: Picture;
+  userId: number
 }
+export interface VolunteerProfile extends Profile{
+  modules: ModuleVolunteerProfile[]
+  studentCounts:StudentCount[] 
+}
+export interface StudentCountVolunteerProfile {
+  module: ModuleGroup
+  assigned_student_count: number
+}
+
+export interface ModuleVolunteerProfile {
+  personnelId: number
+  moduleId: number
+  isActive: boolean
+  createdAt: string
+  updatedAt: any
+  studentsCount: number
+  module: ModuleGroup
+  studentsList: StudentsListVolunteerProfile[] 
+}
+
+export interface StudentsListVolunteerProfile {
+  personnelId: number
+  moduleId: number
+  personnelRole: string
+  notes: any
+  isActive: boolean
+  id: number
+  studentId: number
+  isDeleted: boolean
+  createdAt: string
+  updatedAt: any
+  deletedAt: any
+  student: StudentEdu
+}
+
+
+
 export interface UserProfile {
   username: string;
   idnumber: string;
@@ -483,37 +522,52 @@ export type ModuleSubType =
   | "vocational_skills";
 
 export interface ModuleGroup {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssistantCount: number;
   name: string;
   description: any;
-  moduleType: ModuleType;
-  subType: ModuleSubType;
+  numberOfHours?: number;
+  moduleType: string;
+  subType: string;
   isActive: boolean;
-  teachingStatus: any;
+  isImported: any;
+  teachingStatus: string;
   levelName: any;
-  startDate: any;
-  endDate: any;
+  nonLmsInstructors: any;
+  startDate: string;
+  endDate: string;
   weblinkFeedbackForm: any;
   weblinkFinalProject: any;
+  deadlineFinalProject: any;
   weblinkLmsCourse: any;
   id: number;
   createdAt: string;
-  updatedAt: any;
+  updatedAt: string;
+  category: Category;
+  careerPathway?: CareerPathway;
+  instructors: Instructor[];
 }
 export interface Group {
+  instructorCount: number;
+  studentCount: number;
+  mentorCount: number;
+  teachingAssistantCount: number;
   name: string;
   groupCode: string;
-  description: any;
+  description: string;
   isActive: boolean;
-  startDate: any;
+  startDate: string;
   endDate: any;
   id: number;
   createdAt: string;
-  updatedAt: any;
+  updatedAt: string;
   modules: ModuleGroup[];
   instructors: Instructor[];
-  teachingAssistants: TeachingAssistant[];
-  mentors: Mentor[];
-  students: Student[];
+  teachingAssistants: TeachingAssistantMentorWithProfile[];
+  mentors: TeachingAssistantMentorWithProfile[];
+  studentsWithDetails: StudentsWithDetailCore[]; //TODO: felan ke injori nist data haie sade va avalie student ro mide vali baiad ba in type baram biad
 }
 
 export type GroupArray = Group[];
@@ -523,7 +577,7 @@ export interface ShortGroup {
   instructorCount: number;
   studentCount: number;
   mentorCount: number;
-  teachingAssisstantCount: number;
+  teachingAssistantCount: number;
   name: string;
   groupCode: string;
   description: string;
@@ -540,7 +594,7 @@ export interface CareerPathway {
   instructorCount: number;
   studentCount: number;
   mentorCount: number;
-  teachingAssisstantCount: number;
+  teachingAssistantCount: number;
   name: string;
   description: string;
   isActive: boolean;
@@ -552,7 +606,7 @@ export interface Category {
   instructorCount: number;
   studentCount: number;
   mentorCount: number;
-  teachingAssisstantCount: number;
+  teachingAssistantCount: number;
   name: string;
   groupCode: string;
   description: string;
@@ -595,7 +649,7 @@ export interface ShortCoreModule {
   instructorCount: number;
   studentCount: number;
   mentorCount: number;
-  teachingAssisstantCount: number;
+  teachingAssistantCount: number;
   name: string;
   description: string;
   moduleType: string;
@@ -614,16 +668,69 @@ export interface ShortCoreModule {
   category: Category;
   careerPathway: CareerPathway;
   instructors: Instructor[];
+  studentsWithDetails: StudentsWithDetailCore[];
+  mentors: TeachingAssistantMentorWithProfile[];
+  teachingAssistants: TeachingAssistantMentorWithProfile[];
   numberOfHours: string;
   deadlineFinalProject: any;
   nonLmsInstructors: string | null;
+}
+export interface TeachingAssistantMentorWithProfile {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: any;
+  profile: Profile;
+}
+export interface StudentsWithDetailCore {
+  moduleId: number;
+  studentId: number;
+  assessmentId: any;
+  assessment: Assessment;
+  personnelAssignment: PersonnelAssignment[];
+  student: StudentCore;
+}
+export interface StudentCore {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture?: Picture;
+  registrationForm?: RegistrationForm;
+  afterWeekForm?: AfterWeekForm;
+  statusForm: StatusForm | null;
 }
 
 export interface WorkshopShort {
   instructorCount: number;
   studentCount: number;
   mentorCount: number;
-  teachingAssisstantCount: number;
+  teachingAssistantCount: number;
   name: string;
   description: string;
   moduleType: string;
@@ -648,7 +755,7 @@ export interface EnglishShort {
   instructorCount: number;
   studentCount: number;
   mentorCount: number;
-  teachingAssisstantCount: number;
+  teachingAssistantCount: number;
   name: string;
   description: string;
   moduleType: string;
@@ -730,15 +837,44 @@ export interface ModulesAsStudent {
   assessmentId: number;
   module: ModulesAsStudentModule;
   assessment: ModulesAsStudentAssessment;
+  personnelAssignment: PersonnelAssignment[];
 }
+export interface PersonnelAssignment {
+  assignmentId: number;
+  personnel: Personnel;
+  personnelRole: string;
+}
+
 export interface ModuleAsStudentForDetail extends ModulesAsStudent {
-  student: StudentEdu;
+  student: StudentWithStatus ;
 }
+
+export interface StudentWithStatus {
+  username: string
+  idnumber: string
+  firstName: string
+  family: string
+  email: string
+  phone: string
+  mobile: string
+  institution: string
+  department: string
+  address: string
+  city: string
+  country: string
+  lang: string
+  timezone: string
+  calendarType: string
+  id: number
+  picture: any
+  statusForm: StatusForm
+}
+
 export interface ModulesAsStudentModule {
   instructorCount: number;
   studentCount: number;
   mentorCount: number;
-  teachingAssisstantCount: number;
+  teachingAssistantCount: number;
   name: string;
   description: string | null;
   numberOfHours: string | null;
@@ -815,7 +951,7 @@ export interface StatusForm {
 
 export interface DetailStudentStatus {
   value: string;
-  id: number;
+  id: string | number;
 }
 export interface NextModule {
   name: string;
@@ -852,6 +988,10 @@ interface DetailError {
 export type OptionYesOrNo = {
   value: boolean;
   label: "بله" | "خیر";
+};
+export type OptionActive = {
+  value: boolean;
+  label: "فعال" | "غیرفعال";
 };
 
 export interface Notify {

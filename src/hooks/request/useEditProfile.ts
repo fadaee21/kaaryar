@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { editAxios } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 import { handleError } from "../../utils/handleError";
 import { toast } from "react-toastify";
+import { useSWRConfig } from "swr";
 interface RelatedLink {
   web?: string;
   linkedin?: string;
@@ -39,9 +39,11 @@ type About = string;
 const useEditProfile = () => {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const {
-    auth: { roles },
+    auth: { roles, username },
   } = useAuth();
-  const navigate = useNavigate();
+  const { mutate } = useSWRConfig();
+  const MUTATE_URL = `/user/profile/username/${username}`;
+  // const navigate = useNavigate();
   const editProfile = async (
     relatedLink: RelatedLink,
     desiredLink: DesiredLink[],
@@ -121,7 +123,8 @@ const useEditProfile = () => {
       });
 
       if (res.status === 200) {
-        navigate(`/${roles}/volunteer`);
+        toast.success("ویرایش اطلاعات با موفقیت انجام شد.");
+        mutate(MUTATE_URL);
       }
       console.log(res);
     } catch (error) {

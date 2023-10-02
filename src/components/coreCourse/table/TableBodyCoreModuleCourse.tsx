@@ -23,7 +23,7 @@ const TableBodyCoreModuleCourse = ({ moduleAll, counter }: Prop) => {
     endDate,
     studentCount,
     mentorCount,
-    teachingAssisstantCount,
+    teachingAssistantCount,
     weblinkFinalProject,
   } = moduleAll;
   return (
@@ -71,10 +71,10 @@ const TableBodyCoreModuleCourse = ({ moduleAll, counter }: Prop) => {
         <Typography variant="body2">{studentCount}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{mentorCount}</Typography>
+        <Typography variant="body2">{teachingAssistantCount}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{teachingAssisstantCount}</Typography>
+        <Typography variant="body2">{mentorCount}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{weblinkFinalProject ?? "-"}</Typography>

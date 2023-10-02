@@ -4,11 +4,11 @@ import { useSWRConfig } from "swr";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 const useAssignMentorTa = (
-  page: number,
+  page: number, // important for mutation swr in student table
   mentorState: string,
   taState: string,
-  mentorAssesmentId: number | null | undefined,
-  taAssesmentId: number | null | undefined,
+  mentorAssessmentId: number | null | undefined,
+  taAssessmentId: number | null | undefined,
   moduleId: number,
   id: number,
   family: string,
@@ -25,10 +25,10 @@ const useAssignMentorTa = (
     e.preventDefault();
     setSubmitLoading(true);
     try {
-      if (mentorState === "delete" && mentorAssesmentId && !!mentorState) {
+      if (mentorState === "delete" && mentorAssessmentId && !!mentorState) {
         // removing mentor
         const resRemove = await removeData(
-          `/assignee/unassign/${mentorAssesmentId}`
+          `/assignee/unassign/${mentorAssessmentId}`
         );
         if (resRemove?.status === 204) {
           await mutate(ADMIN_STUDENT_URL);
@@ -71,10 +71,10 @@ const useAssignMentorTa = (
 
     setSubmitLoading(true);
     try {
-      if (taState === "delete" && taAssesmentId) {
+      if (taState === "delete" && taAssessmentId) {
         // Removing mentor
         const resRemove = await removeData(
-          `/assignee/unassign/${taAssesmentId}`
+          `/assignee/unassign/${taAssessmentId}`
         );
         if (resRemove?.status === 204) {
           await mutate(ADMIN_STUDENT_URL);

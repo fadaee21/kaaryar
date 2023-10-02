@@ -2,15 +2,22 @@ import { List, ListItem, ListItemText, Stack } from "@mui/material";
 import {
   ModulesAsStudentAssessment,
   ModulesAsStudentModule,
+  PersonnelAssignment,
 } from "../../model";
 import { convertArrToStr } from "../../utils/courseMethod";
 import { persianDate } from "../../utils/persianDate";
+import usePersonnelAssignmentName from "../../hooks/usePersonnelAssignmentName";
 interface Props {
   assessment: ModulesAsStudentAssessment | undefined;
   module: ModulesAsStudentModule | undefined;
+  personnelAssignment: PersonnelAssignment[] | undefined;
 }
-
-const StudentCoreDetailComp = ({ assessment, module }: Props) => {
+const StudentCoreDetailComp = ({
+  assessment,
+  module,
+  personnelAssignment,
+}: Props) => {
+  const personnelAssignmentName = usePersonnelAssignmentName();
   const {
     name,
     careerPathway,
@@ -55,6 +62,12 @@ const StudentCoreDetailComp = ({ assessment, module }: Props) => {
         <ListItem>
           <ListItemText primary={"نمره نهایی"} secondary={finalGrade || "-"} />
         </ListItem>
+        <ListItem>
+          <ListItemText
+            primary={"مربی حل تمرین"}
+            secondary={personnelAssignmentName("ta", personnelAssignment)}
+          />
+        </ListItem>
       </List>
       <List>
         <ListItem>
@@ -85,6 +98,12 @@ const StudentCoreDetailComp = ({ assessment, module }: Props) => {
           <ListItemText
             primary={"ارزیابی نهایی"}
             secondary={finalAssessment?.value || "-"}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary={"منتور"}
+            secondary={personnelAssignmentName("mentor", personnelAssignment)}
           />
         </ListItem>
       </List>

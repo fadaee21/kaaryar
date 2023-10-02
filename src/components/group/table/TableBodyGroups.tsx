@@ -17,7 +17,7 @@ const TableBodyGroups = ({ groupAll }: Prop) => {
     endDate,
     mentorCount,
     studentCount,
-    teachingAssisstantCount,
+    teachingAssistantCount,
     id,
   } = groupAll;
 
@@ -47,7 +47,7 @@ const TableBodyGroups = ({ groupAll }: Prop) => {
         <Typography variant="body2">{studentCount}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{teachingAssisstantCount}</Typography>
+        <Typography variant="body2">{teachingAssistantCount}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{mentorCount}</Typography>

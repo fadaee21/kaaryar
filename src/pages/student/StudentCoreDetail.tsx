@@ -57,6 +57,7 @@ const StudentCoreDetail = () => {
       <StudentCoreDetailComp
         assessment={data?.assessment}
         module={data?.module}
+        personnelAssignment={data?.personnelAssignment}
       />
     </Container>
   );

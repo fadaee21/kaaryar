@@ -2,10 +2,10 @@ import Container from "@mui/material/Container";
 import useSWR from "swr";
 import { Navigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
-import { Profile } from "../../model";
+import { VolunteerProfile } from "../../model";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
-import VolunteerDetailComp from "../../components/volunteer/VolunteerDetailComp";
+import VolunteerDetailComp from "../../components/volunteer/VolunteerDetailComp/VolunteerDetailComp";
 
 const VolunteerDetail = () => {
   const { username } = useParams();
@@ -13,7 +13,7 @@ const VolunteerDetail = () => {
     data: dataCall,
     isLoading: loadingCall,
     error: errorCall,
-  } = useSWR<Profile>(`/user/profile/username/${username}`);
+  } = useSWR<VolunteerProfile>(`/user/profile/username/${username}`);
 
   if (loadingCall) {
     return <LoadingProgress />;
@@ -26,7 +26,7 @@ const VolunteerDetail = () => {
     return <Navigate replace to={`/notfound`} />;
   }
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <VolunteerDetailComp {...dataCall} usernameParam={username} />
     </Container>
   );

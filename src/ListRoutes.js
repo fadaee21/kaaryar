@@ -10,7 +10,7 @@ import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 import AfterWeekDetail from "./pages/afterWeek/AfterWeekDetail";
 import AfterWeekDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
-import VolunteerEdit from "./pages/volunteer/VolunteerEdit";
+// import VolunteerEdit from "./components/volunteer/VolunteerDetailComp/VolunteerEditParent";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
 import EditComments from "./pages/comment/EditComments";
@@ -43,6 +43,14 @@ import StudentCoreEdit from "./pages/student/StudentCoreEdit";
 import Notify from "./pages/notify/Notify";
 import EditEmail from "./pages/notify/email/EditEmail";
 import EditSMS from "./pages/notify/sms/EditSMS";
+import CoreModuleCourseStudents from "./pages/coreModuleCourses/CoreModuleCourseStudents";
+import CoreModuleCourseMentor from "./pages/coreModuleCourses/CoreModuleCourseMentor";
+import CoreModuleCourseTa from "./pages/coreModuleCourses/CoreModuleCourseTa";
+import GroupDetailModulesTable from "./pages/groups/GroupDetailModulesTable";
+import GroupDetailMentorTable from "./pages/groups/GroupDetailMentorTable";
+import GroupDetailTaTable from "./pages/groups/GroupDetailTaTable";
+import GroupDetailStudentTable from "./pages/groups/GroupDetailStudentTable";
+import StudentVolunteer from "./components/volunteer/VolunteerDetailComp/StudentVolunteer";
 
 const ListRoutes = [
   //! ta________________________________
@@ -98,14 +106,14 @@ const ListRoutes = [
     role: "ta",
     key: "ta6",
   },
-  {
-    path: "ta/profile",
-    name: " ",
-    component: VolunteerEdit,
-    showInNav: false,
-    role: "ta",
-    key: "ta7",
-  },
+  // {
+  //   path: "ta/profile",
+  //   name: " ",
+  //   component: VolunteerEdit,
+  //   showInNav: false,
+  //   role: "ta",
+  //   key: "ta7",
+  // },
   {
     path: "ta/all-comments/:id",
     name: " ",
@@ -186,14 +194,14 @@ const ListRoutes = [
     role: "mentor",
     key: "mentor6",
   },
-  {
-    path: "mentor/profile",
-    name: " ",
-    component: VolunteerEdit,
-    showInNav: false,
-    role: "mentor",
-    key: "mentor7",
-  },
+  // {
+  //   path: "mentor/profile",
+  //   name: " ",
+  //   component: VolunteerEdit,
+  //   showInNav: false,
+  //   role: "mentor",
+  //   key: "mentor7",
+  // },
   {
     path: "mentor/all-comments/:id",
     name: " ",
@@ -332,14 +340,14 @@ const ListRoutes = [
     role: "admin",
     key: "admin10",
   },
-  {
-    path: "admin/profile",
-    name: " ",
-    component: VolunteerEdit,
-    showInNav: false,
-    role: "admin",
-    key: "admin11",
-  },
+  // {
+  //   path: "admin/profile",
+  //   name: " ",
+  //   component: VolunteerEdit,
+  //   showInNav: false,
+  //   role: "admin",
+  //   key: "admin11",
+  // },
   {
     path: "admin/all-comments/:id",
     name: " ",
@@ -452,6 +460,15 @@ const ListRoutes = [
     role: "admin",
     key: "admin19",
   },
+  {
+    path: "admin/volunteer/:username/student",
+    name: "",
+    // icon:<></>,
+    component: StudentVolunteer,
+    showInNav: false,
+    role: "admin",
+    key: "admin19-s",
+  },
 
   {
     path: "admin/graduate/profile/1",
@@ -481,7 +498,43 @@ const ListRoutes = [
     key: "admin22-d",
   },
   {
-    path: "admin/groups/edit/:groupId",
+    path: "admin/groups/:groupId/modules",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailModulesTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-md",
+  },
+  {
+    path: "admin/groups/:groupId/mentor",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailMentorTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-m",
+  },
+  {
+    path: "admin/groups/:groupId/ta",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailTaTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-t",
+  },
+  {
+    path: "admin/groups/:groupId/students",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailStudentTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-s",
+  },
+  {
+    path: "admin/groups/:groupId/edit",
     name: "",
     // icon:<></>,
     component: GroupEdit,
@@ -517,13 +570,40 @@ const ListRoutes = [
     key: "admin23-d",
   },
   {
-    path: "admin/core-course/edit/:coreId",
+    path: "admin/core-course/:coreId/edit",
     name: "",
     // icon:<></>,
     component: CoreModuleCourseEdit,
     showInNav: false,
     role: "admin",
-    key: "admin23-d",
+    key: "admin23-e",
+  },
+  {
+    path: "admin/core-course/:coreId/students",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseStudents,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-s",
+  },
+  {
+    path: "admin/core-course/:coreId/mentor",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseMentor,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-m",
+  },
+  {
+    path: "admin/core-course/:coreId/ta",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseTa,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-t",
   },
   {
     path: "admin/general-course",
@@ -534,6 +614,36 @@ const ListRoutes = [
     role: "admin",
     key: "admin24",
   },
+  
+  {
+    path: "admin/general-course/:coreId/students",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseStudents,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-s",
+  },
+  {
+    path: "admin/general-course/:coreId/mentor",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseMentor,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-m",
+  },
+  {
+    path: "admin/general-course/:coreId/ta",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseTa,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-t",
+  },
+
+
   {
     path: "admin/language-course/:id",
     name: "",

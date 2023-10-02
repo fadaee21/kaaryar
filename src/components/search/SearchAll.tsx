@@ -388,6 +388,10 @@ const SearchAll: ({
               handleChange={(e: any) => setJobStandby(e)}
               placeholder="آمادگی به کار"
               value={jobStandby}
+              options={[
+                { value: true, label: "بله" },
+                { value: false, label: "خیر" },
+              ]}
             />
           </Grid>
           <Grid item xs={3}>
