@@ -36,15 +36,12 @@ const SearchSelect = ({
 export default memo(SearchSelect);
 
 export const EditBooleanSearch = memo(
-  ({ placeholder, handleChange, value }: any) => {
+  ({ placeholder, handleChange, value, options }: any) => {
     const content = (
       <Select
         value={value}
         onChange={handleChange}
-        options={[
-          { value: true, label: "بله" },
-          { value: false, label: "خیر" },
-        ]}
+        options={options}
         // getOptionLabel={(e) => e.label}
         // getOptionValue={(e) => e.value}
         placeholder={placeholder}
@@ -60,3 +57,7 @@ export const EditBooleanSearch = memo(
     return content;
   }
 );
+// [
+//   { value: true, label: "بله" },
+//   { value: false, label: "خیر" },
+// ]

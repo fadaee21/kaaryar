@@ -21,6 +21,7 @@ const RegTableBodyAll = ({
   index,
   city,
   decidedAt,
+  selectedField
 }: TableBodyAllType) => {
   const navigate = useNavigate();
   const backgroundColor =
@@ -148,6 +149,14 @@ const RegTableBodyAll = ({
         }}
       >
         <Typography variant="body2">{refer || "-"}</Typography>
+      </StyledTableCell>
+      <StyledTableCell
+        align="center"
+        sx={{
+          verticalAlign: "center",
+        }}
+      >
+        <Typography variant="body2">{selectedField || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"

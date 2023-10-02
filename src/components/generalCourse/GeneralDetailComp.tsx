@@ -1,7 +1,15 @@
-import { Grid, Link, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Grid,
+  Link,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { ShortCoreModule } from "../../model";
 import { persianDate } from "../../utils/persianDate";
 import { convertArrToStr, getTitle } from "../../utils/courseMethod";
+import { useNavigate } from "react-router-dom";
+import { ListButton } from "../../styles/Button";
 
 interface Prop {
   workshopDetail: ShortCoreModule | undefined;
@@ -21,8 +29,10 @@ const GeneralDetailComp = ({ workshopDetail }: Prop) => {
     subType,
     teachingStatus,
     category,
+    // teachingAssistantCount,
+    // mentorCount,
   } = workshopDetail ?? {};
-
+  const navigate = useNavigate();
   return (
     <Grid container>
       <Grid item xs={12} md={6}>
@@ -65,16 +75,26 @@ const GeneralDetailComp = ({ workshopDetail }: Prop) => {
           )}
 
           <ListItem>
-            <ListItemText
-              primary={
-                subType === "workshop"
-                  ? "تعداد شرکت‌کنندگان"
-                  : "تعداد مهارت‌آموزان"
-              }
-              secondary={studentCount || "-"}
-            />
+            <ListButton onClick={() => navigate("students")} >
+              <ListItemText
+                primary={
+                  subType === "workshop"
+                    ? "تعداد شرکت‌کنندگان"
+                    : "تعداد مهارت‌آموزان"
+                }
+                secondary={studentCount || "-"}
+              />
+            </ListButton>
           </ListItem>
 
+          {/* <ListItem>
+            <ListItemText
+              primary="تعداد مربیان حل تمرین فعال این دوره"
+              secondary={teachingAssistantCount}
+              onClick={() => navigate("ta")}
+              sx={{ cursor: "pointer" }}
+            />
+          </ListItem> */}
           <ListItem>
             <ListItemText primary="توضیحات" secondary={description ?? "-"} />
           </ListItem>
@@ -160,6 +180,14 @@ const GeneralDetailComp = ({ workshopDetail }: Prop) => {
               />
             </ListItem>
           )}
+          {/* <ListItem>
+            <ListItemText
+              sx={{ cursor: "pointer" }}
+              primary="تعداد منتورهای فعال این دوره"
+              secondary={mentorCount}
+              onClick={() => navigate("mentor")}
+            />
+          </ListItem> */}
         </List>
       </Grid>
     </Grid>

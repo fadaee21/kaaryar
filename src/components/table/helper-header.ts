@@ -12,6 +12,7 @@ export const registerTableHeader = [
   "شهر",
   "نحوه آشنایی با کاریار",
   "نام معرف یا موسسه",
+  "رشته انتخابی",
   "تاریخ ارسال فرم",
   "تاریخ تأیید/رد ",
 ];
@@ -103,8 +104,33 @@ export const adminStudentTableHeader: RowHeaderStudent[] = [
   { id: 16, label: "ارزیابی کاریار", minWidth: 200, align: "center" },
   { id: 17, label: "عملیات", minWidth: 530, align: "left" },
 ];
+export const CoreModuleCourseStudentsCompHeaders: RowHeaderStudent[] = [
+  { id: 1, label: "", minWidth: 20, align: "center" },
+  { id: 2, label: "", minWidth: 20, align: "center" },
+  { id: 3, label: "نام و نام خانوادگی", minWidth: 200, align: "center" },
+  { id: 4, label: "نام کاربری", minWidth: 100, align: "center" },
+  { id: 5, label: "گروه", minWidth: 100, align: "center" },
+  { id: 6, label: "استان", minWidth: 100, align: "center" },
+  { id: 7, label: "شهر", minWidth: 100, align: "center" },
+  { id: 8, label: "معرف", minWidth: 100, align: "center" },
+  { id: 9, label: "مسیر آموزشی", minWidth: 120, align: "center" },
+  { id: 11, label: "حل تمرین این دوره", minWidth: 120, align: "center" },
+  { id: 12, label: "منتور این دوره", minWidth: 100, align: "center" },
+  // { id: 13, label: "وضعیت آموزش", minWidth: 200, align: "center" },
+  // { id: 14, label: "قدم آتی آموزش", minWidth: 200, align: "center" },
+  // { id: 15, label: "ارجاع به واحد مالی", minWidth: 200, align: "center" },
+  // { id: 16, label: "ارزیابی کاریار", minWidth: 200, align: "center" },
+];
+export const CoreModuleCourseMentorTaCompHeaders: RowHeaderStudent[] = [
+  { id: 1, label: "", minWidth: 20, align: "center" },
+  { id: 2, label: "", minWidth: 20, align: "center" },
+  { id: 3, label: "نام داوطلب", minWidth: 200, align: "center" },
+  { id: 4, label: "نقش", minWidth: 100, align: "center" },
+  { id: 5, label: "وضعیت", minWidth: 100, align: "center" },
 
-export const volunteerTableHeader = ["", "نام داوطلب", "نقش", "عملیات"];
+];
+
+export const volunteerTableHeader = ["", "", "نام داوطلب", "نقش", "وضعیت"];
 
 export const graduateTableHeader = [
   "",
@@ -152,6 +178,21 @@ export const trainingCourseHeader = [
   "تعداد مربیان حل تمرین",
   "تعداد منتورها",
   "لینک تعریف پروژه پایانی",
+];
+export const trainingCourseHeaderModule = [
+  "",
+  "نوع دوره",
+  "نام دوره آموزشی",
+  "مسیر مرتبط",
+  // "گروه مرتبط",
+  "وضعیت آموزش دوره",
+  "نام مدرس",
+  "تاریخ شروع",
+  // "تاریخ پایان",
+  "تعداد مهارت‌آموزان",
+  "تعداد مربیان حل تمرین",
+  "تعداد منتورها",
+  // "لینک تعریف پروژه پایانی",
 ];
 
 export const language = [

@@ -27,7 +27,7 @@ const GeneralDetail = () => {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <header>
         <Stack direction="row" sx={{ alignItems: "flex-start" }}>
           <Stack sx={{ mr: "auto" }}>

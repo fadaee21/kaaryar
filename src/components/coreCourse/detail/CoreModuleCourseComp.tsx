@@ -1,7 +1,15 @@
-import { Grid, Link, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Grid,
+  Link,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { ShortCoreModule } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
 import { convertArrToStr } from "../../../utils/courseMethod";
+import { useNavigate } from "react-router-dom";
+import { ListButton } from "../../../styles/Button";
 
 interface Prop {
   coreDetail: ShortCoreModule | undefined;
@@ -22,7 +30,10 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
     studentCount,
     numberOfHours,
     deadlineFinalProject,
+    teachingAssistantCount,
+    mentorCount,
   } = coreDetail ?? {};
+  const navigate = useNavigate();
   return (
     <Grid container>
       <Grid item xs={12} md={6}>
@@ -75,12 +86,14 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
               secondary={deadlineFinalProject ?? "-"}
             />
           </ListItem>
-          {/* <ListItem>
-            <ListItemText
-              primary="تعداد مربیان حل تمرین فعال این دوره"
-              secondary={instructorCount}
-            />
-          </ListItem> */}
+          <ListItem>
+            <ListButton onClick={() => navigate("ta")}>
+              <ListItemText
+                primary="تعداد مربیان حل تمرین فعال این دوره"
+                secondary={teachingAssistantCount}
+              />
+            </ListButton>
+          </ListItem>
 
           <ListItem>
             <ListItemText primary="توضیحات" secondary={description ?? "-"} />
@@ -140,17 +153,21 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
             />
           </ListItem>
           <ListItem>
-            <ListItemText
-              primary="تعداد مهارت‌آموزان این دوره"
-              secondary={studentCount}
-            />
+            <ListButton onClick={() => navigate("students")}>
+              <ListItemText
+                primary="تعداد مهارت‌آموزان این دوره"
+                secondary={studentCount}
+              />
+            </ListButton>
           </ListItem>
-          {/* <ListItem>
-            <ListItemText
-              primary="تعداد منتورهای فعال این دوره"
-              secondary={mentorCount}
-            />
-          </ListItem> */}
+          <ListItem>
+            <ListButton onClick={() => navigate("mentor")}>
+              <ListItemText
+                primary="تعداد منتورهای فعال این دوره"
+                secondary={mentorCount}
+              />
+            </ListButton>
+          </ListItem>
         </List>
       </Grid>
     </Grid>

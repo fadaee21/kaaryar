@@ -137,6 +137,13 @@ export const fieldOptions = [
     value: "ICDL پیشرفته",
     label: "ICDL پیشرفته",
   },
+  { value: "مبانی کامپیوتر", label: "مبانی کامپیوتر" },
+  { value: "امور اداری", label: "امور اداری" },
+  { value: "کارشناس مرکز تماس", label: "کارشناس مرکز تماس" },
+  { value: "محتوا و شبکه‌های اجتماعی", label: "محتوا و شبکه‌های اجتماعی" },
+  { value: "تضمین کیفیت نرم‌افزار (QA)", label: "تضمین کیفیت نرم‌افزار (QA)" },
+  { value: "بازاریابی دیجیتال (Digital Marketing)", label: "بازاریابی دیجیتال (Digital Marketing)" },
+  { value: "Help Desk", label: "Help Desk" },
 ];
 
 export const SelectedFieldOpt = [ //ttttttttttt

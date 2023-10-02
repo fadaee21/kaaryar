@@ -25,7 +25,7 @@ const CoreModuleCourseDetail = () => {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <header>
         <Stack direction="row" sx={{ alignItems: "flex-start" }}>
           <Stack sx={{ mr: "auto" }}>
@@ -41,7 +41,7 @@ const CoreModuleCourseDetail = () => {
           <Button
             endIcon={<EditIcon />}
             variant="outlined"
-            onClick={() => navigate(`/admin/core-course/edit/${coreId}`)}
+            onClick={() => navigate("edit")}
             sx={{ mr: 2, px: 5 }}
           >
             ویرایش

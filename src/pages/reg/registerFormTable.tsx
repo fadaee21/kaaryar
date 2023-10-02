@@ -134,6 +134,7 @@ const RegisterFormTable = () => {
                     "نام و نام خانوادگی":
                       registerUser.firstName + " " + registerUser.family,
                     گروه: registerUser.course,
+                    "رشته تحصیلی": registerUser.studyField,
                     "میزان تحصیلات": registerUser.education,
                     شهر: registerUser.city,
                     "سال دبیرستان": registerUser.highSchoolYear,
@@ -145,6 +146,18 @@ const RegisterFormTable = () => {
                       new Intl.DateTimeFormat("fa").format(
                         new Date(registerUser.createdAt)
                       ),
+                    "سال تولد":
+                      registerUser.birthDate &&
+                      new Intl.DateTimeFormat("fa").format(
+                        new Date(registerUser.birthDate)
+                      ),
+                    "نحوه آشنایی": registerUser.familiarity,
+                    "شماره همراه": registerUser.mobile,
+                    ایمیل: registerUser.email,
+                    "ترم دانشگاه": registerUser.uniSemester,
+                    "رشته انتخابی در کاریار ": registerUser.selectedField,
+                    "مسیر مورد نظر متقاضی": registerUser.careerPathwayOther,
+                    "توضیحات سایر": registerUser.description,
                   }))}
                   linkAll="/reg/form/all?pageNum=1&pageSize=100000"
                   useIn="reg"
@@ -204,6 +217,7 @@ const RegisterFormTable = () => {
                             : itemCounterTable(page, pageSize, i)
                         }
                         decidedAt={RegisterUser.decidedAt}
+                        selectedField={RegisterUser.selectedField}
                       />
                     );
                   }

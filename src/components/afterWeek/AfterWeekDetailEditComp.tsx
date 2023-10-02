@@ -6,7 +6,7 @@ import {
   comAccessStatusOpt,
   notifyAcceptWeekOpt,
   presentStatusOpt,
-  recommendFieldOpt,
+  // recommendFieldOpt,
   recommendFieldMentorOpt,
   scholarOpt,
   workshopContOpt,
@@ -175,13 +175,15 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 value={student?.jobCommit}
                 options={yesOrNo}
               />
-              <EditingSelective
-                placeholder="رشته پیشنهادی سرگروه"
-                handleChange={handleChange}
-                identifier="recommendField"
-                value={student?.recommendField}
-                options={recommendFieldOpt}
-              />
+              {data && (
+                <EditingSelective
+                  placeholder="مسیر پیشنهادی سرگروه"
+                  handleChange={handleChange}
+                  identifier="recommendField"
+                  value={student?.recommendField}
+                  options={data.map((i) => ({ label: i.name, value: i.name }))}
+                />
+              )}
               <EditString
                 placeholder="سایر ریسک‌ها و محدودیت‌ها - سرگروه"
                 handleChange={handleChange}

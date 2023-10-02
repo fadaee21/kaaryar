@@ -4,11 +4,19 @@ import {
   InputLabel,
   List,
   ListItem,
+  MenuItem,
   OutlinedInput,
+  Select,
   Stack,
   Typography,
 } from "@mui/material";
-import { ModulesAsStudentAssessment, StudentEdu } from "../../model";
+import {
+  DetailStudentStatus,
+  ModulesAsStudentAssessment,
+  PersonnelAssignment,
+  Profile,
+  StudentWithStatus,
+} from "../../model";
 import { EditComboStudent } from "./EditComboStudent";
 import { useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -16,30 +24,64 @@ import { useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
 import LoadingProgress from "../LoadingProgress";
 import { editAxios } from "../../api/axios";
+import useAssignMentorTa from "../../hooks/request/useAssignMentorTa";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
 
 interface Prop {
   assessment: ModulesAsStudentAssessment | undefined;
-  student: StudentEdu | undefined;
+  student: StudentWithStatus | undefined;
+  personnelAssignment: PersonnelAssignment[] | undefined;
+  trainingStatus: DetailStudentStatus | undefined;
 }
 interface AssessmentOpt {
   value: string;
   id: number;
 }
-const StudentCoreDetailEdit = ({ assessment, student }: Prop) => {
+const PROFILE_VOLUNTEER = "/user/profile/all";
+const StudentCoreDetailEdit = ({
+  assessment,
+  student,
+  personnelAssignment,
+  trainingStatus,
+}: Prop) => {
+  const { data: volunteerData, isLoading: volunteerLoading } =
+    useSWR<Profile[]>(PROFILE_VOLUNTEER);
   const { data: assessmentRes, isLoading: assessmentLoading } = useSWR<
     AssessmentOpt[]
   >("/modules/qualitative-assessment/values/all");
 
-  const [finalGrade, setFinalGrade] = useState(assessment?.finalGrade || "");
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [finalGrade, setFinalGrade] = useState(assessment?.finalGrade || 0);
   const [finalAssessment, setFinalAssessment] = useState(
     assessment?.finalAssessment?.id.toString() || ""
   );
+  const mentor = personnelAssignment?.find((i) => i.personnelRole === "mentor");
+  const [mentorState, setMentorState] = useState(
+    mentor?.personnel.id.toString() || ""
+  );
+  const ta = personnelAssignment?.find((i) => i.personnelRole === "ta");
+  const [taState, setTaState] = useState(ta?.personnel.id.toString() || "");
 
   const navigate = useNavigate();
   const { student_id, module_id } = useParams();
+  const [handleSubmitAssigning] = useAssignMentorTa(
+    0, //it doesn't matter here
+    mentorState,
+    taState,
+    mentor?.assignmentId,
+    ta?.assignmentId,
+    parseInt(module_id!),
+    parseInt(student_id!),
+    student?.family || "",
+    student?.firstName || "",
+    setSubmitLoading
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    await handleSubmitAssigning(e);
+    setSubmitLoading(true);
     try {
       const res = await editAxios(
         `modules/student/enrollment/details/${module_id}/${student_id}`,
@@ -52,16 +94,21 @@ const StudentCoreDetailEdit = ({ assessment, student }: Prop) => {
       );
       if (res.status === 200) {
         navigate(-1);
+        toast.success("ویرایش نمره نهایی و ارزیابی نهایی با موفقیت انجام شد ");
       } else {
         console.log(res.data);
+        toast.error("ویرایش نمره نهایی و ارزیابی نهایی با خطا مواجه شد");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(handleError(error));
+    } finally {
+      setSubmitLoading(false);
     }
   };
-  if (assessmentLoading) {
+  if (assessmentLoading || volunteerLoading) {
     return <LoadingProgress />;
   }
+  const disableAssigning = trainingStatus?.id !== 2; //only this state let you edit ta/mentor
 
   return (
     <form onSubmit={handleSubmit}>
@@ -77,6 +124,7 @@ const StudentCoreDetailEdit = ({ assessment, student }: Prop) => {
             variant="outlined"
             type="submit"
             sx={{ mr: 2, px: 5, ml: "auto" }}
+            disabled={submitLoading}
           >
             ذخیره
           </Button>
@@ -116,6 +164,29 @@ const StudentCoreDetailEdit = ({ assessment, student }: Prop) => {
               />
             </FormControl>
           </ListItem>
+          <ListItem>
+            <FormControl fullWidth>
+              <InputLabel id={`ta-label`}>انتساب مربی حل تمرین</InputLabel>
+              <Select
+                labelId={`ta-label`}
+                id="ta"
+                name="ta"
+                value={taState}
+                label="انتساب مربی حل تمرین"
+                onChange={(event) => setTaState(event.target.value.toString())}
+                disabled={disableAssigning}
+              >
+                <MenuItem disabled={!ta?.assignmentId} value={"delete"}>
+                  نامشخص
+                </MenuItem>
+                {volunteerData?.map((i) => (
+                  <MenuItem key={i.user.id} value={i.user.id}>
+                    {i.firstName + " " + i.lastName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </ListItem>
         </List>
         <List sx={{ width: "45%" }}>
           <ListItem>
@@ -128,6 +199,32 @@ const StudentCoreDetailEdit = ({ assessment, student }: Prop) => {
               label="ارزیابی نهایی"
               val={finalAssessment}
             />
+          </ListItem>
+
+          <ListItem>
+            <FormControl fullWidth>
+              <InputLabel id={`mentor-label`}>انتساب منتور</InputLabel>
+              <Select
+                labelId={`mentor-label`}
+                id="mentor"
+                name="mentor"
+                value={mentorState}
+                label="انتساب منتور"
+                onChange={(event) =>
+                  setMentorState(event.target.value.toString())
+                }
+                disabled={disableAssigning}
+              >
+                <MenuItem disabled={!mentor?.assignmentId} value={"delete"}>
+                  نامشخص
+                </MenuItem>
+                {volunteerData?.map((i) => (
+                  <MenuItem key={i.user.id} value={i.user.id}>
+                    {i.firstName + " " + i.lastName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </ListItem>
         </List>
       </Stack>

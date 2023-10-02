@@ -1,26 +1,30 @@
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom";
-import useEditProfile from "../../hooks/request/useEditProfile";
+import useEditProfile from "../../../hooks/request/useEditProfile";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useState } from "react";
-import UploadVolunteerImage from "./UploadVolunteerImage";
-import { DesireBox, ContentBoxHeader, StackTitle } from "../../styles/profile";
+import UploadVolunteerImage from "../UploadVolunteerImage";
+import {
+  DesireBox,
+  ContentBoxHeader,
+  StackTitle,
+} from "../../../styles/profile";
 import { Box, Button, Container, Typography } from "@mui/material";
-import AddLink, { DesireLink } from "./AddLink";
+import AddLink, { DesireLink } from "../AddLink";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Profile } from "../../model";
+import { Profile } from "../../../model";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
-import Selector from "./Selector";
+import Selector from "../Selector";
 
 interface ProfileData {
   profileData: Profile | null;
+  setEditingProfile: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const VolunteerEditComp = ({ profileData }: ProfileData) => {
+const VolunteerEditComp = ({ profileData, setEditingProfile }: ProfileData) => {
   const {
     firstName,
     lastName,
@@ -90,12 +94,13 @@ const VolunteerEditComp = ({ profileData }: ProfileData) => {
   };
   const { editProfile, loadingProfile } = useEditProfile();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    editProfile(relatedLink, desiredLink, userProfile, about);
+    await editProfile(relatedLink, desiredLink, userProfile, about);
+    setEditingProfile(false);
   };
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mb: 30 }}>
@@ -117,12 +122,12 @@ const VolunteerEditComp = ({ profileData }: ProfileData) => {
           </Button>
           {/* </Tooltip> */}
           <Button
-            onClick={() => navigate(-1)}
+            onClick={() => setEditingProfile(false)}
             endIcon={<ArrowBackIcon />}
             variant="outlined"
             color="inherit"
           >
-            بازگشت
+            خروج از حالت ویرایش
           </Button>
         </ContentBoxHeader>
         <Typography variant="body1">
@@ -145,6 +150,7 @@ const VolunteerEditComp = ({ profileData }: ProfileData) => {
               onChange={handleChange1}
               size="small"
               value={userProfile.profileName}
+              disabled
             />
           </Grid>
           <Grid item xs={2.4}>
@@ -156,6 +162,7 @@ const VolunteerEditComp = ({ profileData }: ProfileData) => {
               onChange={handleChange1}
               size="small"
               value={userProfile.profileFamily}
+              disabled
             />
           </Grid>
           <Grid item xs={2.4}>
@@ -232,6 +239,7 @@ const VolunteerEditComp = ({ profileData }: ProfileData) => {
               items={["منتور", "مربی حل تمرین"]}
               handleChange={handleChange1}
               state={userProfile.profileRole}
+              disabled
             />
           </Grid>
           <Grid item xs={12}>

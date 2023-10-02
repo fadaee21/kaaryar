@@ -11,6 +11,7 @@ interface SelectorType {
   items: string[];
   handleChange: any;
   state: string;
+  disabled?: boolean;
 }
 
 function Selector({
@@ -20,10 +21,10 @@ function Selector({
   items,
   handleChange,
   state,
+  disabled,
 }: SelectorType) {
-  
   return (
-    <FormControl fullWidth size="small">
+    <FormControl fullWidth size="small" disabled={disabled}>
       <InputLabel id="select-label">{label}</InputLabel>
       <Select
         labelId="select-label"

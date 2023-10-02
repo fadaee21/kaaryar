@@ -1,7 +1,9 @@
-import { IconButton, Typography } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
+import useGetImage from "../../hooks/request/useGetImage";
+import { useEffect } from "react";
+import { Picture } from "../../model";
 
 interface Props {
   firstName: string;
@@ -10,6 +12,8 @@ interface Props {
   role: string;
   id: number;
   counter: number;
+  picture: Picture | undefined;
+  isActive: boolean;
 }
 
 const TableBodyVolunteer = ({
@@ -18,8 +22,15 @@ const TableBodyVolunteer = ({
   lastName,
   role,
   counter,
+  picture,
+  isActive,
 }: Props) => {
   const navigate = useNavigate();
+
+  const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
+  useEffect(() => {
+    picture && getPicture(picture.file_hash);
+  }, [getPicture, picture]);
 
   return (
     <StyledTableRow
@@ -30,38 +41,48 @@ const TableBodyVolunteer = ({
       <StyledTableCell
         align="center"
         sx={{
-          width: "10%",
           verticalAlign: "center",
         }}
+        width={"5%"}
       >
         <Typography variant="body2">{counter}</Typography>
       </StyledTableCell>
       <StyledTableCell
+        width={"5%"}
         align="center"
         sx={{
-          width: "30%",
           verticalAlign: "center",
+        }}
+      >
+        <Avatar sx={{ width: 40, height: 40 }} src={pic} />
+      </StyledTableCell>
+      <StyledTableCell
+        width={"40%"}
+        onClick={() => navigate(username)}
+        align="center"
+        sx={{
+          verticalAlign: "center",
+          cursor: "pointer",
         }}
       >
         <Typography variant="body2">{`${firstName} ${lastName}`}</Typography>
       </StyledTableCell>
 
       <StyledTableCell
+        width={"20%"}
         align="center"
         sx={{
-          width: "50%",
           verticalAlign: "center",
         }}
       >
         <Typography variant="body2">{role}</Typography>
       </StyledTableCell>
       <StyledTableCell
+        width={"30%"}
         align="center"
-        sx={{ width: "10%", verticalAlign: "center" }}
+        sx={{ verticalAlign: "center" }}
       >
-        <IconButton onClick={() => navigate(username)}>
-          <VisibilityIcon fontSize="small" color="info" />
-        </IconButton>
+        {isActive ? "فعال" : "غیرفعال"}
       </StyledTableCell>
     </StyledTableRow>
   );

@@ -47,7 +47,7 @@ const SearchAllStudent = ({
   const [careerPathway, setCareerPathway] = useState<CareerPathway | null>(
     null
   );
-  const [currentModule, setCurrentModule] = useState<ModuleAll | null>(null);
+  const [moduleAsStudent, setModuleAsStudent] = useState<ModuleAll | null>(null);
   const [ta, setTa] = useState<Profile | null>(null);
   const [mentor, setMentor] = useState<Profile | null>(null);
   const [trainingStatus, setTrainingStatus] =
@@ -96,7 +96,7 @@ const SearchAllStudent = ({
       // module,
       group,
       careerPathway,
-      currentModule,
+      moduleAsStudent,
       ta,
       mentor,
     ].some(Boolean);
@@ -104,7 +104,7 @@ const SearchAllStudent = ({
   }, [
     mentor,
     ta,
-    currentModule,
+    moduleAsStudent,
     careerPathway,
     group,
     // module,
@@ -138,7 +138,7 @@ const SearchAllStudent = ({
       // moduleAsStudentID: module?.id,
       groupID: group?.id,
       careerPathwayId: careerPathway?.id,
-      currentModuleID: currentModule?.id,
+      moduleAsStudentID: moduleAsStudent?.id,
       currentAssignedTAID: ta?.id,
       currentAssignedMentorID: mentor?.id,
     };
@@ -167,7 +167,7 @@ const SearchAllStudent = ({
     // setModule(null);
     setGroup(null);
     setCareerPathway(null);
-    setCurrentModule(null);
+    setModuleAsStudent(null);
     setTa(null);
     setMentor(null);
     searchPage === "moodle" && setSearchingMoodleStudent(null);
@@ -250,8 +250,8 @@ const SearchAllStudent = ({
       {ModuleData && (
         <Grid item xs={3}>
           <SearchSelect2
-            state={currentModule as any}
-            setState={setCurrentModule as any}
+            state={moduleAsStudent as any}
+            setState={setModuleAsStudent as any}
             options={[
               { id: 0, value: "نامشخص" },
               ...ModuleData.map((i) => ({
@@ -259,7 +259,7 @@ const SearchAllStudent = ({
                 value: i.name,
               })),
             ]}
-            placeholder="دوره کنونی"
+            placeholder="دوره"
           />
         </Grid>
       )}

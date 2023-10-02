@@ -85,7 +85,7 @@ const StudentAdminRowTable = ({
     referralToFinanceData,
     kaaryarAssessmentData,
   } = useGetStatusStudent(true);
-  const { data: volunteerData } = useSWR<Profile[]>(PROFILE_VOLUNTEER, {});
+  const { data: volunteerData } = useSWR<Profile[]>(PROFILE_VOLUNTEER);
   const childRefEditing = useRef<{
     handleSubmitEditing: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   }>();
