@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableContainer } from "@mui/material";
-import { StudentsWithDetailCore } from "../../../model";
+import { studentsGroup } from "../../../model";
 import { CoreModuleCourseStudentsCompHeaders } from "../../table/helper-header";
 import { TableHeaderStudent } from "../../table/TableHeader";
 import {
@@ -11,9 +11,9 @@ import TablePic from "../../table/TablePic";
 // import RowViewStatus from "../../student/admin-table/RowViewStatus";
 import RowViewAssigning from "../../student/admin-table/RowViewAssigning";
 interface Props {
-  students: StudentsWithDetailCore[]  | undefined;
+  students: studentsGroup[] | undefined;
 }
-const CoreModuleCourseStudentsComp = ({ students }: Props) => {
+const GroupCourseStudentsComp = ({ students }: Props) => {
   return (
     <Paper
       sx={{
@@ -33,8 +33,7 @@ const CoreModuleCourseStudentsComp = ({ students }: Props) => {
             studentHeaderItems={CoreModuleCourseStudentsCompHeaders}
           />
           <TableBody>
-            {students?.map((moodleUser: StudentsWithDetailCore, i: number) => {
-              const { student, personnelAssignment } = moodleUser;
+            {students?.map((moodleUser: studentsGroup, i: number) => {
               const {
                 id,
                 firstName,
@@ -43,16 +42,11 @@ const CoreModuleCourseStudentsComp = ({ students }: Props) => {
                 city,
                 picture,
                 registrationForm,
-                afterWeekForm,
-                // statusForm,
-              } = student;
+                currentAssignedMentor,
+                currentAssignedTA,
+                careerPathway,
+              } = moodleUser;
 
-              const currentAssignedMentor = personnelAssignment?.find(
-                (item) => item.personnelRole === "mentor"
-              );
-              const currentAssignedTA = personnelAssignment?.find(
-                (item) => item.personnelRole === "ta"
-              );
               const mentorFullName = currentAssignedMentor
                 ? currentAssignedMentor.personnel.firstName +
                   " " +
@@ -117,7 +111,7 @@ const CoreModuleCourseStudentsComp = ({ students }: Props) => {
                   {/* "مسیر آموزشی" */}
                   <StyledTableCellAdmin align="center">
                     <StyledTypographyAdmin variant="body2" textAlign={"center"}>
-                      {afterWeekForm?.careerPathway?.description ?? "-"}
+                      {careerPathway?.description ?? "-"}
                     </StyledTypographyAdmin>
                   </StyledTableCellAdmin>
                   <RowViewAssigning
@@ -135,4 +129,4 @@ const CoreModuleCourseStudentsComp = ({ students }: Props) => {
   );
 };
 
-export default CoreModuleCourseStudentsComp;
+export default GroupCourseStudentsComp;

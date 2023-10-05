@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 
 import { Chip, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
@@ -51,9 +51,22 @@ const VolunteerDetailComp = ({
 }: VolDetailType) => {
   const [value, setValue] = useState(0);
   const [editingProfile, setEditingProfile] = useState(false);
+  const [tab, setTab] = useSearchParams(undefined);
+
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    setTab({ tab: newValue.toString() });
   };
+  let numberValue;
+
+  const tabVal = tab.get("tab");
+
+  if (tabVal !== null) {
+    numberValue = Number(tabVal);
+  } else {
+    numberValue = 0;
+  }
+
   const navigate = useNavigate();
   const {
     adminVisibility,
@@ -100,9 +113,10 @@ const VolunteerDetailComp = ({
           </Box>
           <Stack direction="row" spacing={2}>
             <Button
-              endIcon={<ArrowBackIcon />}
               variant="outlined"
+              sx={{ px: 5 }}
               color="inherit"
+              endIcon={<ArrowBackIcon />}
               onClick={() => navigate(-1)}
             >
               بازگشت
@@ -113,7 +127,7 @@ const VolunteerDetailComp = ({
 
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          value={value}
+          value={numberValue || value}
           onChange={handleChange}
           aria-label="basic tabs example"
           variant={"scrollable"}
@@ -126,7 +140,7 @@ const VolunteerDetailComp = ({
         </Tabs>
       </Box>
 
-      {/* <TabPanel value={value} index={0}>
+      {/* <TabPanel value={numberValue || value} index={0}>
         <UserProfileName
           firstName={firstName}
           lastName={lastName}
@@ -136,7 +150,7 @@ const VolunteerDetailComp = ({
         />
       </TabPanel> */}
 
-      <TabPanel value={value} index={0}>
+      <TabPanel value={numberValue || value} index={0}>
         {editingProfile ? (
           <VolunteerEditParent setEditingProfile={setEditingProfile} />
         ) : (
@@ -177,9 +191,13 @@ const VolunteerDetailComp = ({
           </>
         )}
       </TabPanel>
-      {/* <TabPanel value={value} index={2}></TabPanel> */}
-      <TabPanel value={value} index={1}>
-        <ModulesVolunteer modules={modules} fullName={fullName} adminVisibility={adminVisibility} />
+      {/* <TabPanel value={numberValue || value} index={2}></TabPanel> */}
+      <TabPanel value={numberValue || value} index={1}>
+        <ModulesVolunteer
+          modules={modules}
+          fullName={fullName}
+          adminVisibility={adminVisibility}
+        />
       </TabPanel>
     </>
   );

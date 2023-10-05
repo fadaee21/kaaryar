@@ -27,6 +27,7 @@ import { handleError } from "../../utils/handleError";
 import { motivationOpt } from "../beforeWeek/helper";
 import { JalaliDatePicker } from "../comment/JalaliDatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import { RELATED_PATH, RelatedPath } from "../addNewCourseComp/CareerPathway";
 
 interface SearchAllType {
   setSearchingStudentBefore?: any;
@@ -60,6 +61,7 @@ interface ObjTypeSearch {
   jobStandby: boolean | undefined;
   cgpa: string | null;
   groupID: number | undefined;
+  careerPathwayId: number | undefined;
 }
 
 const beforeWeekSearch =
@@ -113,12 +115,13 @@ const SearchAll: ({
   const [createdAtTo, setCreatedAtTo] = useState<Date | Dayjs | null>(null);
   const [decidedAtFrom, setDecidedAtFrom] = useState<Date | Dayjs | null>(null);
   const [decidedAtTo, setDecidedAtTo] = useState<Date | Dayjs | null>(null);
-
+  const [careerPathwayId, setCareerPathwayId] = useState<any>(null);
   const { data: groupData } = useSWR<Group[]>(
     chevronDir
       ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
       : null
   );
+  const { data: selectedFieldOpt } = useSWR<RelatedPath[]>(RELATED_PATH);
 
   // below function search in 4 pages at first find the api link for searching
   useEffect(() => {
@@ -160,9 +163,11 @@ const SearchAll: ({
       cgpa,
       group,
       motivation,
+      careerPathwayId,
     ].some(Boolean);
     setDisabledButton(buttonStatus);
   }, [
+    careerPathwayId,
     motivation,
     group,
     acquaintance,
@@ -242,6 +247,7 @@ const SearchAll: ({
       finalField,
       contCourseApproach,
       jobStandby: jobStandby?.value,
+      careerPathwayId: careerPathwayId?.id,
       cgpa,
       groupID: group?.id,
     });
@@ -272,6 +278,7 @@ const SearchAll: ({
     setJobStandby(null);
     setCgpa(null);
     setGroup(null);
+    setCareerPathwayId(null);
     searchPage === "beforeWeek" && setSearchingStudentBefore(null);
     searchPage === "afterWeek" && setSearchingStudentAfter(null);
     searchPage === "reg" && setSearchingStudentRegister(null);
@@ -355,6 +362,19 @@ const SearchAll: ({
               placeholder="میزان تحصیلات"
             />
           </Grid>
+          {selectedFieldOpt && (
+            <Grid item xs={3}>
+              <SearchSelect2
+                state={careerPathwayId}
+                setState={setCareerPathwayId}
+                options={selectedFieldOpt.map((item) => ({
+                  id: item.id,
+                  value: item.name,
+                }))}
+                placeholder="رشته انتخابی"
+              />
+            </Grid>
+          )}
           <Grid item xs={3}>
             <SearchSelect
               state={highSchoolState}

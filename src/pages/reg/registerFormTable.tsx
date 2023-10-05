@@ -217,7 +217,9 @@ const RegisterFormTable = () => {
                             : itemCounterTable(page, pageSize, i)
                         }
                         decidedAt={RegisterUser.decidedAt}
-                        selectedField={RegisterUser.selectedField}
+                        careerPathwayName={
+                          RegisterUser?.careerPathway?.name || "سایر"
+                        }
                       />
                     );
                   }

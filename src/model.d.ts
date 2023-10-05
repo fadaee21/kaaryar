@@ -280,6 +280,7 @@ export interface TableBodyAllType extends RegistrationForm {
   finalResult?: string;
   contCourseApproach?: string;
   index: number;
+  careerPathwayName?: string;
 }
 
 export interface SeekerStudent {
@@ -324,44 +325,43 @@ export interface Profile {
   deleted: boolean;
   user: User;
   picture?: Picture;
-  userId: number
+  userId: number;
 }
-export interface VolunteerProfile extends Profile{
-  modules: ModuleVolunteerProfile[]
-  studentCounts:StudentCount[] 
+export interface VolunteerProfile extends Profile {
+  modules: ModuleVolunteerProfile[];
+  studentCounts: StudentCount[];
 }
 export interface StudentCountVolunteerProfile {
-  module: ModuleGroup
-  assigned_student_count: number
+  module: ModuleGroup;
+  assigned_student_count: number;
 }
 
 export interface ModuleVolunteerProfile {
-  personnelId: number
-  moduleId: number
-  isActive: boolean
-  createdAt: string
-  updatedAt: any
-  studentsCount: number
-  module: ModuleGroup
-  studentsList: StudentsListVolunteerProfile[] 
+  personnelId: number;
+  moduleId: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: any;
+  studentsCount: number;
+  assignedRole: string
+  module: ModuleGroup;
+  studentsList: StudentsListVolunteerProfile[];
 }
 
 export interface StudentsListVolunteerProfile {
-  personnelId: number
-  moduleId: number
-  personnelRole: string
-  notes: any
-  isActive: boolean
-  id: number
-  studentId: number
-  isDeleted: boolean
-  createdAt: string
-  updatedAt: any
-  deletedAt: any
-  student: StudentEdu
+  personnelId: number;
+  moduleId: number;
+  personnelRole: string;
+  notes: any;
+  isActive: boolean;
+  id: number;
+  studentId: number;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: any;
+  deletedAt: any;
+  student: StudentEdu;
 }
-
-
 
 export interface UserProfile {
   username: string;
@@ -567,7 +567,32 @@ export interface Group {
   instructors: Instructor[];
   teachingAssistants: TeachingAssistantMentorWithProfile[];
   mentors: TeachingAssistantMentorWithProfile[];
-  studentsWithDetails: StudentsWithDetailCore[]; //TODO: felan ke injori nist data haie sade va avalie student ro mide vali baiad ba in type baram biad
+  students: studentsGroup[];
+}
+export interface studentsGroup {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  roles: Role[];
+  picture?: Picture;
+  registrationForm?: RegistrationForm;
+  careerPathway?: CareerPathway;
+  currentModuleAsStudent?: CurrentModuleAsStudent;
+  currentAssignedTA: CurrentAssignedMentorTa;
+  currentAssignedMentor: CurrentAssignedMentorTa;
 }
 
 export type GroupArray = Group[];
@@ -846,28 +871,28 @@ export interface PersonnelAssignment {
 }
 
 export interface ModuleAsStudentForDetail extends ModulesAsStudent {
-  student: StudentWithStatus ;
+  student: StudentWithStatus;
 }
 
 export interface StudentWithStatus {
-  username: string
-  idnumber: string
-  firstName: string
-  family: string
-  email: string
-  phone: string
-  mobile: string
-  institution: string
-  department: string
-  address: string
-  city: string
-  country: string
-  lang: string
-  timezone: string
-  calendarType: string
-  id: number
-  picture: any
-  statusForm: StatusForm
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: any;
+  statusForm: StatusForm;
 }
 
 export interface ModulesAsStudentModule {
@@ -1028,6 +1053,8 @@ export interface CurrentAssignedMentorTa {
   personnel: Personnel;
   personnelRole: string;
   assignmentId: number | null;
+  isActive: boolean;
+  studentId: number;
 }
 export interface CurrentModuleAsStudent {
   name: string;
@@ -1079,3 +1106,4 @@ export interface MoodleUser {
   currentAssignedTA: CurrentAssignedMentorTa | null;
   currentModuleAsStudent: CurrentModuleAsStudent;
 }
+

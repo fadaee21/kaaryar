@@ -126,10 +126,24 @@ export const CoreModuleCourseMentorTaCompHeaders: RowHeaderStudent[] = [
   { id: 3, label: "نام داوطلب", minWidth: 200, align: "center" },
   { id: 4, label: "نقش", minWidth: 100, align: "center" },
   { id: 5, label: "وضعیت", minWidth: 100, align: "center" },
-
 ];
 
 export const volunteerTableHeader = ["", "", "نام داوطلب", "نقش", "وضعیت"];
+export const volunteerStudentTableHeader = [
+  "",
+  "نام و نام خانوادگی",
+  "گروه",
+  "استان",
+  "شهر",
+  "معرف",
+  "مسیر آموزشی",
+  "دوره",
+  "حل تمرین",
+  "منتور",
+  "نمره نهایی",
+  "ارزیابی نهایی",
+  "نظرات و ارزیابی‌ها",
+];
 
 export const graduateTableHeader = [
   "",

@@ -7,15 +7,15 @@ import useSWR from "swr";
 import { persianDate } from "../../utils/persianDate";
 import { ShortCoreModule } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";
+import { useAuth } from "../../context/AuthProvider";
 
 const CoreModuleCourseDetail = () => {
   const { coreId } = useParams();
   const navigate = useNavigate();
   const Core_Module_DETAIL = `/modules/details/${coreId}`;
-
-  const { data, isLoading, error } = useSWR<ShortCoreModule>(
-    Core_Module_DETAIL
-  );
+  const { adminVisibility } = useAuth();
+  const { data, isLoading, error } =
+    useSWR<ShortCoreModule>(Core_Module_DETAIL);
   if (error) {
     console.log(error);
     navigate("/");
@@ -30,22 +30,26 @@ const CoreModuleCourseDetail = () => {
         <Stack direction="row" sx={{ alignItems: "flex-start" }}>
           <Stack sx={{ mr: "auto" }}>
             <Typography variant="h6">{`فهرست دوره‌های تخصصی > ${data?.name}`}</Typography>
-            <Typography variant="subtitle1">{`ساخته‌شده در ${persianDate(
-              data?.createdAt
-            )}${
-              data?.updatedAt
-                ? `، آخرین ویرایش در ${persianDate(data.updatedAt)}`
-                : ""
-            }`}</Typography>
+            {adminVisibility && (
+              <Typography variant="subtitle1">{`ساخته‌شده در ${persianDate(
+                data?.createdAt
+              )}${
+                data?.updatedAt
+                  ? `، آخرین ویرایش در ${persianDate(data.updatedAt)}`
+                  : ""
+              }`}</Typography>
+            )}
           </Stack>
-          <Button
-            endIcon={<EditIcon />}
-            variant="outlined"
-            onClick={() => navigate("edit")}
-            sx={{ mr: 2, px: 5 }}
-          >
-            ویرایش
-          </Button>
+          {adminVisibility && (
+            <Button
+              endIcon={<EditIcon />}
+              variant="outlined"
+              onClick={() => navigate("edit")}
+              sx={{ mr: 2, px: 5 }}
+            >
+              ویرایش
+            </Button>
+          )}
           <Button
             variant="outlined"
             sx={{ px: 5 }}

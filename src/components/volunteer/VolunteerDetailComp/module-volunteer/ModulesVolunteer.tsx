@@ -105,29 +105,31 @@ const ModulesVolunteer = ({ modules, fullName, adminVisibility }: Props) => {
       </TableContainer>
       {/* //!for empty response of search return TableEmpty */}
       {searchModulesVolunteer?.length === 0 && <TableEmpty />}
-      {adminVisibility && (
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="flex-start"
-          mt={6}
-          gap={1}
-        >
-          <Typography variant="body2">
-            برای مشاهدهٔ تمام{" "}
-            <Link to={"student"}> {`مهارت‌آموزان ${fullName}`}</Link> کلیک کنید.
-          </Typography>
-          <Typography variant="body2">
-            برای مشاهدهٔ <strong>تمام نظراتی</strong> که هما فکری ثبت کرده است،
-            از منوی سمت راست، به فهرست نظرات بروید و در بخش سرچ، نام این داوطلب
-            را در فیلد «نظردهنده» انتخاب کنید.{" "}
-          </Typography>
-          <Typography variant="body2">
-            برای مشاهدهٔ <strong>بازخوردهایی</strong> که در هر دوره در مورد هما
-            فکری ثبت شده است، به تب «بازخوردها» مراجعه کنید.
-          </Typography>
-        </Stack>
-      )}
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="flex-start"
+        mt={6}
+        gap={1}
+      >
+        <Typography variant="body2">
+          برای مشاهدهٔ تمام{" "}
+          <Link to={"all-students"}> {`مهارت‌آموزان ${fullName}`}</Link> کلیک کنید.
+        </Typography>
+        {adminVisibility && (
+          <>
+            <Typography variant="body2">
+              برای مشاهدهٔ <strong>تمام نظراتی</strong> که هما فکری ثبت کرده
+              است، از منوی سمت راست، به فهرست نظرات بروید و در بخش سرچ، نام این
+              داوطلب را در فیلد «نظردهنده» انتخاب کنید.{" "}
+            </Typography>
+            <Typography variant="body2">
+              برای مشاهدهٔ <strong>بازخوردهایی</strong> که در هر دوره در مورد
+              هما فکری ثبت شده است، به تب «بازخوردها» مراجعه کنید.
+            </Typography>
+          </>
+        )}
+      </Stack>
     </>
   );
 };
