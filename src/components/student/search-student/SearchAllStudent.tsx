@@ -13,71 +13,134 @@ import {
   CareerPathway,
   Profile,
 } from "../../../model";
-import useGetStatusStudent from "../../../hooks/request/useGetStatusStudent";
-import useSWR from "swr";
 import { GreyButton } from "../../../styles/Button";
 import SearchIcon from "@mui/icons-material/Search";
-import { getData } from "../../../api/axios";
-import { toast } from "react-toastify";
-import { handleError } from "../../../utils/handleError";
+import { useSearchParams } from "react-router-dom";
+import useInitialQuery from "../../../hooks/useInitialQuery";
 
 interface Props {
-  setSearchingMoodleStudent: React.Dispatch<React.SetStateAction<any[] | null>>;
   searchPage: string;
-  chevronDir: boolean;
+  groupData: Group[];
+  careerPathwayData: CareerPathway[];
+  moduleData: ModuleAll[];
+  volunteerData: Profile[];
+  trainingData: DetailStudentStatus[];
+  nextStepData: DetailStudentStatus[];
+  kaaryarAssessmentData: DetailStudentStatus[];
+  referralToFinanceData: DetailStudentStatus[];
+  isLoading: boolean;
 }
 const searchLink =
   "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
 const SearchAllStudent = ({
-  chevronDir,
   searchPage,
-  setSearchingMoodleStudent,
+  groupData,
+  careerPathwayData,
+  moduleData,
+  volunteerData,
+  kaaryarAssessmentData,
+  nextStepData,
+  referralToFinanceData,
+  trainingData,
+  isLoading,
 }: Props) => {
-  const [loading, setLoading] = useState(false);
+  let [searchParams, setSearchParams] = useSearchParams();
+  const { initialQuery, initialQueryMentorTa, initialQueryWithoutTransform } =
+    useInitialQuery();
+
   const [disabledButton, setDisabledButton] = useState(false);
-  const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
-  const [outputFamily, setOutputFamily] = useState<string | null>(null);
-  const [referState, setReferState] = useState<string | null>(null);
-  const [mobileState, setMobileState] = useState<string | null>(null);
-  const [emailState, setEmailState] = useState<string | null>(null);
-  const [provincesState, setProvincesState] = useState<string | null>(null);
-  const [cityState, setCityState] = useState<string | null>(null);
+  const [outputFirstName, setOutputFirstName] = useState<string | null>(
+    searchParams.get("firstName")
+  );
+  const [outputFamily, setOutputFamily] = useState<string | null>(
+    searchParams.get("family")
+  );
+  const [referState, setReferState] = useState<string | null>(
+    searchParams.get("refer")
+  );
+  const [mobileState, setMobileState] = useState<string | null>(
+    searchParams.get("mobile")
+  );
+  const [emailState, setEmailState] = useState<string | null>(
+    searchParams.get("email")
+  );
+  const [provincesState, setProvincesState] = useState<string | null>(
+    searchParams.get("province")
+  );
+  const [cityState, setCityState] = useState<string | null>(
+    searchParams.get("city")
+  );
   // const [module, setModule] = useState<ModuleAll | null>(null);
-  const [group, setGroup] = useState<Group | null>(null);
+  const groupIdParams = searchParams.get("groupID");
+  const [group, setGroup] = useState<Group | null>(
+    groupIdParams ? (initialQuery(groupData, groupIdParams) as any) : null
+  );
+  const careerPathwayIdParams = searchParams.get("careerPathwayId");
   const [careerPathway, setCareerPathway] = useState<CareerPathway | null>(
-    null
+    careerPathwayIdParams
+      ? (initialQuery(careerPathwayData, careerPathwayIdParams) as any)
+      : null
   );
-  const [moduleAsStudent, setModuleAsStudent] = useState<ModuleAll | null>(null);
-  const [ta, setTa] = useState<Profile | null>(null);
-  const [mentor, setMentor] = useState<Profile | null>(null);
+  const moduleAsStudentIDParams = searchParams.get("moduleAsStudentID");
+  const [moduleAsStudent, setModuleAsStudent] = useState<ModuleAll | null>(
+    moduleAsStudentIDParams
+      ? (initialQuery(moduleData, moduleAsStudentIDParams) as any)
+      : null
+  );
+  const currentAssignedTAIDParams = searchParams.get("currentAssignedTAID");
+  const [ta, setTa] = useState<Profile | null>(
+    currentAssignedTAIDParams
+      ? (initialQueryMentorTa(volunteerData, currentAssignedTAIDParams) as any)
+      : null
+  );
+  const currentAssignedMentorIDParams = searchParams.get(
+    "currentAssignedMentorID"
+  );
+  const [mentor, setMentor] = useState<Profile | null>(
+    currentAssignedMentorIDParams
+      ? (initialQueryMentorTa(volunteerData, currentAssignedMentorIDParams) as any)
+      : null
+  );
+  const trainingStatusIDParams = searchParams.get("trainingStatusID");
   const [trainingStatus, setTrainingStatus] =
-    useState<DetailStudentStatus | null>(null);
+    useState<DetailStudentStatus | null>(
+      trainingStatusIDParams
+        ? (initialQueryWithoutTransform(
+            trainingData,
+            trainingStatusIDParams
+          ) as any)
+        : null
+    );
+  const nextTrainingStepIDParams = searchParams.get("nextTrainingStepID");
   const [nextTrainingStep, setNextTrainingStep] =
-    useState<DetailStudentStatus | null>(null);
+    useState<DetailStudentStatus | null>(
+      nextTrainingStepIDParams
+        ? (initialQueryWithoutTransform(
+            nextStepData,
+            nextTrainingStepIDParams
+          ) as any)
+        : null
+    );
+  const referralToFinanceIDParams = searchParams.get("referralToFinanceID");
   const [referralToFinance, setReferralToFinance] =
-    useState<DetailStudentStatus | null>(null);
+    useState<DetailStudentStatus | null>(
+      referralToFinanceIDParams
+        ? (initialQueryWithoutTransform(
+            referralToFinanceData,
+            referralToFinanceIDParams
+          ) as any)
+        : null
+    );
+  const kaaryarAssessmentIDParams = searchParams.get("kaaryarAssessmentID");
   const [kaaryarAssessment, setKaaryarAssessment] =
-    useState<DetailStudentStatus | null>(null);
-
-  const {
-    trainingData,
-    nextStepData,
-    referralToFinanceData,
-    kaaryarAssessmentData,
-  } = useGetStatusStudent(chevronDir);
-  const orderingOpt =
-    "orderAscending=true&orderBy=name&pageNum=1&pageSize=10000";
-  const { data: ModuleData } = useSWR<ModuleAll[]>(
-    chevronDir ? `/modules/short-details/all?${orderingOpt}` : null
-  );
-  const { data: groupData } = useSWR<Group[]>(
-    chevronDir ? `/modules/categories/short-details/all?${orderingOpt}` : null
-  );
-  const { data: careerPathwayData } = useSWR<CareerPathway[]>(
-    chevronDir ? `/modules/career-pathways/all?${orderingOpt}` : null
-  );
-
-  const { data: volunteerData } = useSWR<Profile[]>("/user/profile/all");
+    useState<DetailStudentStatus | null>(
+      kaaryarAssessmentIDParams
+        ? (initialQueryWithoutTransform(
+            kaaryarAssessmentData,
+            kaaryarAssessmentIDParams
+          ) as any)
+        : null
+    );
 
   //disable search and clear buttons
   useEffect(() => {
@@ -122,7 +185,6 @@ const SearchAllStudent = ({
   ]);
 
   const handleSearch = async () => {
-    setLoading(true);
     const obj = {
       firstName: outputFirstName?.trim(),
       family: outputFamily?.trim(),
@@ -142,14 +204,18 @@ const SearchAllStudent = ({
       currentAssignedTAID: ta?.id,
       currentAssignedMentorID: mentor?.id,
     };
-    try {
-      const response = await getData(searchLink, { params: obj });
-      setSearchingMoodleStudent(response.status === 200 ? response.data : null);
-    } catch (error: any) {
-      toast.error(handleError(error));
-    } finally {
-      setLoading(false);
-    }
+
+    const updateQueryParams = () => {
+      const updatedQueryParams = new URLSearchParams();
+      for (const [key, value] of Object.entries(obj)) {
+        if (value != null) {
+          updatedQueryParams.append(key, String(value));
+        }
+      }
+      setSearchParams(updatedQueryParams.toString());
+    };
+    console.log("search componenet");
+    updateQueryParams();
   };
 
   const clearSearch = () => {
@@ -170,9 +236,8 @@ const SearchAllStudent = ({
     setModuleAsStudent(null);
     setTa(null);
     setMentor(null);
-    searchPage === "moodle" && setSearchingMoodleStudent(null);
+    setSearchParams("");
   };
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={3}>
@@ -224,124 +289,112 @@ const SearchAllStudent = ({
           label="ایمیل"
         />
       </Grid>
-      {groupData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={group as any}
-            setState={setGroup as any}
-            options={groupData.map((i) => ({ id: i.id, value: i.name }))}
-            placeholder="نام گروه"
-          />
-        </Grid>
-      )}
-      {careerPathwayData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={careerPathway as any}
-            setState={setCareerPathway as any}
-            options={careerPathwayData.map((i) => ({
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={group as any}
+          setState={setGroup as any}
+          options={groupData.map((i) => ({ id: i.id, value: i.name }))}
+          placeholder="نام گروه"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={careerPathway as any}
+          setState={setCareerPathway as any}
+          options={careerPathwayData.map((i) => ({
+            id: i.id,
+            value: i.name,
+          }))}
+          placeholder="مسیر آموزشی"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={moduleAsStudent as any}
+          setState={setModuleAsStudent as any}
+          options={[
+            { id: 0, value: "نامشخص" },
+            ...moduleData.map((i) => ({
               id: i.id,
               value: i.name,
-            }))}
-            placeholder="مسیر آموزشی"
-          />
-        </Grid>
-      )}
-      {ModuleData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={moduleAsStudent as any}
-            setState={setModuleAsStudent as any}
-            options={[
-              { id: 0, value: "نامشخص" },
-              ...ModuleData.map((i) => ({
-                id: i.id,
-                value: i.name,
-              })),
-            ]}
-            placeholder="دوره"
-          />
-        </Grid>
-      )}
-      {volunteerData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={ta as any}
-            setState={setTa as any}
-            options={[
-              { id: 0, value: "نامشخص" },
-              ...volunteerData.map((i) => ({
-                id: i.id,
-                value: i.firstName + " " + i.lastName,
-              })),
-            ]}
-            placeholder="مربی حل تمرین"
-          />
-        </Grid>
-      )}
-      {volunteerData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={mentor as any}
-            setState={setMentor as any}
-            options={[
-              { id: 0, value: "نامشخص" },
-              ...volunteerData.map((i) => ({
-                id: i.id,
-                value: i.firstName + " " + i.lastName,
-              })),
-            ]}
-            placeholder="منتور"
-          />
-        </Grid>
-      )}
-      {trainingData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={trainingStatus}
-            setState={setTrainingStatus}
-            options={trainingData}
-            placeholder="وضعیت آموزش"
-          />
-        </Grid>
-      )}
-      {nextStepData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={nextTrainingStep}
-            setState={setNextTrainingStep}
-            options={nextStepData}
-            placeholder="قدم آتی آموزش"
-          />
-        </Grid>
-      )}
-      {referralToFinanceData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={referralToFinance}
-            setState={setReferralToFinance}
-            options={referralToFinanceData}
-            placeholder="ارجاع به واحد مالی"
-          />
-        </Grid>
-      )}
-      {kaaryarAssessmentData && (
-        <Grid item xs={3}>
-          <SearchSelect2
-            state={kaaryarAssessment}
-            setState={setKaaryarAssessment}
-            options={kaaryarAssessmentData}
-            placeholder="ارزیابی کاریار"
-          />
-        </Grid>
-      )}
+            })),
+          ]}
+          placeholder="دوره"
+        />
+      </Grid>
 
-      {/* {ModuleData && (
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={ta as any}
+          setState={setTa as any}
+          options={[
+            { id: 0, value: "نامشخص" },
+            ...volunteerData.map((i) => ({
+              id: i.id,
+              value: i.firstName + " " + i.lastName,
+            })),
+          ]}
+          placeholder="مربی حل تمرین"
+        />
+      </Grid>
+
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={mentor as any}
+          setState={setMentor as any}
+          options={[
+            { id: 0, value: "نامشخص" },
+            ...volunteerData.map((i) => ({
+              id: i.id,
+              value: i.firstName + " " + i.lastName,
+            })),
+          ]}
+          placeholder="منتور"
+        />
+      </Grid>
+
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={trainingStatus}
+          setState={setTrainingStatus}
+          options={trainingData}
+          placeholder="وضعیت آموزش"
+        />
+      </Grid>
+
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={nextTrainingStep}
+          setState={setNextTrainingStep}
+          options={nextStepData}
+          placeholder="قدم آتی آموزش"
+        />
+      </Grid>
+
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={referralToFinance}
+          setState={setReferralToFinance}
+          options={referralToFinanceData}
+          placeholder="ارجاع به واحد مالی"
+        />
+      </Grid>
+
+      <Grid item xs={3}>
+        <SearchSelect2
+          state={kaaryarAssessment}
+          setState={setKaaryarAssessment}
+          options={kaaryarAssessmentData}
+          placeholder="ارزیابی کاریار"
+        />
+      </Grid>
+
+      {/* {moduleData && (
         <Grid item xs={3}>
           <SearchSelect2 //TODO: i have to change this to autoSelect (Transferred: 218.81 kB)- ask about this
             state={module as any}
             setState={setModule as any}
-            options={ModuleData.map((i) => ({ id: i.id, value: i.name }))}
+            options={moduleData.map((i) => ({ id: i.id, value: i.name }))}
             placeholder="نام دوره"
           />
         </Grid>
@@ -360,12 +413,12 @@ const SearchAllStudent = ({
       <Grid item flex={1}>
         <Button
           sx={{ width: "100%" }}
-          endIcon={!loading && <SearchIcon sx={{ rotate: "90deg" }} />}
+          endIcon={!isLoading && <SearchIcon sx={{ rotate: "90deg" }} />}
           variant="outlined"
           onClick={handleSearch}
-          disabled={disabledButton || loading}
+          disabled={disabledButton || isLoading}
         >
-          {loading ? "در حال جستجو..." : "جستجو"}
+          {isLoading ? "...در حال جستجو" : "جستجو"}
         </Button>
       </Grid>
     </Grid>

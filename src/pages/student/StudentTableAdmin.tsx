@@ -3,14 +3,22 @@ import {
   Paper,
   Table,
   TableBody,
+  TableCell,
   TableContainer,
+  TableRow,
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import { MoodleUser } from "../../model";
+import {
+  CareerPathway,
+  Group,
+  ModuleAll,
+  MoodleUser,
+  Profile,
+} from "../../model";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -26,6 +34,8 @@ import { adminStudentTableHeader } from "../../components/table/helper-header";
 
 import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
 import SearchAllStudent from "../../components/student/search-student/SearchAllStudent";
+import { useSearchParams } from "react-router-dom";
+import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
 
 const pageSize = 25;
 // const adminStudentQuery =
@@ -36,17 +46,63 @@ const STUDENT_COUNT = "moodle/user/student/count";
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  const ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
+  let ADMIN_STUDENT_URL;
+  ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
+  // useEffect(() => {
+  //   if (chevronDir) {
+  //     ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}&orderAscending=true`;
+  //   }
+  // }, []);
+
   const [, counterPage] = useCountPagination(STUDENT_COUNT);
-  const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
-    any[] | null
-  >(null);
+
+
+  //all search options that comes from server
+  const {
+    trainingData,
+    trainingLoading,
+    nextStepData,
+    nextStepLoading,
+    referralToFinanceData,
+    referralLoading,
+    kaaryarAssessmentData,
+    kaaryarAssessmentLoading,
+  } = useGetStatusStudent(chevronDir);
+  const orderingOpt =
+    "orderAscending=true&orderBy=name&pageNum=1&pageSize=10000";
+  const { data: groupData, isLoading: loadingGroupData } = useSWR<Group[]>(
+    chevronDir ? `/modules/categories/short-details/all?${orderingOpt}` : null
+  );
+  const { data: careerPathwayData, isLoading: loadingCareerPathwayData } =
+    useSWR<CareerPathway[]>(
+      chevronDir ? `/modules/career-pathways/all?${orderingOpt}` : null
+    );
+  const { data: moduleData, isLoading: loadingModuleData } = useSWR<
+    ModuleAll[]
+  >(chevronDir ? `/modules/short-details/all?${orderingOpt}` : null);
+  const { data: volunteerData, isLoading: loadingVolunteerData } =
+    useSWR<Profile[]>("/user/profile/all");
+
+  let [searchParams] = useSearchParams();
+
+  const hasQueryParams = () => {
+    return !searchParams.keys().next().done;
+  };
+  useEffect(() => {
+    setChevronDir(hasQueryParams());
+  }, []);
+  if (hasQueryParams()) {
+    const searchLink =
+      "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
+    ADMIN_STUDENT_URL = searchLink + `&${searchParams}`;
+  }
 
   const { data, isLoading, error } = useSWR(ADMIN_STUDENT_URL, {
     onSuccess: () => window.scrollTo(0, 0),
+    revalidateOnMount: true,
   });
-
-  if (isLoading) return <LoadingProgress />;
+  // console.log(searchParams.keys().next());
+  // if (isLoading) return <LoadingProgress />;
   if (error) {
     return (
       <Typography sx={{ display: "flex", justifyContent: "center" }}>
@@ -54,6 +110,25 @@ const StudentTableAdmin = () => {
       </Typography>
     );
   }
+  const searchOptionsResultCondition =
+    groupData &&
+    careerPathwayData &&
+    moduleData &&
+    volunteerData &&
+    trainingData &&
+    nextStepData &&
+    referralToFinanceData &&
+    kaaryarAssessmentData;
+  const SearchLoadingCondition =
+    loadingGroupData &&
+    loadingCareerPathwayData &&
+    loadingModuleData &&
+    loadingVolunteerData &&
+    trainingLoading &&
+    nextStepLoading &&
+    referralLoading &&
+    kaaryarAssessmentLoading;
+
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -84,44 +159,38 @@ const StudentTableAdmin = () => {
               {/* //! export excel */}
               <ExcelExport
                 fileName={"excel export"}
-                linkAll={`moodle/user/student/all?pageNum=1&pageSize=100000&${adminStudentQuery}`}
-                searchData={searchingMoodleStudent?.map((i) => ({
-                  "نام و نام خانوادگی": i.firstName + " " + i.family,
-                  "نام کاربری": i.username,
-                  شهر: i.registrationForm.city,
-                  استان: i.registrationForm.province,
-                  گروه: i.registrationForm.course,
-                  "مؤسسه معرف": i.registrationForm.refer,
-                  "وضعیت آموزش": i.statusForm?.trainingStatus?.value,
-                  "قدم آتی آموزش": i.statusForm?.nextTrainingStep?.value,
-                  "ارجاع به واحد مالی": i.statusForm?.referralToFinance?.value,
-                  "ارزیابی کاریار": i.statusForm?.kaaryarAssessment?.value,
-                }))}
+                linkAll={
+                  hasQueryParams()
+                    ? ADMIN_STUDENT_URL
+                    : `moodle/user/student/all?pageNum=1&pageSize=100000&${adminStudentQuery}`
+                }
+                searchData={null}
                 useIn="studentOfAdmin"
               />
             </Box>
             <AccordionDetails>
-              {/* //! export excel */}
-              <Box
-                sx={{
-                  my: 3,
-                }}
-              >
-                {/* <SearchAll
-                  setSearchingMoodleStudent={setSearchingMoodleStudent}
-                  searchPage="moodle"
-                  chevronDir={chevronDir}
-                /> */}
-                <SearchAllStudent
-                  setSearchingMoodleStudent={setSearchingMoodleStudent}
-                  searchPage="moodle"
-                  chevronDir={chevronDir}
-                />
+              <Box sx={{ my: 3 }}>
+                {searchOptionsResultCondition && !SearchLoadingCondition ? (
+                  <SearchAllStudent
+                    searchPage="moodle"
+                    groupData={groupData}
+                    careerPathwayData={careerPathwayData}
+                    moduleData={moduleData}
+                    volunteerData={volunteerData}
+                    trainingData={trainingData}
+                    nextStepData={nextStepData}
+                    referralToFinanceData={referralToFinanceData}
+                    kaaryarAssessmentData={kaaryarAssessmentData}
+                    isLoading={isLoading}
+                  />
+                ) : (
+                  <LoadingProgress usage="paper" />
+                )}
               </Box>
             </AccordionDetails>
           </AccordionStyled>
           {/* //!for empty response of search return TableEmpty */}
-          {searchingMoodleStudent?.length === 0 && <TableEmpty />}
+          {data?.length === 0 && <TableEmpty />}
 
           <Paper
             sx={{
@@ -140,60 +209,65 @@ const StudentTableAdmin = () => {
                 sx={{ tableLayout: "auto" }}
               >
                 {/* //!for empty response of search don't return TableHeader */}
-                {searchingMoodleStudent?.length !== 0 && (
+                {data?.length !== 0 && (
                   <TableHeaderStudent
                     studentHeaderItems={adminStudentTableHeader}
                   />
                 )}
 
                 <TableBody>
-                  {(searchingMoodleStudent
-                    ? searchingMoodleStudent
-                    : data
-                  )?.map((moodleUser: MoodleUser, i: number) => {
-                    const {
-                      id,
-                      firstName,
-                      family,
-                      username,
-                      picture,
-                      city,
-                      statusForm,
-                      registrationForm,
-                      careerPathway,
-                      currentAssignedMentor,
-                      currentAssignedTA,
-                      currentModuleAsStudent,
-                    } = moodleUser;
-                    return (
-                      <StudentAdminRowTable
-                        key={id}
-                        id={id}
-                        firstName={firstName}
-                        family={family}
-                        username={username}
-                        picture={picture}
-                        city={city}
-                        statusForm={statusForm}
-                        registrationForm={registrationForm}
-                        careerPathway={careerPathway}
-                        i={i}
-                        searchingMoodleStudent={searchingMoodleStudent}
-                        page={page}
-                        pageSize={pageSize}
-                        currentAssignedMentor={currentAssignedMentor}
-                        currentAssignedTA={currentAssignedTA}
-                        currentModuleAsStudent={currentModuleAsStudent}
-                      />
-                    );
-                  })}
+                  {isLoading ? (
+                    <TableRow>
+                      <TableCell align="center" sx={{ p: 3 }}>
+                        <LoadingProgress usage="paper" size={40} />
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    data?.map((moodleUser: MoodleUser, i: number) => {
+                      const {
+                        id,
+                        firstName,
+                        family,
+                        username,
+                        picture,
+                        city,
+                        statusForm,
+                        registrationForm,
+                        careerPathway,
+                        currentAssignedMentor,
+                        currentAssignedTA,
+                        currentModuleAsStudent,
+                      } = moodleUser;
+                      return (
+                        <StudentAdminRowTable
+                          key={id}
+                          id={id}
+                          firstName={firstName}
+                          family={family}
+                          username={username}
+                          picture={picture}
+                          city={city}
+                          statusForm={statusForm}
+                          registrationForm={registrationForm}
+                          careerPathway={careerPathway}
+                          i={i}
+                          countAll={hasQueryParams()}
+                          page={page}
+                          pageSize={pageSize}
+                          currentAssignedMentor={currentAssignedMentor}
+                          currentAssignedTA={currentAssignedTA}
+                          currentModuleAsStudent={currentModuleAsStudent}
+                        />
+                      );
+                    })
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           </Paper>
         </Container>
       </Box>
-      {!searchingMoodleStudent && (
+      {!hasQueryParams() && (
         <Pagination
           sx={{
             display: "flex",

@@ -52,7 +52,7 @@ const StudentStatusEditComp = ({
   const { id } = statusForm || {};
   const {
     trainingData,
-    statusLoading,
+    trainingLoading,
     nextStepData,
     nextStepLoading,
     withdrawalData,
@@ -74,7 +74,7 @@ const StudentStatusEditComp = ({
   );
 
   if (
-    statusLoading ||
+    trainingLoading ||
     nextStepLoading ||
     withdrawalLoading ||
     referralLoading ||

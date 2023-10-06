@@ -3,7 +3,7 @@ import { DetailStudentStatus } from "../../model";
 
 const useGetStatusStudent = (boolean: Boolean) => {
     //the boolean argument help to prevent fetching data in the searching component for non related
-  const { data: trainingData, isLoading: statusLoading } = useSWR<
+  const { data: trainingData, isLoading: trainingLoading } = useSWR<
     DetailStudentStatus[]
   >(boolean ? "/status/training-status/values/all" : null);
   const { data: nextStepData, isLoading: nextStepLoading } = useSWR<
@@ -22,7 +22,7 @@ const useGetStatusStudent = (boolean: Boolean) => {
 
   return {
     trainingData,
-    statusLoading,
+    trainingLoading,
     nextStepData,
     nextStepLoading,
     withdrawalData,
