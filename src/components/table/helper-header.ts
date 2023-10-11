@@ -81,7 +81,7 @@ export const assigneeStudentTableHeader = [
   "قدم آتی آموزش",
   "ارجاع به واحد مالی",
   "ارزیابی کاریار",
-  "عملیات",
+  // "عملیات",
 ];
 
 export const adminStudentTableHeader: RowHeaderStudent[] = [
@@ -129,6 +129,17 @@ export const CoreModuleCourseMentorTaCompHeaders: RowHeaderStudent[] = [
 ];
 
 export const volunteerTableHeader = ["", "", "نام داوطلب", "نقش", "وضعیت"];
+export const moduleVolunteerTableHeader = [
+  "",
+  "نام دوره",
+  "نقش",
+  "مسیر مرتبط",
+  "گروه مرتبط",
+  "وضعیت دوره",
+  "مدرس(ها)",
+  "مهارت‌آموزان",
+  "نظرات ",
+];
 export const volunteerStudentTableHeader = [
   "",
   "نام و نام خانوادگی",
@@ -138,11 +149,12 @@ export const volunteerStudentTableHeader = [
   "معرف",
   "مسیر آموزشی",
   "دوره",
+  "وضعیت دوره",
   "حل تمرین",
   "منتور",
   "نمره نهایی",
   "ارزیابی نهایی",
-  "نظرات و ارزیابی‌ها",
+  "نظرات ",
 ];
 
 export const graduateTableHeader = [

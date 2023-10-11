@@ -100,28 +100,6 @@ export interface moodleJustStudent {
   moodleUser: MoodleUser;
   epochTimeModified: number;
 }
-//this is for mentor/ta
-export interface MoodleUserAssignee {
-  user_id: number;
-  role: {
-    name: string;
-    userRole: string;
-    roleId: number;
-  };
-  assigneeContext: {
-    student: {
-      studentUserName: string;
-      studentEmail: string;
-      studentFirstName: string;
-      studentLastName: string;
-      studentCity: string;
-      studentPhone: string;
-      studentMobile: string;
-      studentId: number;
-    };
-  };
-  id: number;
-}
 
 export interface LocalStorage {
   key: string;
@@ -329,7 +307,7 @@ export interface Profile {
 }
 export interface VolunteerProfile extends Profile {
   modules: ModuleVolunteerProfile[];
-  studentCounts: StudentCount[];
+  studentCounts: StudentCountVolunteerProfile[];
 }
 export interface StudentCountVolunteerProfile {
   module: ModuleGroup;
@@ -343,9 +321,17 @@ export interface ModuleVolunteerProfile {
   createdAt: string;
   updatedAt: any;
   studentsCount: number;
-  assignedRole: string
+  assignedRole: string;
   module: ModuleGroup;
   studentsList: StudentsListVolunteerProfile[];
+}
+
+export interface MentorsAndTa {
+  assignmentId: number;
+  isActive: boolean;
+  studentId: number;
+  personnel: Personnel;
+  personnelRole: string;
 }
 
 export interface StudentsListVolunteerProfile {
@@ -360,7 +346,31 @@ export interface StudentsListVolunteerProfile {
   createdAt: string;
   updatedAt: any;
   deletedAt: any;
-  student: StudentEdu;
+  student: StudentInModuleVolunteer | undefined;
+  mentorsAndTAs: MentorsAndTa[];
+}
+
+export interface StudentInModuleVolunteer {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: any;
+  registrationForm: RegistrationForm;
+  statusForm: StatusForm;
+  careerPathway: CareerPathway;
 }
 
 export interface UserProfile {
@@ -664,7 +674,7 @@ export interface ModuleAll {
   instructors: Instructor[];
   teachingAssistants: TeachingAssistant[];
   mentors: Mentor[];
-  students: Student[];
+  students: any[];
 }
 
 export type ModuleAllArray = ModuleAll[];
@@ -724,7 +734,7 @@ export interface StudentsWithDetailCore {
   moduleId: number;
   studentId: number;
   assessmentId: any;
-  assessment: Assessment;
+  assessment: ModulesAsStudentAssessment;
   personnelAssignment: PersonnelAssignment[];
   student: StudentCore;
 }
@@ -1106,4 +1116,69 @@ export interface MoodleUser {
   currentAssignedTA: CurrentAssignedMentorTa | null;
   currentModuleAsStudent: CurrentModuleAsStudent;
 }
+
+export interface StudentsVolunteer {
+  personnelId: number;
+  moduleId: number;
+  personnelRole: string;
+  notes: any;
+  isActive: boolean;
+  id: number;
+  studentId: number;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: any;
+  deletedAt: any;
+  student: StudentVolunteerObject;
+  surveys: Survey[];
+  enrollment: Enrollment;
+  module: ModulesAsStudentModule;
+}
+
+export interface StudentVolunteerObject {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: any;
+  registrationForm: RegistrationForm;
+}
+
+export interface Survey {
+  isChecked: boolean;
+  comment: string;
+  studentContribution: string;
+  sessionDate: string;
+  studentPresent: string;
+  sessionProblem: string;
+  studentTask: string;
+  studentId: number;
+  moduleId: number;
+  commenterId: number;
+  isDeleted: boolean;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  deleteTime: any;
+  commenterRole: string;
+}
+
+export interface Enrollment {
+  assessment: ModulesAsStudentAssessment;
+  assignedTA: Mentor;
+  assignedMentor: Mentor;
+}
+
 

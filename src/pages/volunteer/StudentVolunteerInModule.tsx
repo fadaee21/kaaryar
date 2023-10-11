@@ -19,8 +19,14 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import TableHeader from "../../components/table/TableHeader";
 import { volunteerStudentTableHeader } from "../../components/table/helper-header";
 import StudentVolunteerRowComp from "../../components/volunteer/VolunteerDetailComp/student-volunteer/StudentVolunteerRowComp";
+import { useAuth } from "../../context/AuthProvider";
 const StudentVolunteerInModule = () => {
-  const { username } = useParams();
+  const { username, moduleId } = useParams();
+
+  const {
+    adminVisibility,
+    auth: { username: loggerUserName },
+  } = useAuth();
   const navigate = useNavigate();
   const {
     data: dataCall,
@@ -36,12 +42,21 @@ const StudentVolunteerInModule = () => {
     return <Navigate to="/" replace />;
   }
 
+  const whoCanSeeCommentField = adminVisibility || username === loggerUserName;
+  const modules =
+    moduleId && dataCall
+      ? dataCall.modules.find((i) => i.moduleId === parseInt(moduleId))
+      : undefined;
+  const categoryName = modules?.module.category.name;
+  const moduleName = modules?.module.name;
+  const teachingStatus = modules?.module.teachingStatus;
+
   return (
     <Container maxWidth="xl">
       <header>
         <Stack direction="row" sx={{ alignItems: "center", height: 100 }}>
           <Stack sx={{ mr: "auto" }}>
-            <Typography variant="h5">{`${dataCall?.firstName} ${dataCall?.lastName} > دوره‌های فعالیت > نام دوره!! > مهارت‌آموزان`}</Typography>
+            <Typography variant="h5">{`${dataCall?.firstName} ${dataCall?.lastName} > دوره‌های فعالیت > ${dataCall?.studentCounts[0]?.module.name} > مهارت‌آموزان`}</Typography>
           </Stack>
           <Button
             variant="outlined"
@@ -56,27 +71,54 @@ const StudentVolunteerInModule = () => {
       </header>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
-          <TableHeader headerItems={volunteerStudentTableHeader} />
+          <TableHeader
+            headerItems={
+              whoCanSeeCommentField
+                ? volunteerStudentTableHeader
+                : volunteerStudentTableHeader.slice(0, -1)
+            }
+          />
 
           <TableBody>
-            {/* {(searchingVolunteer ? searchingVolunteer : dataCall)?.map(
-                  (item, i: number) => (
-                    <TableBodyVolunteer
-                      key={item.id}
-                      firstName={item.firstName}
-                      lastName={item.lastName}
-                      username={item.user.username}
-                      role={item.role}
-                      id={item.id}
-                      picture={item.picture}
-                      counter={itemCounterTable(page, pageSize, i)}
-                      isActive={item.isActive}
-                    />
-                  )
-                )} */}
-            {[{}, {}, {}].map((item, inx) => (
-              <StudentVolunteerRowComp {...item} counter={inx + 1} />
-            ))}
+            {modules?.studentsList?.map((studentModule, inx) => {
+              const { student, mentorsAndTAs } = studentModule;
+              const { firstName, family, registrationForm, careerPathway } =
+                student || {};
+              const { refer, city, province } = registrationForm || {};
+              const mentors = mentorsAndTAs.find(
+                (i) => i.personnelRole === "mentor"
+              );
+              const ta = mentorsAndTAs.find((i) => i.personnelRole === "ta");
+              return (
+                <StudentVolunteerRowComp
+                  key={inx}
+                  counter={inx + 1}
+                  assignedMentorFullName={
+                    mentors
+                      ? mentors?.personnel.firstName +
+                        " " +
+                        mentors?.personnel.family
+                      : "-"
+                  }
+                  assignedTaFullName={
+                    ta
+                      ? ta?.personnel.firstName + " " + ta?.personnel.family
+                      : "-"
+                  }
+                  finalAssessmentValue="?"
+                  finalGrade={0}
+                  careerPathwayName={careerPathway?.name}
+                  categoryName={categoryName}
+                  province={province}
+                  city={city}
+                  refer={refer}
+                  studentFullName={firstName + " " + family}
+                  teachingStatus={teachingStatus}
+                  moduleName={moduleName}
+                  whoCanSeeCommentField={whoCanSeeCommentField}
+                />
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

@@ -15,23 +15,28 @@ import {
   AccordionSummaryStyled,
 } from "../../../../styles/search/accordion";
 import TableHeader from "../../../table/TableHeader";
-import { useState } from "react";
-import TableEmpty from "../../../table/TableEmpty";
 import TableBodyModuleVolunteer from "./TableBodyModuleVolunteer";
 import { Link } from "react-router-dom";
+import { moduleVolunteerTableHeader } from "../../../table/helper-header";
 interface Props {
   modules: ModuleVolunteerProfile[];
   fullName: string;
+  whoCanSeeComments: boolean;
   adminVisibility: boolean;
 }
-const ModulesVolunteer = ({ modules, fullName, adminVisibility }: Props) => {
-  const [chevronDir, setChevronDir] = useState(false);
-  const [searchModulesVolunteer, setSearchModulesVolunteer] = useState<
-    ModuleVolunteerProfile[] | null
-  >();
+const ModulesVolunteer = ({
+  whoCanSeeComments,
+  modules,
+  fullName,
+  adminVisibility,
+}: Props) => {
+  // const [chevronDir, setChevronDir] = useState(false);
+  // const [searchModulesVolunteer, setSearchModulesVolunteer] = useState<
+  //   ModuleVolunteerProfile[] | null
+  // >();
   return (
     <>
-      <AccordionStyled expanded={chevronDir}>
+      {/* <AccordionStyled expanded={chevronDir}>
         <Box
           sx={{
             display: "flex",
@@ -46,65 +51,58 @@ const ModulesVolunteer = ({ modules, fullName, adminVisibility }: Props) => {
             expandIcon={<ExpandMoreIcon />}
           >
             <Typography variant="button">جستجو</Typography>
-          </AccordionSummaryStyled>
+          </AccordionSummaryStyled> */}
 
-          {/* <ExcelExport
+      {/* <ExcelExport
               fileName={"Applicant Info"}
               searchData={[]}
               linkAll=""
               useIn="reg"
             /> */}
-        </Box>
+      {/* </Box>
         <AccordionDetails>
           <Box
             sx={{
               width: "100%",
               my: 3,
             }}
-          >
-            {/* //!component for searching student */}
-            {/* <SearchAllCourse
+          > */}
+      {/* //!component for searching student */}
+      {/* <SearchAllCourse
           moduleSubType="workshop"
           moduleType="general"
           chevronDir={chevronDir}
           setSearchCourseCore={setSearchCourseWorkshop}
           settingResponse={SETTING_RESPONSE}
         /> */}
-          </Box>
+      {/* </Box>
         </AccordionDetails>
-      </AccordionStyled>
+      </AccordionStyled> */}
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
           <TableHeader
-            headerItems={[
-              "",
-              "نام دوره",
-              "نقش",
-              "مسیر مرتبط",
-              "گروه مرتبط",
-              "وضعیت دوره",
-              "مدرس(ها)",
-              "مهارت‌آموزان",
-              "نظرات و ارزیابی‌ها",
-            ]}
+            headerItems={
+              whoCanSeeComments
+                ? moduleVolunteerTableHeader
+                : moduleVolunteerTableHeader.slice(0, -1)
+            }
           />
-
           <TableBody>
-            {(searchModulesVolunteer ? searchModulesVolunteer : modules)?.map(
-              (module, index) => (
-                <TableBodyModuleVolunteer
-                  key={module.moduleId}
-                  moduleVolunteer={module}
-                  counter={index}
-                />
-              )
-            )}
+            {/* {(searchModulesVolunteer ? searchModulesVolunteer : modules)?.map( */}
+            {modules?.map((module, index) => (
+              <TableBodyModuleVolunteer
+                key={module.moduleId}
+                moduleVolunteer={module}
+                counter={index}
+                whoCanSeeComments={whoCanSeeComments}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
       {/* //!for empty response of search return TableEmpty */}
-      {searchModulesVolunteer?.length === 0 && <TableEmpty />}
+      {/* {searchModulesVolunteer?.length === 0 && <TableEmpty />} */}
       <Stack
         direction="column"
         justifyContent="center"
@@ -114,7 +112,8 @@ const ModulesVolunteer = ({ modules, fullName, adminVisibility }: Props) => {
       >
         <Typography variant="body2">
           برای مشاهدهٔ تمام{" "}
-          <Link to={"all-students"}> {`مهارت‌آموزان ${fullName}`}</Link> کلیک کنید.
+          <Link to={"all-students"}> {`مهارت‌آموزان ${fullName}`}</Link> کلیک
+          کنید.
         </Typography>
         {adminVisibility && (
           <>

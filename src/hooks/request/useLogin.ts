@@ -15,66 +15,52 @@ export const useSubmitLogin = (username: string, password: string) => {
   const navigate = useNavigate();
   const location = useLocation();
   const stateLocation = location.state as any;
-  const handleLogin = async () => {
-    try {
-      const response = await userLogin(loginURL, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        data: bodyContent,
-      });
+const handleLogin = async () => {
+  try {
+    const response = await userLogin(loginURL, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: bodyContent,
+    });
 
-      if (response.status === 201) {
-        const {
-          authorization,
-          profile: { id, roles },
-        } = response.data;
+    if (response.status === 201) {
+      const { authorization, profile: { id, roles } } = response.data;
 
-        Cookies.set("token", authorization, {
-          path: "/",
-          expires: 0.5,
-          secure: true,
-          sameSite: "strict",
-        });
+      Cookies.set("token", authorization, { path: "/", expires: 0.5, secure: true, sameSite: "strict" });
 
-        const roleResponseServer: RoleType = roles.includes("manager")
-          ? "admin"
-          : roles.includes("mentor")
-          ? "mentor"
-          : roles.includes("teachingassistant")
-          ? "ta"
-          : null;
+      const roleResponseServer = roles.includes("manager") ? "admin"
+        : roles.includes("mentor") ? "mentor"
+        : roles.includes("teachingassistant") ? "ta"
+        : null;
 
-        if (!roleResponseServer) {
-          setErrMsg("شما مجاز به ورود در سامانه نمی باشید ");
-          return;
-        }
-
-        setAuth({
-          id,
-          username,
-          roles: [roleResponseServer],
-        });
-        const from =
-          stateLocation?.from?.pathname || `/${roleResponseServer}/dashboard`;
-        console.log(from);
-        navigate(from, { replace: true });
+      if (!roleResponseServer) {
+        setErrMsg("شما مجاز به ورود در سامانه نمی باشید ");
+        return;
       }
-    } catch (error) {
-      console.log(error);
-      const err = error as AxiosError;
-      if (!err?.response) {
-        setErrMsg("پاسخی از سرور دریافت نشد");
-      } else if (err.response?.status === 400) {
-        setErrMsg("نام کاربری یا پسورد را وارد نکرده اید");
-      } else if (err.response?.status === 401) {
-        setErrMsg("نام کاربری یا پسورد را اشتباه وارد کرده اید");
-      } else {
-        setErrMsg("ورود ناموفق");
-        toast.error(handleError(error as any));
-      }
+
+      const from = stateLocation?.from?.pathname || `/${roleResponseServer}/dashboard`;
+      console.log(from);
+      navigate(from, { replace: true });
+
+      setAuth({ id, username, roles: [roleResponseServer] });
     }
-  };
+  } catch (error) {
+    console.log(error);
+    const err = error as AxiosError;
+
+    if (!err?.response) {
+      setErrMsg("پاسخی از سرور دریافت نشد");
+    } else if (err.response?.status === 400) {
+      setErrMsg("نام کاربری یا پسورد را وارد نکرده اید");
+    } else if (err.response?.status === 401) {
+      setErrMsg("نام کاربری یا پسورد را اشتباه وارد کرده اید");
+    } else {
+      setErrMsg("ورود ناموفق");
+      toast.error(handleError(error as any));
+    }
+  }
+};
 
   return { handleLogin, errMsg, setErrMsg };
 };

@@ -56,7 +56,6 @@ const StudentTableAdmin = () => {
 
   const [, counterPage] = useCountPagination(STUDENT_COUNT);
 
-
   //all search options that comes from server
   const {
     trainingData,
@@ -90,6 +89,7 @@ const StudentTableAdmin = () => {
   };
   useEffect(() => {
     setChevronDir(hasQueryParams());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (hasQueryParams()) {
     const searchLink =
@@ -98,7 +98,7 @@ const StudentTableAdmin = () => {
   }
 
   const { data, isLoading, error } = useSWR(ADMIN_STUDENT_URL, {
-    onSuccess: () => window.scrollTo(0, 0),
+    // onSuccess: () => window.scrollTo(0, 0),
     revalidateOnMount: true,
   });
   // console.log(searchParams.keys().next());
@@ -200,30 +200,26 @@ const StudentTableAdmin = () => {
               zIndex: 0,
             }}
           >
-            <TableContainer
-            //  sx={{ maxHeight: 440 }}
-            >
-              <Table
-                stickyHeader
-                aria-label="simple table"
-                sx={{ tableLayout: "auto" }}
-              >
-                {/* //!for empty response of search don't return TableHeader */}
-                {data?.length !== 0 && (
-                  <TableHeaderStudent
-                    studentHeaderItems={adminStudentTableHeader}
-                  />
-                )}
+            {isLoading ? (
+              <Box sx={{ m: 10 }}>
+                <LoadingProgress usage="paper" size={40} />
+              </Box>
+            ) : (
+              <TableContainer>
+                <Table
+                  stickyHeader
+                  aria-label="simple table"
+                  sx={{ tableLayout: "auto" }}
+                >
+                  {/* //!for empty response of search don't return TableHeader */}
+                  {data?.length !== 0 && (
+                    <TableHeaderStudent
+                      studentHeaderItems={adminStudentTableHeader}
+                    />
+                  )}
 
-                <TableBody>
-                  {isLoading ? (
-                    <TableRow>
-                      <TableCell align="center" sx={{ p: 3 }}>
-                        <LoadingProgress usage="paper" size={40} />
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    data?.map((moodleUser: MoodleUser, i: number) => {
+                  <TableBody>
+                    {data?.map((moodleUser: MoodleUser, i: number) => {
                       const {
                         id,
                         firstName,
@@ -259,11 +255,11 @@ const StudentTableAdmin = () => {
                           currentModuleAsStudent={currentModuleAsStudent}
                         />
                       );
-                    })
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </Paper>
         </Container>
       </Box>

@@ -214,7 +214,7 @@ const SearchAllStudent = ({
       }
       setSearchParams(updatedQueryParams.toString());
     };
-    console.log("search componenet");
+    console.log("search component");
     updateQueryParams();
   };
 
@@ -418,7 +418,7 @@ const SearchAllStudent = ({
           onClick={handleSearch}
           disabled={disabledButton || isLoading}
         >
-          {isLoading ? "...در حال جستجو" : "جستجو"}
+          {isLoading ? "در حال جستجو..." : "جستجو"}
         </Button>
       </Grid>
     </Grid>

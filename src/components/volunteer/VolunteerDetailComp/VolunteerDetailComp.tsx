@@ -14,7 +14,6 @@ import { VolunteerProfile } from "../../../model";
 import useGetImage from "../../../hooks/request/useGetImage";
 import PublicProfile from "./PublicProfile";
 import { TabPanel, a11yProps } from "../../../pages/student/StudentDetail";
-import UserProfileName from "./UserProfileName";
 import VolunteerEditParent from "./VolunteerEditParent";
 import ModulesVolunteer from "./module-volunteer/ModulesVolunteer";
 interface VolDetailType extends VolunteerProfile {
@@ -70,8 +69,10 @@ const VolunteerDetailComp = ({
   const navigate = useNavigate();
   const {
     adminVisibility,
-    auth: { roles, username },
+    auth: { username: usernameLogger },
   } = useAuth();
+  const sameUser = usernameParam === usernameLogger;
+  const whoCanSeeComments = adminVisibility || sameUser;
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const fullName = `${firstName || ""} ${lastName || ""}`;
@@ -134,21 +135,15 @@ const VolunteerDetailComp = ({
           scrollButtons="auto"
         >
           <Tab label="درباره داوطلب" {...a11yProps(0)} />
-          <Tab label="دوره‌های فعالیت" {...a11yProps(1)} />
-          <Tab label="بازخوردها" {...a11yProps(2)} />
-          <Tab label="درخواست جلسه" {...a11yProps(3)} />
+          <Tab
+            label="دوره‌های فعالیت"
+            {...a11yProps(1)}
+            disabled={modules.length < 1}
+          />
+          {/* <Tab label="بازخوردها" {...a11yProps(2)} />
+          <Tab label="درخواست جلسه" {...a11yProps(3)} /> */}
         </Tabs>
       </Box>
-
-      {/* <TabPanel value={numberValue || value} index={0}>
-        <UserProfileName
-          firstName={firstName}
-          lastName={lastName}
-          id={id}
-          role={role}
-          isActive={isActive}
-        />
-      </TabPanel> */}
 
       <TabPanel value={numberValue || value} index={0}>
         {editingProfile ? (
@@ -156,7 +151,7 @@ const VolunteerDetailComp = ({
         ) : (
           <>
             <Stack direction="row" justifyContent={"end"}>
-              {usernameParam === username && (
+              {sameUser && (
                 <Button
                   endIcon={<EditIcon />}
                   variant="outlined"
@@ -191,11 +186,11 @@ const VolunteerDetailComp = ({
           </>
         )}
       </TabPanel>
-      {/* <TabPanel value={numberValue || value} index={2}></TabPanel> */}
       <TabPanel value={numberValue || value} index={1}>
         <ModulesVolunteer
           modules={modules}
           fullName={fullName}
+          whoCanSeeComments={whoCanSeeComments}
           adminVisibility={adminVisibility}
         />
       </TabPanel>

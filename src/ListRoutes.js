@@ -52,6 +52,7 @@ import GroupDetailTaTable from "./pages/groups/GroupDetailTaTable";
 import GroupDetailStudentTable from "./pages/groups/GroupDetailStudentTable";
 import StudentVolunteerAll from "./pages/volunteer/StudentVolunteerAll";
 import StudentVolunteerInModule from "./pages/volunteer/StudentVolunteerInModule";
+import UserProfileName from "./pages/userProfileTaMentor/UserProfileName";
 
 const ListRoutes = [
   //! ta________________________________
@@ -159,7 +160,7 @@ const ListRoutes = [
     key: "ta11-s",
   },
   {
-    path: "ta/volunteer/:username/module-students",
+    path: "ta/volunteer/:username/module-students/:moduleId",
     name: "",
     // icon:<></>,
     component: StudentVolunteerInModule,
@@ -185,6 +186,15 @@ const ListRoutes = [
     showInNav: false,
     role: "ta",
     key: "ta11-gd",
+  },
+  {
+    path: "ta/my-user-profile",
+    name: "پروفایل کاربری من",
+    // icon: <CommentIcon />,
+    component: UserProfileName,
+    showInNav: true,
+    role: "ta",
+    key: "ta12",
   },
 
   // mentor____________________________________________
@@ -284,7 +294,7 @@ const ListRoutes = [
     key: "mentor11-s",
   },
   {
-    path: "mentor/volunteer/:username/module-students",
+    path: "mentor/volunteer/:username/module-students/:moduleId",
     name: "",
     // icon:<></>,
     component: StudentVolunteerInModule,
@@ -319,6 +329,15 @@ const ListRoutes = [
     showInNav: true,
     role: "mentor",
     key: "mentor5",
+  },
+  {
+    path: "mentor/my-user-profile",
+    name: "پروفایل کاربری من",
+    // icon: <CommentIcon />,
+    component: UserProfileName,
+    showInNav: true,
+    role: "mentor",
+    key: "mentor12",
   },
   //! admin__________________________________________
   {
@@ -546,7 +565,7 @@ const ListRoutes = [
     key: "admin19-s",
   },
   {
-    path: "admin/volunteer/:username/module-students",
+    path: "admin/volunteer/:username/module-students/:moduleId",
     name: "",
     // icon:<></>,
     component: StudentVolunteerInModule,

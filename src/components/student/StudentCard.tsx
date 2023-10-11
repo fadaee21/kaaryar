@@ -2,18 +2,19 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { StudentEdu } from "../../model";
 import { Button, CardActions, Divider, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { TablePic2 } from "../table/TablePic";
+import { AssigneeStudent } from "../../pages/student/studentMentorTaType";
 
 interface Props {
-  moodleUser: StudentEdu;
+  moodleUser: AssigneeStudent;
 }
 
 export default function StudentCard({ moodleUser }: Props) {
-  const { firstName, family, email, city, id, mobile, phone } = moodleUser;
+  const { student: studentRes } = moodleUser || {};
+  const { firstName, family, email, city, id, mobile, phone } = studentRes;
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();

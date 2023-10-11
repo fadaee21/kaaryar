@@ -3,8 +3,36 @@ import { StyledTableCell, StyledTableRow } from "../../../../styles/table";
 import { Typography } from "@mui/material";
 interface Props {
   counter: number;
+  studentFullName: string;
+  categoryName: string | undefined;
+  province: string | undefined;
+  city: string | undefined;
+  refer: string | undefined;
+  careerPathwayName: string | undefined;
+  assignedTaFullName: string | undefined;
+  assignedMentorFullName: string | undefined;
+  finalGrade: number | undefined;
+  finalAssessmentValue: string | undefined;
+  teachingStatus: string | undefined;
+  moduleName: string | undefined;
+  whoCanSeeCommentField: boolean;
 }
-const StudentVolunteerRowComp = ({ counter }: Props) => {
+const StudentVolunteerRowComp = ({
+  counter,
+  assignedMentorFullName,
+  assignedTaFullName,
+  finalAssessmentValue,
+  finalGrade,
+  careerPathwayName,
+  categoryName,
+  province,
+  city,
+  refer,
+  studentFullName,
+  teachingStatus,
+  moduleName,
+  whoCanSeeCommentField,
+}: Props) => {
   const navigate = useNavigate();
   return (
     <StyledTableRow
@@ -15,50 +43,53 @@ const StudentVolunteerRowComp = ({ counter }: Props) => {
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{counter}</Typography>
       </StyledTableCell>
-      <StyledTableCell
-        align="center"
-        sx={{ verticalAlign: "center", cursor: "pointer" }}
-        // onClick={() => navigate(`${id}`)}
-      >
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+        <Typography variant="body2">{studentFullName}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        <Typography variant="body2">{categoryName ?? "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        <Typography variant="body2">{province || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        {city || "-"}
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        {refer || "-"}
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        <Typography variant="body2">{careerPathwayName || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        <Typography variant="body2">{moduleName}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        <Typography variant="body2">{teachingStatus || "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        <Typography variant="body2">
+          <Typography variant="body2">{assignedTaFullName || "-"}</Typography>
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        {assignedMentorFullName || "-"}
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        {/* <Typography variant="body2">{firstName + " " + family}</Typography> */}
+        <Typography variant="body2">{finalGrade ?? "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell
-        align="center"
-        sx={{ verticalAlign: "center", cursor: "pointer" }}
-        // onClick={() => navigate(`${id}`)}
-      >
-        <Typography variant="body2">مشاهده</Typography>
+      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+        <Typography variant="body2">{finalAssessmentValue || "-"}</Typography>
       </StyledTableCell>
+      {whoCanSeeCommentField && (
+        <StyledTableCell
+          align="center"
+          sx={{ verticalAlign: "center", cursor: "pointer" }}
+          // onClick={() => navigate(`${id}`)}
+        >
+          <Typography variant="body2">مشاهده</Typography>
+        </StyledTableCell>
+      )}
     </StyledTableRow>
   );
 };

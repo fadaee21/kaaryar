@@ -8,8 +8,13 @@ import { useAuth } from "../../../../context/AuthProvider";
 interface Props {
   counter: number;
   moduleVolunteer: ModuleVolunteerProfile;
+  whoCanSeeComments: boolean;
 }
-const TableBodyModuleVolunteer = ({ counter, moduleVolunteer }: Props) => {
+const TableBodyModuleVolunteer = ({
+  counter,
+  moduleVolunteer,
+  whoCanSeeComments,
+}: Props) => {
   const { module, studentsCount, assignedRole } = moduleVolunteer;
   const {
     name,
@@ -70,20 +75,18 @@ const TableBodyModuleVolunteer = ({ counter, moduleVolunteer }: Props) => {
       </StyledTableCell>
       {/* مهارت‌آموزان */}
       <StyledTableCell
-        onClick={() => navigate("module-students")}
+        onClick={() => navigate(`module-students/${id}`)}
         align="center"
-        sx={{ verticalAlign: "center", cursor: "pointer"  }}
+        sx={{ verticalAlign: "center", cursor: "pointer" }}
       >
         <Typography variant="body2">{` ${studentsCount} مهارت‌آموز`}</Typography>
       </StyledTableCell>
-      {/* نظرات و ارزیابی‌ها */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">مشاهده</Typography>
-      </StyledTableCell>
-      {/* ارزیابی روی هما فکری
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">مشاهده</Typography>
-      </StyledTableCell> */}
+      {/* نظرات  */}
+      {whoCanSeeComments && (
+        <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+          <Typography variant="body2">مشاهده</Typography>
+        </StyledTableCell>
+      )}
     </StyledTableRow>
   );
 };
