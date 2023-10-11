@@ -65,10 +65,10 @@ export default function Sidebar({ listRoutes }: any) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleNavigateProfilePage = () => {
-    handleClose();
-    navigate(`${roleUser}/profile`);
-  };
+  // const handleNavigateProfilePage = () => {
+  //   handleClose();
+  //   navigate(`${roleUser}/profile`);
+  // };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -157,12 +157,12 @@ export default function Sidebar({ listRoutes }: any) {
                   }`}
                 />
               </MenuItem>
-              <MenuItem onClick={handleNavigateProfilePage}>
+              {/* <MenuItem onClick={handleNavigateProfilePage}>
                 <ListItemIcon sx={{ marginRight: 1 }}>
                   {<AccountCircle />}
                 </ListItemIcon>
                 <ListItemText secondary="پروفایل من" />
-              </MenuItem>
+              </MenuItem> */}
               <Divider variant="middle" />
               <MenuItem onClick={handleExit}>
                 <ListItemIcon sx={{ mr: 1 }}>{<LogoutIcon />}</ListItemIcon>

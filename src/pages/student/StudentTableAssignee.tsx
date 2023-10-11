@@ -10,7 +10,6 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import { useAuth } from "../../context/AuthProvider";
-import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { AccordionStyled } from "../../styles/search/accordion";
 import useSWR from "swr";
@@ -19,11 +18,12 @@ import { assigneeStudentTableHeader } from "../../components/table/helper-header
 import TablePic from "../../components/table/TablePic";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import { AssigneeStudentsAll } from "./studentMentorTaType";
 //^this component list related student for mentor and ta
 const StudentTableAssignee = () => {
   const { auth } = useAuth();
   const roles = auth.roles.toString();
-  const { data, isLoading, error } = useSWR<MoodleUser[]>(
+  const { data, isLoading, error } = useSWR<AssigneeStudentsAll>(
     `/${roles}/user/student`
   );
   const navigate = useNavigate();
@@ -73,7 +73,9 @@ const StudentTableAssignee = () => {
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHeader headerItems={assigneeStudentTableHeader} />
               <TableBody>
-                {data?.map((moodleUser: MoodleUser, i: number) => {
+                {data?.map((moodleUser, i: number) => {
+                  const { student, module, mentorsAndTAs } = moodleUser || {};
+                  const { category } = module;
                   const {
                     id,
                     firstName,
@@ -83,7 +85,17 @@ const StudentTableAssignee = () => {
                     city,
                     statusForm,
                     registrationForm,
-                  } = moodleUser;
+                    careerPathway,
+                  } = student || {};
+                  
+
+                  const mentors = mentorsAndTAs.find(
+                    (i) => i.personnelRole === "mentor"
+                  );
+                  const ta = mentorsAndTAs.find(
+                    (i) => i.personnelRole === "ta"
+                  );
+
                   return (
                     <StyledTableRow
                       key={id}
@@ -126,17 +138,17 @@ const StudentTableAssignee = () => {
                           {username}
                         </Typography>
                       </StyledTableCell>
-
                       <StyledTableCell
                         align="center"
                         sx={{
                           verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2">
-                          {registrationForm?.city || city || "-"}
+                        <Typography variant="body2" textAlign={"center"}>
+                          {category?.name}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -154,7 +166,7 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {registrationForm?.course ?? "-"}
+                          {registrationForm?.city || city || "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -165,6 +177,54 @@ const StudentTableAssignee = () => {
                       >
                         <Typography variant="body2">
                           {registrationForm?.refer || "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {careerPathway?.name || "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {module?.name || "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {mentors
+                            ? mentors?.personnel.firstName +
+                              " " +
+                              mentors?.personnel.family
+                            : "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {ta
+                            ? ta?.personnel.firstName +
+                              " " +
+                              ta?.personnel.family
+                            : "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell

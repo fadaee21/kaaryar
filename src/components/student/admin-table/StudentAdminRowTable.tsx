@@ -41,7 +41,7 @@ interface Props {
   registrationForm: RegistrationForm | null;
   careerPathway: CareerPathway | null;
   i: number;
-  searchingMoodleStudent: any[] | null;
+  countAll: boolean;
   page: number;
   pageSize: number;
   currentAssignedMentor: CurrentAssignedMentorTa | null;
@@ -59,7 +59,7 @@ const StudentAdminRowTable = ({
   registrationForm,
   careerPathway,
   i,
-  searchingMoodleStudent,
+  countAll,
   page,
   pageSize,
   currentAssignedMentor,
@@ -126,7 +126,7 @@ const StudentAdminRowTable = ({
       {/* ردیف */}
       <StyledTableCellAdmin align="center">
         <StyledTypographyAdmin variant="body2">
-          {searchingMoodleStudent ? i + 1 : itemCounterTable(page, pageSize, i)}
+          {countAll ? i + 1 : itemCounterTable(page, pageSize, i)}
         </StyledTypographyAdmin>
       </StyledTableCellAdmin>
       {/* عکس */}

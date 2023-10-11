@@ -5,7 +5,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { getData } from "../api/axios";
 import { seekerStateFinder } from "../utils/seekerStateFinder";
 import { useState } from "react";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
   };
 
   const exportAllFunc = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       let response = await getData(linkAll);
       let allData = await response.data;
@@ -48,9 +48,7 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
             "تاریخ ارسال فرم":
               reg.createdAt &&
               new Intl.DateTimeFormat("fa").format(new Date(reg.createdAt)),
-            "سال تولد":
-              reg.birthDate &&
-              new Intl.DateTimeFormat("fa").format(new Date(reg.birthDate)),
+            "سال تولد": reg.birthDate,
             "نحوه آشنایی": reg.familiarity,
             "شماره همراه": reg.mobile,
             ایمیل: reg.email,
@@ -208,8 +206,8 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
       }
     } catch (error) {
       console.log(error);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -221,10 +219,16 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
     <Button
       sx={{ ml: "auto" }}
       color="secondary"
-      endIcon={loading ? <CircularProgress size={20} color="inherit" />:<FileDownloadIcon size={20}  />}
+      endIcon={
+        loading ? (
+          <CircularProgress size={20} color="inherit" />
+        ) : (
+          <FileDownloadIcon size={20} />
+        )
+      }
       variant="contained"
       onClick={searchData ? handleClick : exportAllFunc}
-      // disabled={loading}
+      disabled={loading}
     >
       خروجی اکسل
     </Button>

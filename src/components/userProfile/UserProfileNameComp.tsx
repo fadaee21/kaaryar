@@ -1,5 +1,4 @@
 import { List, ListItem, ListItemText, Stack } from "@mui/material";
-import React from "react";
 interface Props {
   firstName: string;
   lastName: string;
@@ -7,13 +6,7 @@ interface Props {
   role: string;
   isActive: boolean;
 }
-const UserProfileName = ({
-  firstName,
-  id,
-  lastName,
-  role,
-  isActive,
-}: Props) => {
+const UserProfileNameComp = ({ firstName, lastName, role, isActive }: Props) => {
   return (
     <Stack direction="row" spacing={20}>
       <List>
@@ -39,4 +32,4 @@ const UserProfileName = ({
   );
 };
 
-export default UserProfileName;
+export default UserProfileNameComp;

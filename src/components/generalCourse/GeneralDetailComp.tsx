@@ -1,15 +1,10 @@
-import {
-  Grid,
-  Link,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Grid, Link, List, ListItem, ListItemText } from "@mui/material";
 import { ShortCoreModule } from "../../model";
 import { persianDate } from "../../utils/persianDate";
 import { convertArrToStr, getTitle } from "../../utils/courseMethod";
 import { useNavigate } from "react-router-dom";
 import { ListButton } from "../../styles/Button";
+import { useAuth } from "../../context/AuthProvider";
 
 interface Prop {
   workshopDetail: ShortCoreModule | undefined;
@@ -33,6 +28,7 @@ const GeneralDetailComp = ({ workshopDetail }: Prop) => {
     // mentorCount,
   } = workshopDetail ?? {};
   const navigate = useNavigate();
+  const { adminVisibility } = useAuth();
   return (
     <Grid container>
       <Grid item xs={12} md={6}>
@@ -75,7 +71,18 @@ const GeneralDetailComp = ({ workshopDetail }: Prop) => {
           )}
 
           <ListItem>
-            <ListButton onClick={() => navigate("students")} >
+            {adminVisibility ? (
+              <ListButton onClick={() => navigate("students")}>
+                <ListItemText
+                  primary={
+                    subType === "workshop"
+                      ? "تعداد شرکت‌کنندگان"
+                      : "تعداد مهارت‌آموزان"
+                  }
+                  secondary={studentCount || "-"}
+                />
+              </ListButton>
+            ) : (
               <ListItemText
                 primary={
                   subType === "workshop"
@@ -84,7 +91,7 @@ const GeneralDetailComp = ({ workshopDetail }: Prop) => {
                 }
                 secondary={studentCount || "-"}
               />
-            </ListButton>
+            )}
           </ListItem>
 
           {/* <ListItem>

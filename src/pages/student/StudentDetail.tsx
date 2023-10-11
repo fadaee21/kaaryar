@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useSWR from "swr";
 import {
   Avatar,
@@ -38,7 +38,7 @@ const StudentDetail = () => {
   const studentProfile = `/moodle/user/${id}`;
   const afterBeforeInfo = `/exam/after/week/form/moodle/${id}`;
   const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
-
+  const [tab, setTab] = useSearchParams(undefined);
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useSWR<StudentInfo>(studentProfile, {
@@ -65,7 +65,19 @@ const StudentDetail = () => {
   }
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    setTab({ tab: newValue.toString() });
   };
+
+  let numberValue;
+
+  const tabVal = tab.get("tab");
+
+  if (tabVal !== null) {
+    numberValue = Number(tabVal);
+  } else {
+    numberValue = 0;
+  }
+
   return (
     <Container maxWidth="lg">
       <header>
@@ -101,7 +113,7 @@ const StudentDetail = () => {
 
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          value={value}
+          value={numberValue || value}
           onChange={handleChange}
           aria-label="basic tabs example"
           variant={"scrollable"}
@@ -121,7 +133,7 @@ const StudentDetail = () => {
           <Tab label="دوره‌های عمومی" {...a11yProps(6)} />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={numberValue || value} index={0}>
         {afterBeforeLoading ? (
           <LoadingProgress />
         ) : (
@@ -138,7 +150,7 @@ const StudentDetail = () => {
         )}
       </TabPanel>
 
-      <TabPanel value={value} index={1}>
+      <TabPanel value={numberValue || value} index={1}>
         {afterBeforeLoading ? (
           <LoadingProgress />
         ) : (
@@ -156,7 +168,7 @@ const StudentDetail = () => {
         )}
       </TabPanel>
 
-      <TabPanel value={value} index={2}>
+      <TabPanel value={numberValue || value} index={2}>
         {afterBeforeError ? (
           <p>اطلاعات پذیرش برای این مهارت آموز وجود ندارد</p>
         ) : (
@@ -167,23 +179,23 @@ const StudentDetail = () => {
           />
         )}
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={numberValue || value} index={3}>
         <StudentDetailMore studentDetail={data?.infoData} />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={numberValue || value} index={4}>
         <StatusStudent
           careerPathway={afterBeforeData?.careerPathway}
           statusForm={data?.statusForm}
         />
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel value={numberValue || value} index={5}>
         <CoreCourseStudent
           courses={data?.modulesAsStudent.filter(
             (item) => item.module.moduleType === "core"
           )}
         />
       </TabPanel>
-      <TabPanel value={value} index={6}>
+      <TabPanel value={numberValue || value} index={6}>
         <GeneralCourseStudent
           courses={data?.modulesAsStudent.filter(
             (item) => item.module.moduleType !== "core"

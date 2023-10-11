@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
 import { Group } from "../../model";
 import LoadingProgress from "../../components/LoadingProgress";
-import CoreModuleCourseStudentsComp from "../../components/coreCourse/student/CoreModuleCourseStudentsComp";
+import GroupCourseStudentsComp from "../../components/group/table/GroupCourseStudentsComp";
 
 const GroupDetailStudentTable = () => {
   const { groupId } = useParams();
@@ -40,10 +40,7 @@ const GroupDetailStudentTable = () => {
             </Stack>
           </header>
           <Box sx={{ my: 6 }}>
-            <CoreModuleCourseStudentsComp
-              students={data.studentsWithDetails}
-            />
-            {/* //TODO: felan ke injori nist data haie sade va avalie student ro mide vali baiad ba in type baram biad */}
+            <GroupCourseStudentsComp students={data?.students} />
           </Box>
         </Container>
       )}

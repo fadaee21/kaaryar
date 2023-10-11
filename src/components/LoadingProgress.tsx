@@ -3,9 +3,10 @@ import Box from "@mui/material/Box";
 
 interface Usage {
   usage?: "page" | "paper";
+  size?: number;
 }
 
-const LoadingProgress = ({ usage }: Usage) => {
+const LoadingProgress = ({ usage, size }: Usage) => {
   return (
     <>
       {usage === "paper" ? (
@@ -17,7 +18,7 @@ const LoadingProgress = ({ usage }: Usage) => {
             height: "100%",
           }}
         >
-          <CircularProgress color="secondary" />
+          <CircularProgress color="secondary" size={size} />
         </Box>
       ) : (
         <Box

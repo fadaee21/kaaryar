@@ -21,7 +21,7 @@ const RegTableBodyAll = ({
   index,
   city,
   decidedAt,
-  selectedField
+  careerPathwayName,
 }: TableBodyAllType) => {
   const navigate = useNavigate();
   const backgroundColor =
@@ -156,7 +156,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{selectedField || "-"}</Typography>
+        <Typography variant="body2">{careerPathwayName}</Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"

@@ -100,28 +100,6 @@ export interface moodleJustStudent {
   moodleUser: MoodleUser;
   epochTimeModified: number;
 }
-//this is for mentor/ta
-export interface MoodleUserAssignee {
-  user_id: number;
-  role: {
-    name: string;
-    userRole: string;
-    roleId: number;
-  };
-  assigneeContext: {
-    student: {
-      studentUserName: string;
-      studentEmail: string;
-      studentFirstName: string;
-      studentLastName: string;
-      studentCity: string;
-      studentPhone: string;
-      studentMobile: string;
-      studentId: number;
-    };
-  };
-  id: number;
-}
 
 export interface LocalStorage {
   key: string;
@@ -280,6 +258,7 @@ export interface TableBodyAllType extends RegistrationForm {
   finalResult?: string;
   contCourseApproach?: string;
   index: number;
+  careerPathwayName?: string;
 }
 
 export interface SeekerStudent {
@@ -324,44 +303,75 @@ export interface Profile {
   deleted: boolean;
   user: User;
   picture?: Picture;
-  userId: number
+  userId: number;
 }
-export interface VolunteerProfile extends Profile{
-  modules: ModuleVolunteerProfile[]
-  studentCounts:StudentCount[] 
+export interface VolunteerProfile extends Profile {
+  modules: ModuleVolunteerProfile[];
+  studentCounts: StudentCountVolunteerProfile[];
 }
 export interface StudentCountVolunteerProfile {
-  module: ModuleGroup
-  assigned_student_count: number
+  module: ModuleGroup;
+  assigned_student_count: number;
 }
 
 export interface ModuleVolunteerProfile {
-  personnelId: number
-  moduleId: number
-  isActive: boolean
-  createdAt: string
-  updatedAt: any
-  studentsCount: number
-  module: ModuleGroup
-  studentsList: StudentsListVolunteerProfile[] 
+  personnelId: number;
+  moduleId: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: any;
+  studentsCount: number;
+  assignedRole: string;
+  module: ModuleGroup;
+  studentsList: StudentsListVolunteerProfile[];
+}
+
+export interface MentorsAndTa {
+  assignmentId: number;
+  isActive: boolean;
+  studentId: number;
+  personnel: Personnel;
+  personnelRole: string;
 }
 
 export interface StudentsListVolunteerProfile {
-  personnelId: number
-  moduleId: number
-  personnelRole: string
-  notes: any
-  isActive: boolean
-  id: number
-  studentId: number
-  isDeleted: boolean
-  createdAt: string
-  updatedAt: any
-  deletedAt: any
-  student: StudentEdu
+  personnelId: number;
+  moduleId: number;
+  personnelRole: string;
+  notes: any;
+  isActive: boolean;
+  id: number;
+  studentId: number;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: any;
+  deletedAt: any;
+  student: StudentInModuleVolunteer | undefined;
+  mentorsAndTAs: MentorsAndTa[];
 }
 
-
+export interface StudentInModuleVolunteer {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: any;
+  registrationForm: RegistrationForm;
+  statusForm: StatusForm;
+  careerPathway: CareerPathway;
+}
 
 export interface UserProfile {
   username: string;
@@ -567,7 +577,32 @@ export interface Group {
   instructors: Instructor[];
   teachingAssistants: TeachingAssistantMentorWithProfile[];
   mentors: TeachingAssistantMentorWithProfile[];
-  studentsWithDetails: StudentsWithDetailCore[]; //TODO: felan ke injori nist data haie sade va avalie student ro mide vali baiad ba in type baram biad
+  students: studentsGroup[];
+}
+export interface studentsGroup {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  roles: Role[];
+  picture?: Picture;
+  registrationForm?: RegistrationForm;
+  careerPathway?: CareerPathway;
+  currentModuleAsStudent?: CurrentModuleAsStudent;
+  currentAssignedTA: CurrentAssignedMentorTa;
+  currentAssignedMentor: CurrentAssignedMentorTa;
 }
 
 export type GroupArray = Group[];
@@ -639,7 +674,7 @@ export interface ModuleAll {
   instructors: Instructor[];
   teachingAssistants: TeachingAssistant[];
   mentors: Mentor[];
-  students: Student[];
+  students: any[];
 }
 
 export type ModuleAllArray = ModuleAll[];
@@ -699,7 +734,7 @@ export interface StudentsWithDetailCore {
   moduleId: number;
   studentId: number;
   assessmentId: any;
-  assessment: Assessment;
+  assessment: ModulesAsStudentAssessment;
   personnelAssignment: PersonnelAssignment[];
   student: StudentCore;
 }
@@ -846,28 +881,28 @@ export interface PersonnelAssignment {
 }
 
 export interface ModuleAsStudentForDetail extends ModulesAsStudent {
-  student: StudentWithStatus ;
+  student: StudentWithStatus;
 }
 
 export interface StudentWithStatus {
-  username: string
-  idnumber: string
-  firstName: string
-  family: string
-  email: string
-  phone: string
-  mobile: string
-  institution: string
-  department: string
-  address: string
-  city: string
-  country: string
-  lang: string
-  timezone: string
-  calendarType: string
-  id: number
-  picture: any
-  statusForm: StatusForm
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: any;
+  statusForm: StatusForm;
 }
 
 export interface ModulesAsStudentModule {
@@ -1028,6 +1063,8 @@ export interface CurrentAssignedMentorTa {
   personnel: Personnel;
   personnelRole: string;
   assignmentId: number | null;
+  isActive: boolean;
+  studentId: number;
 }
 export interface CurrentModuleAsStudent {
   name: string;
@@ -1079,3 +1116,69 @@ export interface MoodleUser {
   currentAssignedTA: CurrentAssignedMentorTa | null;
   currentModuleAsStudent: CurrentModuleAsStudent;
 }
+
+export interface StudentsVolunteer {
+  personnelId: number;
+  moduleId: number;
+  personnelRole: string;
+  notes: any;
+  isActive: boolean;
+  id: number;
+  studentId: number;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: any;
+  deletedAt: any;
+  student: StudentVolunteerObject;
+  surveys: Survey[];
+  enrollment: Enrollment;
+  module: ModulesAsStudentModule;
+}
+
+export interface StudentVolunteerObject {
+  username: string;
+  idnumber: string;
+  firstName: string;
+  family: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  institution: string;
+  department: string;
+  address: string;
+  city: string;
+  country: string;
+  lang: string;
+  timezone: string;
+  calendarType: string;
+  id: number;
+  picture: any;
+  registrationForm: RegistrationForm;
+}
+
+export interface Survey {
+  isChecked: boolean;
+  comment: string;
+  studentContribution: string;
+  sessionDate: string;
+  studentPresent: string;
+  sessionProblem: string;
+  studentTask: string;
+  studentId: number;
+  moduleId: number;
+  commenterId: number;
+  isDeleted: boolean;
+  id: number;
+  createdAt: string;
+  updatedAt: any;
+  deleteTime: any;
+  commenterRole: string;
+}
+
+export interface Enrollment {
+  assessment: ModulesAsStudentAssessment;
+  assignedTA: Mentor;
+  assignedMentor: Mentor;
+}
+
+

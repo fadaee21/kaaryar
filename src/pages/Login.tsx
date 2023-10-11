@@ -55,7 +55,7 @@ const Login = () => {
   return (
     <>
       {tokenValidation ? (
-        <Navigate to={from} replace />
+        <Navigate to={from}  />
       ) : (
         <BackgroundImage backgd={backgd}>
           <Container maxWidth="md" sx={{ py: 9 }}>
