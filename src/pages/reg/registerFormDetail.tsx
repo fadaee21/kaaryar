@@ -17,7 +17,6 @@ const RegisterFormDetail = () => {
     "approve" | "disApprove" | undefined
   >(undefined);
   const handleOpenAlert = (alert: "approve" | "disApprove") => {
-    console.log(alert);
     setAlertType(alert);
     setOpenAlert(true);
   };
@@ -56,6 +55,14 @@ const RegisterFormDetail = () => {
     getApproveReg(id, { status: false }, approveLink);
   };
 
+  const resendApproveEmail = () => {
+    if (student?.checked) {
+      handleOpenAlert("approve");
+    } else {
+      handleOpenAlert("disApprove");
+    }
+  };
+
   if (loading || loadingRegApprove) {
     return <LoadingProgress />;
   }
@@ -76,6 +83,12 @@ const RegisterFormDetail = () => {
           size="small"
           aria-label="small button group"
         >
+          <Button
+            disabled={student?.checked !== null || success ? false : true}
+            onClick={resendApproveEmail}
+          >
+            ارسال مجدد ایمیل
+          </Button>
           <Button onClick={() => navigate("edit")}>ویرایش</Button>
           <Button
             variant="contained"

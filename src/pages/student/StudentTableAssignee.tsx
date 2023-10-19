@@ -21,10 +21,12 @@ import { handleError } from "../../utils/handleError";
 import { AssigneeStudentsAll } from "./studentMentorTaType";
 //^this component list related student for mentor and ta
 const StudentTableAssignee = () => {
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
+  const {
+    auth: { username: user_name, roles },
+  } = useAuth();
+  const role = roles.toString();
   const { data, isLoading, error } = useSWR<AssigneeStudentsAll>(
-    `/${roles}/user/student`
+    `/user/profile/username/${user_name}/students`
   );
   const navigate = useNavigate();
 
@@ -47,7 +49,7 @@ const StudentTableAssignee = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> فهرست مهارت آموزان</Typography>
+            <Typography variant="h4"> مهارت‌آموزان من</Typography>
           </Box>
 
           <AccordionStyled>
@@ -63,7 +65,7 @@ const StudentTableAssignee = () => {
 
               <ExcelExport
                 fileName={"excel export"}
-                linkAll={`/${roles}/user/student`}
+                linkAll={`/${role}/user/student`}
                 searchData={null}
                 useIn="studentListMoodleTable"
               />
@@ -74,20 +76,18 @@ const StudentTableAssignee = () => {
               <TableHeader headerItems={assigneeStudentTableHeader} />
               <TableBody>
                 {data?.map((moodleUser, i: number) => {
-                  const { student, module, mentorsAndTAs } = moodleUser || {};
-                  const { category } = module;
+                  const { student, module, mentorsAndTAs, enrollment } =
+                    moodleUser || {};
+                  const { category, id: module_id } = module;
                   const {
                     id,
                     firstName,
                     family,
-                    username,
                     picture,
                     city,
-                    statusForm,
                     registrationForm,
                     careerPathway,
                   } = student || {};
-                  
 
                   const mentors = mentorsAndTAs.find(
                     (i) => i.personnelRole === "mentor"
@@ -128,27 +128,17 @@ const StudentTableAssignee = () => {
                           {firstName + " " + family}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
                           verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2" textAlign={"center"}>
-                          {username}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          verticalAlign: "center",
-                        }}
-                      >
-                        <Typography variant="body2" textAlign={"center"}>
+                        <Typography variant="body2">
                           {category?.name}
                         </Typography>
                       </StyledTableCell>
-
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -169,6 +159,7 @@ const StudentTableAssignee = () => {
                           {registrationForm?.city || city || "-"}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -179,14 +170,15 @@ const StudentTableAssignee = () => {
                           {registrationForm?.refer || "-"}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
                           verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2">
-                          {careerPathway?.name || "-"}
+                        <Typography variant="body2" textAlign={"center"}>
+                          {careerPathway?.name ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -195,10 +187,11 @@ const StudentTableAssignee = () => {
                           verticalAlign: "center",
                         }}
                       >
-                        <Typography variant="body2">
+                        <Typography variant="body2" textAlign={"center"}>
                           {module?.name || "-"}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -206,13 +199,10 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {mentors
-                            ? mentors?.personnel.firstName +
-                              " " +
-                              mentors?.personnel.family
-                            : "-"}
+                          {module?.teachingStatus || "-"}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -227,6 +217,7 @@ const StudentTableAssignee = () => {
                             : "-"}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -234,7 +225,22 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.trainingStatus?.value ?? "-"}
+                          {mentors
+                            ? mentors?.personnel.firstName +
+                              " " +
+                              mentors?.personnel.family
+                            : "-"}
+                        </Typography>
+                      </StyledTableCell>
+
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {enrollment.assessment.finalGrade ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -244,28 +250,18 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.nextTrainingStep?.value ?? "-"}
+                          {enrollment?.assessment?.finalAssessment ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
                         align="center"
                         sx={{
                           verticalAlign: "center",
+                          cursor: "pointer",
                         }}
+                        onClick={() => navigate(`${module_id}/${id}`)}
                       >
-                        <Typography variant="body2">
-                          {statusForm?.referralToFinance?.value ?? "-"}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          verticalAlign: "center",
-                        }}
-                      >
-                        <Typography variant="body2">
-                          {statusForm?.kaaryarAssessment?.value ?? "-"}
-                        </Typography>
+                        <Typography variant="body2">مشاهده</Typography>
                       </StyledTableCell>
                     </StyledTableRow>
                   );

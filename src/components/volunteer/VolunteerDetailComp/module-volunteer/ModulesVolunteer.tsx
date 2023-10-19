@@ -1,6 +1,6 @@
 import {
-  AccordionDetails,
-  Box,
+  // AccordionDetails,
+  // Box,
   Paper,
   Stack,
   Table,
@@ -9,14 +9,14 @@ import {
   Typography,
 } from "@mui/material";
 import { ModuleVolunteerProfile } from "../../../../model";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  AccordionStyled,
-  AccordionSummaryStyled,
-} from "../../../../styles/search/accordion";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import {
+//   AccordionStyled,
+//   AccordionSummaryStyled,
+// } from "../../../../styles/search/accordion";
 import TableHeader from "../../../table/TableHeader";
 import TableBodyModuleVolunteer from "./TableBodyModuleVolunteer";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { moduleVolunteerTableHeader } from "../../../table/helper-header";
 interface Props {
   modules: ModuleVolunteerProfile[];
@@ -83,9 +83,10 @@ const ModulesVolunteer = ({
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
           <TableHeader
             headerItems={
-              whoCanSeeComments
-                ? moduleVolunteerTableHeader
-                : moduleVolunteerTableHeader.slice(0, -1)
+              moduleVolunteerTableHeader
+              // whoCanSeeComments
+              //   ? moduleVolunteerTableHeader
+              //   : moduleVolunteerTableHeader.slice(0, -1)
             }
           />
           <TableBody>
@@ -95,7 +96,7 @@ const ModulesVolunteer = ({
                 key={module.moduleId}
                 moduleVolunteer={module}
                 counter={index}
-                whoCanSeeComments={whoCanSeeComments}
+                // whoCanSeeComments={whoCanSeeComments}
               />
             ))}
           </TableBody>
@@ -110,22 +111,22 @@ const ModulesVolunteer = ({
         mt={6}
         gap={1}
       >
-        <Typography variant="body2">
+        {/* <Typography variant="body2">
           برای مشاهدهٔ تمام{" "}
           <Link to={"all-students"}> {`مهارت‌آموزان ${fullName}`}</Link> کلیک
           کنید.
-        </Typography>
+        </Typography> */}
         {adminVisibility && (
           <>
             <Typography variant="body2">
-              برای مشاهدهٔ <strong>تمام نظراتی</strong> که هما فکری ثبت کرده
+              {`برای مشاهدهٔ <strong>تمام نظراتی</strong> که ${fullName} ثبت کرده
               است، از منوی سمت راست، به فهرست نظرات بروید و در بخش سرچ، نام این
-              داوطلب را در فیلد «نظردهنده» انتخاب کنید.{" "}
+              داوطلب را در فیلد «نظردهنده» انتخاب کنید.`}
             </Typography>
-            <Typography variant="body2">
-              برای مشاهدهٔ <strong>بازخوردهایی</strong> که در هر دوره در مورد
-              هما فکری ثبت شده است، به تب «بازخوردها» مراجعه کنید.
-            </Typography>
+            {/* <Typography variant="body2">
+              {`  برای مشاهدهٔ <strong>بازخوردهایی</strong> که در هر دوره در مورد
+              ${fullName} ثبت شده است، به تب «بازخوردها» مراجعه کنید.`}
+            </Typography> */}
           </>
         )}
       </Stack>

@@ -12,9 +12,11 @@ import { AssigneeStudentsAll } from "../student/studentMentorTaType";
 
 const Dashboard = () => {
   const {
-    auth: { roles },
+    auth: { username: user_name },
   } = useAuth();
-  const { data, isLoading, error } = useSWR<AssigneeStudentsAll>(`/${roles}/user/student`);
+  const { data, isLoading, error } = useSWR<AssigneeStudentsAll>(
+    `/user/profile/username/${user_name}/students/active`
+  );
 
   if (isLoading) {
     return <LoadingProgress />;

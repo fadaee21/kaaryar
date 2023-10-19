@@ -26,6 +26,7 @@ import {
 import RowViewAssigning from "./RowViewAssigning";
 import RowEditAssigning from "./RowEditAssigning";
 import useSWR from "swr";
+import ContextMenu from "../../ContextMenu";
 // import LoadingProgress from "../../LoadingProgress";
 const PROFILE_VOLUNTEER = "/user/profile/all";
 interface Props {
@@ -47,6 +48,7 @@ interface Props {
   currentAssignedMentor: CurrentAssignedMentorTa | null;
   currentAssignedTA: CurrentAssignedMentorTa | null;
   currentModuleAsStudent: CurrentModuleAsStudent;
+  latestEnrolledModule: any;
 }
 const StudentAdminRowTable = ({
   id,
@@ -65,6 +67,7 @@ const StudentAdminRowTable = ({
   currentAssignedMentor,
   currentAssignedTA,
   currentModuleAsStudent,
+  latestEnrolledModule,
 }: Props) => {
   const [editingMode, setEditingMode] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -79,6 +82,7 @@ const StudentAdminRowTable = ({
     setAssigningMode((i) => !i);
     setMode("assign");
   };
+
   const {
     trainingData,
     nextStepData,
@@ -109,10 +113,9 @@ const StudentAdminRowTable = ({
       " " +
       currentAssignedTA.personnel.family
     : "-";
-  const currentModule = currentModuleAsStudent
-    ? currentModuleAsStudent.name
-    : "-";
-
+  // const currentModule = currentModuleAsStudent
+  //   ? currentModuleAsStudent.name
+  //   : "-";
   return (
     <StyledTableRowAdmin
       key={id}
@@ -142,9 +145,11 @@ const StudentAdminRowTable = ({
         }}
         onClick={() => navigate(`${id}`)}
       >
-        <StyledTypographyAdmin variant="body1">
-          {firstName + " " + family}
-        </StyledTypographyAdmin>
+        <ContextMenu navigation={id}>
+          <StyledTypographyAdmin variant="body1">
+            {firstName + " " + family}
+          </StyledTypographyAdmin>
+        </ContextMenu>
       </StyledTableCellAdmin>
       {/* "نام کاربری" */}
       <StyledTableCellAdmin align="center">
@@ -176,6 +181,14 @@ const StudentAdminRowTable = ({
           {registrationForm?.refer || "-"}
         </StyledTypographyAdmin>
       </StyledTableCellAdmin>
+      {/* "نحوه آشنایی" */}
+      <StyledTableCellAdmin align="center">
+        <StyledTypographyAdmin variant="body2">
+          {registrationForm?.familiarity === "other"
+            ? "سایر"
+            : registrationForm?.familiarity || "-"}
+        </StyledTypographyAdmin>
+      </StyledTableCellAdmin>
       {/* "مسیر آموزشی" */}
       <StyledTableCellAdmin align="center">
         <StyledTypographyAdmin variant="body2" textAlign={"center"}>
@@ -189,7 +202,10 @@ const StudentAdminRowTable = ({
           variant="body2"
           textAlign={"center"}
         >
-          {statusForm?.trainingStatus?.id !== 2 ? "-" : currentModule}
+          {/* {statusForm?.trainingStatus?.id !== 2 ? "-" : currentModule} */}
+          {statusForm?.trainingStatus?.id !== 2
+            ? "-"
+            : latestEnrolledModule?.name || "-"}
         </StyledTypographyAdmin>
       </StyledTableCellAdmin>
       {assigningMode ? (

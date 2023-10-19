@@ -1115,6 +1115,8 @@ export interface MoodleUser {
   currentAssignedMentor: CurrentAssignedMentorTa | null;
   currentAssignedTA: CurrentAssignedMentorTa | null;
   currentModuleAsStudent: CurrentModuleAsStudent;
+  latestEnrolledModule: any;
+  latestEnrolledModuleId: any;
 }
 
 export interface StudentsVolunteer {
@@ -1180,5 +1182,3 @@ export interface Enrollment {
   assignedTA: Mentor;
   assignedMentor: Mentor;
 }
-
-

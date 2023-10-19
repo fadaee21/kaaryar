@@ -5,7 +5,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import { Comment, DetailStudentStatus } from "../../model";
+import { Comment } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { Container } from "@mui/system";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -14,7 +14,7 @@ import {
   Box,
   IconButton,
   ListItem,
-  Pagination,
+  // Pagination,
   Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,9 +26,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
-import { useGetComments } from "../../hooks/request/useGetComments";
-import { counterPagination } from "../../utils/counterPagination";
-import { useNavigate } from "react-router-dom";
+// import { counterPagination } from "../../utils/counterPagination";
+import { useNavigate, useParams } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
@@ -38,109 +37,35 @@ import {
   AccordionStyled,
   AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-import SearchAllComments from "./SearchAllComments";
-import TableEmpty from "../../components/table/TableEmpty";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { roleConverter } from "../../utils/roleConverter";
-import dayjs, { Dayjs } from "dayjs";
 
-const Comments = () => {
+const TableCommentsInModule = () => {
   const [chevronDir, setChevronDir] = useState(false);
-
-  // ^searching- i have to create logic if user want delete a comment on search table, i need to code fetching search here that if user delete ane comment mutate search api to see latest content
-  const [liftUpSearchState, setLiftUpSearchState] = useState<{
-    student: string;
-    commenterUser: string;
-    commenterRole: DetailStudentStatus | null;
-    sessionDateFrom: Date | Dayjs | null;
-    sessionDateTo: Date | Dayjs | null;
-    moduleName: DetailStudentStatus | null;
-  }>({
-    student: "",
-    commenterUser: "",
-    commenterRole: null,
-    sessionDateFrom: null,
-    sessionDateTo: null,
-    moduleName: null,
-  });
-  const [searchingComments, setSearchingComments] = useState(false);
+  const [open, setOpen] = useState(false);
   const {
-    auth: { id },
+    auth: { roles },
     adminVisibility,
   } = useAuth();
+  const role = roles.toString();
+  const PATH = `/${role}/all-comments`;
+  const { student_id, module_id } = useParams();
+  const COMMENTS_IN_MODULE_URL = `/total/student/survey/all/${student_id}?${module_id}`;
+
   const {
-    commenterRole,
-    commenterUser,
-    sessionDateFrom,
-    student,
-    sessionDateTo,
-    moduleName,
-  } = liftUpSearchState;
+    data: commentsTable,
+    mutate,
+    error: commentsTableError,
+    isLoading: commentsTableLoading,
+  } = useSWR(COMMENTS_IN_MODULE_URL);
 
-  // Define the base URL
-  const BASE_URL = "/total/survey/search";
-  // Construct the parameters
-  // Construct the parameters conditionally
-  const params = new URLSearchParams();
-
-  if (!adminVisibility) {
-    params.set("commenterId", String(id));
-  }
-  if (moduleName) {
-    params.set("moduleName", moduleName.value.trim());
-  }
-
-  params.set("commenterName", commenterUser);
-  params.set("studentName", student);
-
-  if (commenterRole) {
-    params.set("commenterRole", String(commenterRole.id));
-  }
-
-  if (sessionDateFrom) {
-    const dataFrom = dayjs(sessionDateFrom).startOf("day").toISOString();
-    params.set("sessionDateFrom", dataFrom);
-  }
-
-  if (sessionDateTo) {
-    const dateTo = sessionDateTo.toISOString();
-    params.set("sessionDateTo", dateTo);
-  }
-
-  params.set("pageNum", "1");
-  params.set("pageSize", "100");
-  params.set("orderAscending", "false");
-  params.set("orderBy", "session_date");
-
-  // Construct the full URL
-  const SEARCH_URL = `${BASE_URL}?${params.toString()}`;
-
-  const { error: errorSearch, mutate } = useSWR(
-    searchingComments ? SEARCH_URL : null,
-    {
-      onSuccess: (data) => {
-        setSearchingComments(false); //after get response disable swr, otherwise typing every character in textField send new req to server
-        setSearchResult(data);
-      },
-      onError: () => setSearchingComments(false),
-    }
-  );
-  if (errorSearch) {
-    toast.error(handleError(errorSearch));
-  }
-  // ^searching
-
-  const [page, setPage] = useState(1);
-  const [open, setOpen] = useState(false);
-  const [searchResult, setSearchResult] = useState<Comment[] | null>(null);
+  // const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
-  const pageSize = adminVisibility ? 10 : 100;
-  const { commentsTable, commentsTableLoading, commentCounter, refreshData } =
-    useGetComments(page, pageSize);
+
   const handleClickOpenEdit = (id: any) => {
-    navigate(`${id}/editing`);
+    navigate(`${PATH}/${id}/editing`);
   };
   const [idComment, setIdComment] = useState<number>();
   const { removeComment } = useDeleteComment(idComment);
@@ -154,18 +79,22 @@ const Comments = () => {
   const handleDelete: () => void = async () => {
     setOpen(false);
     await removeComment();
-    setSearchingComments(true);
-    refreshData();
+    // refreshData();
     mutate();
   };
   const handleClose = () => {
     setOpen(false);
   };
 
+  if (commentsTableError) {
+    toast.error(handleError(commentsTableError));
+  }
+
   if (commentsTableLoading) {
     return <LoadingProgress />;
   }
-
+  const student = commentsTable[0].student;
+  const fullName = student.firstName + " " + student.family;
   return (
     <Box component={"article"} sx={{ m: 2, mb: 8 }}>
       <Container maxWidth="xl">
@@ -173,7 +102,7 @@ const Comments = () => {
           component={"div"}
           sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
         >
-          <Typography variant="h4"> فهرست نظرات</Typography>
+          <Typography variant="h5">{`مهارت‌آموزان من > ${fullName} > نظرات`}</Typography>
         </Box>
 
         <AccordionStyled expanded={chevronDir}>
@@ -192,13 +121,6 @@ const Comments = () => {
             >
               <Typography variant="button">جستجو</Typography>
             </AccordionSummaryStyled>
-
-            {/* <ExcelExport
-                  fileName={"Applicant Info"}
-                  searchData={[]}
-                  linkAll=""
-                  useIn="reg"
-                /> */}
           </Box>
           <AccordionDetails>
             <Box
@@ -206,24 +128,15 @@ const Comments = () => {
                 width: "100%",
                 my: 3,
               }}
-            >
-              <SearchAllComments
-                setSearchResult={setSearchResult}
-                setLiftUpSearchState={setLiftUpSearchState}
-                setSearchingComments={setSearchingComments}
-              />
-            </Box>
+            ></Box>
           </AccordionDetails>
         </AccordionStyled>
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            {/* //!for empty response of search don't return TableHeader */}
-            {searchResult?.length !== 0 && (
-              <TableHeader headerItems={commentsTableHeader} />
-            )}
+            <TableHeader headerItems={commentsTableHeader} />
             <TableBody>
-              {(searchResult ?? commentsTable)?.map((commentItem: Comment) => {
+              {commentsTable?.map((commentItem: Comment) => {
                 const {
                   id,
                   module,
@@ -326,7 +239,7 @@ const Comments = () => {
                         sx={{ pt: 0, justifyContent: "center" }}
                         alignItems="center"
                       >
-                        <IconButton onClick={() => navigate(`${id}`)}>
+                        <IconButton onClick={() => navigate(`${PATH}/${id}`)}>
                           <VisibilityIcon fontSize="small" color="info" />
                         </IconButton>
                         <IconButton
@@ -377,9 +290,9 @@ const Comments = () => {
           </Table>
         </TableContainer>
         {/* //!for empty response of search return TableEmpty */}
-        {searchResult?.length === 0 && <TableEmpty />}
+        {/* {searchResult?.length === 0 && <TableEmpty />} */}
       </Container>
-      {!searchResult && adminVisibility && (
+      {/* {!searchResult && adminVisibility && (
         <Pagination
           sx={{
             display: "flex",
@@ -396,9 +309,9 @@ const Comments = () => {
             setPage(value);
           }}
         />
-      )}
+      )} */}
     </Box>
   );
 };
 
-export default Comments;
+export default TableCommentsInModule;

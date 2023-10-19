@@ -34,6 +34,9 @@ import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { persianDate } from "../../utils/persianDate";
 
+const pageSize = 20;
+const heightOfTable = 500;
+const loadingBoxHeight = heightOfTable - 160;
 const AfterWeekTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
@@ -41,7 +44,6 @@ const AfterWeekTable = () => {
     AfterWeekType[] | null
   >(null);
 
-  const pageSize = 20;
   const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
@@ -64,10 +66,6 @@ const AfterWeekTable = () => {
     // eslint-disable-next-line
   }, [loadingMulti]);
 
-  if (loading || loadingMulti) {
-    return <LoadingProgress />;
-  }
-
   if (error) {
     toast.error(handleError(error));
     if (error.response.status === 401) {
@@ -76,7 +74,7 @@ const AfterWeekTable = () => {
   }
 
   return (
-    <Box sx={{ m: 2 }}>
+    <>
       <Box component={"article"}>
         <Container maxWidth="xl">
           <Box
@@ -196,74 +194,86 @@ const AfterWeekTable = () => {
           </AccordionStyled>
           {/* //!for empty response of search return TableEmpty */}
           {searchingStudentAfter?.length === 0 && <TableEmpty />}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentAfter?.length !== 0 && (
-                <TableHeader headerItems={afterTableHeader} />
-              )}
-              <TableBody>
-                {(searchingStudentAfter ?? data)?.map(
-                  (afterWeekStudent: AfterWeekType, i: number) => {
-                    const {
-                      id,
-                      finalField,
-                      scholar,
-                      finalResult,
-                      decidedAt,
-                      beforeWeekForm: {
-                        registrationForm: {
-                          province,
-                          city,
-                          family,
-                          firstName,
-                          registrationCode,
-                          codeMeli,
-                          mobile,
-                          email,
-                          // gender,
-                          studyField,
-                          course,
-                        },
-                      },
-                      afterWeekChecked,
-                    } = afterWeekStudent;
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            {loading || loadingMulti ? (
+              <Box sx={{ m: 10, height: loadingBoxHeight }}>
+                <LoadingProgress usage="paper" size={40} />
+              </Box>
+            ) : (
+              <TableContainer sx={{ maxHeight: heightOfTable }}>
+                 <Table
+                  stickyHeader
+                  aria-label="simple table"
+                  sx={{ tableLayout: "auto" }}
+                >
+                  {/* //!for empty response of search don't return TableHeader */}
+                  {searchingStudentAfter?.length !== 0 && (
+                    <TableHeader headerItems={afterTableHeader} />
+                  )}
+                  <TableBody>
+                    {(searchingStudentAfter ?? data)?.map(
+                      (afterWeekStudent: AfterWeekType, i: number) => {
+                        const {
+                          id,
+                          finalField,
+                          scholar,
+                          finalResult,
+                          decidedAt,
+                          beforeWeekForm: {
+                            registrationForm: {
+                              province,
+                              city,
+                              family,
+                              firstName,
+                              registrationCode,
+                              codeMeli,
+                              mobile,
+                              email,
+                              // gender,
+                              studyField,
+                              course,
+                            },
+                          },
+                          afterWeekChecked,
+                        } = afterWeekStudent;
 
-                    return (
-                      <TableBodyAll
-                        key={id}
-                        id={id}
-                        province={province}
-                        city={city}
-                        studyField={studyField}
-                        scholar={scholar}
-                        finalField={finalField}
-                        finalResult={finalResult}
-                        family={family}
-                        firstName={firstName}
-                        registrationCode={registrationCode}
-                        codeMeli={codeMeli}
-                        mobile={mobile}
-                        email={email}
-                        directNav="after-week"
-                        // gender={gender}
-                        checked={afterWeekChecked}
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={!!searchingStudentAfter}
-                        index={
-                          searchingStudentAfter
-                            ? i + 1
-                            : itemCounterTable(page, pageSize, i)
-                        }
-                        course={course}
-                        decidedAt={persianDate(decidedAt)}
-                      />
-                    );
-                  }
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                        return (
+                          <TableBodyAll
+                            key={id}
+                            id={id}
+                            province={province}
+                            city={city}
+                            studyField={studyField}
+                            scholar={scholar}
+                            finalField={finalField}
+                            finalResult={finalResult}
+                            family={family}
+                            firstName={firstName}
+                            registrationCode={registrationCode}
+                            codeMeli={codeMeli}
+                            mobile={mobile}
+                            email={email}
+                            directNav="after-week"
+                            // gender={gender}
+                            checked={afterWeekChecked}
+                            handleCheckBox={handleCheckBox}
+                            checkBoxDisplay={!!searchingStudentAfter}
+                            index={
+                              searchingStudentAfter
+                                ? i + 1
+                                : itemCounterTable(page, pageSize, i)
+                            }
+                            course={course}
+                            decidedAt={persianDate(decidedAt)}
+                          />
+                        );
+                      }
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Paper>
         </Container>
       </Box>
       {!searchingStudentAfter && (
@@ -284,7 +294,7 @@ const AfterWeekTable = () => {
           }}
         />
       )}
-    </Box>
+    </>
   );
 };
 

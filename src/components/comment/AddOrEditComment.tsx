@@ -73,6 +73,23 @@ const AddOrEditComment = ({
     getOptionLabel: (option: ModulesAsStudentModule) => option.name,
   };
   const navigate = useNavigate();
+  const isStudentPresentFalse =
+    course && sessionDate && studentPresent === "خیر";
+  const isButtonDisabled =
+    !course ||
+    !studentContribute ||
+    !studentPresent ||
+    !studentTask ||
+    !sessionProblem ||
+    !sessionDate ||
+    !comment ||
+    loading;
+  //for activation the button user must fill out all fields except studentPresent equal to "خیر"
+  const buttonStatus = isStudentPresentFalse
+    ? false
+    : isButtonDisabled
+    ? true
+    : false;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -91,16 +108,7 @@ const AddOrEditComment = ({
           variant="contained"
           type="submit"
           sx={{ px: 5, mr: 2, ml: "auto" }}
-          disabled={
-            !course ||
-            !studentContribute ||
-            !studentPresent ||
-            !studentTask ||
-            !sessionProblem ||
-            !sessionDate ||
-            !comment ||
-            loading
-          }
+          disabled={buttonStatus}
         >
           {compType === "adding" ? "ارسال" : "ویرایش"}
         </Button>

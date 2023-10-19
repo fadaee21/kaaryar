@@ -8,12 +8,12 @@ import { useAuth } from "../../../../context/AuthProvider";
 interface Props {
   counter: number;
   moduleVolunteer: ModuleVolunteerProfile;
-  whoCanSeeComments: boolean;
+  // whoCanSeeComments: boolean;
 }
 const TableBodyModuleVolunteer = ({
   counter,
   moduleVolunteer,
-  whoCanSeeComments,
+  // whoCanSeeComments,
 }: Props) => {
   const { module, studentsCount, assignedRole } = moduleVolunteer;
   const {
@@ -82,11 +82,11 @@ const TableBodyModuleVolunteer = ({
         <Typography variant="body2">{` ${studentsCount} مهارت‌آموز`}</Typography>
       </StyledTableCell>
       {/* نظرات  */}
-      {whoCanSeeComments && (
+      {/* {whoCanSeeComments && (
         <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
           <Typography variant="body2">مشاهده</Typography>
         </StyledTableCell>
-      )}
+      )} */}
     </StyledTableRow>
   );
 };

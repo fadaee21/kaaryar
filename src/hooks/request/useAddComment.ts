@@ -48,6 +48,7 @@ export const useAddComment = (
       });
       if (response.status === 201) {
         navigate(`/${roles}/all-comments`);
+        toast.success("نظر با موفقیت ثبت شد");
         return;
       }
       if (response.data.state === "exist") {
@@ -80,13 +81,14 @@ export const useAddComment = (
 
       if (response.status === 200) {
         navigate(`/${roles}/all-comments`);
+        toast.success("نظر شما با موفقیت ویرایش شد");
         return;
       }
       if (response.data.state === "exist") {
         toast.error("این نظر قبلا ثبت شده است");
         return;
       }
-      toast.error(" نظر شما ثبت نشد");
+      toast.error(" نظر شما ویرایش نشد");
     } catch (error: any) {
       toast.error(handleError(error));
     } finally {

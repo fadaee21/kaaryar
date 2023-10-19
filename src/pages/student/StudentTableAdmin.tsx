@@ -3,9 +3,7 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
-  TableRow,
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -31,13 +29,14 @@ import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
 import { TableHeaderStudent } from "../../components/table/TableHeader";
 import { adminStudentTableHeader } from "../../components/table/helper-header";
-
 import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
 import SearchAllStudent from "../../components/student/search-student/SearchAllStudent";
 import { useSearchParams } from "react-router-dom";
 import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
 
 const pageSize = 25;
+const heightOfTable = 500;
+const loadingBoxHeight = heightOfTable - 160;
 // const adminStudentQuery =
 //   "orderAscending=false&orderBy=after_week_update_timestamp";
 const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
@@ -48,11 +47,6 @@ const StudentTableAdmin = () => {
   const [chevronDir, setChevronDir] = useState(false);
   let ADMIN_STUDENT_URL;
   ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
-  // useEffect(() => {
-  //   if (chevronDir) {
-  //     ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}&orderAscending=true`;
-  //   }
-  // }, []);
 
   const [, counterPage] = useCountPagination(STUDENT_COUNT);
 
@@ -97,7 +91,7 @@ const StudentTableAdmin = () => {
     ADMIN_STUDENT_URL = searchLink + `&${searchParams}`;
   }
 
-  const { data, isLoading, error } = useSWR(ADMIN_STUDENT_URL, {
+  const { data, isLoading, error } = useSWR<MoodleUser[]>(ADMIN_STUDENT_URL, {
     // onSuccess: () => window.scrollTo(0, 0),
     revalidateOnMount: true,
   });
@@ -130,7 +124,7 @@ const StudentTableAdmin = () => {
     kaaryarAssessmentLoading;
 
   return (
-    <Box sx={{ m: 2 }}>
+    <>
       <Box component={"article"}>
         <Container maxWidth="xl">
           <Box
@@ -182,6 +176,7 @@ const StudentTableAdmin = () => {
                     referralToFinanceData={referralToFinanceData}
                     kaaryarAssessmentData={kaaryarAssessmentData}
                     isLoading={isLoading}
+                    
                   />
                 ) : (
                   <LoadingProgress usage="paper" />
@@ -192,20 +187,13 @@ const StudentTableAdmin = () => {
           {/* //!for empty response of search return TableEmpty */}
           {data?.length === 0 && <TableEmpty />}
 
-          <Paper
-            sx={{
-              width: "100%",
-              overflow: "auto",
-              position: "relative",
-              zIndex: 0,
-            }}
-          >
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
             {isLoading ? (
-              <Box sx={{ m: 10 }}>
+              <Box sx={{ m: 10, height: loadingBoxHeight }}>
                 <LoadingProgress usage="paper" size={40} />
               </Box>
             ) : (
-              <TableContainer>
+              <TableContainer sx={{ maxHeight: heightOfTable }}>
                 <Table
                   stickyHeader
                   aria-label="simple table"
@@ -219,7 +207,7 @@ const StudentTableAdmin = () => {
                   )}
 
                   <TableBody>
-                    {data?.map((moodleUser: MoodleUser, i: number) => {
+                    {data?.map((moodleUser, i) => {
                       const {
                         id,
                         firstName,
@@ -233,6 +221,7 @@ const StudentTableAdmin = () => {
                         currentAssignedMentor,
                         currentAssignedTA,
                         currentModuleAsStudent,
+                        latestEnrolledModule
                       } = moodleUser;
                       return (
                         <StudentAdminRowTable
@@ -253,6 +242,7 @@ const StudentTableAdmin = () => {
                           currentAssignedMentor={currentAssignedMentor}
                           currentAssignedTA={currentAssignedTA}
                           currentModuleAsStudent={currentModuleAsStudent}
+                          latestEnrolledModule={latestEnrolledModule}
                         />
                       );
                     })}
@@ -281,7 +271,7 @@ const StudentTableAdmin = () => {
           }}
         />
       )}
-    </Box>
+    </>
   );
 };
 export default StudentTableAdmin;

@@ -35,6 +35,8 @@ import { handleError } from "../../utils/handleError";
 import { Navigate } from "react-router-dom";
 
 const pageSize = 20;
+const heightOfTable = 500;
+const loadingBoxHeight = heightOfTable - 160;
 const RegisterFormTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
@@ -62,9 +64,6 @@ const RegisterFormTable = () => {
     // eslint-disable-next-line
   }, [loadingMulti]);
 
-  if (loading || loadingMulti) {
-    return <LoadingProgress />;
-  }
   if (error) {
     toast.error(handleError(error));
     if (error.response.status === 401) {
@@ -182,51 +181,63 @@ const RegisterFormTable = () => {
           </AccordionStyled>
           {/* //!for empty response of search return TableEmpty */}
           {searchingStudentRegister?.length === 0 && <TableEmpty />}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentRegister?.length !== 0 && (
-                <TableHeader headerItems={registerTableHeader} />
-              )}
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            {loading || loadingMulti ? (
+              <Box sx={{ m: 10, height: loadingBoxHeight }}>
+                <LoadingProgress usage="paper" size={40} />
+              </Box>
+            ) : (
+              <TableContainer sx={{ maxHeight: heightOfTable }}>
+                <Table
+                  stickyHeader
+                  aria-label="simple table"
+                  sx={{ tableLayout: "auto" }}
+                >
+                  {/* //!for empty response of search don't return TableHeader */}
+                  {searchingStudentRegister?.length !== 0 && (
+                    <TableHeader headerItems={registerTableHeader} />
+                  )}
 
-              <TableBody>
-                {(searchingStudentRegister ?? data)?.map(
-                  (RegisterUser: RegistrationForm, i: number) => {
-                    return (
-                      <RegTableBodyAll
-                        key={RegisterUser.id}
-                        id={RegisterUser.id}
-                        family={RegisterUser.family}
-                        firstName={RegisterUser.firstName}
-                        // registrationCode={RegisterUser.registrationCode}
-                        directNav="register-form"
-                        checked={RegisterUser.checked}
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={!!searchingStudentRegister} //if you have any searching student show checkbox in table
-                        education={RegisterUser.education}
-                        refer={RegisterUser.refer}
-                        highSchoolYear={RegisterUser.highSchoolYear}
-                        familiarity={RegisterUser.familiarity}
-                        province={RegisterUser.province}
-                        city={RegisterUser.city}
-                        createdAt={RegisterUser.createdAt}
-                        course={RegisterUser.course}
-                        index={
-                          searchingStudentRegister
-                            ? i + 1
-                            : itemCounterTable(page, pageSize, i)
-                        }
-                        decidedAt={RegisterUser.decidedAt}
-                        careerPathwayName={
-                          RegisterUser?.careerPathway?.name || "سایر"
-                        }
-                      />
-                    );
-                  }
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  <TableBody>
+                    {(searchingStudentRegister ?? data)?.map(
+                      (RegisterUser: RegistrationForm, i: number) => {
+                        return (
+                          <RegTableBodyAll
+                            key={RegisterUser.id}
+                            id={RegisterUser.id}
+                            family={RegisterUser.family}
+                            firstName={RegisterUser.firstName}
+                            // registrationCode={RegisterUser.registrationCode}
+                            directNav="register-form"
+                            checked={RegisterUser.checked}
+                            handleCheckBox={handleCheckBox}
+                            checkBoxDisplay={!!searchingStudentRegister} //if you have any searching student show checkbox in table
+                            education={RegisterUser.education}
+                            refer={RegisterUser.refer}
+                            highSchoolYear={RegisterUser.highSchoolYear}
+                            familiarity={RegisterUser.familiarity}
+                            province={RegisterUser.province}
+                            city={RegisterUser.city}
+                            createdAt={RegisterUser.createdAt}
+                            course={RegisterUser.course}
+                            index={
+                              searchingStudentRegister
+                                ? i + 1
+                                : itemCounterTable(page, pageSize, i)
+                            }
+                            decidedAt={RegisterUser.decidedAt}
+                            careerPathwayName={
+                              RegisterUser?.careerPathway?.name || "سایر"
+                            }
+                          />
+                        );
+                      }
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Paper>
         </Container>
       </Box>
       {!searchingStudentRegister && (

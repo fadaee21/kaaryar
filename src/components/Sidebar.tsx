@@ -24,7 +24,13 @@ import {
   Main,
 } from "../styles/sideBar";
 import { useAuth } from "../context/AuthProvider";
-import { ListItemText, Menu, MenuItem, Typography } from "@mui/material";
+import {
+  ClickAwayListener,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import style from "../styles/sideBar/searchChevron.module.css";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
@@ -49,7 +55,6 @@ export default function Sidebar({ listRoutes }: any) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
 
   const handleExit = () => {
     handleClose();
@@ -71,83 +76,84 @@ export default function Sidebar({ listRoutes }: any) {
   // };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box
-            // component={"img"}
-            // src={logoWithName}
-            // alt={"kaaryar logo"}
-            sx={{
-              mr: 5,
-              width: "8rem",
-              height: "auto",
-              ...(open && { display: "none" }),
-            }}
-          >
-            <LogoLight />
-          </Box>
-          <Typography variant="subtitle2">
-            سامانه مدیریت پروفایل کاریار
-          </Typography>
-          <Box sx={{ marginLeft: "auto" }}>
+    <ClickAwayListener mouseEvent={"onMouseDown"} onClickAway={handleDrawerClose}>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
             <Box
+              // component={"img"}
+              // src={logoWithName}
+              // alt={"kaaryar logo"}
               sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
+                mr: 5,
+                width: "8rem",
+                height: "auto",
+                ...(open && { display: "none" }),
               }}
             >
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <ExpandMoreIcon
-                  className={anchorEl ? style.rotate180 : style.rotate0}
-                />
-              </IconButton>
-              <Typography sx={{ mr: 1 }}>{auth.username}</Typography>
-              <AccountCircle />
+              <LogoLight />
             </Box>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem>
-                <ListItemIcon sx={{ marginRight: 1 }}>
-                  {roleUser === "admin" ? (
-                    <AdminPanelSettingsIcon />
-                  ) : (
-                    <Face6Icon />
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  secondary={`نقش شما:
+            <Typography variant="subtitle2">
+              سامانه مدیریت پروفایل کاریار
+            </Typography>
+            <Box sx={{ marginLeft: "auto" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                }}
+              >
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <ExpandMoreIcon
+                    className={anchorEl ? style.rotate180 : style.rotate0}
+                  />
+                </IconButton>
+                <Typography sx={{ mr: 1 }}>{auth.username}</Typography>
+                <AccountCircle />
+              </Box>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem>
+                  <ListItemIcon sx={{ marginRight: 1 }}>
+                    {roleUser === "admin" ? (
+                      <AdminPanelSettingsIcon />
+                    ) : (
+                      <Face6Icon />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText
+                    secondary={`نقش شما:
                   ${
                     roleUser === "admin"
                       ? "ادمین"
@@ -155,102 +161,109 @@ export default function Sidebar({ listRoutes }: any) {
                       ? "منتور"
                       : "مربی حل تمرین"
                   }`}
-                />
-              </MenuItem>
-              {/* <MenuItem onClick={handleNavigateProfilePage}>
+                  />
+                </MenuItem>
+                {/* <MenuItem onClick={handleNavigateProfilePage}>
                 <ListItemIcon sx={{ marginRight: 1 }}>
                   {<AccountCircle />}
                 </ListItemIcon>
                 <ListItemText secondary="پروفایل من" />
               </MenuItem> */}
-              <Divider variant="middle" />
-              <MenuItem onClick={handleExit}>
-                <ListItemIcon sx={{ mr: 1 }}>{<LogoutIcon />}</ListItemIcon>
-                <ListItemText secondary="خروج" />
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
+                <Divider variant="middle" />
+                <MenuItem onClick={handleExit}>
+                  <ListItemIcon sx={{ mr: 1 }}>{<LogoutIcon />}</ListItemIcon>
+                  <ListItemText secondary="خروج" />
+                </MenuItem>
+              </Menu>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {listRoutes
-            .filter(
-              (route: any) =>
-                route.showInNav === true && route.role === roleUser
-            )
-            .map((route: any) => {
-              return (
-                <ListItem key={route.key} disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      navigate(route.path);
-                      handleDrawerClose();
-                      setActiveKey(route.key);
-                    }}
-                    sx={{ p: 0.5 }}
-                  >
-                    {activeKey === route.key ? (
-                      <Box
-                        sx={{
-                          backgroundColor: "#f5f5f5",
-                          borderRadius: 2,
-                          padding: 0.5,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "100%",
-                        }}
-                      >
-                        <ListItemIcon>{route.icon}</ListItemIcon>
-                        <ListTextFont sx={{ my: 0.25 }} primary={route.name} />
-                      </Box>
-                    ) : (
-                      <Box
-                        sx={{
-                          borderRadius: 5,
-                          padding: 0,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "100%",
-                        }}
-                      >
-                        <ListItemIcon>{route.icon}</ListItemIcon>
-                        <ListTextFont primary={route.name} sx={{ my: 0.25 }} />
-                      </Box>
-                    )}
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-        </List>
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
-    </Box>
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "ltr" ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {listRoutes
+              .filter(
+                (route: any) =>
+                  route.showInNav === true && route.role === roleUser
+              )
+              .map((route: any) => {
+                return (
+                  <ListItem key={route.key} disablePadding>
+                    <ListItemButton
+                      onClick={() => {
+                        navigate(route.path);
+                        handleDrawerClose();
+                        setActiveKey(route.key);
+                      }}
+                      sx={{ p: 0.5 }}
+                    >
+                      {activeKey === route.key ? (
+                        <Box
+                          sx={{
+                            backgroundColor: "#f5f5f5",
+                            borderRadius: 2,
+                            padding: 0.5,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "100%",
+                          }}
+                        >
+                          <ListItemIcon>{route.icon}</ListItemIcon>
+                          <ListTextFont
+                            sx={{ my: 0.25 }}
+                            primary={route.name}
+                          />
+                        </Box>
+                      ) : (
+                        <Box
+                          sx={{
+                            borderRadius: 5,
+                            padding: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "100%",
+                          }}
+                        >
+                          <ListItemIcon>{route.icon}</ListItemIcon>
+                          <ListTextFont
+                            primary={route.name}
+                            sx={{ my: 0.25 }}
+                          />
+                        </Box>
+                      )}
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+          </List>
+        </Drawer>
+        <Main open={open}>
+          <DrawerHeader />
+        </Main>
+      </Box>
+    </ClickAwayListener>
   );
 }

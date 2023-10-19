@@ -55,6 +55,13 @@ let theme = createTheme({
         disableRipple: true, // No more ripple
       },
     },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          zIndex: 0, position:"relative"
+        },
+      },
+    }
   },
 });
 

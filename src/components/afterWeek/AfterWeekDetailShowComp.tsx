@@ -47,6 +47,15 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
     const navigateToEdit = () => {
       navigate("edit");
     };
+    const resendApproveEmail = () => {
+      if (handleOpenAlert) {
+        if (student?.afterWeekChecked) {
+          handleOpenAlert("approve");
+        } else {
+          handleOpenAlert("disApprove");
+        }
+      }
+    };
 
     return (
       <ButtonGroup
@@ -58,9 +67,10 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
           display: typeComp === "afterWeek" ? "show" : "none",
         }}
       >
-        <Button disabled={isDisabledEdit} onClick={navigateToEdit}>
-          ویرایش
+        <Button disabled={!isDisabledEdit} onClick={resendApproveEmail}>
+          ارسال مجدد ایمیل
         </Button>
+        <Button onClick={navigateToEdit}>ویرایش</Button>
         <Button
           variant="contained"
           onClick={() => handleOpenAlert?.("approve")}

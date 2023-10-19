@@ -54,7 +54,7 @@ const Volunteer = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> فهرست پروفایل داوطلبان</Typography>
+            <Typography variant="h4"> داوطلبان کاریار</Typography>
           </Box>
           <AccordionStyled expanded={chevronDir}>
             <Box

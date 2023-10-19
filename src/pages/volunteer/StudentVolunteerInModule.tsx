@@ -19,14 +19,14 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import TableHeader from "../../components/table/TableHeader";
 import { volunteerStudentTableHeader } from "../../components/table/helper-header";
 import StudentVolunteerRowComp from "../../components/volunteer/VolunteerDetailComp/student-volunteer/StudentVolunteerRowComp";
-import { useAuth } from "../../context/AuthProvider";
+// import { useAuth } from "../../context/AuthProvider";
 const StudentVolunteerInModule = () => {
   const { username, moduleId } = useParams();
 
-  const {
-    adminVisibility,
-    auth: { username: loggerUserName },
-  } = useAuth();
+  // const {
+  //   adminVisibility,
+  //   auth: { username: loggerUserName },
+  // } = useAuth();
   const navigate = useNavigate();
   const {
     data: dataCall,
@@ -42,7 +42,7 @@ const StudentVolunteerInModule = () => {
     return <Navigate to="/" replace />;
   }
 
-  const whoCanSeeCommentField = adminVisibility || username === loggerUserName;
+  // const whoCanSeeCommentField = adminVisibility || username === loggerUserName;
   const modules =
     moduleId && dataCall
       ? dataCall.modules.find((i) => i.moduleId === parseInt(moduleId))
@@ -50,7 +50,7 @@ const StudentVolunteerInModule = () => {
   const categoryName = modules?.module.category.name;
   const moduleName = modules?.module.name;
   const teachingStatus = modules?.module.teachingStatus;
-
+  // TODO: waiting for finalProjectGrade and finalAssessment from API
   return (
     <Container maxWidth="xl">
       <header>
@@ -73,9 +73,10 @@ const StudentVolunteerInModule = () => {
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
           <TableHeader
             headerItems={
-              whoCanSeeCommentField
-                ? volunteerStudentTableHeader
-                : volunteerStudentTableHeader.slice(0, -1)
+              volunteerStudentTableHeader
+              // whoCanSeeCommentField
+              // ? volunteerStudentTableHeader
+              // : volunteerStudentTableHeader.slice(0, -1)
             }
           />
 
@@ -115,7 +116,7 @@ const StudentVolunteerInModule = () => {
                   studentFullName={firstName + " " + family}
                   teachingStatus={teachingStatus}
                   moduleName={moduleName}
-                  whoCanSeeCommentField={whoCanSeeCommentField}
+                  // whoCanSeeCommentField={whoCanSeeCommentField}
                 />
               );
             })}

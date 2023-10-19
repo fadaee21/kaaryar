@@ -31,6 +31,8 @@ import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 const pageSize = 20;
+const heightOfTable = 500;
+const loadingBoxHeight = heightOfTable - 160;
 const examFormCount = "/status/form/count";
 const SkillSeeker = () => {
   const [page, setPage] = useState(1);
@@ -43,9 +45,7 @@ const SkillSeeker = () => {
     onSuccess: () => window.scrollTo(0, 0),
   });
 
-  if (isLoading) {
-    return <LoadingProgress />;
-  }
+
 
   if (error) {
     toast.error(handleError(error));
@@ -55,7 +55,7 @@ const SkillSeeker = () => {
   }
 
   return (
-    <Box sx={{ m: 2 }}>
+    <>
       <Box component={"article"}>
         <Container maxWidth="xl">
           <Box
@@ -133,58 +133,69 @@ const SkillSeeker = () => {
               </Box>
             </AccordionDetails>
           </AccordionStyled>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={afterTableSkillSeeker} />
-              {/*//! while searching show the search content */}
-              {!searchingStudentSeeker && (
-                <TableBody>
-                  {data?.map((seekerStudent: SeekerStudent, i: number) => {
-                    const {
-                      id,
-                      regForm,
-                      afterWeekChecked,
-                      beforeWeekChecked,
-                      regChecked,
-                      AfterWeekForm,
-                    } = seekerStudent;
-
-                    return (
-                      <TableBodyAll
-                        key={id}
-                        id={id}
-                        birthDate={regForm?.birthDate}
-                        family={regForm?.family}
-                        firstName={regForm?.firstName}
-                        registrationCode={regForm?.registrationCode}
-                        mobile={regForm?.mobile}
-                        email={regForm?.email}
-                        directNav="skill-seeker"
-                        province={regForm?.province}
-                        city={regForm?.city}
-                        studyField={regForm?.studyField}
-                        selectedField={regForm?.selectedField}
-                        // just send checked prop due to tableBodyAll need this prob,
-                        //in this case does't any effect
-                        //all state affair will handle in resultStatus
-                        checked={false}
-                        resultStatus={seekerStateFinder(
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            {isLoading ? (
+              <Box sx={{ m: 10, height: loadingBoxHeight }}>
+                <LoadingProgress usage="paper" size={40} />
+              </Box>
+            ) : (
+              <TableContainer sx={{ maxHeight: heightOfTable }}>
+                <Table
+                  stickyHeader
+                  aria-label="simple table"
+                  sx={{ tableLayout: "auto" }}
+                >
+                  <TableHeader headerItems={afterTableSkillSeeker} />
+                  {/*//! while searching show the search content */}
+                  {!searchingStudentSeeker && (
+                    <TableBody>
+                      {data?.map((seekerStudent: SeekerStudent, i: number) => {
+                        const {
+                          id,
+                          regForm,
                           afterWeekChecked,
                           beforeWeekChecked,
-                          regChecked
-                        )}
-                        index={itemCounterTable(page, pageSize, i)}
-                        finalResult={AfterWeekForm?.finalResult}
-                        finalField={AfterWeekForm?.finalField}
-                        course={regForm?.course}
-                        
-                      />
-                    );
-                  })}
-                </TableBody>
-              )}
-            </Table>
-          </TableContainer>
+                          regChecked,
+                          AfterWeekForm,
+                        } = seekerStudent;
+
+                        return (
+                          <TableBodyAll
+                            key={id}
+                            id={id}
+                            birthDate={regForm?.birthDate}
+                            family={regForm?.family}
+                            firstName={regForm?.firstName}
+                            registrationCode={regForm?.registrationCode}
+                            mobile={regForm?.mobile}
+                            email={regForm?.email}
+                            directNav="skill-seeker"
+                            province={regForm?.province}
+                            city={regForm?.city}
+                            studyField={regForm?.studyField}
+                            selectedField={regForm?.selectedField}
+                            // just send checked prop due to tableBodyAll need this prob,
+                            //in this case does't any effect
+                            //all state affair will handle in resultStatus
+                            checked={false}
+                            resultStatus={seekerStateFinder(
+                              afterWeekChecked,
+                              beforeWeekChecked,
+                              regChecked
+                            )}
+                            index={itemCounterTable(page, pageSize, i)}
+                            finalResult={AfterWeekForm?.finalResult}
+                            finalField={AfterWeekForm?.finalField}
+                            course={regForm?.course}
+                          />
+                        );
+                      })}
+                    </TableBody>
+                  )}
+                </Table>
+              </TableContainer>
+            )}
+          </Paper>
         </Container>
       </Box>
       {!searchingStudentSeeker && (
@@ -205,7 +216,7 @@ const SkillSeeker = () => {
           }}
         />
       )}
-    </Box>
+    </>
   );
 };
 

@@ -53,6 +53,7 @@ import GroupDetailStudentTable from "./pages/groups/GroupDetailStudentTable";
 import StudentVolunteerAll from "./pages/volunteer/StudentVolunteerAll";
 import StudentVolunteerInModule from "./pages/volunteer/StudentVolunteerInModule";
 import UserProfileName from "./pages/userProfileTaMentor/UserProfileName";
+import TableCommentsInModule from "./pages/comment/TableCommentsInModule";
 
 const ListRoutes = [
   //! ta________________________________
@@ -67,7 +68,7 @@ const ListRoutes = [
   },
   {
     path: "ta/student",
-    name: "فهرست مهارت آموزان",
+    name: "مهارت‌آموزان من",
     // icon: <PeopleIcon />,
     component: StudentAssignee,
     showInNav: true,
@@ -134,7 +135,7 @@ const ListRoutes = [
   },
   {
     path: "ta/volunteer",
-    name: "فهرست پروفایل داوطلبان",
+    name: "داوطلبان کاریار",
     // icon:<></>,
     component: VolunteerTable,
     showInNav: true,
@@ -196,6 +197,15 @@ const ListRoutes = [
     role: "ta",
     key: "ta12",
   },
+  {
+    path: "ta/student/:module_id/:student_id",
+    name: "",
+    // icon: <CommentIcon />,
+    component: TableCommentsInModule,
+    showInNav: false,
+    role: "ta",
+    key: "ta13",
+  },
 
   // mentor____________________________________________
   {
@@ -209,7 +219,7 @@ const ListRoutes = [
   },
   {
     path: "mentor/student",
-    name: "فهرست مهارت آموزان",
+    name: "مهارت‌آموزان من",
     // icon: <PeopleIcon />,
     component: StudentAssignee,
     showInNav: true,
@@ -268,7 +278,7 @@ const ListRoutes = [
   },
   {
     path: "mentor/volunteer",
-    name: "فهرست پروفایل داوطلبان",
+    name: "داوطلبان کاریار",
     // icon:<></>,
     component: VolunteerTable,
     showInNav: true,
@@ -338,6 +348,15 @@ const ListRoutes = [
     showInNav: true,
     role: "mentor",
     key: "mentor12",
+  },
+  {
+    path: "mentor/student/:module_id/:student_id",
+    name: "",
+    // icon: <CommentIcon />,
+    component: TableCommentsInModule,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor13",
   },
   //! admin__________________________________________
   {
@@ -501,7 +520,7 @@ const ListRoutes = [
   },
   {
     path: "admin/volunteer",
-    name: "فهرست پروفایل داوطلبان",
+    name: "داوطلبان کاریار",
     // icon:<></>,
     component: VolunteerTable,
     showInNav: true,

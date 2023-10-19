@@ -492,7 +492,7 @@ const SearchAll: ({
         <JalaliDatePicker
           setSessionDate={setDecidedAtTo}
           sessionDate={decidedAtTo}
-          label="تا (تاریخ ارسال فرم)"
+          label="تا (تاریخ تأیید/رد)"
           usageType="searching"
         />
       </Grid>

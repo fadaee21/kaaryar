@@ -1,6 +1,7 @@
 import React from "react";
-import { Grid, List} from "@mui/material";
+import { Grid, List } from "@mui/material";
 import {
+  CharityOptions,
   acquaintanceOptions,
   eduLevelOptions,
   highSchoolOptions,
@@ -18,13 +19,28 @@ interface RegStudent {
   student: RegistrationForm | null;
   handleChange: (e: any) => void;
 }
+export interface CHARITY_RESPONSE {
+  value: string;
+  id: number;
+}
+const CHARITY = "/reg/wp/charity-orgs/values/all";
 const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   student,
   handleChange,
 }) => {
-  const { data, isLoading } = useSWR<RelatedPath[]>(RELATED_PATH);
+  const { data: careerPathwayData, isLoading } =
+    useSWR<RelatedPath[]>(RELATED_PATH);
+  const { data: charityData, isLoading: charityLoading } =
+    useSWR<CHARITY_RESPONSE[]>(CHARITY);
+
+  const referCondition =
+    student?.familiarity?.trim() === "معرف" ||
+    student?.familiarity?.trim() === "other";
+  const CharitableCondition =
+    student?.familiarity?.trim() === "موسسات نیکوکاری";
+
   return (
-    <LayoutReg title="فرم ثبت اطلاعات اولیه" >
+    <LayoutReg title="فرم ثبت اطلاعات اولیه">
       <Grid container>
         <Grid item xs={12} md={6}>
           <List>
@@ -71,13 +87,28 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               value={student?.familiarity?.trim() || ""}
               identifier="familiarity"
             />
-
-            <EditString
-              placeholder="نام معرف یا موسسه"
-              handleChange={handleChange}
-              value={student?.refer || ""}
-              identifier="refer"
-            />
+            {referCondition && (
+              <EditString
+                placeholder="نام معرف یا موسسه"
+                handleChange={handleChange}
+                value={student?.refer || ""}
+                identifier="refer"
+              />
+            )}
+            {CharitableCondition && !!charityData && (
+              <EditingSelective
+                // options={CharityOptions}
+                value={student?.refer || ""}
+                disabled={charityLoading && !!charityData}
+                options={charityData?.map((i) => ({
+                  label: i.value,
+                  value: i.id,
+                }))}
+                placeholder="نام موسسه خیریه"
+                handleChange={handleChange}
+                identifier="refer"
+              />
+            )}
 
             <EditString
               placeholder="سال تولد"
@@ -135,8 +166,11 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             />
 
             <EditingSelective
-              disabled={isLoading && !!data}
-              options={data?.map((i) => ({ label: i.name, value: i.id }))}
+              disabled={isLoading && !!careerPathwayData}
+              options={careerPathwayData?.map((i) => ({
+                label: i.name,
+                value: i.id,
+              }))}
               placeholder="رشته انتخابی در کاریار"
               handleChange={handleChange}
               value={student?.careerPathwayId || ""}

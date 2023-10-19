@@ -68,7 +68,7 @@ const useInitialQuery = () => {
     () => (data: IData[], searchParamsVal: string | number | boolean) => {
       // console.log("hoooook:", { data }, { searchParamsVal });
       const findObjectQuery = data.find(
-        (g: any) => g.id.toString() === searchParamsVal
+        (g: any) => g.userId.toString() === searchParamsVal
       );
       const transformObject = (inputObject: IData | undefined) => ({
         id: inputObject?.id,

@@ -52,6 +52,15 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
     const navigateToEdit = () => {
       navigate("edit");
     };
+    const resendApproveEmail = () => {
+      if (handleOpenAlert) {
+        if (student?.acceptWeekChecked) {
+          handleOpenAlert("approve");
+        } else {
+          handleOpenAlert("disApprove");
+        }
+      }
+    };
 
     return (
       <ButtonGroup
@@ -62,16 +71,21 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
         sx={{
           display: typeComp === "beforeWeek" ? "show" : "none",
         }}
-        disabled={isDisabled}
+        
       >
-        <Button onClick={navigateToEdit}>ویرایش</Button>
+        <Button disabled={!isDisabled} onClick={resendApproveEmail}>
+          ارسال مجدد ایمیل
+        </Button>
+        <Button disabled={isDisabled} onClick={navigateToEdit}>ویرایش</Button>
         <Button
+        disabled={isDisabled}
           variant="contained"
           onClick={() => handleOpenAlert?.("approve")}
         >
           تایید کردن
         </Button>
         <Button
+        disabled={isDisabled}
           variant="contained"
           onClick={() => handleOpenAlert?.("disApprove")}
         >

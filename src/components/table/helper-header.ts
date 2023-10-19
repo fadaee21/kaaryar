@@ -10,8 +10,8 @@ export const registerTableHeader = [
   "سال دبیرستان",
   "استان",
   "شهر",
-  "نحوه آشنایی با کاریار",
   "نام معرف یا موسسه",
+  "نحوه آشنایی با کاریار",
   "رشته انتخابی",
   "تاریخ ارسال فرم",
   "تاریخ تأیید/رد ",
@@ -68,20 +68,19 @@ export const assigneeStudentTableHeader = [
   "",
   "",
   "نام و نام خانوادگی",
-  "نام کاربری",
   "گروه",
   "استان",
   "شهر",
   "معرف",
   "مسیر آموزشی",
-  " دوره کنونی",
-  "مربی حل تمرین",
+  "دوره‌ای که شما منتسب به این مهارت‌آموز بوده‌اید/هستید",
+  "وضعیت دوره",
+  "حل تمرین",
   "منتور",
-  "وضعیت آموزش",
-  "قدم آتی آموزش",
-  "ارجاع به واحد مالی",
-  "ارزیابی کاریار",
-  // "عملیات",
+  "نمره نهایی",
+  "ارزیابی نهایی",
+  "نظرات",
+
 ];
 
 export const adminStudentTableHeader: RowHeaderStudent[] = [
@@ -93,8 +92,10 @@ export const adminStudentTableHeader: RowHeaderStudent[] = [
   { id: 6, label: "استان", minWidth: 100, align: "center" },
   { id: 7, label: "شهر", minWidth: 100, align: "center" },
   { id: 8, label: "معرف", minWidth: 100, align: "center" },
+  { id: 80, label: "نحوه آشنایی", minWidth: 100, align: "center" },
   { id: 9, label: "مسیر آموزشی", minWidth: 120, align: "center" },
-  { id: 10, label: " دوره کنونی", minWidth: 100, align: "center" },
+  { id: 10, label: " آخرین دوره گذرانده شده", minWidth: 100, align: "center" },
+  // { id: 10, label: " دوره کنونی", minWidth: 100, align: "center" },
   { id: 11, label: "مربی حل تمرین", minWidth: 120, align: "center" },
   { id: 12, label: "منتور", minWidth: 100, align: "center" },
   { id: 13, label: "وضعیت آموزش", minWidth: 200, align: "center" },
@@ -138,7 +139,7 @@ export const moduleVolunteerTableHeader = [
   "وضعیت دوره",
   "مدرس(ها)",
   "مهارت‌آموزان",
-  "نظرات ",
+  // "نظرات ",
 ];
 export const volunteerStudentTableHeader = [
   "",
@@ -154,7 +155,7 @@ export const volunteerStudentTableHeader = [
   "منتور",
   "نمره نهایی",
   "ارزیابی نهایی",
-  "نظرات ",
+  // "نظرات ",
 ];
 
 export const graduateTableHeader = [
@@ -177,6 +178,8 @@ export const commentsTableHeader = [
   "نظر دهنده",
   "نقش نظر دهنده",
   "دوره آموزشی",
+  "مشکل قابل توجه",
+  "حضور و غیاب",
   "عملیات",
 ];
 

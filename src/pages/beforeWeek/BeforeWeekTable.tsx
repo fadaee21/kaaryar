@@ -34,6 +34,8 @@ import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { Navigate } from "react-router-dom";
 const pageSize = 20;
+const heightOfTable = 500;
+const loadingBoxHeight = heightOfTable - 160;
 const BeforeWeekTable = () => {
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
@@ -65,10 +67,6 @@ const BeforeWeekTable = () => {
     // eslint-disable-next-line
   }, [loadingMulti]);
 
-  if (loading || loadingMulti) {
-    return <LoadingProgress />;
-  }
-
   if (error) {
     toast.error(handleError(error));
     if (error.response.status === 401) {
@@ -77,7 +75,7 @@ const BeforeWeekTable = () => {
   }
 
   return (
-    <Box sx={{ m: 2 }}>
+    <>
       <Box component={"article"}>
         <Container maxWidth="xl">
           <Box
@@ -198,71 +196,83 @@ const BeforeWeekTable = () => {
 
           {/* //!for empty response of search return TableEmpty */}
           {searchingStudentBefore?.length === 0 && <TableEmpty />}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentBefore?.length !== 0 && (
-                <TableHeader headerItems={beforeTableHeader} />
-              )}
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            {loading || loadingMulti ? (
+              <Box sx={{ m: 10, height: loadingBoxHeight }}>
+                <LoadingProgress usage="paper" size={40} />
+              </Box>
+            ) : (
+              <TableContainer sx={{ maxHeight: heightOfTable }}>
+                <Table
+                  stickyHeader
+                  aria-label="simple table"
+                  sx={{ tableLayout: "auto" }}
+                >
+                  {/* //!for empty response of search don't return TableHeader */}
+                  {searchingStudentBefore?.length !== 0 && (
+                    <TableHeader headerItems={beforeTableHeader} />
+                  )}
 
-              <TableBody>
-                {(searchingStudentBefore ?? data)?.map(
-                  (examRegisterUser: BeforeWeekType, i: number) => {
-                    const {
-                      id,
-                      motivation,
-                      jobStandby,
-                      decidedAt,
-                      registrationForm: {
-                        province,
-                        city,
-                        family,
-                        firstName,
-                        // registrationCode,
-                        mobile,
-                        email,
-                        studyField,
-                        course,
-                        createdAt,
-                      },
-                      acceptWeekChecked,
-                      contCourseApproach,
-                    } = examRegisterUser;
+                  <TableBody>
+                    {(searchingStudentBefore ?? data)?.map(
+                      (examRegisterUser: BeforeWeekType, i: number) => {
+                        const {
+                          id,
+                          motivation,
+                          jobStandby,
+                          decidedAt,
+                          registrationForm: {
+                            province,
+                            city,
+                            family,
+                            firstName,
+                            // registrationCode,
+                            mobile,
+                            email,
+                            studyField,
+                            course,
+                            createdAt,
+                          },
+                          acceptWeekChecked,
+                          contCourseApproach,
+                        } = examRegisterUser;
 
-                    return (
-                      <TableBodyAll
-                        key={id}
-                        id={id}
-                        province={province}
-                        city={city}
-                        studyField={studyField}
-                        motivation={motivation}
-                        jobStandby={jobStandby}
-                        family={family}
-                        firstName={firstName}
-                        // registrationCode={registrationCode}
-                        mobile={mobile}
-                        email={email}
-                        directNav="before-week"
-                        contCourseApproach={contCourseApproach}
-                        checked={acceptWeekChecked}
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={!!searchingStudentBefore}
-                        index={
-                          searchingStudentBefore
-                            ? i + 1
-                            : itemCounterTable(page, pageSize, i)
-                        }
-                        course={course}
-                        createdAt={persianDate(createdAt)}
-                        decidedAt={persianDate(decidedAt)}
-                      />
-                    );
-                  }
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                        return (
+                          <TableBodyAll
+                            key={id}
+                            id={id}
+                            province={province}
+                            city={city}
+                            studyField={studyField}
+                            motivation={motivation}
+                            jobStandby={jobStandby}
+                            family={family}
+                            firstName={firstName}
+                            // registrationCode={registrationCode}
+                            mobile={mobile}
+                            email={email}
+                            directNav="before-week"
+                            contCourseApproach={contCourseApproach}
+                            checked={acceptWeekChecked}
+                            handleCheckBox={handleCheckBox}
+                            checkBoxDisplay={!!searchingStudentBefore}
+                            index={
+                              searchingStudentBefore
+                                ? i + 1
+                                : itemCounterTable(page, pageSize, i)
+                            }
+                            course={course}
+                            createdAt={persianDate(createdAt)}
+                            decidedAt={persianDate(decidedAt)}
+                          />
+                        );
+                      }
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Paper>
         </Container>
       </Box>
       {!searchingStudentBefore && (
@@ -283,7 +293,7 @@ const BeforeWeekTable = () => {
           }}
         />
       )}
-    </Box>
+    </>
   );
 };
 
