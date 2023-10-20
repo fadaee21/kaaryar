@@ -16,12 +16,20 @@ const SearchSelect = ({
 }: SearchType) => {
   return (
     <Select
+      isClearable
       value={state ? { label: state, value: state } : null}
       maxMenuHeight={150}
       id={`select-${placeholder.substring(0, 2)}`}
       options={options}
       placeholder={placeholder}
-      onChange={(e: any) => setState(e.value)}
+      // onChange={(e: any) => setState(e.value)}
+      onChange={(selectedOption) => {
+        if (selectedOption === null) {
+          setState(null);
+        } else {
+          setState(selectedOption.value);
+        }
+      }}
       styles={{
         control: (baseStyles) => ({
           ...baseStyles,
@@ -39,6 +47,7 @@ export const EditBooleanSearch = memo(
   ({ placeholder, handleChange, value, options }: any) => {
     const content = (
       <Select
+        isClearable
         value={value}
         onChange={handleChange}
         options={options}

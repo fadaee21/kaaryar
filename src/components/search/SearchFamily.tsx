@@ -47,12 +47,19 @@ const SearchFamily = ({
     <>
       {searchPage === "reg" && (
         <AsyncSelect
+          isClearable
           value={outputFamily ? { family: outputFamily } : null}
           // defaultOptions={true}
           getOptionLabel={(e: any) => e.family}
           getOptionValue={(e: any) => e.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFamily(e.family)}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.family);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"
@@ -70,6 +77,7 @@ const SearchFamily = ({
       )}
       {searchPage === "beforeWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFamily ? { registrationForm: { family: outputFamily } } : null
           }
@@ -77,7 +85,13 @@ const SearchFamily = ({
           getOptionLabel={(e: any) => e.registrationForm.family}
           getOptionValue={(e: any) => e.registrationForm.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFamily(e.registrationForm.family)}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.registrationForm.family);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"
@@ -95,6 +109,7 @@ const SearchFamily = ({
       )}
       {searchPage === "afterWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFamily
               ? {
@@ -108,9 +123,18 @@ const SearchFamily = ({
           getOptionLabel={(e: any) => e.beforeWeekForm.registrationForm.family}
           getOptionValue={(e: any) => e.beforeWeekForm.registrationForm.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) =>
-            setOutputFamily(e.beforeWeekForm.registrationForm.family)
-          }
+          // onChange={(e: any) =>
+          //   setOutputFamily(e.beforeWeekForm.registrationForm.family)
+          // }
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(
+                selectedOption.beforeWeekForm.registrationForm.family
+              );
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"
@@ -128,12 +152,19 @@ const SearchFamily = ({
       )}
       {searchPage === "moodle" && (
         <AsyncSelect
+          isClearable
           value={outputFamily ? { family: outputFamily } : null}
           // defaultOptions={true}
           getOptionLabel={(e: any) => e.family}
           getOptionValue={(e: any) => e.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFamily(e.family)}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.family);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"

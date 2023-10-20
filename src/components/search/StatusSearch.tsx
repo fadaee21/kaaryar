@@ -17,9 +17,16 @@ const StatusSearch = ({
 }: Prop) => {
   return (
     <Select
+      isClearable
       value={state ? statusOptions.find((i) => i.value === state) : null}
       options={statusOptions}
-      onChange={(selectedValue: any) => setState(selectedValue.value)}
+      onChange={(selectedOption) => {
+        if (selectedOption === null) {
+          setState(null);
+        } else {
+          setState(selectedOption.value);
+        }
+      }}
       placeholder={placeholder}
       styles={{
         control: (baseStyles) => ({

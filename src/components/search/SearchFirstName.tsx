@@ -3,7 +3,7 @@ import { getData } from "../../api/axios";
 import { memo } from "react";
 
 const responseQuantity = "8";
- const SearchFirstName = ({
+const SearchFirstName = ({
   setOutputFirstName,
   outputFirstName,
   searchPage,
@@ -45,12 +45,18 @@ const responseQuantity = "8";
     <>
       {searchPage === "reg" && (
         <AsyncSelect
+          isClearable
           value={outputFirstName ? { firstName: outputFirstName } : null}
           // defaultOptions={true}
-          getOptionLabel={(e: any) => e.firstName}
-          getOptionValue={(e: any) => e.firstName}
-          // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFirstName(e.firstName)}
+          getOptionLabel={(e) => e.firstName}
+          getOptionValue={(e) => e.firstName}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(selectedOption.firstName);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام"
@@ -68,18 +74,23 @@ const responseQuantity = "8";
       )}
       {searchPage === "beforeWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFirstName
               ? { registrationForm: { firstName: outputFirstName } }
               : null
           }
           // defaultOptions={true}
-          getOptionLabel={(e: any) => e.registrationForm.firstName}
-          getOptionValue={(e: any) => e.registrationForm.firstName}
+          getOptionLabel={(e) => e.registrationForm.firstName}
+          getOptionValue={(e) => e.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) =>
-            setOutputFirstName(e.registrationForm.firstName)
-          }
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(selectedOption.registrationForm.firstName);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام"
@@ -97,6 +108,7 @@ const responseQuantity = "8";
       )}
       {searchPage === "afterWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFirstName
               ? {
@@ -110,8 +122,14 @@ const responseQuantity = "8";
           getOptionLabel={(e) => e.beforeWeekForm.registrationForm.firstName}
           getOptionValue={(e) => e.beforeWeekForm.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e) => {
-            setOutputFirstName(e?.beforeWeekForm.registrationForm.firstName);
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(
+                selectedOption.beforeWeekForm.registrationForm.firstName
+              );
+            }
           }}
           cacheOptions
           loadOptions={promiseOptions}
@@ -130,12 +148,18 @@ const responseQuantity = "8";
       )}
       {searchPage === "moodle" && (
         <AsyncSelect
+          isClearable
           value={outputFirstName ? { firstName: outputFirstName } : null}
           // defaultOptions={true}
-          getOptionLabel={(e: any) => e.firstName}
-          getOptionValue={(e: any) => e.firstName}
-          // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFirstName(e.firstName)}
+          getOptionLabel={(e) => e.firstName}
+          getOptionValue={(e) => e.firstName}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(selectedOption.firstName);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام"

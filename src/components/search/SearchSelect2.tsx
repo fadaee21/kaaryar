@@ -31,6 +31,7 @@ const SearchSelect2 = ({
 
   return (
     <Select
+      isClearable
       value={state}
       maxMenuHeight={150}
       id={selectId}
