@@ -27,7 +27,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 // import { counterPagination } from "../../utils/counterPagination";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
@@ -42,7 +42,7 @@ import { handleError } from "../../utils/handleError";
 import { roleConverter } from "../../utils/roleConverter";
 
 const TableCommentsInModule = () => {
-  const [chevronDir, setChevronDir] = useState(false);
+  // const [chevronDir, setChevronDir] = useState(false);
   const [open, setOpen] = useState(false);
   const {
     auth: { roles },
@@ -52,7 +52,8 @@ const TableCommentsInModule = () => {
   const PATH = `/${role}/all-comments`;
   const { student_id, module_id } = useParams();
   const COMMENTS_IN_MODULE_URL = `/total/student/survey/all/${student_id}?${module_id}`;
-
+  const STUDENT_DETAIL_PATH = `/${role}/student/${student_id}`;
+  const STUDENT_MODULE_PATH = `/${role}/core-course/${module_id}`;
   const {
     data: commentsTable,
     mutate,
@@ -105,7 +106,7 @@ const TableCommentsInModule = () => {
           <Typography variant="h5">{`مهارت‌آموزان من > ${fullName} > نظرات`}</Typography>
         </Box>
 
-        <AccordionStyled expanded={chevronDir}>
+        {/* <AccordionStyled expanded={chevronDir}>
           <Box
             sx={{
               display: "flex",
@@ -130,7 +131,7 @@ const TableCommentsInModule = () => {
               }}
             ></Box>
           </AccordionDetails>
-        </AccordionStyled>
+        </AccordionStyled> */}
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -175,12 +176,12 @@ const TableCommentsInModule = () => {
                       sx={{
                         width: "15%",
                         verticalAlign: "center",
-                        cursor: "pointer",
                       }}
-                      onClick={() => navigate(`${id}`)}
                     >
                       <Typography variant="body1">
-                        {student.firstName + " " + student.family}
+                        <Link to={STUDENT_DETAIL_PATH}>
+                          {student.firstName + " " + student.family}
+                        </Link>
                       </Typography>
                     </StyledTableCell>
                     <StyledTableCell
@@ -205,7 +206,9 @@ const TableCommentsInModule = () => {
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">{module?.name}</Typography>
+                      <Typography variant="body1">
+                        <Link to={STUDENT_MODULE_PATH}>{module?.name}</Link>
+                      </Typography>
                     </StyledTableCell>
                     <StyledTableCell
                       align="center"

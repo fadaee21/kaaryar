@@ -1,4 +1,5 @@
 // import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../../styles/table";
 import { Typography } from "@mui/material";
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
   finalAssessmentValue: string | undefined;
   teachingStatus: string | undefined;
   moduleName: string | undefined;
+  role: string;
+  id: number;
   // whoCanSeeCommentField: boolean;
 }
 const StudentVolunteerRowComp = ({
@@ -31,8 +34,10 @@ const StudentVolunteerRowComp = ({
   studentFullName,
   teachingStatus,
   moduleName,
-  // whoCanSeeCommentField,
-}: Props) => {
+  id,
+  role,
+}: // whoCanSeeCommentField,
+Props) => {
   // const navigate = useNavigate();
   return (
     <StyledTableRow
@@ -44,7 +49,9 @@ const StudentVolunteerRowComp = ({
         <Typography variant="body2">{counter}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{studentFullName}</Typography>
+        <Typography variant="body2">
+          <Link to={`/${role}/student/${id}`}>{studentFullName}</Link>
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{categoryName ?? "-"}</Typography>

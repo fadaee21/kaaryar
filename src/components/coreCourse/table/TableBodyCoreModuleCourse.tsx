@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import { ShortCoreModule } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
@@ -11,7 +11,6 @@ interface Prop {
 }
 
 const TableBodyCoreModuleCourse = ({ moduleAll, counter }: Prop) => {
-  const navigate = useNavigate();
   const {
     id,
     name,
@@ -28,19 +27,21 @@ const TableBodyCoreModuleCourse = ({ moduleAll, counter }: Prop) => {
   } = moduleAll;
   return (
     <StyledTableRow
-      onClick={() => {
-        navigate(`/admin/core-course/${id}`);
-      }}
+      // onClick={() => {
+      //   navigate(`/admin/core-course/${id}`);
+      // }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
-        cursor: "pointer",
+        // cursor: "pointer",
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{counter + 1}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{name}</Typography>
+        <Typography variant="body2">
+          <Link to={`${id}`}>{name}</Link>
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">

@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import { ShortGroup } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
@@ -9,7 +9,6 @@ interface Prop {
 }
 
 const TableBodyGroups = ({ groupAll }: Prop) => {
-  const navigate = useNavigate();
   const {
     groupCode,
     name,
@@ -23,19 +22,19 @@ const TableBodyGroups = ({ groupAll }: Prop) => {
 
   return (
     <StyledTableRow
-      onClick={() => {
-        navigate(`/admin/groups/${id}`);
-      }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
-        cursor: "pointer",
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+        {/* <Link to={`${id}`}> */}
         <Typography variant="body2">{groupCode}</Typography>
+        {/* </Link> */}
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{name}</Typography>
+        <Typography variant="body2">
+          <Link to={`${id}`}>{name}</Link>
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{persianDate(startDate)}</Typography>

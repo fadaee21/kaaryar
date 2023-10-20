@@ -1,6 +1,6 @@
 import { Avatar, Typography } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useGetImage from "../../hooks/request/useGetImage";
 import { useEffect } from "react";
 import { Picture } from "../../model";
@@ -25,8 +25,6 @@ const TableBodyVolunteer = ({
   picture,
   isActive,
 }: Props) => {
-  const navigate = useNavigate();
-
   const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   useEffect(() => {
     picture && getPicture(picture.file_hash);
@@ -58,14 +56,14 @@ const TableBodyVolunteer = ({
       </StyledTableCell>
       <StyledTableCell
         width={"40%"}
-        onClick={() => navigate(username)}
         align="center"
         sx={{
           verticalAlign: "center",
-          cursor: "pointer",
         }}
       >
-        <Typography variant="body2">{`${firstName} ${lastName}`}</Typography>
+        <Typography variant="body2">
+          <Link to={`${username}`}>{`${firstName} ${lastName}`}</Link>
+        </Typography>
       </StyledTableCell>
 
       <StyledTableCell

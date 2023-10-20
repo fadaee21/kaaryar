@@ -1,8 +1,7 @@
 import { Checkbox, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
-import ContextMenu from "../ContextMenu";
 
 const RegTableBodyAll = ({
   id,
@@ -91,9 +90,9 @@ const RegTableBodyAll = ({
         sx={{ verticalAlign: "center", cursor: "pointer" }}
         onClick={() => navigate(`${id}`)}
       >
-        <ContextMenu navigation={id}>
-          <Typography variant="body2">{firstName + " " + family}</Typography>
-        </ContextMenu>
+        <Typography variant="body2">
+          <Link to={`${id}`}>{firstName + " " + family}</Link>
+        </Typography>
       </StyledTableCell>
       <StyledTableCell
         align="center"

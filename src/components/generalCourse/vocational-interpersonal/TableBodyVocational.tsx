@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import { WorkshopShort } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
@@ -23,12 +23,8 @@ const TableBodyVocational = ({ vocational, counter }: Prop) => {
   } = vocational;
   return (
     <StyledTableRow
-      onClick={() => {
-        navigate(`/admin/general-course/${id}`);
-      }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
-        cursor: "pointer",
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
@@ -36,7 +32,9 @@ const TableBodyVocational = ({ vocational, counter }: Prop) => {
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{name}</Typography>
+        <Typography variant="body2">
+          <Link to={`${id}`}>{name}</Link>
+        </Typography>
       </StyledTableCell>
       {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{levelName}</Typography>

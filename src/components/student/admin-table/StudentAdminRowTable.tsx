@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import TablePic from "../../table/TablePic";
 import { itemCounterTable } from "../../../utils/itemCounterTable";
 import { FormEvent, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   CareerPathway,
   CurrentAssignedMentorTa,
@@ -26,7 +26,6 @@ import {
 import RowViewAssigning from "./RowViewAssigning";
 import RowEditAssigning from "./RowEditAssigning";
 import useSWR from "swr";
-import ContextMenu from "../../ContextMenu";
 // import LoadingProgress from "../../LoadingProgress";
 const PROFILE_VOLUNTEER = "/user/profile/all";
 interface Props {
@@ -143,13 +142,10 @@ const StudentAdminRowTable = ({
           verticalAlign: "center",
           cursor: "pointer",
         }}
-        onClick={() => navigate(`${id}`)}
       >
-        <ContextMenu navigation={id}>
-          <StyledTypographyAdmin variant="body1">
-            {firstName + " " + family}
-          </StyledTypographyAdmin>
-        </ContextMenu>
+        <StyledTypographyAdmin variant="body1">
+          <Link to={`${id}`}>{firstName + " " + family}</Link>
+        </StyledTypographyAdmin>
       </StyledTableCellAdmin>
       {/* "نام کاربری" */}
       <StyledTableCellAdmin align="center">

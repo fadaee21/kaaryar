@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import { useAuth } from "../../context/AuthProvider";
@@ -28,8 +28,7 @@ const StudentTableAssignee = () => {
   const { data, isLoading, error } = useSWR<AssigneeStudentsAll>(
     `/user/profile/username/${user_name}/students`
   );
-  const navigate = useNavigate();
-
+  const STUDENT_MODULE_PATH = `/${role}/core-course`;
   if (isLoading) {
     return <LoadingProgress />;
   }
@@ -107,9 +106,7 @@ const StudentTableAssignee = () => {
                         align="center"
                         sx={{
                           verticalAlign: "center",
-                          cursor: "pointer",
                         }}
-                        onClick={() => navigate(`${id}`)}
                       >
                         <Typography variant="body2">{i + 1}</Typography>
                       </StyledTableCell>
@@ -120,12 +117,10 @@ const StudentTableAssignee = () => {
                         align="center"
                         sx={{
                           verticalAlign: "center",
-                          cursor: "pointer",
                         }}
-                        onClick={() => navigate(`${id}`)}
                       >
                         <Typography variant="body1">
-                          {firstName + " " + family}
+                          <Link to={`${id}`}>{`${firstName} ${family}`}</Link>
                         </Typography>
                       </StyledTableCell>
 
@@ -188,7 +183,9 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2" textAlign={"center"}>
-                          {module?.name || "-"}
+                          <Link to={`${STUDENT_MODULE_PATH}/${module_id}`}>
+                            {module?.name || "-"}
+                          </Link>
                         </Typography>
                       </StyledTableCell>
 
@@ -259,9 +256,10 @@ const StudentTableAssignee = () => {
                           verticalAlign: "center",
                           cursor: "pointer",
                         }}
-                        onClick={() => navigate(`${module_id}/${id}`)}
                       >
-                        <Typography variant="body2">مشاهده</Typography>
+                        <Typography variant="body2">
+                          <Link to={`${module_id}/${id}`}>مشاهده</Link>
+                        </Typography>
                       </StyledTableCell>
                     </StyledTableRow>
                   );

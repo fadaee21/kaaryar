@@ -1,9 +1,8 @@
-import React from "react";
 import { ModuleVolunteerProfile } from "../../../../model";
 import { StyledTableCell, StyledTableRow } from "../../../../styles/table";
 import { Typography } from "@mui/material";
 import { convertArrToStr } from "../../../../utils/courseMethod";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../../context/AuthProvider";
 interface Props {
   counter: number;
@@ -13,8 +12,8 @@ interface Props {
 const TableBodyModuleVolunteer = ({
   counter,
   moduleVolunteer,
-  // whoCanSeeComments,
-}: Props) => {
+}: // whoCanSeeComments,
+Props) => {
   const { module, studentsCount, assignedRole } = moduleVolunteer;
   const {
     name,
@@ -25,7 +24,6 @@ const TableBodyModuleVolunteer = ({
     id,
     moduleType,
   } = module;
-  const navigate = useNavigate();
   const {
     auth: { roles },
   } = useAuth();
@@ -41,17 +39,18 @@ const TableBodyModuleVolunteer = ({
       </StyledTableCell>
       {/* نام دوره */}
       <StyledTableCell
-        onClick={() => {
-          navigate(
-            `/${roles[0]}/${
-              moduleType === "core" ? "core-course" : "general-course"
-            }/${id}`
-          );
-        }}
         align="center"
         sx={{ verticalAlign: "center", cursor: "pointer" }}
       >
-        <Typography variant="body2">{name}</Typography>
+        <Typography variant="body2">
+          <Link
+            to={`/${roles[0]}/${
+              moduleType === "core" ? "core-course" : "general-course"
+            }/${id}`}
+          >
+            {name}
+          </Link>
+        </Typography>
       </StyledTableCell>
       {/* نقش */}
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
@@ -75,11 +74,14 @@ const TableBodyModuleVolunteer = ({
       </StyledTableCell>
       {/* مهارت‌آموزان */}
       <StyledTableCell
-        onClick={() => navigate(`module-students/${id}`)}
         align="center"
         sx={{ verticalAlign: "center", cursor: "pointer" }}
       >
-        <Typography variant="body2">{` ${studentsCount} مهارت‌آموز`}</Typography>
+        <Typography variant="body2">
+          <Link to={`module-students/${id}`}>
+            {` ${studentsCount} مهارت‌آموز`}
+          </Link>
+        </Typography>
       </StyledTableCell>
       {/* نظرات  */}
       {/* {whoCanSeeComments && (

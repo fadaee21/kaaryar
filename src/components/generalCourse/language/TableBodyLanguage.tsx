@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "../../../styles/table";
 import { EnglishShort } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
@@ -8,7 +8,6 @@ interface Prop {
   counter: number;
 }
 const TableBodyLanguage = ({ englishCourse, counter }: Prop) => {
-  const navigate = useNavigate();
   const {
     id,
     name,
@@ -21,12 +20,8 @@ const TableBodyLanguage = ({ englishCourse, counter }: Prop) => {
   } = englishCourse;
   return (
     <StyledTableRow
-      onClick={() => {
-        navigate(`/admin/general-course/${id}`);
-      }}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
-        cursor: "pointer",
       }}
     >
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
@@ -34,7 +29,9 @@ const TableBodyLanguage = ({ englishCourse, counter }: Prop) => {
       </StyledTableCell>
 
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
-        <Typography variant="body2">{name}</Typography>
+        <Typography variant="body2">
+          <Link to={`${id}`}>{name}</Link>
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
         <Typography variant="body2">{teachingStatus}</Typography>
