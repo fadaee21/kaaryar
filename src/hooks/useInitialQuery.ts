@@ -49,9 +49,9 @@ interface IData {
 
 const useInitialQuery = () => {
   const initialQuery = useMemo(
-    () => (data: IData[], searchParamsVal: string | number | boolean) => {
+    () => (data: IData[]|undefined, searchParamsVal: string | number | boolean) => {
       console.log("hoooook:", { data }, { searchParamsVal });
-      const findObjectQuery = data.find(
+      const findObjectQuery = data?.find(
         (g: any) => g.id.toString() === searchParamsVal
       );
       const transformObject = (inputObject: IData | undefined) => ({

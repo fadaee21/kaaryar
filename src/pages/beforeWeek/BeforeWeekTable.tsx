@@ -32,20 +32,36 @@ import useSWR from "swr";
 import { persianDate } from "../../utils/persianDate";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 const pageSize = 20;
 const heightOfTable = 500;
 const loadingBoxHeight = heightOfTable - 160;
 const BeforeWeekTable = () => {
+  const [searchMode, setSearchMode] = useState(false);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  const [searchingStudentBefore, setSearchingStudentBefore] = useState<
-    BeforeWeekType[] | null
-  >(null);
+  let BEFORE_STUDENT;
+  BEFORE_STUDENT = `/exam/before/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
 
-  const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
+  let [searchParams] = useSearchParams();
+
+  const hasQueryParams = () => {
+    return !searchParams.keys().next().done;
+  };
+
+  useEffect(() => {
+    setChevronDir(hasQueryParams());
+    setSearchMode(hasQueryParams());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (hasQueryParams()) {
+    const searchLink =
+      "/exam/before/week/search/param?pageNum=1&pageSize=10000";
+    BEFORE_STUDENT = searchLink + `&${searchParams}`;
+  }
+
   const examFormCount = "/exam/before/week/form/count";
-
   const [, counterPage] = useCountPagination(examFormCount);
 
   const {
@@ -53,8 +69,8 @@ const BeforeWeekTable = () => {
     isLoading: loading,
     error,
     mutate,
-  } = useSWR(studentBeforeWeek, {
-    onSuccess: () => window.scrollTo(0, 0),
+  } = useSWR(BEFORE_STUDENT, {
+    revalidateOnMount: true,
   });
   const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
@@ -62,7 +78,6 @@ const BeforeWeekTable = () => {
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   console.log(ids);
   useEffect(() => {
-    setSearchingStudentBefore(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
@@ -135,45 +150,46 @@ const BeforeWeekTable = () => {
                   fileName={"Before Week Table"}
                   linkAll="/exam/before/week/form/all?pageNum=1&pageSize=100000"
                   useIn="before"
-                  searchData={searchingStudentBefore?.map((before) => {
-                    const {
-                      motivation,
-                      jobStandby,
-                      contCourseApproach,
-                      registrationForm: {
-                        province,
-                        city,
-                        family,
-                        firstName,
-                        registrationCode,
-                        mobile,
-                        email,
-                        course,
-                        createdAt,
-                      },
-                      acceptWeekChecked,
-                    } = before;
+                  searchData={[]}
+                  // searchData={data?.map((before) => {
+                  //   const {
+                  //     motivation,
+                  //     jobStandby,
+                  //     contCourseApproach,
+                  //     registrationForm: {
+                  //       province,
+                  //       city,
+                  //       family,
+                  //       firstName,
+                  //       registrationCode,
+                  //       mobile,
+                  //       email,
+                  //       course,
+                  //       createdAt,
+                  //     },
+                  //     acceptWeekChecked,
+                  //   } = before;
 
-                    return {
-                      وضعیت:
-                        acceptWeekChecked === true
-                          ? `تایید شده`
-                          : acceptWeekChecked === null
-                          ? `در انتظار تایید`
-                          : `رد شده`,
-                      "کد متقاضی": registrationCode,
-                      "نام و نام خانوادگی": firstName + " " + family,
-                      گروه: course,
-                      استان: province,
-                      شهر: city,
-                      "شماره همراه": mobile,
-                      ایمیل: email,
-                      "نمره آزمون": contCourseApproach,
-                      "آمادگی کار": jobStandby ? "بله" : "خیر",
-                      "انگیزه ورود": motivation,
-                      "تاریخ ارسال فرم": persianDate(createdAt),
-                    };
-                  })}
+                  //   return {
+                  //     وضعیت:
+                  //       acceptWeekChecked === true
+                  //         ? `تایید شده`
+                  //         : acceptWeekChecked === null
+                  //         ? `در انتظار تایید`
+                  //         : `رد شده`,
+                  //     "کد متقاضی": registrationCode,
+                  //     "نام و نام خانوادگی": firstName + " " + family,
+                  //     گروه: course,
+                  //     استان: province,
+                  //     شهر: city,
+                  //     "شماره همراه": mobile,
+                  //     ایمیل: email,
+                  //     "نمره آزمون": contCourseApproach,
+                  //     "آمادگی کار": jobStandby ? "بله" : "خیر",
+                  //     "انگیزه ورود": motivation,
+                  //     "تاریخ ارسال فرم": persianDate(createdAt),
+                  //   };
+                  // })}
                 />
               </Box>
             </Box>
@@ -186,16 +202,16 @@ const BeforeWeekTable = () => {
                 }}
               >
                 <SearchAll
-                  setSearchingStudentBefore={setSearchingStudentBefore}
                   searchPage="beforeWeek"
-                  chevronDir={chevronDir}
+                  loading={loading}
+                  setSearchMode={setSearchMode}
                 />
               </Box>
             </AccordionDetails>
           </AccordionStyled>
 
           {/* //!for empty response of search return TableEmpty */}
-          {searchingStudentBefore?.length === 0 && <TableEmpty />}
+          {data?.length === 0 && <TableEmpty />}
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             {loading || loadingMulti ? (
               <Box sx={{ m: 10, height: loadingBoxHeight }}>
@@ -209,65 +225,64 @@ const BeforeWeekTable = () => {
                   sx={{ tableLayout: "auto" }}
                 >
                   {/* //!for empty response of search don't return TableHeader */}
-                  {searchingStudentBefore?.length !== 0 && (
+                  {data?.length !== 0 && (
                     <TableHeader headerItems={beforeTableHeader} />
                   )}
 
                   <TableBody>
-                    {(searchingStudentBefore ?? data)?.map(
-                      (examRegisterUser: BeforeWeekType, i: number) => {
-                        const {
-                          id,
-                          motivation,
-                          jobStandby,
-                          decidedAt,
-                          registrationForm: {
-                            province,
-                            city,
-                            family,
-                            firstName,
-                            // registrationCode,
-                            mobile,
-                            email,
-                            studyField,
-                            course,
-                            createdAt,
-                          },
-                          acceptWeekChecked,
-                          contCourseApproach,
-                        } = examRegisterUser;
+                    {data.map((examRegisterUser: BeforeWeekType, i: number) => {
+                      const {
+                        id,
+                        motivation,
+                        jobStandby,
+                        decidedAt,
+                        registrationForm: {
+                          province,
+                          city,
+                          family,
+                          firstName,
+                          // registrationCode,
+                          mobile,
+                          email,
+                          studyField,
+                          course,
+                          createdAt,
+                        },
+                        acceptWeekChecked,
+                        contCourseApproach,
+                      } = examRegisterUser;
 
-                        return (
-                          <TableBodyAll
-                            key={id}
-                            id={id}
-                            province={province}
-                            city={city}
-                            studyField={studyField}
-                            motivation={motivation}
-                            jobStandby={jobStandby}
-                            family={family}
-                            firstName={firstName}
-                            // registrationCode={registrationCode}
-                            mobile={mobile}
-                            email={email}
-                            directNav="before-week"
-                            contCourseApproach={contCourseApproach}
-                            checked={acceptWeekChecked}
-                            handleCheckBox={handleCheckBox}
-                            checkBoxDisplay={!!searchingStudentBefore}
-                            index={
-                              searchingStudentBefore
-                                ? i + 1
-                                : itemCounterTable(page, pageSize, i)
-                            }
-                            course={course}
-                            createdAt={persianDate(createdAt)}
-                            decidedAt={persianDate(decidedAt)}
-                          />
-                        );
-                      }
-                    )}
+                      return (
+                        <TableBodyAll
+                          key={id}
+                          id={id}
+                          province={province}
+                          city={city}
+                          studyField={studyField}
+                          motivation={motivation}
+                          jobStandby={jobStandby}
+                          family={family}
+                          firstName={firstName}
+                          // registrationCode={registrationCode}
+                          mobile={mobile}
+                          email={email}
+                          directNav="before-week"
+                          contCourseApproach={contCourseApproach}
+                          checked={acceptWeekChecked}
+                          handleCheckBox={handleCheckBox}
+                          checkBoxDisplay={
+                            !!data &&
+                            searchParams.get("approvalStatus") === "pending"
+                          }
+                          index={
+                            data ? i + 1 : itemCounterTable(page, pageSize, i)
+                          }
+                          course={course}
+                          createdAt={persianDate(createdAt)}
+                          decidedAt={persianDate(decidedAt)}
+                        />
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -275,7 +290,7 @@ const BeforeWeekTable = () => {
           </Paper>
         </Container>
       </Box>
-      {!searchingStudentBefore && (
+      {!searchMode && (
         <Pagination
           sx={{
             display: "flex",

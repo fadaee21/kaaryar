@@ -1,6 +1,5 @@
 import { Button, Grid } from "@mui/material";
 import { memo, useEffect, useState } from "react";
-import { getData } from "../../api/axios";
 import SearchFirstName from "./SearchFirstName";
 import SearchFamily from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
@@ -8,7 +7,6 @@ import SearchSelect, { EditBooleanSearch } from "./SearchSelect";
 import SearchString from "./SearchString";
 import SearchIcon from "@mui/icons-material/Search";
 import { GreyButton } from "../../styles/Button";
-import useSWR from "swr";
 import {
   acquaintanceOptions,
   eduLevelOptions,
@@ -22,46 +20,19 @@ import {
 
 import { Group, OptionYesOrNo } from "../../model";
 import SearchSelect2 from "./SearchSelect2";
-import { toast } from "react-toastify";
-import { handleError } from "../../utils/handleError";
 import { motivationOpt } from "../beforeWeek/helper";
 import { JalaliDatePicker } from "../comment/JalaliDatePicker";
 import dayjs, { Dayjs } from "dayjs";
-import { RELATED_PATH, RelatedPath } from "../addNewCourseComp/CareerPathway";
+import { RelatedPath } from "../addNewCourseComp/CareerPathway";
+import { useSearchParams } from "react-router-dom";
+import useInitialQuery from "../../hooks/useInitialQuery";
 
 interface SearchAllType {
-  setSearchingStudentBefore?: any;
-  setSearchingStudentAfter?: any;
-  setSearchingStudentRegister?: any;
   searchPage: "beforeWeek" | "afterWeek" | "reg";
-  chevronDir: boolean;
-}
-interface ObjTypeSearch {
-  createdAtTo: string | undefined;
-  createdAtFrom: string | null;
-  decidedAtTo: string | undefined;
-  decidedAtFrom: string | null;
-  motivation: string | null;
-  firstName: string | undefined;
-  family: string | undefined;
-  refer: string | null;
-  highSchoolYear: string | null;
-  registrationCode: string | null;
-  city: string | null;
-  province: string | null;
-  mobile: string | null;
-  email: string | null;
-  education: string | null;
-  familiarity: string | null;
-  approvalStatus: string | null;
-  finalResult: string | null;
-  scholarshipStatus: string | null;
-  finalField: string | null;
-  contCourseApproach: string | null;
-  jobStandby: boolean | undefined;
-  cgpa: string | null;
-  groupID: number | undefined;
-  careerPathwayId: number | undefined;
+  loading: boolean;
+  groupData?: Group[];
+  selectedFieldOpt?: RelatedPath[] | undefined;
+  setSearchMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const beforeWeekSearch =
@@ -71,59 +42,183 @@ const afterWeekSearch =
 const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
 
 const SearchAll: ({
-  setSearchingStudentBefore,
-  setSearchingStudentAfter,
-  setSearchingStudentRegister,
   searchPage,
-  chevronDir,
+  groupData,
+  loading,
+  selectedFieldOpt,
+  setSearchMode,
 }: SearchAllType) => JSX.Element = ({
-  setSearchingStudentBefore,
-  setSearchingStudentAfter,
-  setSearchingStudentRegister,
   searchPage,
-  chevronDir,
+  groupData,
+  loading,
+  selectedFieldOpt,
+  setSearchMode,
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
-  const [outputFamily, setOutputFamily] = useState<string | null>(null);
-  const [referState, setReferState] = useState<string | null>(null);
-  const [highSchoolState, setHighSchoolState] = useState<string | null>(null);
-  const [registerCodeState, setRegisterCodeState] = useState<string | null>(
-    null
-  );
-  const [mobileState, setMobileState] = useState<string | null>(null);
-  const [emailState, setEmailState] = useState<string | null>(null);
-  const [provincesState, setProvincesState] = useState<string | null>(null);
-  const [cityState, setCityState] = useState<string | null>(null);
-  //status of items: there is 3 phases for searching - "pending" - "approved" - "rejected" , these all is available only for search, if you render the table, response can be _acceptWeekChecked: true|false|null_ don't mess it up
-  const [approvalStatus, setApprovalStatus] = useState<string | null>(null);
-  const [acquaintance, setAcquaintance] = useState<string | null>(null);
-  const [eduLevel, setEduLevel] = useState<string | null>(null);
-  const [finalResult, setFinalResult] = useState<string | null>(null);
-  const [scholar, setScholar] = useState<string | null>(null);
-  const [finalField, setFinalField] = useState<string | null>(null);
-  const [contCourseApproach, setContCourseApproach] = useState<string | null>(
-    null
-  );
-  const [motivation, setMotivation] = useState<string | null>(null);
-  const [jobStandby, setJobStandby] = useState<OptionYesOrNo | null>(null);
-  const [cgpa, setCgpa] = useState<string | null>(null);
+  const { initialQuery } = useInitialQuery();
+  let [searchParams, setSearchParams] = useSearchParams();
   const [disabledButton, setDisabledButton] = useState(false);
   const [searchLink, setSearchLink] = useState("");
-  const [group, setGroup] = useState<Group | null>(null);
-  const [createdAtFrom, setCreatedAtFrom] = useState<Date | Dayjs | null>(null);
-  const [createdAtTo, setCreatedAtTo] = useState<Date | Dayjs | null>(null);
-  const [decidedAtFrom, setDecidedAtFrom] = useState<Date | Dayjs | null>(null);
-  const [decidedAtTo, setDecidedAtTo] = useState<Date | Dayjs | null>(null);
-  const [careerPathwayId, setCareerPathwayId] = useState<any>(null);
-  const { data: groupData } = useSWR<Group[]>(
-    chevronDir
-      ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
+
+  //--
+  const [outputFirstName, setOutputFirstName] = useState<string | null>(
+    searchParams.get("firstName")
+  );
+  //--
+  const [outputFamily, setOutputFamily] = useState<string | null>(
+    searchParams.get("family")
+  );
+  //--
+  const [referState, setReferState] = useState<string | null>(
+    searchParams.get("refer")
+  );
+  //--
+  const highSchoolStateParams = searchParams.get("highSchoolYear");
+  const highSchoolStateOption = highSchoolOptions2.find(
+    (i) => i.value === highSchoolStateParams
+  );
+  const [highSchoolState, setHighSchoolState] = useState<string | null>(
+    highSchoolStateParams && highSchoolStateOption
+      ? highSchoolStateOption.value
       : null
   );
-  const { data: selectedFieldOpt } = useSWR<RelatedPath[]>(RELATED_PATH);
+  //--
+  const [registerCodeState, setRegisterCodeState] = useState<string | null>(
+    searchParams.get("registrationCode")
+  );
+  //--
+  const [mobileState, setMobileState] = useState<string | null>(
+    searchParams.get("mobile")
+  );
+  //--
+  const [emailState, setEmailState] = useState<string | null>(
+    searchParams.get("email")
+  );
+  //--
+  const [provincesState, setProvincesState] = useState<string | null>(
+    searchParams.get("province")
+  );
+  //--
+  const [cityState, setCityState] = useState<string | null>(
+    searchParams.get("city")
+  );
+  //--
+  //status of items: there is 3 phases for searching - "pending" - "approved" - "rejected" , these all is available only for search, if you render the table, response can be _acceptWeekChecked: true|false|null_ don't mess it up
+  const approvalStatusParams = searchParams.get("approvalStatus");
+  const statusOption = statusOptions.find(
+    (i) => i.value === approvalStatusParams
+  );
+  const [approvalStatus, setApprovalStatus] = useState<string | null>(
+    approvalStatusParams && statusOption ? statusOption.value : null
+  );
+  //--
+  const acquaintanceParams = searchParams.get("familiarity");
+  const acquaintanceOption = acquaintanceOptions.find(
+    (i) => i.value === acquaintanceParams
+  );
+  //--
+  const [acquaintance, setAcquaintance] = useState<string | null>(
+    acquaintanceParams && acquaintanceOption ? acquaintanceOption.value : null
+  );
+  //--
+  const eduLevelParams = searchParams.get("education");
+  const eduLevelOption = eduLevelOptions.find(
+    (i) => i.value === eduLevelParams
+  );
+  const [eduLevel, setEduLevel] = useState<string | null>(
+    eduLevelParams && eduLevelOption ? eduLevelOption.value : null
+  );
+  //----
+  const finalResultParams = searchParams.get("finalResult");
+  const finalResultOption = finalResults.find(
+    (i) => i.value === finalResultParams
+  );
+  const [finalResult, setFinalResult] = useState<string | null>(
+    finalResultParams && finalResultOption ? finalResultOption.value : null
+  );
+  //--
+  const scholarParams = searchParams.get("scholarshipStatus");
+  const scholarOption = scholarOptions.find((i) => i.value === scholarParams);
+  const [scholar, setScholar] = useState<string | null>(
+    scholarParams && scholarOption ? scholarOption.value : null
+  );
+  //--
+  const finalFieldParams = searchParams.get("finalField");
+  const finalFieldOption = fieldOptions.find(
+    (i) => i.value === finalFieldParams
+  );
+  const [finalField, setFinalField] = useState<string | null>(
+    finalFieldParams && finalFieldOption ? finalFieldOption.value : null
+  );
 
-  // below function search in 4 pages at first find the api link for searching
+  //--
+  const [contCourseApproach, setContCourseApproach] = useState<string | null>(
+    searchParams.get("contCourseApproach")
+  );
+  //--
+  const motivationParams = searchParams.get("motivation");
+  const motivationOption = motivationOpt.find(
+    (i) => i.value === motivationParams
+  );
+  const [motivation, setMotivation] = useState<string | null>(
+    motivationParams && motivationOption ? motivationOption.value : null
+  );
+  //--
+  const jobStandbyCondition = searchParams.get("jobStandby");
+  const jobStandbyParams =
+    jobStandbyCondition === null
+      ? null
+      : {
+          value: jobStandbyCondition === "true",
+          label:
+            jobStandbyCondition === "true"
+              ? ("بله" as "بله")
+              : ("خیر" as "خیر"),
+        };
+  const [jobStandby, setJobStandby] = useState<OptionYesOrNo | null>(
+    jobStandbyParams
+  );
+  //--
+  // const [cgpa, setCgpa] = useState<string | null>(null);
+  //--
+  const groupIdParams = searchParams.get("groupID");
+  const [group, setGroup] = useState<Group | null>(
+    groupIdParams ? (initialQuery(groupData, groupIdParams) as any) : null
+  );
+  //--
+  const createdAtToParam = searchParams.get("createdAtTo");
+  const createdAtFromParam = searchParams.get("createdAtFrom");
+  const createdAtToDate = createdAtToParam ? new Date(createdAtToParam) : null;
+  const createdAtFromDate = createdAtFromParam
+    ? new Date(createdAtFromParam)
+    : null;
+  const [createdAtFrom, setCreatedAtFrom] = useState<Date | Dayjs | null>(
+    createdAtFromDate
+  );
+  const [createdAtTo, setCreatedAtTo] = useState<Date | Dayjs | null>(
+    createdAtToDate
+  );
+  const decidedAtFromParam = searchParams.get("decidedAtFrom");
+  const decidedAtToParam = searchParams.get("decidedAtTo");
+  const decidedAtFromDate = decidedAtFromParam
+    ? new Date(decidedAtFromParam)
+    : null;
+  const decidedAtToDate = decidedAtToParam ? new Date(decidedAtToParam) : null;
+  const [decidedAtFrom, setDecidedAtFrom] = useState<Date | Dayjs | null>(
+    decidedAtFromDate
+  );
+  const [decidedAtTo, setDecidedAtTo] = useState<Date | Dayjs | null>(
+    decidedAtToDate
+  );
+  //--
+  const careerPathwayIdParams = searchParams.get("careerPathwayId");
+  const [careerPathwayId, setCareerPathwayId] = useState<any>(
+    careerPathwayIdParams
+      ? (initialQuery(selectedFieldOpt, careerPathwayIdParams) as any)
+      : null
+  );
+  //--
+
+  // below function search in 3 pages at first find the api link for searching
   useEffect(() => {
     if (searchPage === "beforeWeek") {
       setSearchLink(beforeWeekSearch);
@@ -160,7 +255,7 @@ const SearchAll: ({
       finalField,
       contCourseApproach,
       jobStandby,
-      cgpa,
+      // cgpa,
       group,
       motivation,
       careerPathwayId,
@@ -172,7 +267,7 @@ const SearchAll: ({
     group,
     acquaintance,
     approvalStatus,
-    cgpa,
+    // cgpa,
     cityState,
     contCourseApproach,
     eduLevel,
@@ -194,35 +289,8 @@ const SearchAll: ({
     decidedAtFrom,
   ]);
 
-  const fetchData = async (obj: ObjTypeSearch) => {
-    setLoading(true);
-    try {
-      const response = await getData(searchLink, {
-        params: obj,
-      });
-
-      if (response.status === 200) {
-        const searchPageActions = {
-          beforeWeek: setSearchingStudentBefore,
-          afterWeek: setSearchingStudentAfter,
-          reg: setSearchingStudentRegister,
-        };
-        const action = searchPageActions[searchPage];
-        if (action) {
-          action(response.data);
-        }
-      } else {
-        console.log(response);
-      }
-    } catch (error: any) {
-      console.log(error);
-      toast.error(handleError(error));
-    } finally {
-      setLoading(false);
-    }
-  };
   const handleSearch = () => {
-    fetchData({
+    const obj = {
       createdAtTo: createdAtTo?.toISOString(),
       createdAtFrom:
         createdAtFrom && dayjs(createdAtFrom).startOf("day").toISOString(),
@@ -248,9 +316,21 @@ const SearchAll: ({
       contCourseApproach,
       jobStandby: jobStandby?.value,
       careerPathwayId: careerPathwayId?.id,
-      cgpa,
+      // cgpa,
       groupID: group?.id,
-    });
+    };
+
+    const updateQueryParams = () => {
+      const updatedQueryParams = new URLSearchParams();
+      for (const [key, value] of Object.entries(obj)) {
+        if (value != null) {
+          updatedQueryParams.append(key, String(value));
+        }
+      }
+      setSearchParams(updatedQueryParams.toString());
+    };
+    updateQueryParams();
+    setSearchMode(true);
   };
 
   const clearSearch = () => {
@@ -276,12 +356,11 @@ const SearchAll: ({
     setFinalField(null);
     setContCourseApproach(null);
     setJobStandby(null);
-    setCgpa(null);
+    // setCgpa(null);
     setGroup(null);
     setCareerPathwayId(null);
-    searchPage === "beforeWeek" && setSearchingStudentBefore(null);
-    searchPage === "afterWeek" && setSearchingStudentAfter(null);
-    searchPage === "reg" && setSearchingStudentRegister(null);
+    setSearchParams("");
+    setSearchMode(false);
   };
 
   return (

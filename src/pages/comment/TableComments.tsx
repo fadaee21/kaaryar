@@ -28,7 +28,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
 import { counterPagination } from "../../utils/counterPagination";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
@@ -135,13 +135,10 @@ const Comments = () => {
   const [open, setOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<Comment[] | null>(null);
 
-  const navigate = useNavigate();
   const pageSize = adminVisibility ? 10 : 100;
   const { commentsTable, commentsTableLoading, commentCounter, refreshData } =
     useGetComments(page, pageSize);
-  const handleClickOpenEdit = (id: any) => {
-    navigate(`${id}/editing`);
-  };
+
   const [idComment, setIdComment] = useState<number>();
   const { removeComment } = useDeleteComment(idComment);
 
@@ -264,10 +261,11 @@ const Comments = () => {
                         verticalAlign: "center",
                         cursor: "pointer",
                       }}
-                      onClick={() => navigate(`${id}`)}
                     >
                       <Typography variant="body1">
-                        {student.firstName + " " + student.family}
+                        <Link to={`${id}`}>
+                          {student.firstName + " " + student.family}
+                        </Link>
                       </Typography>
                     </StyledTableCell>
                     <StyledTableCell
@@ -326,8 +324,10 @@ const Comments = () => {
                         sx={{ pt: 0, justifyContent: "center" }}
                         alignItems="center"
                       >
-                        <IconButton onClick={() => navigate(`${id}`)}>
-                          <VisibilityIcon fontSize="small" color="info" />
+                        <IconButton>
+                          <Link to={`${id}`}>
+                            <VisibilityIcon fontSize="small" color="info" />
+                          </Link>
                         </IconButton>
                         <IconButton
                           sx={{
@@ -335,9 +335,10 @@ const Comments = () => {
                               display: "none",
                             }),
                           }}
-                          onClick={() => handleClickOpenEdit(`${id}`)}
                         >
-                          <EditIcon fontSize="small" color="primary" />
+                          <Link to={`${id}/editing`}>
+                            <EditIcon fontSize="small" color="primary" />
+                          </Link>
                         </IconButton>
                         <IconButton
                           sx={{

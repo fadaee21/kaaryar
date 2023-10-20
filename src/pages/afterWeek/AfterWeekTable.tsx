@@ -29,7 +29,7 @@ import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import { afterTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 import useSWR from "swr";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { persianDate } from "../../utils/persianDate";
@@ -38,13 +38,30 @@ const pageSize = 20;
 const heightOfTable = 500;
 const loadingBoxHeight = heightOfTable - 160;
 const AfterWeekTable = () => {
+  const [searchMode, setSearchMode] = useState(false);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  const [searchingStudentAfter, setSearchingStudentAfter] = useState<
-    AfterWeekType[] | null
-  >(null);
 
-  const allStudentAfterWeek = `/exam/after/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
+  let AFTER_STUDENT;
+  AFTER_STUDENT = `/exam/after/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
+
+  let [searchParams] = useSearchParams();
+
+  const hasQueryParams = () => {
+    return !searchParams.keys().next().done;
+  };
+
+  useEffect(() => {
+    setChevronDir(hasQueryParams());
+    setSearchMode(hasQueryParams());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (hasQueryParams()) {
+    const searchLink = "/exam/after/week/search/param?pageNum=1&pageSize=10000";
+    AFTER_STUDENT = searchLink + `&${searchParams}`;
+  }
+
   const examFormCount = "/exam/after/week/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
 
@@ -53,15 +70,14 @@ const AfterWeekTable = () => {
     isLoading: loading,
     error,
     mutate,
-  } = useSWR(allStudentAfterWeek, {
-    onSuccess: () => window.scrollTo(0, 0),
+  } = useSWR(AFTER_STUDENT, {
+    revalidateOnMount: true,
   });
   const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
-    setSearchingStudentAfter(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
@@ -133,45 +149,46 @@ const AfterWeekTable = () => {
                 <ExcelExport
                   fileName={"After Week Table"}
                   linkAll="/exam/after/week/form/all?pageNum=1&pageSize=100000"
-                  searchData={searchingStudentAfter?.map((after) => {
-                    const {
-                      finalField,
-                      scholar,
-                      finalResult,
-                      beforeWeekForm: {
-                        registrationForm: {
-                          province,
-                          city,
-                          family,
-                          firstName,
-                          registrationCode,
-                          mobile,
-                          email,
-                          course,
-                        },
-                      },
-                      afterWeekChecked,
-                    } = after;
+                  searchData={[]}
+                  // searchData={data?.map((after) => {
+                  //   const {
+                  //     finalField,
+                  //     scholar,
+                  //     finalResult,
+                  //     beforeWeekForm: {
+                  //       registrationForm: {
+                  //         province,
+                  //         city,
+                  //         family,
+                  //         firstName,
+                  //         registrationCode,
+                  //         mobile,
+                  //         email,
+                  //         course,
+                  //       },
+                  //     },
+                  //     afterWeekChecked,
+                  //   } = after;
 
-                    return {
-                      وضعیت:
-                        afterWeekChecked === true
-                          ? `تایید شده`
-                          : afterWeekChecked === null
-                          ? `در انتظار تایید`
-                          : `رد شده`,
-                      "کد متقاضی": registrationCode,
-                      "نام و نام خانوادگی": firstName + " " + family,
-                      گروه: course,
-                      استان: province,
-                      شهر: city,
-                      "شماره همراه": mobile,
-                      ایمیل: email,
-                      "نتیجه نهایی": finalResult,
-                      بورسیه: scholar ? "دارد" : "ندارد",
-                      "رشته نهایی": finalField,
-                    };
-                  })}
+                  //   return {
+                  //     وضعیت:
+                  //       afterWeekChecked === true
+                  //         ? `تایید شده`
+                  //         : afterWeekChecked === null
+                  //         ? `در انتظار تایید`
+                  //         : `رد شده`,
+                  //     "کد متقاضی": registrationCode,
+                  //     "نام و نام خانوادگی": firstName + " " + family,
+                  //     گروه: course,
+                  //     استان: province,
+                  //     شهر: city,
+                  //     "شماره همراه": mobile,
+                  //     ایمیل: email,
+                  //     "نتیجه نهایی": finalResult,
+                  //     بورسیه: scholar ? "دارد" : "ندارد",
+                  //     "رشته نهایی": finalField,
+                  //   };
+                  // })}
                   useIn="after"
                 />
               </Box>
@@ -185,15 +202,15 @@ const AfterWeekTable = () => {
                 }}
               >
                 <SearchAll
-                  setSearchingStudentAfter={setSearchingStudentAfter}
                   searchPage="afterWeek"
-                  chevronDir={chevronDir}
+                  loading={loading}
+                  setSearchMode={setSearchMode}
                 />
               </Box>
             </AccordionDetails>
           </AccordionStyled>
           {/* //!for empty response of search return TableEmpty */}
-          {searchingStudentAfter?.length === 0 && <TableEmpty />}
+          {data?.length === 0 && <TableEmpty />}
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             {loading || loadingMulti ? (
               <Box sx={{ m: 10, height: loadingBoxHeight }}>
@@ -201,17 +218,17 @@ const AfterWeekTable = () => {
               </Box>
             ) : (
               <TableContainer sx={{ maxHeight: heightOfTable }}>
-                 <Table
+                <Table
                   stickyHeader
                   aria-label="simple table"
                   sx={{ tableLayout: "auto" }}
                 >
                   {/* //!for empty response of search don't return TableHeader */}
-                  {searchingStudentAfter?.length !== 0 && (
+                  {data?.length !== 0 && (
                     <TableHeader headerItems={afterTableHeader} />
                   )}
                   <TableBody>
-                    {(searchingStudentAfter ?? data)?.map(
+                    {(data ?? data)?.map(
                       (afterWeekStudent: AfterWeekType, i: number) => {
                         const {
                           id,
@@ -257,11 +274,9 @@ const AfterWeekTable = () => {
                             // gender={gender}
                             checked={afterWeekChecked}
                             handleCheckBox={handleCheckBox}
-                            checkBoxDisplay={!!searchingStudentAfter}
+                            checkBoxDisplay={!!data && searchParams.get("approvalStatus") === "pending"}
                             index={
-                              searchingStudentAfter
-                                ? i + 1
-                                : itemCounterTable(page, pageSize, i)
+                              data ? i + 1 : itemCounterTable(page, pageSize, i)
                             }
                             course={course}
                             decidedAt={persianDate(decidedAt)}
@@ -276,7 +291,7 @@ const AfterWeekTable = () => {
           </Paper>
         </Container>
       </Box>
-      {!searchingStudentAfter && (
+      {!searchMode && (
         <Pagination
           sx={{
             display: "flex",

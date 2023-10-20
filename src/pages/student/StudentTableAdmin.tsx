@@ -92,11 +92,9 @@ const StudentTableAdmin = () => {
   }
 
   const { data, isLoading, error } = useSWR<MoodleUser[]>(ADMIN_STUDENT_URL, {
-    // onSuccess: () => window.scrollTo(0, 0),
     revalidateOnMount: true,
   });
-  // console.log(searchParams.keys().next());
-  // if (isLoading) return <LoadingProgress />;
+
   if (error) {
     return (
       <Typography sx={{ display: "flex", justifyContent: "center" }}>
@@ -176,7 +174,6 @@ const StudentTableAdmin = () => {
                     referralToFinanceData={referralToFinanceData}
                     kaaryarAssessmentData={kaaryarAssessmentData}
                     isLoading={isLoading}
-                    
                   />
                 ) : (
                   <LoadingProgress usage="paper" />
@@ -221,7 +218,7 @@ const StudentTableAdmin = () => {
                         currentAssignedMentor,
                         currentAssignedTA,
                         currentModuleAsStudent,
-                        latestEnrolledModule
+                        latestEnrolledModule,
                       } = moodleUser;
                       return (
                         <StudentAdminRowTable

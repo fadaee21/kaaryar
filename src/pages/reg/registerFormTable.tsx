@@ -16,7 +16,7 @@ import RegTableBodyAll from "../../components/table/RegTableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
 import useApproveMulti from "../../hooks/request/useApproveMulti";
 import useCountPagination from "../../hooks/request/useCountPagination";
-import { RegistrationForm } from "../../model";
+import { Group, RegistrationForm } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -32,18 +32,39 @@ import { registerTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
+import {
+  RELATED_PATH,
+  RelatedPath,
+} from "../../components/addNewCourseComp/CareerPathway";
 
 const pageSize = 20;
 const heightOfTable = 500;
 const loadingBoxHeight = heightOfTable - 160;
 const RegisterFormTable = () => {
+  const [searchMode, setSearchMode] = useState(false);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  const [searchingStudentRegister, setSearchingStudentRegister] = useState<
-    RegistrationForm[] | null
-  >(null);
-  const allStudentReg = `/reg/form/all?pageNum=${page}&pageSize=${pageSize}`;
+  let REGISTER_STUDENT;
+  REGISTER_STUDENT = `/reg/form/all?pageNum=${page}&pageSize=${pageSize}`;
+
+  let [searchParams] = useSearchParams();
+
+  const hasQueryParams = () => {
+    return !searchParams.keys().next().done;
+  };
+
+  useEffect(() => {
+    setChevronDir(hasQueryParams());
+    setSearchMode(hasQueryParams());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (hasQueryParams()) {
+    const searchLink = "/reg/search/param?pageNum=1&pageSize=10000";
+    REGISTER_STUDENT = searchLink + `&${searchParams}`;
+  }
+
   const examFormCount = "/reg/form/count";
   const [, counterPage] = useCountPagination(examFormCount);
   const {
@@ -51,15 +72,21 @@ const RegisterFormTable = () => {
     isLoading: loading,
     error,
     mutate,
-  } = useSWR(allStudentReg, {
-    onSuccess: () => window.scrollTo(0, 0),
+  } = useSWR(REGISTER_STUDENT, {
+    revalidateOnMount: true,
   });
+  //these two data is used for search
+  const { data: groupData, isLoading: loadingGroup } = useSWR<Group[]>(
+    chevronDir
+      ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
+      : null
+  );
+  const { data: selectedFieldOpt } = useSWR<RelatedPath[]>(RELATED_PATH);
   const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
   useEffect(() => {
-    setSearchingStudentRegister(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
@@ -122,42 +149,43 @@ const RegisterFormTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"Register Form Table"}
-                  searchData={searchingStudentRegister?.map((registerUser) => ({
-                    وضعیت:
-                      registerUser.checked === true
-                        ? `تایید شده`
-                        : registerUser.checked === null
-                        ? `در انتظار تایید`
-                        : `رد شده`,
-                    " کد متقاضی": registerUser.registrationCode,
-                    "نام و نام خانوادگی":
-                      registerUser.firstName + " " + registerUser.family,
-                    گروه: registerUser.course,
-                    "رشته تحصیلی": registerUser.studyField,
-                    "میزان تحصیلات": registerUser.education,
-                    شهر: registerUser.city,
-                    "سال دبیرستان": registerUser.highSchoolYear,
-                    استان: registerUser.province,
-                    "نحوه آشنایی با کاریار": registerUser.familiarity,
-                    "نام معرف یا موسسه": registerUser.refer,
-                    "تاریخ ارسال فرم":
-                      registerUser.createdAt &&
-                      new Intl.DateTimeFormat("fa").format(
-                        new Date(registerUser.createdAt)
-                      ),
-                    "سال تولد":
-                      registerUser.birthDate &&
-                      new Intl.DateTimeFormat("fa").format(
-                        new Date(registerUser.birthDate)
-                      ),
-                    "نحوه آشنایی": registerUser.familiarity,
-                    "شماره همراه": registerUser.mobile,
-                    ایمیل: registerUser.email,
-                    "ترم دانشگاه": registerUser.uniSemester,
-                    "رشته انتخابی در کاریار ": registerUser.selectedField,
-                    "مسیر مورد نظر متقاضی": registerUser.careerPathwayOther,
-                    "توضیحات سایر": registerUser.description,
-                  }))}
+                  searchData={[]}
+                  // searchData={data?.map((registerUser) => ({
+                  //   وضعیت:
+                  //     registerUser.checked === true
+                  //       ? `تایید شده`
+                  //       : registerUser.checked === null
+                  //       ? `در انتظار تایید`
+                  //       : `رد شده`,
+                  //   " کد متقاضی": registerUser.registrationCode,
+                  //   "نام و نام خانوادگی":
+                  //     registerUser.firstName + " " + registerUser.family,
+                  //   گروه: registerUser.course,
+                  //   "رشته تحصیلی": registerUser.studyField,
+                  //   "میزان تحصیلات": registerUser.education,
+                  //   شهر: registerUser.city,
+                  //   "سال دبیرستان": registerUser.highSchoolYear,
+                  //   استان: registerUser.province,
+                  //   "نحوه آشنایی با کاریار": registerUser.familiarity,
+                  //   "نام معرف یا موسسه": registerUser.refer,
+                  //   "تاریخ ارسال فرم":
+                  //     registerUser.createdAt &&
+                  //     new Intl.DateTimeFormat("fa").format(
+                  //       new Date(registerUser.createdAt)
+                  //     ),
+                  //   "سال تولد":
+                  //     registerUser.birthDate &&
+                  //     new Intl.DateTimeFormat("fa").format(
+                  //       new Date(registerUser.birthDate)
+                  //     ),
+                  //   "نحوه آشنایی": registerUser.familiarity,
+                  //   "شماره همراه": registerUser.mobile,
+                  //   ایمیل: registerUser.email,
+                  //   "ترم دانشگاه": registerUser.uniSemester,
+                  //   "رشته انتخابی در کاریار ": registerUser.selectedField,
+                  //   "مسیر مورد نظر متقاضی": registerUser.careerPathwayOther,
+                  //   "توضیحات سایر": registerUser.description,
+                  // }))}
                   linkAll="/reg/form/all?pageNum=1&pageSize=100000"
                   useIn="reg"
                 />
@@ -171,16 +199,22 @@ const RegisterFormTable = () => {
                 }}
               >
                 {/* //!component for searching student */}
-                <SearchAll
-                  setSearchingStudentRegister={setSearchingStudentRegister}
-                  searchPage="reg"
-                  chevronDir={chevronDir}
-                />
+                {!loadingGroup ? (
+                  <SearchAll
+                    searchPage="reg"
+                    groupData={groupData}
+                    selectedFieldOpt={selectedFieldOpt}
+                    loading={loading}
+                    setSearchMode={setSearchMode}
+                  />
+                ) : (
+                  <LoadingProgress usage="paper" />
+                )}
               </Box>
             </AccordionDetails>
           </AccordionStyled>
           {/* //!for empty response of search return TableEmpty */}
-          {searchingStudentRegister?.length === 0 && <TableEmpty />}
+          {data?.length === 0 && <TableEmpty />}
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             {loading || loadingMulti ? (
               <Box sx={{ m: 10, height: loadingBoxHeight }}>
@@ -194,45 +228,44 @@ const RegisterFormTable = () => {
                   sx={{ tableLayout: "auto" }}
                 >
                   {/* //!for empty response of search don't return TableHeader */}
-                  {searchingStudentRegister?.length !== 0 && (
+                  {data?.length !== 0 && (
                     <TableHeader headerItems={registerTableHeader} />
                   )}
 
                   <TableBody>
-                    {(searchingStudentRegister ?? data)?.map(
-                      (RegisterUser: RegistrationForm, i: number) => {
-                        return (
-                          <RegTableBodyAll
-                            key={RegisterUser.id}
-                            id={RegisterUser.id}
-                            family={RegisterUser.family}
-                            firstName={RegisterUser.firstName}
-                            // registrationCode={RegisterUser.registrationCode}
-                            directNav="register-form"
-                            checked={RegisterUser.checked}
-                            handleCheckBox={handleCheckBox}
-                            checkBoxDisplay={!!searchingStudentRegister} //if you have any searching student show checkbox in table
-                            education={RegisterUser.education}
-                            refer={RegisterUser.refer}
-                            highSchoolYear={RegisterUser.highSchoolYear}
-                            familiarity={RegisterUser.familiarity}
-                            province={RegisterUser.province}
-                            city={RegisterUser.city}
-                            createdAt={RegisterUser.createdAt}
-                            course={RegisterUser.course}
-                            index={
-                              searchingStudentRegister
-                                ? i + 1
-                                : itemCounterTable(page, pageSize, i)
-                            }
-                            decidedAt={RegisterUser.decidedAt}
-                            careerPathwayName={
-                              RegisterUser?.careerPathway?.name || "سایر"
-                            }
-                          />
-                        );
-                      }
-                    )}
+                    {data?.map((RegisterUser: RegistrationForm, i: number) => {
+                      return (
+                        <RegTableBodyAll
+                          key={RegisterUser.id}
+                          id={RegisterUser.id}
+                          family={RegisterUser.family}
+                          firstName={RegisterUser.firstName}
+                          // registrationCode={RegisterUser.registrationCode}
+                          directNav="register-form"
+                          checked={RegisterUser.checked}
+                          handleCheckBox={handleCheckBox}
+                          checkBoxDisplay={
+                            !!data &&
+                            searchParams.get("approvalStatus") === "pending"
+                          }
+                          education={RegisterUser.education}
+                          refer={RegisterUser.refer}
+                          highSchoolYear={RegisterUser.highSchoolYear}
+                          familiarity={RegisterUser.familiarity}
+                          province={RegisterUser.province}
+                          city={RegisterUser.city}
+                          createdAt={RegisterUser.createdAt}
+                          course={RegisterUser.course}
+                          index={
+                            data ? i + 1 : itemCounterTable(page, pageSize, i)
+                          }
+                          decidedAt={RegisterUser.decidedAt}
+                          careerPathwayName={
+                            RegisterUser?.careerPathway?.name || "سایر"
+                          }
+                        />
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -240,7 +273,7 @@ const RegisterFormTable = () => {
           </Paper>
         </Container>
       </Box>
-      {!searchingStudentRegister && (
+      {!searchMode && (
         <Pagination
           sx={{
             display: "flex",
