@@ -249,7 +249,7 @@ export interface TableBodyAllType extends RegistrationForm {
   checkBoxDisplay?: boolean;
   // idMulti?: number;
   // roles: string;
-  directNav: string;
+  directNav?: "before-week" | "after-week";
   motivation?: string;
   finalField?: string;
   finalResults?: string;
@@ -270,6 +270,14 @@ export interface SeekerStudent {
   beforeWeekChecked: boolean;
   AfterWeekForm?: AfterWeekType;
   afterWeekChecked: true;
+  hasLMSUser: boolean;
+  pendingBeforeweekSubmission: boolean;
+  actions: Action[]|null;
+}
+export interface Action {
+  action: string;
+  status: string;
+  date?: string;
 }
 
 export interface Profile {

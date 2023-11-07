@@ -34,7 +34,7 @@ Props) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{counter + 1}</Typography>
       </StyledTableCell>
       {/* نام دوره */}
@@ -53,23 +53,23 @@ Props) => {
         </Typography>
       </StyledTableCell>
       {/* نقش */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{assignedRole || "-"}</Typography>
       </StyledTableCell>
       {/* مسیر مرتبط */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{careerPathway?.name}</Typography>
       </StyledTableCell>
       {/* گروه مرتبط */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{category?.name}</Typography>
       </StyledTableCell>
       {/* وضعیت دوره */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingStatus}</Typography>
       </StyledTableCell>
       {/* مدرس(ها) */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         {instructors.length ? convertArrToStr(instructors) : "-"}
       </StyledTableCell>
       {/* مهارت‌آموزان */}
@@ -85,7 +85,7 @@ Props) => {
       </StyledTableCell>
       {/* نظرات  */}
       {/* {whoCanSeeComments && (
-        <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+       <StyledTableCell align="center" >
           <Typography variant="body2">مشاهده</Typography>
         </StyledTableCell>
       )} */}

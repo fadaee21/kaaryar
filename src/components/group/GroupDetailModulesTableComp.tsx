@@ -82,52 +82,52 @@ const RowTable = ({
         )
       }
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{counter + 1}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {moduleType === "general" ? "عمومی" : "تخصصی"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {careerPathway ? careerPathway.name : "-"}
         </Typography>
       </StyledTableCell>
-      {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+      {/*<StyledTableCell align="center" >
         <Typography variant="body2">
           {category ? category.groupCode + "-" + category.name : "-"}
         </Typography>
       </StyledTableCell> */}
 
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingStatus || "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {instructors.length > 0 ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
-      {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+      {/*<StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(endDate)}</Typography>
       </StyledTableCell> */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{studentCount}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingAssistantCount}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{mentorCount}</Typography>
       </StyledTableCell>
-      {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+      {/*<StyledTableCell align="center" >
         <Typography variant="body2">{weblinkFinalProject ?? "-"}</Typography>
       </StyledTableCell> */}
     </StyledTableRow>

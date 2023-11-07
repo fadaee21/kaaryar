@@ -115,7 +115,7 @@ const SearchAll: ({
   const acquaintanceOption = acquaintanceOptions.find(
     (i) => i.value === acquaintanceParams
   );
-  //--
+
   const [acquaintance, setAcquaintance] = useState<string | null>(
     acquaintanceParams && acquaintanceOption ? acquaintanceOption.value : null
   );
@@ -255,7 +255,6 @@ const SearchAll: ({
       finalField,
       contCourseApproach,
       jobStandby,
-      // cgpa,
       group,
       motivation,
       careerPathwayId,
@@ -267,7 +266,6 @@ const SearchAll: ({
     group,
     acquaintance,
     approvalStatus,
-    // cgpa,
     cityState,
     contCourseApproach,
     eduLevel,
@@ -543,22 +541,26 @@ const SearchAll: ({
           </Grid>
         )}
       </>
-      <Grid item xs={3}>
-        <JalaliDatePicker
-          setSessionDate={setCreatedAtFrom}
-          sessionDate={createdAtFrom}
-          label="از (تاریخ ارسال فرم)"
-          usageType="searching"
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <JalaliDatePicker
-          setSessionDate={setCreatedAtTo}
-          sessionDate={createdAtTo}
-          label="تا (تاریخ ارسال فرم)"
-          usageType="searching"
-        />
-      </Grid>
+      {searchPage !== "afterWeek" && (
+        <>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtFrom}
+              sessionDate={createdAtFrom}
+              label="از (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtTo}
+              sessionDate={createdAtTo}
+              label="تا (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
+        </>
+      )}
       <Grid item xs={3}>
         <JalaliDatePicker
           setSessionDate={setDecidedAtFrom}

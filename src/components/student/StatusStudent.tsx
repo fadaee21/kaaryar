@@ -82,9 +82,11 @@ const StatusStudent = ({ statusForm, careerPathway }: Prop) => {
                 secondary={nextTrainingStep?.value}
               />
             </ListItem>
-            <ListItem>
-              <ListItemText primary="توضیحات" secondary={description} />
-            </ListItem>
+            {adminVisibility && (
+              <ListItem>
+                <ListItemText primary="توضیحات" secondary={description} />
+              </ListItem>
+            )}
           </List>
           <List>
             {[6, 7].some((item) => item === trainingStatus?.id) && (
@@ -95,18 +97,22 @@ const StatusStudent = ({ statusForm, careerPathway }: Prop) => {
                 />
               </ListItem>
             )}
-            <ListItem>
-              <ListItemText
-                primary="ارجاع به واحد مالی"
-                secondary={referralToFinance?.value || "-"}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="ارزیابی کاریار"
-                secondary={kaaryarAssessment?.value || "-"}
-              />
-            </ListItem>
+            {adminVisibility && (
+              <>
+                <ListItem>
+                  <ListItemText
+                    primary="ارجاع به واحد مالی"
+                    secondary={referralToFinance?.value || "-"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="ارزیابی کاریار"
+                    secondary={kaaryarAssessment?.value || "-"}
+                  />
+                </ListItem>
+              </>
+            )}
             <ListItem>
               <ListItemText
                 primary="مسیر آموزشی"

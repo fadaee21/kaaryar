@@ -45,47 +45,47 @@ Props) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{counter}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           <Link to={`/${role}/student/${id}`}>{studentFullName}</Link>
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{categoryName ?? "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{province || "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         {city || "-"}
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         {refer || "-"}
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{careerPathwayName || "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{moduleName}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingStatus || "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           <Typography variant="body2">{assignedTaFullName || "-"}</Typography>
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         {assignedMentorFullName || "-"}
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{finalGrade ?? "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{finalAssessmentValue || "-"}</Typography>
       </StyledTableCell>
       {/* {whoCanSeeCommentField && (

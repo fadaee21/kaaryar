@@ -1,5 +1,5 @@
 import { Checkbox, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { TableBodyAllType } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 
@@ -23,7 +23,6 @@ const RegTableBodyAll = ({
   decidedAt,
   careerPathwayName,
 }: TableBodyAllType) => {
-  const navigate = useNavigate();
   const backgroundColor =
     checked === true
       ? "#64dd1720"
@@ -58,7 +57,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{index}</Typography>
+        {index}
       </StyledTableCell>
       <StyledTableCell align="left" sx={{ verticalAlign: "center" }}>
         <Typography
@@ -85,14 +84,8 @@ const RegTableBodyAll = ({
       >
         <Typography variant="body2">{registrationCode}</Typography>
       </StyledTableCell> */}
-      <StyledTableCell
-        align="left"
-        sx={{ verticalAlign: "center", cursor: "pointer" }}
-        onClick={() => navigate(`${id}`)}
-      >
-        <Typography variant="body2">
-          <Link to={`${id}`}>{firstName + " " + family}</Link>
-        </Typography>
+      <StyledTableCell align="center">
+        <Link to={`${id}`}>{firstName + " " + family}</Link>
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -100,7 +93,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{course || "-"}</Typography>
+        {course || "-"}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -108,7 +101,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{education || "-"}</Typography>
+        {education || "-"}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -116,7 +109,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{highSchoolYear || "-"}</Typography>
+        {highSchoolYear || "-"}
       </StyledTableCell>
 
       <StyledTableCell
@@ -125,7 +118,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{province || "-"}</Typography>
+        {province || "-"}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -133,7 +126,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{city || "-"}</Typography>
+        {city || "-"}
       </StyledTableCell>
 
       <StyledTableCell
@@ -142,7 +135,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{refer || "-"}</Typography>
+        {refer || "-"}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -150,7 +143,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{familiarityText}</Typography>
+        {familiarityText}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -158,7 +151,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{careerPathwayName}</Typography>
+        {careerPathwayName}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -166,7 +159,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{formattedcreatedAt}</Typography>
+        {formattedcreatedAt}
       </StyledTableCell>
       <StyledTableCell
         align="center"
@@ -174,7 +167,7 @@ const RegTableBodyAll = ({
           verticalAlign: "center",
         }}
       >
-        <Typography variant="body2">{formattedDecidedTime}</Typography>
+        {formattedDecidedTime}
       </StyledTableCell>
     </StyledTableRow>
   );

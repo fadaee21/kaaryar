@@ -49,19 +49,22 @@ export const afterTableHeader = [
   "رشته نهایی",
   "تاریخ تأیید/رد ",
 ];
-export const afterTableSkillSeeker = [
-  "",
+export const seekerTableHeader = [
   "",
   "وضعیت",
+  "تاریخ",
   "نام و نام خانوادگی",
   "گروه",
-  "استان",
-  "شهر",
-  "شماره همراه",
-  "ایمیل",
+  "شماره متقاضی",
+  "نحوه آشنایی با کاریار",
+  "نام معرف یا موسسه",
   "رشته انتخابی",
+  "اکانت ال ام اس",
+  "وضعیت شرکت در کارگاه معارفه",
+  "وضعیت حضور و غیاب در کارنامه هفته پذیرش",
+  "بورسیه",
   "رشته نهایی",
-  "نتیجه نهایی",
+  "مسیر آموزشی",
 ];
 
 export const assigneeStudentTableHeader = [
@@ -80,7 +83,6 @@ export const assigneeStudentTableHeader = [
   "نمره نهایی",
   "ارزیابی نهایی",
   "نظرات",
-
 ];
 
 export const adminStudentTableHeader: RowHeaderStudent[] = [
@@ -94,7 +96,12 @@ export const adminStudentTableHeader: RowHeaderStudent[] = [
   { id: 8, label: "معرف", minWidth: 100, align: "center" },
   { id: 80, label: "نحوه آشنایی", minWidth: 100, align: "center" },
   { id: 9, label: "مسیر آموزشی", minWidth: 120, align: "center" },
-  { id: 10, label: " آخرین دوره گذرانده شده", minWidth: 100, align: "center" },
+  {
+    id: 10,
+    label: "  دوره کنونی / آخرین دوره",
+    minWidth: 100,
+    align: "center",
+  },
   // { id: 10, label: " دوره کنونی", minWidth: 100, align: "center" },
   { id: 11, label: "مربی حل تمرین", minWidth: 120, align: "center" },
   { id: 12, label: "منتور", minWidth: 100, align: "center" },

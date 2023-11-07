@@ -26,29 +26,29 @@ const TableBodyGroups = ({ groupAll }: Prop) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         {/* <Link to={`${id}`}> */}
         <Typography variant="body2">{groupCode}</Typography>
         {/* </Link> */}
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           <Link to={`${id}`}>{name}</Link>
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(endDate)}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{studentCount}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingAssistantCount}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{mentorCount}</Typography>
       </StyledTableCell>
     </StyledTableRow>

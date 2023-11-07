@@ -76,49 +76,49 @@ const RowTable = ({
       }}
       onClick={() => navigate(`${id}/core-detail`)}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {careerPathway ? careerPathway.name : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {category ? category.name : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingStatus ?? "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {instructors ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
-      {/* <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+      {/*<StyledTableCell align="center" >
         <Typography variant="body2">
           {endDate ? persianDate(endDate) : "-"}
         </Typography>
       </StyledTableCell> */}
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {personnelAssignmentName("ta", personnelAssignment)}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {personnelAssignmentName("mentor", personnelAssignment)}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{finalGrade ? finalGrade : "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {finalAssessment ? finalAssessment.value : "-"}
         </Typography>

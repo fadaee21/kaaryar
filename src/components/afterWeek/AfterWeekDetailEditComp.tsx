@@ -72,7 +72,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 placeholder="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
                 value={student?.notifyAcceptWeek}
               />
-              {data && (
+              {/* {data && (
                 <EditingSelective
                   handleChange={handleChange}
                   identifier=""
@@ -81,7 +81,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                   value={student?.firstSelectJobRoad || ""}
                   disabled={true}
                 />
-              )}
+              )} */}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>

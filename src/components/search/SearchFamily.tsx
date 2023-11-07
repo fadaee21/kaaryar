@@ -150,6 +150,45 @@ const SearchFamily = ({
           }}
         />
       )}
+
+      {searchPage === "skillSeeker" && (
+        <AsyncSelect
+          isClearable
+          value={
+            outputFamily
+              ? {
+                  regForm: {
+                    family: outputFamily,
+                  },
+                }
+              : null
+          }
+          // defaultOptions={true}
+          getOptionLabel={(e) => e.regForm.family}
+          getOptionValue={(e) => e.regForm.family}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.regForm.family);
+            }
+          }}
+          cacheOptions
+          loadOptions={promiseOptions}
+          placeholder="نام خانوادگی"
+          noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+          loadingMessage={() => "لطفا کمی صبر کنید"}
+          name="searchName"
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
+          }}
+        />
+      )}
+
       {searchPage === "moodle" && (
         <AsyncSelect
           isClearable

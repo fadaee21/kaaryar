@@ -15,6 +15,7 @@ import { SelectedFieldOpt } from "../search/searchOptions";
 import ImageManager from "../beforeWeek/ImageManager";
 import { lazy } from "react";
 import LayoutReg from "../layout/LayoutReg";
+import { useAuth } from "../../context/AuthProvider";
 const LookUpLink = lazy(() => import("./LookUpLink"));
 
 interface AfterWeekStudentShow {
@@ -34,6 +35,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
   handleOpenAlert,
   refreshingPage,
 }) => {
+  const { adminVisibility } = useAuth();
   const navigate = useNavigate();
   if (!student) return null;
   const cField = student.beforeWeekForm?.registrationForm?.careerPathwayOther;
@@ -222,101 +224,106 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         </Grid>
       </LayoutReg>
       {/* نظرات سرگروه */}
-      <LayoutReg
-        title="نظرات سرگروه"
-        colorActive={
-          student.afterWeekChecked || successObject === "afterWeekChecked"
-        }
-      >
-        <Grid container>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="اختصاص زمان کافی به کاریار"
-                  secondary={student.consistCompleteTime}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="وضعیت دسترسی به کامپیوتر و اینترنت"
-                  secondary={student.comAccessStatus}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="پیش بینی ریزش"
-                  secondary={student.predict}
-                />
-              </ListItem>
-            </List>
+      {adminVisibility && (
+        <LayoutReg
+          title="نظرات سرگروه"
+          colorActive={
+            student.afterWeekChecked || successObject === "afterWeekChecked"
+          }
+        >
+          <Grid container>
+            <Grid item xs={12} md={6}>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="اختصاص زمان کافی به کاریار"
+                    secondary={student.consistCompleteTime}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="وضعیت دسترسی به کامپیوتر و اینترنت"
+                    secondary={student.comAccessStatus}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="پیش بینی ریزش"
+                    secondary={student.predict}
+                  />
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="تعهد به کار"
+                    secondary={student.jobCommit}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="رشته پیشنهادی سرگروه"
+                    secondary={student.recommendField}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="سایر ریسک‌ها و محدودیت‌ها"
+                    secondary={student.etcDesc}
+                  />
+                </ListItem>
+              </List>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="تعهد به کار"
-                  secondary={student.jobCommit}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="رشته پیشنهادی سرگروه"
-                  secondary={student.recommendField}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="سایر ریسک‌ها و محدودیت‌ها"
-                  secondary={student.etcDesc}
-                />
-              </ListItem>
-            </List>
-          </Grid>
-        </Grid>
-      </LayoutReg>
+        </LayoutReg>
+      )}
       {/* نظرات منتور */}
-      <LayoutReg
-        title="نظرات منتور"
-        colorActive={
-          student.afterWeekChecked || successObject === "afterWeekChecked"
-        }
-      >
-        <Grid container>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="اختصاص زمان کافی به کاریار"
-                  secondary={student.consistTime}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="رشته پیشنهادی منتور"
-                  secondary={student.recommendFieldMentor}
-                />
-              </ListItem>
-            </List>
+      {adminVisibility && (
+        <LayoutReg
+          title="نظرات منتور"
+          colorActive={
+            student.afterWeekChecked || successObject === "afterWeekChecked"
+          }
+        >
+          <Grid container>
+            <Grid item xs={12} md={6}>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="اختصاص زمان کافی به کاریار"
+                    secondary={student.consistTime}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="رشته پیشنهادی منتور"
+                    secondary={student.recommendFieldMentor}
+                  />
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="تعهد به کار"
+                    secondary={student.workCommit}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="سایر ریسک‌ها و محدودیت‌ها"
+                    secondary={student.limitAndRisk}
+                  />
+                </ListItem>
+              </List>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="تعهد به کار"
-                  secondary={student.workCommit}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="سایر ریسک‌ها و محدودیت‌ها"
-                  secondary={student.limitAndRisk}
-                />
-              </ListItem>
-            </List>
-          </Grid>
-        </Grid>
-      </LayoutReg>
+        </LayoutReg>
+      )}
+
       {/* <ContentBox
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"

@@ -66,7 +66,7 @@ const Comments = () => {
   });
   const [searchingComments, setSearchingComments] = useState(false);
   const {
-    auth: { id },
+    auth: { id, username: usernameAuth },
     adminVisibility,
   } = useAuth();
   const {
@@ -231,6 +231,8 @@ const Comments = () => {
                   studentPresent,
                   sessionProblem,
                 } = commentItem;
+                const { username } = commenter || { username: "" };
+                const notAuthorizedUser = username !== usernameAuth;
                 return (
                   <StyledTableRow
                     key={id}
@@ -262,55 +264,45 @@ const Comments = () => {
                         cursor: "pointer",
                       }}
                     >
-                      <Typography variant="body1">
-                        <Link to={`${id}`}>
-                          {student.firstName + " " + student.family}
-                        </Link>
-                      </Typography>
+                      <Link to={`${id}`}>
+                        {student.firstName + " " + student.family}
+                      </Link>
                     </StyledTableCell>
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">
-                        {commenter?.firstName + " " + commenter?.family}
-                      </Typography>
+                      {commenter?.firstName + " " + commenter?.family}
                     </StyledTableCell>
 
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">
-                        {roleConverter(commenterRole)}
-                      </Typography>
+                      {roleConverter(commenterRole)}
                     </StyledTableCell>
 
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">{module?.name}</Typography>
+                      {module?.name}
                     </StyledTableCell>
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">
-                        {sessionProblem.length ? sessionProblem : "-"}
-                      </Typography>
+                      {sessionProblem.length ? sessionProblem : "-"}
                     </StyledTableCell>
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">
-                        {studentPresent.length
-                          ? studentPresent === "بله"
-                            ? "حاضر"
-                            : "غایب"
-                          : "-"}
-                      </Typography>
+                      {studentPresent.length
+                        ? studentPresent === "بله"
+                          ? "حاضر"
+                          : "غایب"
+                        : "-"}
                     </StyledTableCell>
 
                     <StyledTableCell
@@ -334,7 +326,11 @@ const Comments = () => {
                             ...(adminVisibility && {
                               display: "none",
                             }),
+                            ...(notAuthorizedUser && {
+                              display: "none",
+                            }),
                           }}
+                          disabled={notAuthorizedUser}
                         >
                           <Link to={`${id}/editing`}>
                             <EditIcon fontSize="small" color="primary" />
@@ -345,8 +341,12 @@ const Comments = () => {
                             ...(adminVisibility && {
                               display: "none",
                             }),
+                            ...(notAuthorizedUser && {
+                              display: "none",
+                            }),
                           }}
                           onClick={() => handleClickOpen(id)}
+                          disabled={notAuthorizedUser}
                         >
                           <DeleteIcon fontSize="small" color="error" />
                         </IconButton>

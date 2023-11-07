@@ -39,11 +39,10 @@ type About = string;
 const useEditProfile = () => {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const {
-    auth: { roles, username },
+    auth: {  username },
   } = useAuth();
   const { mutate } = useSWRConfig();
   const MUTATE_URL = `/user/profile/username/${username}`;
-  // const navigate = useNavigate();
   const editProfile = async (
     relatedLink: RelatedLink,
     desiredLink: DesiredLink[],

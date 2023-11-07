@@ -2,11 +2,12 @@ import { Stack } from "@mui/material";
 import TablePic from "../../table/TablePic";
 import { itemCounterTable } from "../../../utils/itemCounterTable";
 import { FormEvent, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   CareerPathway,
   CurrentAssignedMentorTa,
   CurrentModuleAsStudent,
+  DetailStudentStatus,
   Profile,
   RegistrationForm,
   StatusForm,
@@ -15,19 +16,15 @@ import EditingButtons from "./EditingButtons";
 import ViewButtons from "./ViewButtons";
 import RowViewStatus from "./RowViewStatus";
 import RowEditStatus from "./RowEditStatus";
-import useGetStatusStudent from "../../../hooks/request/useGetStatusStudent";
 import { yellow } from "@mui/material/colors";
 import {
   StyledTableCellAdmin,
   StyledTableRowAdmin,
   StyledTypographyAdmin,
-  // StyledTypographyAdmin,
 } from "../../../styles/adminTable";
 import RowViewAssigning from "./RowViewAssigning";
 import RowEditAssigning from "./RowEditAssigning";
-import useSWR from "swr";
-// import LoadingProgress from "../../LoadingProgress";
-const PROFILE_VOLUNTEER = "/user/profile/all";
+
 interface Props {
   id: number;
   firstName: string;
@@ -48,6 +45,11 @@ interface Props {
   currentAssignedTA: CurrentAssignedMentorTa | null;
   currentModuleAsStudent: CurrentModuleAsStudent;
   latestEnrolledModule: any;
+  trainingData: DetailStudentStatus[] | undefined;
+  nextStepData: DetailStudentStatus[] | undefined;
+  referralToFinanceData: DetailStudentStatus[] | undefined;
+  kaaryarAssessmentData: DetailStudentStatus[] | undefined;
+  volunteerData: Profile[] | undefined;
 }
 const StudentAdminRowTable = ({
   id,
@@ -67,12 +69,16 @@ const StudentAdminRowTable = ({
   currentAssignedTA,
   currentModuleAsStudent,
   latestEnrolledModule,
+  trainingData,
+  nextStepData,
+  referralToFinanceData,
+  kaaryarAssessmentData,
+  volunteerData,
 }: Props) => {
   const [editingMode, setEditingMode] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [assigningMode, setAssigningMode] = useState(false);
   const [mode, setMode] = useState<"edit" | "assign" | null>(null); // there is only one confirm changes button for handling edit and assign
-  const navigate = useNavigate();
   const toggleEditingMode = () => {
     setEditingMode((i) => !i);
     setMode("edit");
@@ -82,13 +88,6 @@ const StudentAdminRowTable = ({
     setMode("assign");
   };
 
-  const {
-    trainingData,
-    nextStepData,
-    referralToFinanceData,
-    kaaryarAssessmentData,
-  } = useGetStatusStudent(true);
-  const { data: volunteerData } = useSWR<Profile[]>(PROFILE_VOLUNTEER);
   const childRefEditing = useRef<{
     handleSubmitEditing: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   }>();
@@ -112,9 +111,7 @@ const StudentAdminRowTable = ({
       " " +
       currentAssignedTA.personnel.family
     : "-";
-  // const currentModule = currentModuleAsStudent
-  //   ? currentModuleAsStudent.name
-  //   : "-";
+
   return (
     <StyledTableRowAdmin
       key={id}
@@ -191,17 +188,18 @@ const StudentAdminRowTable = ({
           {careerPathway?.name ?? "-"}
         </StyledTypographyAdmin>
       </StyledTableCellAdmin>
-      {/* " دوره کنونی" */}
+      {/* "  دوره کنونی / آخرین دوره" */}
       <StyledTableCellAdmin align="center">
         <StyledTypographyAdmin
           maxWidth={200}
           variant="body2"
           textAlign={"center"}
         >
+          {latestEnrolledModule?.name || "-"}
           {/* {statusForm?.trainingStatus?.id !== 2 ? "-" : currentModule} */}
-          {statusForm?.trainingStatus?.id !== 2
+          {/* {statusForm?.trainingStatus?.id !== 2
             ? "-"
-            : latestEnrolledModule?.name || "-"}
+            : latestEnrolledModule?.name || "-"} */}
         </StyledTypographyAdmin>
       </StyledTableCellAdmin>
       {assigningMode ? (

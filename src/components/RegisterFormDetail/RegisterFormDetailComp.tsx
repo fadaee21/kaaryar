@@ -3,6 +3,7 @@ import { RegistrationForm } from "../../model";
 import LayoutReg from "../layout/LayoutReg";
 import { getLabel } from "../../utils/getLabel";
 import { SelectedFieldOpt } from "../search/searchOptions";
+import { useAuth } from "../../context/AuthProvider";
 
 interface RegStudent {
   student: RegistrationForm | undefined;
@@ -10,6 +11,7 @@ interface RegStudent {
 }
 
 const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
+  const { adminVisibility } = useAuth();
   return (
     <LayoutReg title="فرم ثبت اطلاعات اولیه" NotRender={studentDetailComp}>
       <Grid container>
@@ -55,25 +57,29 @@ const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
                 secondary={student?.birthDate || "-"}
               />
             </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="نحوه آشنایی :"
-                secondary={
-                  !student?.familiarity || student?.familiarity === ""
-                    ? "-"
-                    : student?.familiarity === "other"
-                    ? "سایر"
-                    : student?.familiarity
-                }
-              />
-            </ListItem>
-            {student?.refer && (
-              <ListItem>
-                <ListItemText
-                  primary="نام معرف یا موسسه :"
-                  secondary={student?.refer || "-"}
-                />
-              </ListItem>
+            {adminVisibility && (
+              <>
+                <ListItem>
+                  <ListItemText
+                    primary="نحوه آشنایی :"
+                    secondary={
+                      !student?.familiarity || student?.familiarity === ""
+                        ? "-"
+                        : student?.familiarity === "other"
+                        ? "سایر"
+                        : student?.familiarity
+                    }
+                  />
+                </ListItem>
+                {student?.refer && (
+                  <ListItem>
+                    <ListItemText
+                      primary="نام معرف یا موسسه :"
+                      secondary={student?.refer || "-"}
+                    />
+                  </ListItem>
+                )}
+              </>
             )}
           </List>
         </Grid>

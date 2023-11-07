@@ -148,48 +148,13 @@ const BeforeWeekTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"Before Week Table"}
-                  linkAll="/exam/before/week/form/all?pageNum=1&pageSize=100000"
+                  searchData={null}
+                  linkAll={
+                    hasQueryParams()
+                      ? BEFORE_STUDENT
+                      : "/exam/before/week/form/all?pageNum=1&pageSize=100000"
+                  }
                   useIn="before"
-                  searchData={[]}
-                  // searchData={data?.map((before) => {
-                  //   const {
-                  //     motivation,
-                  //     jobStandby,
-                  //     contCourseApproach,
-                  //     registrationForm: {
-                  //       province,
-                  //       city,
-                  //       family,
-                  //       firstName,
-                  //       registrationCode,
-                  //       mobile,
-                  //       email,
-                  //       course,
-                  //       createdAt,
-                  //     },
-                  //     acceptWeekChecked,
-                  //   } = before;
-
-                  //   return {
-                  //     وضعیت:
-                  //       acceptWeekChecked === true
-                  //         ? `تایید شده`
-                  //         : acceptWeekChecked === null
-                  //         ? `در انتظار تایید`
-                  //         : `رد شده`,
-                  //     "کد متقاضی": registrationCode,
-                  //     "نام و نام خانوادگی": firstName + " " + family,
-                  //     گروه: course,
-                  //     استان: province,
-                  //     شهر: city,
-                  //     "شماره همراه": mobile,
-                  //     ایمیل: email,
-                  //     "نمره آزمون": contCourseApproach,
-                  //     "آمادگی کار": jobStandby ? "بله" : "خیر",
-                  //     "انگیزه ورود": motivation,
-                  //     "تاریخ ارسال فرم": persianDate(createdAt),
-                  //   };
-                  // })}
                 />
               </Box>
             </Box>
@@ -303,7 +268,7 @@ const BeforeWeekTable = () => {
           variant="outlined"
           shape="rounded"
           page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
             setPage(value);
           }}
         />

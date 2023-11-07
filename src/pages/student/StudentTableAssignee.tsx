@@ -63,10 +63,10 @@ const StudentTableAssignee = () => {
               {/* //! export excel */}
 
               <ExcelExport
-                fileName={"excel export"}
+                fileName={`student list of ${user_name}`}
                 linkAll={`/${role}/user/student`}
                 searchData={null}
-                useIn="studentListMoodleTable"
+                useIn="studentsAssignee"
               />
             </Box>
           </AccordionStyled>

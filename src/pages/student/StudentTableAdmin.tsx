@@ -60,7 +60,7 @@ const StudentTableAdmin = () => {
     referralLoading,
     kaaryarAssessmentData,
     kaaryarAssessmentLoading,
-  } = useGetStatusStudent(chevronDir);
+  } = useGetStatusStudent(true);
   const orderingOpt =
     "orderAscending=true&orderBy=name&pageNum=1&pageSize=10000";
   const { data: groupData, isLoading: loadingGroupData } = useSWR<Group[]>(
@@ -154,7 +154,7 @@ const StudentTableAdmin = () => {
                 linkAll={
                   hasQueryParams()
                     ? ADMIN_STUDENT_URL
-                    : `moodle/user/student/all?pageNum=1&pageSize=100000&${adminStudentQuery}`
+                    : `moodle/user/student/all?pageNum=1&pageSize=10000&${adminStudentQuery}`
                 }
                 searchData={null}
                 useIn="studentOfAdmin"
@@ -240,6 +240,11 @@ const StudentTableAdmin = () => {
                           currentAssignedTA={currentAssignedTA}
                           currentModuleAsStudent={currentModuleAsStudent}
                           latestEnrolledModule={latestEnrolledModule}
+                          kaaryarAssessmentData={kaaryarAssessmentData}
+                          volunteerData={volunteerData}
+                          trainingData={trainingData}
+                          nextStepData={nextStepData}
+                          referralToFinanceData={referralToFinanceData}
                         />
                       );
                     })}

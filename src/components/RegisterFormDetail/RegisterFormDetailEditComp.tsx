@@ -1,7 +1,6 @@
 import React from "react";
 import { Grid, List } from "@mui/material";
 import {
-  CharityOptions,
   acquaintanceOptions,
   eduLevelOptions,
   highSchoolOptions,

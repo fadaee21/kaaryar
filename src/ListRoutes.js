@@ -519,15 +519,6 @@ const ListRoutes = [
     key: "admin14-newEdited-se",
   },
   {
-    path: "admin/volunteer",
-    name: "داوطلبان کاریار",
-    // icon:<></>,
-    component: VolunteerTable,
-    showInNav: true,
-    role: "admin",
-    key: "admin15",
-  },
-  {
     path: "admin/graduate",
     name: "فهرست فارغ‌التحصیلان",
     // icon:<></>,
@@ -535,6 +526,15 @@ const ListRoutes = [
     showInNav: true,
     role: "admin",
     key: "admin20",
+  },
+  {
+    path: "admin/volunteer",
+    name: "داوطلبان کاریار",
+    // icon:<></>,
+    component: VolunteerTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin15",
   },
   {
     path: "admin/all-comments",
@@ -604,7 +604,7 @@ const ListRoutes = [
   },
   {
     path: "admin/groups",
-    name: "فهرست گروه‌ها",
+    name: "گروه‌ها",
     // icon:<></>,
     component: GroupsTable,
     showInNav: true,
@@ -676,7 +676,7 @@ const ListRoutes = [
   },
   {
     path: "admin/core-course",
-    name: "فهرست دوره‌های تخصصی",
+    name: "دوره‌های تخصصی",
     // icon:<></>,
     component: CoreModuleCoursesTable,
     showInNav: true,
@@ -730,7 +730,7 @@ const ListRoutes = [
   },
   {
     path: "admin/general-course",
-    name: "فهرست آموزش‌های عمومی",
+    name: "آموزش‌های عمومی",
     // icon:<></>,
     component: GeneralEducationTable,
     showInNav: true,

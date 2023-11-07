@@ -33,7 +33,8 @@ const WatchComment = () => {
   const { mutate } = useSWRConfig();
   const navigate = useNavigate();
   const {
-    auth: { roles },
+    auth: { roles, username: usernameAuth },
+    adminVisibility,
   } = useAuth();
   if (loading) {
     return <LoadingProgress />;
@@ -50,7 +51,7 @@ const WatchComment = () => {
     commenter,
     commenterRole,
   } = allComment as Comment;
-
+  const notAuthorizedUser = commenter?.username !== usernameAuth;
   const handleClickOpenEdit = () => {
     navigate("editing");
   };
@@ -89,22 +90,24 @@ const WatchComment = () => {
             endIcon={<DeleteIcon />}
             sx={{
               ml: "auto",
-              ...(roles.toString() === "admin" && { display: "none" }),
+              ...(adminVisibility && { display: "none" }),
             }}
             variant="contained"
             color="error"
             onClick={() => handleClickOpen(id)}
+            disabled={notAuthorizedUser || adminVisibility}
           >
             حذف نظر
           </Button>
           <Button
             sx={{
               mx: 1,
-              ...(roles.toString() === "admin" && { display: "none" }),
+              ...(adminVisibility && { display: "none" }),
             }}
             onClick={handleClickOpenEdit}
             endIcon={<EditIcon />}
             variant="outlined"
+            disabled={notAuthorizedUser || adminVisibility}
           >
             ویرایش نظر
           </Button>

@@ -23,7 +23,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 interface AddCommentType {
   compType: "adding" | "editing";
   allComment?: Comment; //this prop just for editing
-  studentName: { firstName: string; lastName: string } | null;
+  studentName: { firstName: string; lastName?: string ,family?: string } | null;
 }
 const AddOrEditComment = ({
   compType,
@@ -96,7 +96,7 @@ const AddOrEditComment = ({
       <Stack direction="row" alignItems="center">
         {compType === "adding" ? (
           <Typography variant="h5" gutterBottom>
-            ثبت گزارش برای {studentName?.firstName} {studentName?.lastName}
+            ثبت گزارش برای {studentName?.firstName} {studentName?.lastName || studentName?.family}
           </Typography>
         ) : (
           <Typography variant="h5" gutterBottom>

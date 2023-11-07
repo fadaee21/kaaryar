@@ -103,17 +103,19 @@ const SearchAllComments = ({
           state={student}
         />
       </Grid>
-      <Grid item xs={3}>
-        <SearchSelect2
-          options={[
-            { value: "منتور", id: "mentor" },
-            { value: "مربی حل تمرین", id: "ta" },
-          ]}
-          placeholder="نقش نظر دهنده"
-          setState={setCommenterRole}
-          state={commenterRole}
-        />
-      </Grid>
+      {adminVisibility && (
+        <Grid item xs={3}>
+          <SearchSelect2
+            options={[
+              { value: "منتور", id: "mentor" },
+              { value: "مربی حل تمرین", id: "ta" },
+            ]}
+            placeholder="نقش نظر دهنده"
+            setState={setCommenterRole}
+            state={commenterRole}
+          />
+        </Grid>
+      )}
       <Grid item xs={3}>
         {allModule && (
           <SearchSelect2

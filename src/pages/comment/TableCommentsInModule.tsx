@@ -8,9 +8,7 @@ import Paper from "@mui/material/Paper";
 import { Comment } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { Container } from "@mui/system";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  AccordionDetails,
   Box,
   IconButton,
   ListItem,
@@ -33,10 +31,7 @@ import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
 import { commentsTableHeader } from "../../components/table/helper-header";
 import { persianDate } from "../../utils/persianDate";
-import {
-  AccordionStyled,
-  AccordionSummaryStyled,
-} from "../../styles/search/accordion";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { roleConverter } from "../../utils/roleConverter";
@@ -45,7 +40,7 @@ const TableCommentsInModule = () => {
   // const [chevronDir, setChevronDir] = useState(false);
   const [open, setOpen] = useState(false);
   const {
-    auth: { roles },
+    auth: { roles, username },
     adminVisibility,
   } = useAuth();
   const role = roles.toString();
@@ -94,6 +89,7 @@ const TableCommentsInModule = () => {
   if (commentsTableLoading) {
     return <LoadingProgress />;
   }
+
   const student = commentsTable[0].student;
   const fullName = student.firstName + " " + student.family;
   return (
@@ -101,11 +97,36 @@ const TableCommentsInModule = () => {
       <Container maxWidth="xl">
         <Box
           component={"div"}
-          sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
+          sx={{ display: "flex", alignItems: "center", mb: 6, width: "100%" }}
         >
           <Typography variant="h5">{`مهارت‌آموزان من > ${fullName} > نظرات`}</Typography>
+          <Button
+            sx={{ ml: "auto", mr: 2, py: 1, px: 5 }}
+            size="small"
+            variant="contained"
+            onClick={() =>
+              navigate(`/${roles}/student/${student.id}/add-comment/`, {
+                state: {
+                  student: student,
+                },
+              })
+            }
+          >
+            افزودن نظر جدید
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ px: 5 }}
+            color="inherit"
+            endIcon={<ArrowBackIcon />}
+            onClick={() => navigate(-1)}
+          >
+            بازگشت
+          </Button>
         </Box>
-
+        <Typography variant="body1" sx={{ my: 8 }}>
+          {`          اینجا، می‌توانید تمام نظراتی که در دوره‌ی ${commentsTable[0]?.module?.name} روی ${fullName} ثبت شده است، ببینید.`}
+        </Typography>
         {/* <AccordionStyled expanded={chevronDir}>
           <Box
             sx={{
@@ -148,6 +169,7 @@ const TableCommentsInModule = () => {
                   studentPresent,
                   sessionProblem,
                 } = commentItem;
+                const notAuthorizedUser = commenter?.username !== username;
                 return (
                   <StyledTableRow
                     key={id}
@@ -250,8 +272,12 @@ const TableCommentsInModule = () => {
                             ...(adminVisibility && {
                               display: "none",
                             }),
+                            ...(notAuthorizedUser && {
+                              display: "none",
+                            }),
                           }}
                           onClick={() => handleClickOpenEdit(`${id}`)}
+                          disabled={notAuthorizedUser}
                         >
                           <EditIcon fontSize="small" color="primary" />
                         </IconButton>
@@ -260,8 +286,12 @@ const TableCommentsInModule = () => {
                             ...(adminVisibility && {
                               display: "none",
                             }),
+                            ...(notAuthorizedUser && {
+                              display: "none",
+                            }),
                           }}
                           onClick={() => handleClickOpen(id)}
+                          disabled={notAuthorizedUser}
                         >
                           <DeleteIcon fontSize="small" color="error" />
                         </IconButton>

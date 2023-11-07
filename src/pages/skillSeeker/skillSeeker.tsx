@@ -7,45 +7,75 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-// import SearchAll from "../../components/search/SearchAll";
-import TableBodyAll from "../../components/table/TableBodyAll";
 import TableHeader from "../../components/table/TableHeader";
 import useCountPagination from "../../hooks/request/useCountPagination";
-import { SeekerStudent } from "../../model";
+import { CareerPathway, Group, SeekerStudent } from "../../model";
 import { counterPagination } from "../../utils/counterPagination";
 import AccordionDetails from "@mui/material/AccordionDetails";
-// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   AccordionStyled,
-  // AccordionSummaryStyled,
+  AccordionSummaryStyled,
 } from "../../styles/search/accordion";
-// import style from "../../styles/search/searchChevron.module.css";
-import { seekerStateFinder } from "../../utils/seekerStateFinder";
-import { afterTableSkillSeeker } from "../../components/table/helper-header";
+import { seekerTableHeader } from "../../components/table/helper-header";
 import useSWR from "swr";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { itemCounterTable } from "../../utils/itemCounterTable";
+import TableEmpty from "../../components/table/TableEmpty";
+import SkillSeekerRowTable from "../../components/table/SkillSeekerRowTable";
+import SearchSeeker from "../../components/search/SearchSeeker";
+const orderingOpt = "orderAscending=true&orderBy=name&pageNum=1&pageSize=10000";
 const pageSize = 20;
 const heightOfTable = 500;
 const loadingBoxHeight = heightOfTable - 160;
 const examFormCount = "/status/form/count";
 const SkillSeeker = () => {
+  const [searchMode, setSearchMode] = useState(false);
   const [page, setPage] = useState(1);
-  // const [chevronDir, setChevronDir] = useState(false);
-  const [searchingStudentSeeker] = useState<SeekerStudent[] | null>(null);
-  const allStudentSeeker = `/status/form/all?pageNum=${page}&pageSize=${pageSize}`;
+  const [chevronDir, setChevronDir] = useState(false);
+
+  let SEEKER_STUDENT;
+  SEEKER_STUDENT = `/status/form/all?pageNum=${page}&pageSize=${pageSize}&orderBy=latest_action_date`;
+
+  let [searchParams] = useSearchParams();
+
+  const hasQueryParams = () => {
+    return !searchParams.keys().next().done;
+  };
+
+  useEffect(() => {
+    setChevronDir(hasQueryParams());
+    setSearchMode(hasQueryParams());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (hasQueryParams()) {
+    const searchLink = "/status/form/all?pageNum=1&pageSize=10000";
+    SEEKER_STUDENT = searchLink + `&${searchParams}`;
+  }
+
   const [, counterPage] = useCountPagination(examFormCount);
 
-  const { data, isLoading, error } = useSWR(allStudentSeeker, {
-    onSuccess: () => window.scrollTo(0, 0),
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useSWR(SEEKER_STUDENT, {
+    revalidateOnMount: true,
   });
-
-
+  const { data: groupData, isLoading: loadingGroup } = useSWR<Group[]>(
+    chevronDir
+      ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
+      : null
+  );
+  const { data: careerPathwayData, isLoading: loadingCareerPathwayData } =
+    useSWR<CareerPathway[]>(
+      chevronDir ? `/modules/career-pathways/all?${orderingOpt}` : null
+    );
 
   if (error) {
     toast.error(handleError(error));
@@ -64,56 +94,31 @@ const SkillSeeker = () => {
           >
             <Typography variant="h4"> فهرست متقاضیان</Typography>
           </Box>
-          <AccordionStyled>
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",
                 alignItems: "flex-start",
                 justifyContent: "flex-start",
-                mb: 2,
               }}
             >
-              {/* <AccordionSummaryStyled
+              <AccordionSummaryStyled
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={() => setChevronDir(!chevronDir)}
+                expandIcon={<ExpandMoreIcon />}
               >
                 <Typography variant="button">جستجو</Typography>
-                <ExpandMoreIcon
-                  className={chevronDir ? style.rotate180 : style.rotate0}
-                />
-              </AccordionSummaryStyled> */}
-              <ExcelExport
-                fileName={"Applicant Info"}
-                linkAll="/status/form/all?pageNum=1&pageSize=100000"
-                searchData={searchingStudentSeeker?.map((seekerStudent) => {
-                  const {
-                    regForm,
-                    afterWeekChecked,
-                    beforeWeekChecked,
-                    regChecked,
-                    AfterWeekForm,
-                  } = seekerStudent;
+              </AccordionSummaryStyled>
 
-                  return {
-                    وضعیت: seekerStateFinder(
-                      afterWeekChecked,
-                      beforeWeekChecked,
-                      regChecked
-                    ),
-                    "کد متقاضی": regForm.registrationCode,
-                    "نام و نام خانوادگی":
-                      regForm.firstName + " " + regForm.family,
-                    گروه: regForm.course,
-                    استان: regForm.province,
-                    شهر: regForm.city,
-                    "شماره همراه": regForm.mobile,
-                    ایمیل: regForm.email,
-                    "رشته انتخابی": regForm?.selectedField,
-                    "رشته نهایی": AfterWeekForm?.finalField,
-                    "نتیجه نهایی": AfterWeekForm?.finalResult,
-                  };
-                })}
+              <ExcelExport
+                fileName={"status seeker Table"}
+                searchData={null} //TODO:use this when you search a data, don't get data again for excel
+                linkAll={
+                  hasQueryParams()
+                    ? SEEKER_STUDENT
+                    : "/status/form/all?pageNum=1&pageSize=100000"
+                }
                 useIn="seeker"
               />
             </Box>
@@ -125,16 +130,24 @@ const SkillSeeker = () => {
                   my: 3,
                 }}
               >
-                {/* <SearchAll
-                  setSearchingStudentSeeker={setSearchingStudentSeeker}
-                  searchPage="seekerWeek"
-                  chevronDir={chevronDir}
-                /> */}
+                {!loadingGroup && !loadingCareerPathwayData ? (
+                  <SearchSeeker
+                    groupData={groupData}
+                    searchPage="skillSeeker"
+                    loading={loading}
+                    setSearchMode={setSearchMode}
+                    careerPathwayData={careerPathwayData}
+                  />
+                ) : (
+                  <LoadingProgress usage="paper" />
+                )}
               </Box>
             </AccordionDetails>
           </AccordionStyled>
+          {/* //!for empty response of search return TableEmpty */}
+          {data?.length === 0 && <TableEmpty />}
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
-            {isLoading ? (
+            {loading ? (
               <Box sx={{ m: 10, height: loadingBoxHeight }}>
                 <LoadingProgress usage="paper" size={40} />
               </Box>
@@ -145,60 +158,54 @@ const SkillSeeker = () => {
                   aria-label="simple table"
                   sx={{ tableLayout: "auto" }}
                 >
-                  <TableHeader headerItems={afterTableSkillSeeker} />
-                  {/*//! while searching show the search content */}
-                  {!searchingStudentSeeker && (
-                    <TableBody>
-                      {data?.map((seekerStudent: SeekerStudent, i: number) => {
-                        const {
-                          id,
-                          regForm,
-                          afterWeekChecked,
-                          beforeWeekChecked,
-                          regChecked,
-                          AfterWeekForm,
-                        } = seekerStudent;
-
-                        return (
-                          <TableBodyAll
-                            key={id}
-                            id={id}
-                            birthDate={regForm?.birthDate}
-                            family={regForm?.family}
-                            firstName={regForm?.firstName}
-                            registrationCode={regForm?.registrationCode}
-                            mobile={regForm?.mobile}
-                            email={regForm?.email}
-                            directNav="skill-seeker"
-                            province={regForm?.province}
-                            city={regForm?.city}
-                            studyField={regForm?.studyField}
-                            selectedField={regForm?.selectedField}
-                            // just send checked prop due to tableBodyAll need this prob,
-                            //in this case does't any effect
-                            //all state affair will handle in resultStatus
-                            checked={false}
-                            resultStatus={seekerStateFinder(
-                              afterWeekChecked,
-                              beforeWeekChecked,
-                              regChecked
-                            )}
-                            index={itemCounterTable(page, pageSize, i)}
-                            finalResult={AfterWeekForm?.finalResult}
-                            finalField={AfterWeekForm?.finalField}
-                            course={regForm?.course}
-                          />
-                        );
-                      })}
-                    </TableBody>
+                  {/* //!for empty response of search don't return TableHeader */}
+                  {data?.length !== 0 && (
+                    <TableHeader headerItems={seekerTableHeader} />
                   )}
+                  <TableBody>
+                    {data?.map((seekerStudent: SeekerStudent, i: number) => {
+                      const {
+                        id,
+                        regForm,
+                        AfterWeekForm,
+                        hasLMSUser,
+                        actions,
+                      } = seekerStudent;
+
+                      const latestActions = actions?.[actions.length - 1];
+
+                      return (
+                        <SkillSeekerRowTable
+                          key={id}
+                          id={id}
+                          family={regForm?.family}
+                          firstName={regForm?.firstName}
+                          registrationCode={regForm?.registrationCode}
+                          group={regForm?.course}
+                          selectedField={regForm?.selectedField}
+                          resultStatus={latestActions?.status}
+                          date={latestActions?.date}
+                          index={itemCounterTable(page, pageSize, i)}
+                          finalResult={AfterWeekForm?.finalResult}
+                          finalField={AfterWeekForm?.finalField}
+                          familiarity={regForm?.familiarity}
+                          refer={regForm?.refer}
+                          hasLMSUser={hasLMSUser}
+                          workshopCont={AfterWeekForm?.workshopCont}
+                          presentStatus={AfterWeekForm?.presentStatus}
+                          scholar={AfterWeekForm?.scholar}
+                          careerPathway={AfterWeekForm?.careerPathway?.name}
+                        />
+                      );
+                    })}
+                  </TableBody>
                 </Table>
               </TableContainer>
             )}
           </Paper>
         </Container>
       </Box>
-      {!searchingStudentSeeker && (
+      {!searchMode && (
         <Pagination
           sx={{
             display: "flex",
@@ -211,7 +218,7 @@ const SkillSeeker = () => {
           variant="outlined"
           shape="rounded"
           page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
             setPage(value);
           }}
         />

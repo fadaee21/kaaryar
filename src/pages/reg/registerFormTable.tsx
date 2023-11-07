@@ -149,44 +149,12 @@ const RegisterFormTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"Register Form Table"}
-                  searchData={[]}
-                  // searchData={data?.map((registerUser) => ({
-                  //   وضعیت:
-                  //     registerUser.checked === true
-                  //       ? `تایید شده`
-                  //       : registerUser.checked === null
-                  //       ? `در انتظار تایید`
-                  //       : `رد شده`,
-                  //   " کد متقاضی": registerUser.registrationCode,
-                  //   "نام و نام خانوادگی":
-                  //     registerUser.firstName + " " + registerUser.family,
-                  //   گروه: registerUser.course,
-                  //   "رشته تحصیلی": registerUser.studyField,
-                  //   "میزان تحصیلات": registerUser.education,
-                  //   شهر: registerUser.city,
-                  //   "سال دبیرستان": registerUser.highSchoolYear,
-                  //   استان: registerUser.province,
-                  //   "نحوه آشنایی با کاریار": registerUser.familiarity,
-                  //   "نام معرف یا موسسه": registerUser.refer,
-                  //   "تاریخ ارسال فرم":
-                  //     registerUser.createdAt &&
-                  //     new Intl.DateTimeFormat("fa").format(
-                  //       new Date(registerUser.createdAt)
-                  //     ),
-                  //   "سال تولد":
-                  //     registerUser.birthDate &&
-                  //     new Intl.DateTimeFormat("fa").format(
-                  //       new Date(registerUser.birthDate)
-                  //     ),
-                  //   "نحوه آشنایی": registerUser.familiarity,
-                  //   "شماره همراه": registerUser.mobile,
-                  //   ایمیل: registerUser.email,
-                  //   "ترم دانشگاه": registerUser.uniSemester,
-                  //   "رشته انتخابی در کاریار ": registerUser.selectedField,
-                  //   "مسیر مورد نظر متقاضی": registerUser.careerPathwayOther,
-                  //   "توضیحات سایر": registerUser.description,
-                  // }))}
-                  linkAll="/reg/form/all?pageNum=1&pageSize=100000"
+                  searchData={null}
+                  linkAll={
+                    hasQueryParams()
+                      ? REGISTER_STUDENT
+                      : "/reg/form/all?pageNum=1&pageSize=10000"
+                  }
                   useIn="reg"
                 />
               </Box>
@@ -241,7 +209,6 @@ const RegisterFormTable = () => {
                           family={RegisterUser.family}
                           firstName={RegisterUser.firstName}
                           // registrationCode={RegisterUser.registrationCode}
-                          directNav="register-form"
                           checked={RegisterUser.checked}
                           handleCheckBox={handleCheckBox}
                           checkBoxDisplay={
@@ -257,7 +224,7 @@ const RegisterFormTable = () => {
                           createdAt={RegisterUser.createdAt}
                           course={RegisterUser.course}
                           index={
-                            data ? i + 1 : itemCounterTable(page, pageSize, i)
+                            searchMode ? i + 1 : itemCounterTable(page, pageSize, i)
                           }
                           decidedAt={RegisterUser.decidedAt}
                           careerPathwayName={

@@ -31,6 +31,7 @@ import RegisterFormDetailComp from "../../components/RegisterFormDetail/Register
 const StudentDetail = () => {
   const {
     auth: { roles },
+    adminVisibility,
   } = useAuth();
   const isTa = roles.includes("ta"); //unmount "اطلاعات ارزیابی" for ta
   const [value, setValue] = useState(0);
@@ -127,7 +128,12 @@ const StudentDetail = () => {
             sx={{ ...(isTa && { display: "none" }) }}
           />
           <Tab label="اطلاعات پذیرش" {...a11yProps(2)} />
-          <Tab label="مشخصات فردی" {...a11yProps(3)} />
+          <Tab
+            disabled={!adminVisibility}
+            sx={{ ...(!adminVisibility && { display: "none" }) }}
+            label="مشخصات فردی"
+            {...a11yProps(3)}
+          />
           <Tab label="وضعیت آموزش" {...a11yProps(4)} />
           <Tab label="دوره‌های تخصصی" {...a11yProps(5)} />
           <Tab label="دوره‌های عمومی" {...a11yProps(6)} />

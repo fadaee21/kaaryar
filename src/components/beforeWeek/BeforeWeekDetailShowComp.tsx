@@ -73,11 +73,14 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
         }}
         
       >
-        <Button disabled={!isDisabled} onClick={resendApproveEmail}>
+        <Button
+        sx={{whiteSpace:"nowrap"}} disabled={!isDisabled} onClick={resendApproveEmail}>
           ارسال مجدد ایمیل
         </Button>
-        <Button disabled={isDisabled} onClick={navigateToEdit}>ویرایش</Button>
         <Button
+        sx={{whiteSpace:"nowrap"}} disabled={isDisabled} onClick={navigateToEdit}>ویرایش</Button>
+        <Button
+        sx={{whiteSpace:"nowrap"}}
         disabled={isDisabled}
           variant="contained"
           onClick={() => handleOpenAlert?.("approve")}
@@ -85,6 +88,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           تایید کردن
         </Button>
         <Button
+        sx={{whiteSpace:"nowrap"}}
         disabled={isDisabled}
           variant="contained"
           onClick={() => handleOpenAlert?.("disApprove")}

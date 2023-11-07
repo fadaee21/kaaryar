@@ -148,47 +148,12 @@ const AfterWeekTable = () => {
                 </Button>
                 <ExcelExport
                   fileName={"After Week Table"}
-                  linkAll="/exam/after/week/form/all?pageNum=1&pageSize=100000"
-                  searchData={[]}
-                  // searchData={data?.map((after) => {
-                  //   const {
-                  //     finalField,
-                  //     scholar,
-                  //     finalResult,
-                  //     beforeWeekForm: {
-                  //       registrationForm: {
-                  //         province,
-                  //         city,
-                  //         family,
-                  //         firstName,
-                  //         registrationCode,
-                  //         mobile,
-                  //         email,
-                  //         course,
-                  //       },
-                  //     },
-                  //     afterWeekChecked,
-                  //   } = after;
-
-                  //   return {
-                  //     وضعیت:
-                  //       afterWeekChecked === true
-                  //         ? `تایید شده`
-                  //         : afterWeekChecked === null
-                  //         ? `در انتظار تایید`
-                  //         : `رد شده`,
-                  //     "کد متقاضی": registrationCode,
-                  //     "نام و نام خانوادگی": firstName + " " + family,
-                  //     گروه: course,
-                  //     استان: province,
-                  //     شهر: city,
-                  //     "شماره همراه": mobile,
-                  //     ایمیل: email,
-                  //     "نتیجه نهایی": finalResult,
-                  //     بورسیه: scholar ? "دارد" : "ندارد",
-                  //     "رشته نهایی": finalField,
-                  //   };
-                  // })}
+                  searchData={null}
+                  linkAll={
+                    hasQueryParams()
+                      ? AFTER_STUDENT
+                      : "/exam/after/week/form/all?pageNum=1&pageSize=100000"
+                  }
                   useIn="after"
                 />
               </Box>
@@ -228,62 +193,63 @@ const AfterWeekTable = () => {
                     <TableHeader headerItems={afterTableHeader} />
                   )}
                   <TableBody>
-                    {(data ?? data)?.map(
-                      (afterWeekStudent: AfterWeekType, i: number) => {
-                        const {
-                          id,
-                          finalField,
-                          scholar,
-                          finalResult,
-                          decidedAt,
-                          beforeWeekForm: {
-                            registrationForm: {
-                              province,
-                              city,
-                              family,
-                              firstName,
-                              registrationCode,
-                              codeMeli,
-                              mobile,
-                              email,
-                              // gender,
-                              studyField,
-                              course,
-                            },
+                    {data?.map((afterWeekStudent: AfterWeekType, i: number) => {
+                      const {
+                        id,
+                        finalField,
+                        scholar,
+                        finalResult,
+                        decidedAt,
+                        beforeWeekForm: {
+                          registrationForm: {
+                            province,
+                            city,
+                            family,
+                            firstName,
+                            registrationCode,
+                            codeMeli,
+                            mobile,
+                            email,
+                            // gender,
+                            studyField,
+                            course,
                           },
-                          afterWeekChecked,
-                        } = afterWeekStudent;
+                        },
+                        afterWeekChecked,
+                      } = afterWeekStudent;
 
-                        return (
-                          <TableBodyAll
-                            key={id}
-                            id={id}
-                            province={province}
-                            city={city}
-                            studyField={studyField}
-                            scholar={scholar}
-                            finalField={finalField}
-                            finalResult={finalResult}
-                            family={family}
-                            firstName={firstName}
-                            registrationCode={registrationCode}
-                            codeMeli={codeMeli}
-                            mobile={mobile}
-                            email={email}
-                            directNav="after-week"
-                            // gender={gender}
-                            checked={afterWeekChecked}
-                            handleCheckBox={handleCheckBox}
-                            checkBoxDisplay={!!data && searchParams.get("approvalStatus") === "pending"}
-                            index={
-                              data ? i + 1 : itemCounterTable(page, pageSize, i)
-                            }
-                            course={course}
-                            decidedAt={persianDate(decidedAt)}
-                          />
-                        );
-                      }
-                    )}
+                      return (
+                        <TableBodyAll
+                          key={id}
+                          id={id}
+                          province={province}
+                          city={city}
+                          studyField={studyField}
+                          scholar={scholar}
+                          finalField={finalField}
+                          finalResult={finalResult}
+                          family={family}
+                          firstName={firstName}
+                          registrationCode={registrationCode}
+                          codeMeli={codeMeli}
+                          mobile={mobile}
+                          email={email}
+                          directNav="after-week"
+                          // gender={gender}
+                          checked={afterWeekChecked}
+                          handleCheckBox={handleCheckBox}
+                          checkBoxDisplay={
+                            !!data &&
+                            searchParams.get("approvalStatus") === "pending"
+                          }
+                          index={
+                            data ? i + 1 : itemCounterTable(page, pageSize, i)
+                          }
+                          course={course}
+                          decidedAt={persianDate(decidedAt)}
+                        />
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -304,7 +270,7 @@ const AfterWeekTable = () => {
           variant="outlined"
           shape="rounded"
           page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
             setPage(value);
           }}
         />
