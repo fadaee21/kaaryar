@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { getData } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
 
@@ -7,39 +7,30 @@ const useGetValidationToken = () => {
   const [tokenValidation, setTokenValidation] = useState(false);
   const [loadingVal, setLoadingVal] = useState(false);
   const { auth } = useAuth();
+  const roles = auth?.roles?.toString();
   useEffect(() => {
-    // just for token validation
     const getValid = async () => {
-      const roles = auth?.roles?.toString();
       setLoadingVal(false);
       try {
-        let response = await getData(
-          `/${roles === "admin" ? "manager" : roles}/test`
-        );
-        if (response.status === 200) {
-          setTokenValidation(true);
-        } else {
-          setTokenValidation(false);
-        }
-        setLoadingVal(true);
+        const endpoint = `/${roles === "admin" ? "manager" : roles}/test`;
+        const response = await getData(endpoint);
+        setTokenValidation(response.status === 200);
       } catch (error: any) {
         setTokenValidation(false);
+        throw new Error("Your token is not valid anymore, please log in again");
+      }finally{
         setLoadingVal(true);
-        throw new Error("your token is not valid anymore, please log in again");
       }
     };
-    
     const token = Cookies.get("token");
-    //if roles array is empty,you don't need send request to validate token
     if (token) {
       getValid();
     } else {
-      console.log("token not found");
+      console.log("Token not found");
       setTokenValidation(false);
       setLoadingVal(true);
     }
-  }, [auth?.roles]);
-
+  }, [roles]);
   return [tokenValidation, loadingVal];
 };
 

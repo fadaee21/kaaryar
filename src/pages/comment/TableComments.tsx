@@ -5,7 +5,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import { Comment } from "../../model";
+import { Comment, DetailStudentStatus } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { Container } from "@mui/system";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -28,7 +28,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useDeleteComment } from "../../hooks/request/useDeleteComment";
 import { useGetComments } from "../../hooks/request/useGetComments";
 import { counterPagination } from "../../utils/counterPagination";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "../../context/AuthProvider";
 import TableHeader from "../../components/table/TableHeader";
@@ -43,6 +43,7 @@ import TableEmpty from "../../components/table/TableEmpty";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { roleConverter } from "../../utils/roleConverter";
+import dayjs, { Dayjs } from "dayjs";
 
 const Comments = () => {
   const [chevronDir, setChevronDir] = useState(false);
@@ -51,17 +52,69 @@ const Comments = () => {
   const [liftUpSearchState, setLiftUpSearchState] = useState<{
     student: string;
     commenterUser: string;
-  }>({ student: "", commenterUser: "" });
+    commenterRole: DetailStudentStatus | null;
+    sessionDateFrom: Date | Dayjs | null;
+    sessionDateTo: Date | Dayjs | null;
+    moduleName: DetailStudentStatus | null;
+  }>({
+    student: "",
+    commenterUser: "",
+    commenterRole: null,
+    sessionDateFrom: null,
+    sessionDateTo: null,
+    moduleName: null,
+  });
   const [searchingComments, setSearchingComments] = useState(false);
   const {
-    auth: { id },
+    auth: { id, username: usernameAuth },
     adminVisibility,
   } = useAuth();
-  const SEARCH_URL = `/total/survey/search?commenterId=${
-    !adminVisibility ? id : "" //while you are not admin send your id as commenter by default otherwise you can search for commenter
-  }&commenterName=${liftUpSearchState?.commenterUser}&studentName=${
-    liftUpSearchState?.student
-  }&pageNum=1&pageSize=100&orderAscending=false&orderBy=session_date`;
+  const {
+    commenterRole,
+    commenterUser,
+    sessionDateFrom,
+    student,
+    sessionDateTo,
+    moduleName,
+  } = liftUpSearchState;
+
+  // Define the base URL
+  const BASE_URL = "/total/survey/search";
+  // Construct the parameters
+  // Construct the parameters conditionally
+  const params = new URLSearchParams();
+
+  if (!adminVisibility) {
+    params.set("commenterId", String(id));
+  }
+  if (moduleName) {
+    params.set("moduleName", moduleName.value.trim());
+  }
+
+  params.set("commenterName", commenterUser);
+  params.set("studentName", student);
+
+  if (commenterRole) {
+    params.set("commenterRole", String(commenterRole.id));
+  }
+
+  if (sessionDateFrom) {
+    const dataFrom = dayjs(sessionDateFrom).startOf("day").toISOString();
+    params.set("sessionDateFrom", dataFrom);
+  }
+
+  if (sessionDateTo) {
+    const dateTo = sessionDateTo.toISOString();
+    params.set("sessionDateTo", dateTo);
+  }
+
+  params.set("pageNum", "1");
+  params.set("pageSize", "100");
+  params.set("orderAscending", "false");
+  params.set("orderBy", "session_date");
+
+  // Construct the full URL
+  const SEARCH_URL = `${BASE_URL}?${params.toString()}`;
 
   const { error: errorSearch, mutate } = useSWR(
     searchingComments ? SEARCH_URL : null,
@@ -82,13 +135,10 @@ const Comments = () => {
   const [open, setOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<Comment[] | null>(null);
 
-  const navigate = useNavigate();
   const pageSize = adminVisibility ? 10 : 100;
   const { commentsTable, commentsTableLoading, commentCounter, refreshData } =
     useGetComments(page, pageSize);
-  const handleClickOpenEdit = (id: any) => {
-    navigate(`${id}/editing`);
-  };
+
   const [idComment, setIdComment] = useState<number>();
   const { removeComment } = useDeleteComment(idComment);
 
@@ -124,21 +174,21 @@ const Comments = () => {
         </Box>
 
         <AccordionStyled expanded={chevronDir}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-              }}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+            }}
+          >
+            <AccordionSummaryStyled
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              onClick={() => setChevronDir(!chevronDir)}
+              expandIcon={<ExpandMoreIcon />}
             >
-              <AccordionSummaryStyled
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                onClick={() => setChevronDir(!chevronDir)}
-                expandIcon={<ExpandMoreIcon />}
-              >
-                <Typography variant="button">جستجو</Typography>
-              </AccordionSummaryStyled>
+              <Typography variant="button">جستجو</Typography>
+            </AccordionSummaryStyled>
 
             {/* <ExcelExport
                   fileName={"Applicant Info"}
@@ -178,7 +228,11 @@ const Comments = () => {
                   commenter,
                   commenterRole,
                   sessionDate,
+                  studentPresent,
+                  sessionProblem,
                 } = commentItem;
+                const { username } = commenter || { username: "" };
+                const notAuthorizedUser = username !== usernameAuth;
                 return (
                   <StyledTableRow
                     key={id}
@@ -192,7 +246,7 @@ const Comments = () => {
                       align="center"
                       sx={{ width: "10%", verticalAlign: "center" }}
                     >
-                      {persianDate(createTime)}
+                      {persianDate(createdAt)}
                     </StyledTableCell> */}
                     <StyledTableCell
                       component="th"
@@ -209,35 +263,46 @@ const Comments = () => {
                         verticalAlign: "center",
                         cursor: "pointer",
                       }}
-                      onClick={() => navigate(`${id}`)}
                     >
-                      <Typography variant="body1">
+                      <Link to={`${id}`}>
                         {student.firstName + " " + student.family}
-                      </Typography>
+                      </Link>
                     </StyledTableCell>
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">
-                        {commenter?.firstName + " " + commenter?.family}
-                      </Typography>
+                      {commenter?.firstName + " " + commenter?.family}
                     </StyledTableCell>
 
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">
-                        {roleConverter(commenterRole)}
-                      </Typography>
+                      {roleConverter(commenterRole)}
                     </StyledTableCell>
 
                     <StyledTableCell
                       align="center"
                       sx={{ width: "15%", verticalAlign: "center" }}
                     >
-                      <Typography variant="body1">{module?.name}</Typography>
+                      {module?.name}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="center"
+                      sx={{ width: "15%", verticalAlign: "center" }}
+                    >
+                      {sessionProblem.length ? sessionProblem : "-"}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="center"
+                      sx={{ width: "15%", verticalAlign: "center" }}
+                    >
+                      {studentPresent.length
+                        ? studentPresent === "بله"
+                          ? "حاضر"
+                          : "غایب"
+                        : "-"}
                     </StyledTableCell>
 
                     <StyledTableCell
@@ -251,26 +316,37 @@ const Comments = () => {
                         sx={{ pt: 0, justifyContent: "center" }}
                         alignItems="center"
                       >
-                        <IconButton onClick={() => navigate(`${id}`)}>
-                          <VisibilityIcon fontSize="small" color="info" />
+                        <IconButton>
+                          <Link to={`${id}`}>
+                            <VisibilityIcon fontSize="small" color="info" />
+                          </Link>
                         </IconButton>
                         <IconButton
                           sx={{
                             ...(adminVisibility && {
                               display: "none",
                             }),
+                            ...(notAuthorizedUser && {
+                              display: "none",
+                            }),
                           }}
-                          onClick={() => handleClickOpenEdit(`${id}`)}
+                          disabled={notAuthorizedUser}
                         >
-                          <EditIcon fontSize="small" color="primary" />
+                          <Link to={`${id}/editing`}>
+                            <EditIcon fontSize="small" color="primary" />
+                          </Link>
                         </IconButton>
                         <IconButton
                           sx={{
                             ...(adminVisibility && {
+                              display: "none",
+                            }),
+                            ...(notAuthorizedUser && {
                               display: "none",
                             }),
                           }}
                           onClick={() => handleClickOpen(id)}
+                          disabled={notAuthorizedUser}
                         >
                           <DeleteIcon fontSize="small" color="error" />
                         </IconButton>

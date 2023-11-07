@@ -1,24 +1,28 @@
+import { RowHeaderStudent } from "../../model";
+
 export const registerTableHeader = [
   "",
   "",
   "وضعیت",
-  "کد متقاضی",
   "نام و نام خانوادگی",
   "گروه",
   "میزان تحصیلات",
   "سال دبیرستان",
   "استان",
-  "نحوه آشنایی با کاریار",
+  "شهر",
   "نام معرف یا موسسه",
+  "نحوه آشنایی با کاریار",
+  "رشته انتخابی",
   "تاریخ ارسال فرم",
+  "تاریخ تأیید/رد ",
 ];
 
 export const beforeTableHeader = [
   "",
   "",
   "وضعیت",
-  "کد متقاضی",
   "نام و نام خانوادگی",
+  "گروه",
   "استان",
   "شهر",
   "شماره همراه",
@@ -26,14 +30,16 @@ export const beforeTableHeader = [
   "نمره آزمون",
   "آمادگی کار",
   "انگیزه ورود",
+  "تاریخ ارسال فرم",
+  "تاریخ تأیید/رد ",
 ];
 
 export const afterTableHeader = [
   "",
   "",
   "وضعیت",
-  "کد متقاضی",
   "نام و نام خانوادگی",
+  "گروه",
   "استان",
   "شهر",
   "شماره همراه",
@@ -41,38 +47,123 @@ export const afterTableHeader = [
   "نتیجه نهایی",
   "بورسیه",
   "رشته نهایی",
+  "تاریخ تأیید/رد ",
 ];
-export const afterTableSkillSeeker = [
-  "",
+export const seekerTableHeader = [
   "",
   "وضعیت",
-  "کد متقاضی",
+  "تاریخ",
   "نام و نام خانوادگی",
-  "استان",
-  "شهر",
-  "شماره همراه",
-  "ایمیل",
-  "رشته انتخابی",
-  "رشته نهایی",
-  "نتیجه نهایی",
-];
-
-export const studentTableHeader = [
-  "",
-  "",
-  "نام و نام خانوادگی",
-  "نام کاربری",
-  "شهر",
-  "استان",
   "گروه",
-  " مؤسسه معرف",
-  "وضعیت آموزش",
-  "قدم آتی آموزش",
-  "ارجاع به واحد مالی",
-  "ارزیابی کاریار",
+  "شماره متقاضی",
+  "نحوه آشنایی با کاریار",
+  "نام معرف یا موسسه",
+  "رشته انتخابی",
+  "اکانت ال ام اس",
+  "وضعیت شرکت در کارگاه معارفه",
+  "وضعیت حضور و غیاب در کارنامه هفته پذیرش",
+  "بورسیه",
+  "رشته نهایی",
+  "مسیر آموزشی",
 ];
 
-export const volunteerTableHeader = ["", "نام داوطلب", "نقش", "عملیات"];
+export const assigneeStudentTableHeader = [
+  "",
+  "",
+  "نام و نام خانوادگی",
+  "گروه",
+  "استان",
+  "شهر",
+  "معرف",
+  "مسیر آموزشی",
+  "دوره‌ای که شما منتسب به این مهارت‌آموز بوده‌اید/هستید",
+  "وضعیت دوره",
+  "حل تمرین",
+  "منتور",
+  "نمره نهایی",
+  "ارزیابی نهایی",
+  "نظرات",
+];
+
+export const adminStudentTableHeader: RowHeaderStudent[] = [
+  { id: 1, label: "", minWidth: 20, align: "center" },
+  { id: 2, label: "", minWidth: 20, align: "center" },
+  { id: 3, label: "نام و نام خانوادگی", minWidth: 200, align: "center" },
+  { id: 4, label: "نام کاربری", minWidth: 100, align: "center" },
+  { id: 5, label: "گروه", minWidth: 100, align: "center" },
+  { id: 6, label: "استان", minWidth: 100, align: "center" },
+  { id: 7, label: "شهر", minWidth: 100, align: "center" },
+  { id: 8, label: "معرف", minWidth: 100, align: "center" },
+  { id: 80, label: "نحوه آشنایی", minWidth: 100, align: "center" },
+  { id: 9, label: "مسیر آموزشی", minWidth: 120, align: "center" },
+  {
+    id: 10,
+    label: "  دوره کنونی / آخرین دوره",
+    minWidth: 100,
+    align: "center",
+  },
+  // { id: 10, label: " دوره کنونی", minWidth: 100, align: "center" },
+  { id: 11, label: "مربی حل تمرین", minWidth: 120, align: "center" },
+  { id: 12, label: "منتور", minWidth: 100, align: "center" },
+  { id: 13, label: "وضعیت آموزش", minWidth: 200, align: "center" },
+  { id: 14, label: "قدم آتی آموزش", minWidth: 200, align: "center" },
+  { id: 15, label: "ارجاع به واحد مالی", minWidth: 200, align: "center" },
+  { id: 16, label: "ارزیابی کاریار", minWidth: 200, align: "center" },
+  { id: 17, label: "عملیات", minWidth: 530, align: "left" },
+];
+export const CoreModuleCourseStudentsCompHeaders: RowHeaderStudent[] = [
+  { id: 1, label: "", minWidth: 20, align: "center" },
+  { id: 2, label: "", minWidth: 20, align: "center" },
+  { id: 3, label: "نام و نام خانوادگی", minWidth: 200, align: "center" },
+  { id: 4, label: "نام کاربری", minWidth: 100, align: "center" },
+  { id: 5, label: "گروه", minWidth: 100, align: "center" },
+  { id: 6, label: "استان", minWidth: 100, align: "center" },
+  { id: 7, label: "شهر", minWidth: 100, align: "center" },
+  { id: 8, label: "معرف", minWidth: 100, align: "center" },
+  { id: 9, label: "مسیر آموزشی", minWidth: 120, align: "center" },
+  { id: 11, label: "حل تمرین این دوره", minWidth: 120, align: "center" },
+  { id: 12, label: "منتور این دوره", minWidth: 100, align: "center" },
+  // { id: 13, label: "وضعیت آموزش", minWidth: 200, align: "center" },
+  // { id: 14, label: "قدم آتی آموزش", minWidth: 200, align: "center" },
+  // { id: 15, label: "ارجاع به واحد مالی", minWidth: 200, align: "center" },
+  // { id: 16, label: "ارزیابی کاریار", minWidth: 200, align: "center" },
+];
+export const CoreModuleCourseMentorTaCompHeaders: RowHeaderStudent[] = [
+  { id: 1, label: "", minWidth: 20, align: "center" },
+  { id: 2, label: "", minWidth: 20, align: "center" },
+  { id: 3, label: "نام داوطلب", minWidth: 200, align: "center" },
+  { id: 4, label: "نقش", minWidth: 100, align: "center" },
+  { id: 5, label: "وضعیت", minWidth: 100, align: "center" },
+];
+
+export const volunteerTableHeader = ["", "", "نام داوطلب", "نقش", "وضعیت"];
+export const moduleVolunteerTableHeader = [
+  "",
+  "نام دوره",
+  "نقش",
+  "مسیر مرتبط",
+  "گروه مرتبط",
+  "وضعیت دوره",
+  "مدرس(ها)",
+  "مهارت‌آموزان",
+  // "نظرات ",
+];
+export const volunteerStudentTableHeader = [
+  "",
+  "نام و نام خانوادگی",
+  "گروه",
+  "استان",
+  "شهر",
+  "معرف",
+  "مسیر آموزشی",
+  "دوره",
+  "وضعیت دوره",
+  "حل تمرین",
+  "منتور",
+  "نمره نهایی",
+  "ارزیابی نهایی",
+  // "نظرات ",
+];
 
 export const graduateTableHeader = [
   "",
@@ -94,6 +185,8 @@ export const commentsTableHeader = [
   "نظر دهنده",
   "نقش نظر دهنده",
   "دوره آموزشی",
+  "مشکل قابل توجه",
+  "حضور و غیاب",
   "عملیات",
 ];
 
@@ -120,6 +213,21 @@ export const trainingCourseHeader = [
   "تعداد مربیان حل تمرین",
   "تعداد منتورها",
   "لینک تعریف پروژه پایانی",
+];
+export const trainingCourseHeaderModule = [
+  "",
+  "نوع دوره",
+  "نام دوره آموزشی",
+  "مسیر مرتبط",
+  // "گروه مرتبط",
+  "وضعیت آموزش دوره",
+  "نام مدرس",
+  "تاریخ شروع",
+  // "تاریخ پایان",
+  "تعداد مهارت‌آموزان",
+  "تعداد مربیان حل تمرین",
+  "تعداد منتورها",
+  // "لینک تعریف پروژه پایانی",
 ];
 
 export const language = [
@@ -159,7 +267,9 @@ export const coreStudent = [
   "وضعیت دوره",
   "نام مدرس",
   "تاریخ شروع",
-  "تاریخ پایان",
+  // "تاریخ پایان",
+  "مربی حل تمرین",
+  "منتور",
   "نمره نهایی",
   "ارزیابی نهایی",
 ];
@@ -202,4 +312,22 @@ export const interpersonalStudent = [
   "وضعیت انجام تکالیف",
   "ارزیابی نهایی",
   "ویرایش",
+];
+
+export const emailHeader = [
+  "مرحله ارسال",
+  "عنوان ایمیل",
+  // "body",
+  "وضعیت",
+  // "templateId",
+  "تاریخ ایجاد",
+  "تاریخ ویرایش",
+];
+export const smsHeader = [
+  "مرحله ارسال",
+  // "body",
+  "وضعیت",
+  // "templateId",
+  "تاریخ ایجاد",
+  "تاریخ ویرایش",
 ];

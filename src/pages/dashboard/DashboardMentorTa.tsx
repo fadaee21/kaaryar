@@ -7,15 +7,15 @@ import useSWR from "swr";
 import { useAuth } from "../../context/AuthProvider";
 // import { toast } from "react-toastify";
 // import { handleError } from "../../utils/handleError";
-import { StudentEdu } from "../../model";
 import { Navigate } from "react-router-dom";
+import { AssigneeStudentsAll } from "../student/studentMentorTaType";
 
 const Dashboard = () => {
   const {
-    auth: { roles },
+    auth: { username: user_name },
   } = useAuth();
-  const { data, isLoading, error } = useSWR<StudentEdu[]>(
-    `/${roles}/user/student`
+  const { data, isLoading, error } = useSWR<AssigneeStudentsAll>(
+    `/user/profile/username/${user_name}/students/active`
   );
 
   if (isLoading) {
@@ -31,7 +31,7 @@ const Dashboard = () => {
   return (
     <Container maxWidth={"lg"}>
       <Grid container spacing={4}>
-        {data?.map((student: StudentEdu) => (
+        {data?.map((student) => (
           <Grid item sm={12} md={6} key={student.id}>
             <StudentCard moodleUser={student} />
           </Grid>

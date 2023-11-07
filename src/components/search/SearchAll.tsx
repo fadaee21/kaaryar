@@ -1,14 +1,12 @@
 import { Button, Grid } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { getData } from "../../api/axios";
-import { SearchFirstName } from "./SearchFirstName";
-import { SearchFamily } from "./SearchFamily";
+import { memo, useEffect, useState } from "react";
+import SearchFirstName from "./SearchFirstName";
+import SearchFamily from "./SearchFamily";
 import StatusSearch from "./StatusSearch";
 import SearchSelect, { EditBooleanSearch } from "./SearchSelect";
 import SearchString from "./SearchString";
 import SearchIcon from "@mui/icons-material/Search";
 import { GreyButton } from "../../styles/Button";
-import useSWR from "swr";
 import {
   acquaintanceOptions,
   eduLevelOptions,
@@ -19,134 +17,209 @@ import {
   scholarOptions,
   statusOptions,
 } from "./searchOptions";
-// import { EditComboStudent } from "../student/EditComboStudent";
-// import TrainingStatusSearch from "./SearchSelect2";
-import {
-  DetailStudentStatus,
-  Group,
-  ModuleAll,
-  OptionYesOrNo,
-} from "../../model";
+
+import { Group, OptionYesOrNo } from "../../model";
 import SearchSelect2 from "./SearchSelect2";
-import { toast } from "react-toastify";
-import { handleError } from "../../utils/handleError";
 import { motivationOpt } from "../beforeWeek/helper";
-// import { ApprovalStatus } from "../../model";
-// import SearchScholar from "./SearchScholar";
-// import SearchGender from "./SearchGender";
+import { JalaliDatePicker } from "../comment/JalaliDatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { RelatedPath } from "../addNewCourseComp/CareerPathway";
+import { useSearchParams } from "react-router-dom";
+import useInitialQuery from "../../hooks/useInitialQuery";
 
 interface SearchAllType {
-  setSearchingStudentBefore?: any;
-  setSearchingStudentAfter?: any;
-  setSearchingStudentRegister?: any;
-  setSearchingMoodleStudent?: any;
-  searchPage: "moodle" | "beforeWeek" | "afterWeek" | "reg";
-  chevronDir: boolean;
+  searchPage: "beforeWeek" | "afterWeek" | "reg";
+  loading: boolean;
+  groupData?: Group[];
+  selectedFieldOpt?: RelatedPath[] | undefined;
+  setSearchMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const beforeWeekSearch =
-"/exam/before/week/search/param?pageNum=1&pageSize=10000";
+  "/exam/before/week/search/param?pageNum=1&pageSize=10000";
 const afterWeekSearch =
-"/exam/after/week/search/param?pageNum=1&pageSize=10000";
+  "/exam/after/week/search/param?pageNum=1&pageSize=10000";
 const regSearch = "/reg/search/param?pageNum=1&pageSize=10000";
-const moodleSearch =
-"/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
-
 
 const SearchAll: ({
-  setSearchingStudentBefore,
-  setSearchingStudentAfter,
-  setSearchingStudentRegister,
-  setSearchingMoodleStudent,
   searchPage,
-  chevronDir,
+  groupData,
+  loading,
+  selectedFieldOpt,
+  setSearchMode,
 }: SearchAllType) => JSX.Element = ({
-  setSearchingStudentBefore,
-  setSearchingStudentAfter,
-  setSearchingStudentRegister,
-  setSearchingMoodleStudent,
   searchPage,
-  chevronDir,
+  groupData,
+  loading,
+  selectedFieldOpt,
+  setSearchMode,
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [outputFirstName, setOutputFirstName] = useState<string | null>(null);
-  const [outputFamily, setOutputFamily] = useState<string | null>(null);
-  const [referState, setReferState] = useState<string | null>(null);
-  const [highSchoolState, setHighSchoolState] = useState<string | null>(null);
-  const [registerCodeState, setRegisterCodeState] = useState<string | null>(
-    null
-  );
-  const [mobileState, setMobileState] = useState<string | null>(null);
-  const [emailState, setEmailState] = useState<string | null>(null);
-
-  const [provincesState, setProvincesState] = useState<string | null>(null);
-  const [cityState, setCityState] = useState<string | null>(null);
-  //status of items: there is 3 phases for searching - "pending" - "approved" - "rejected" , these all is available only for search, if you render the table, response can be _acceptWeekChecked: true|false|null_ don't mess it up
-  const [approvalStatus, setApprovalStatus] = useState<string | null>(null);
-  const [acquaintance, setAcquaintance] = useState<string | null>(null);
-  const [eduLevel, setEduLevel] = useState<string | null>(null);
-
-  // const [gender, setGender] = useState<"مرد" | "زن" | null>(null);
-  // const [studyField, setStudyField] = useState<string | null>(null);
-  const [finalResult, setFinalResult] = useState<string | null>(null);
-  const [scholar, setScholar] = useState<string | null>(null);
-  const [finalField, setFinalField] = useState<string | null>(null);
-  const [contCourseApproach, setContCourseApproach] = useState<string | null>(
-    null
-  );
-  const [motivation, setMotivation] = useState<string | null>(null);
-  const [jobStandby, setJobStandby] = useState<OptionYesOrNo | null>(null);
-  const [cgpa, setCgpa] = useState<string | null>(null);
+  const { initialQuery } = useInitialQuery();
+  let [searchParams, setSearchParams] = useSearchParams();
   const [disabledButton, setDisabledButton] = useState(false);
   const [searchLink, setSearchLink] = useState("");
 
-  const [trainingStatus, setTrainingStatus] =
-    useState<DetailStudentStatus | null>(null);
-  const [nextTrainingStep, setNextTrainingStep] =
-    useState<DetailStudentStatus | null>(null);
-  const [referralToFinance, setReferralToFinance] =
-    useState<DetailStudentStatus | null>(null);
-  const [kaaryarAssessment, setKaaryarAssessment] =
-    useState<DetailStudentStatus | null>(null);
-  const [module, setModule] = useState<ModuleAll | null>(null);
-  const [group, setGroup] = useState<Group | null>(null);
-
-  const fetchMoodlePage = useMemo(
-    () => searchPage === "moodle" && chevronDir,
-    [searchPage, chevronDir]
+  //--
+  const [outputFirstName, setOutputFirstName] = useState<string | null>(
+    searchParams.get("firstName")
   );
-
-  const { data: trainingStatusData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/training-status/values/all" : null // get trainingData only for moodle search student
+  //--
+  const [outputFamily, setOutputFamily] = useState<string | null>(
+    searchParams.get("family")
   );
-  const { data: nextTrainingStepData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/next-training-step/values/all" : null
+  //--
+  const [referState, setReferState] = useState<string | null>(
+    searchParams.get("refer")
   );
-  const { data: referralToFinanceData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/referral-finance/values/all" : null
+  //--
+  const highSchoolStateParams = searchParams.get("highSchoolYear");
+  const highSchoolStateOption = highSchoolOptions2.find(
+    (i) => i.value === highSchoolStateParams
   );
-  const { data: KaaryarAssessmentData } = useSWR<DetailStudentStatus[]>(
-    fetchMoodlePage ? "/status/kaaryar-assessment/values/all" : null
-  );
-  const { data: ModuleData } = useSWR<ModuleAll[]>(
-    fetchMoodlePage
-      ? "/modules/short-details/all?orderAscending=true&orderBy=name"
+  const [highSchoolState, setHighSchoolState] = useState<string | null>(
+    highSchoolStateParams && highSchoolStateOption
+      ? highSchoolStateOption.value
       : null
   );
-
-  const { data: groupData } = useSWR<Group[]>(
-    fetchMoodlePage || searchPage === "reg"
-      ? "/modules/categories/short-details/all?orderAscending=true&orderBy=name"
-      : null
+  //--
+  const [registerCodeState, setRegisterCodeState] = useState<string | null>(
+    searchParams.get("registrationCode")
+  );
+  //--
+  const [mobileState, setMobileState] = useState<string | null>(
+    searchParams.get("mobile")
+  );
+  //--
+  const [emailState, setEmailState] = useState<string | null>(
+    searchParams.get("email")
+  );
+  //--
+  const [provincesState, setProvincesState] = useState<string | null>(
+    searchParams.get("province")
+  );
+  //--
+  const [cityState, setCityState] = useState<string | null>(
+    searchParams.get("city")
+  );
+  //--
+  //status of items: there is 3 phases for searching - "pending" - "approved" - "rejected" , these all is available only for search, if you render the table, response can be _acceptWeekChecked: true|false|null_ don't mess it up
+  const approvalStatusParams = searchParams.get("approvalStatus");
+  const statusOption = statusOptions.find(
+    (i) => i.value === approvalStatusParams
+  );
+  const [approvalStatus, setApprovalStatus] = useState<string | null>(
+    approvalStatusParams && statusOption ? statusOption.value : null
+  );
+  //--
+  const acquaintanceParams = searchParams.get("familiarity");
+  const acquaintanceOption = acquaintanceOptions.find(
+    (i) => i.value === acquaintanceParams
   );
 
+  const [acquaintance, setAcquaintance] = useState<string | null>(
+    acquaintanceParams && acquaintanceOption ? acquaintanceOption.value : null
+  );
+  //--
+  const eduLevelParams = searchParams.get("education");
+  const eduLevelOption = eduLevelOptions.find(
+    (i) => i.value === eduLevelParams
+  );
+  const [eduLevel, setEduLevel] = useState<string | null>(
+    eduLevelParams && eduLevelOption ? eduLevelOption.value : null
+  );
+  //----
+  const finalResultParams = searchParams.get("finalResult");
+  const finalResultOption = finalResults.find(
+    (i) => i.value === finalResultParams
+  );
+  const [finalResult, setFinalResult] = useState<string | null>(
+    finalResultParams && finalResultOption ? finalResultOption.value : null
+  );
+  //--
+  const scholarParams = searchParams.get("scholarshipStatus");
+  const scholarOption = scholarOptions.find((i) => i.value === scholarParams);
+  const [scholar, setScholar] = useState<string | null>(
+    scholarParams && scholarOption ? scholarOption.value : null
+  );
+  //--
+  const finalFieldParams = searchParams.get("finalField");
+  const finalFieldOption = fieldOptions.find(
+    (i) => i.value === finalFieldParams
+  );
+  const [finalField, setFinalField] = useState<string | null>(
+    finalFieldParams && finalFieldOption ? finalFieldOption.value : null
+  );
 
-  // below function search in 4 pages at first find the api link for searching
+  //--
+  const [contCourseApproach, setContCourseApproach] = useState<string | null>(
+    searchParams.get("contCourseApproach")
+  );
+  //--
+  const motivationParams = searchParams.get("motivation");
+  const motivationOption = motivationOpt.find(
+    (i) => i.value === motivationParams
+  );
+  const [motivation, setMotivation] = useState<string | null>(
+    motivationParams && motivationOption ? motivationOption.value : null
+  );
+  //--
+  const jobStandbyCondition = searchParams.get("jobStandby");
+  const jobStandbyParams =
+    jobStandbyCondition === null
+      ? null
+      : {
+          value: jobStandbyCondition === "true",
+          label:
+            jobStandbyCondition === "true"
+              ? ("بله" as "بله")
+              : ("خیر" as "خیر"),
+        };
+  const [jobStandby, setJobStandby] = useState<OptionYesOrNo | null>(
+    jobStandbyParams
+  );
+  //--
+  // const [cgpa, setCgpa] = useState<string | null>(null);
+  //--
+  const groupIdParams = searchParams.get("groupID");
+  const [group, setGroup] = useState<Group | null>(
+    groupIdParams ? (initialQuery(groupData, groupIdParams) as any) : null
+  );
+  //--
+  const createdAtToParam = searchParams.get("createdAtTo");
+  const createdAtFromParam = searchParams.get("createdAtFrom");
+  const createdAtToDate = createdAtToParam ? new Date(createdAtToParam) : null;
+  const createdAtFromDate = createdAtFromParam
+    ? new Date(createdAtFromParam)
+    : null;
+  const [createdAtFrom, setCreatedAtFrom] = useState<Date | Dayjs | null>(
+    createdAtFromDate
+  );
+  const [createdAtTo, setCreatedAtTo] = useState<Date | Dayjs | null>(
+    createdAtToDate
+  );
+  const decidedAtFromParam = searchParams.get("decidedAtFrom");
+  const decidedAtToParam = searchParams.get("decidedAtTo");
+  const decidedAtFromDate = decidedAtFromParam
+    ? new Date(decidedAtFromParam)
+    : null;
+  const decidedAtToDate = decidedAtToParam ? new Date(decidedAtToParam) : null;
+  const [decidedAtFrom, setDecidedAtFrom] = useState<Date | Dayjs | null>(
+    decidedAtFromDate
+  );
+  const [decidedAtTo, setDecidedAtTo] = useState<Date | Dayjs | null>(
+    decidedAtToDate
+  );
+  //--
+  const careerPathwayIdParams = searchParams.get("careerPathwayId");
+  const [careerPathwayId, setCareerPathwayId] = useState<any>(
+    careerPathwayIdParams
+      ? (initialQuery(selectedFieldOpt, careerPathwayIdParams) as any)
+      : null
+  );
+  //--
+
+  // below function search in 3 pages at first find the api link for searching
   useEffect(() => {
-    if (searchPage === "moodle") {
-      setSearchLink(moodleSearch);
-      return;
-    }
     if (searchPage === "beforeWeek") {
       setSearchLink(beforeWeekSearch);
       return;
@@ -161,6 +234,10 @@ const SearchAll: ({
   //disable search and clear buttons
   useEffect(() => {
     const buttonStatus = ![
+      createdAtTo,
+      createdAtFrom,
+      decidedAtTo,
+      decidedAtFrom,
       outputFirstName,
       outputFamily,
       referState,
@@ -178,27 +255,17 @@ const SearchAll: ({
       finalField,
       contCourseApproach,
       jobStandby,
-      cgpa,
-      trainingStatus,
-      nextTrainingStep,
-      referralToFinance,
-      kaaryarAssessment,
-      module,
       group,
       motivation,
+      careerPathwayId,
     ].some(Boolean);
     setDisabledButton(buttonStatus);
   }, [
+    careerPathwayId,
     motivation,
     group,
-    module,
-    kaaryarAssessment,
-    referralToFinance,
-    nextTrainingStep,
-    trainingStatus,
     acquaintance,
     approvalStatus,
-    cgpa,
     cityState,
     contCourseApproach,
     eduLevel,
@@ -214,48 +281,20 @@ const SearchAll: ({
     referState,
     registerCodeState,
     scholar,
+    createdAtTo,
+    createdAtFrom,
+    decidedAtTo,
+    decidedAtFrom,
   ]);
 
-
-const fetchData = async (obj: any) => {
-  setLoading(true);
-
-  try {
-    const response = await getData(searchLink, {
-      params: obj,
-    });
-
-    if (response.status === 200) {
-      switch (searchPage) {
-        case "moodle":
-          setSearchingMoodleStudent(response.data);
-          break;
-        case "beforeWeek":
-          setSearchingStudentBefore(response.data);
-          break;
-        case "afterWeek":
-          setSearchingStudentAfter(response.data);
-          break;
-        case "reg":
-          setSearchingStudentRegister(response.data);
-          break;
-        default:
-          break;
-      }
-    } else {
-      console.log(response);
-    }
-  } catch (error: any) {
-    console.log(error);
-    toast.error(handleError(error));
-  } finally {
-    setLoading(false);
-  }
-};
- 
-
   const handleSearch = () => {
-    fetchData({
+    const obj = {
+      createdAtTo: createdAtTo?.toISOString(),
+      createdAtFrom:
+        createdAtFrom && dayjs(createdAtFrom).startOf("day").toISOString(),
+      decidedAtTo: decidedAtTo?.toISOString(),
+      decidedAtFrom:
+        decidedAtFrom && dayjs(decidedAtFrom).startOf("day").toISOString(),
       motivation,
       firstName: outputFirstName?.trim(),
       family: outputFamily?.trim(),
@@ -269,24 +308,34 @@ const fetchData = async (obj: any) => {
       education: eduLevel,
       familiarity: acquaintance,
       approvalStatus,
-      // gender,
-      // studyField,
       finalResult,
       scholarshipStatus: scholar,
       finalField,
       contCourseApproach,
       jobStandby: jobStandby?.value,
-      cgpa,
-      trainingStatusID: trainingStatus?.id,
-      nextTrainingStepID: nextTrainingStep?.id,
-      referralToFinanceID: referralToFinance?.id,
-      kaaryarAssessmentID: kaaryarAssessment?.id,
-      moduleID: module?.id,
+      careerPathwayId: careerPathwayId?.id,
+      // cgpa,
       groupID: group?.id,
-    });
+    };
+
+    const updateQueryParams = () => {
+      const updatedQueryParams = new URLSearchParams();
+      for (const [key, value] of Object.entries(obj)) {
+        if (value != null) {
+          updatedQueryParams.append(key, String(value));
+        }
+      }
+      setSearchParams(updatedQueryParams.toString());
+    };
+    updateQueryParams();
+    setSearchMode(true);
   };
 
   const clearSearch = () => {
+    setCreatedAtFrom(null);
+    setCreatedAtTo(null);
+    setDecidedAtFrom(null);
+    setDecidedAtTo(null);
     setMotivation(null);
     setOutputFirstName(null);
     setOutputFamily(null);
@@ -300,25 +349,16 @@ const fetchData = async (obj: any) => {
     setProvincesState(null);
     setCityState(null);
     setApprovalStatus(null);
-    // setGender(null);
-    // setStudyField(null);
     setFinalResult(null);
     setScholar(null);
     setFinalField(null);
     setContCourseApproach(null);
     setJobStandby(null);
-    setCgpa(null);
-    setTrainingStatus(null);
-    setNextTrainingStep(null);
-    setReferralToFinance(null);
-    setKaaryarAssessment(null);
-    setModule(null);
+    // setCgpa(null);
     setGroup(null);
-    // searchPage !== "moodle" && setApprovalStatus(null);
-    searchPage === "moodle" && setSearchingMoodleStudent(null);
-    searchPage === "beforeWeek" && setSearchingStudentBefore(null);
-    searchPage === "afterWeek" && setSearchingStudentAfter(null);
-    searchPage === "reg" && setSearchingStudentRegister(null);
+    setCareerPathwayId(null);
+    setSearchParams("");
+    setSearchMode(false);
   };
 
   return (
@@ -339,66 +379,13 @@ const fetchData = async (obj: any) => {
           searchLink={searchLink}
         />
       </Grid>
-      {["reg", "moodle"].includes(searchPage) && (
-        <Grid item xs={3}>
-          <SearchString
-            state={referState}
-            setState={setReferState}
-            label="نام معرف یا موسسه"
-          />
-        </Grid>
-      )}
-      {searchPage === "reg" && (
-        <Grid item xs={3}>
-          <SearchSelect
-            state={highSchoolState}
-            setState={setHighSchoolState}
-            options={highSchoolOptions2}
-            placeholder="سال دبیرستان"
-          />
-        </Grid>
-      )}
-      {searchPage === "reg" && (
-        <>
-          <Grid item xs={3}>
-            <SearchSelect
-              state={eduLevel}
-              setState={setEduLevel}
-              options={eduLevelOptions}
-              placeholder="میزان تحصیلات"
-            />
-          </Grid>
-          {groupData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={group as any}
-                setState={setGroup as any}
-                options={groupData.map((i) => ({ id: i.id, value: i.name }))}
-                placeholder="نام گروه"
-              />
-            </Grid>
-          )}
-        </>
-      )}
-      {searchPage === "reg" && (
-        <Grid item xs={3}>
-          <SearchSelect
-            state={acquaintance}
-            setState={setAcquaintance}
-            options={acquaintanceOptions}
-            placeholder="نحوه آشنایی"
-          />
-        </Grid>
-      )}
-      {searchPage !== "moodle" && (
-        <Grid item xs={3}>
-          <SearchString
-            state={registerCodeState}
-            setState={setRegisterCodeState}
-            label="کد متقاضی"
-          />
-        </Grid>
-      )}
+      <Grid item xs={3}>
+        <SearchString
+          state={registerCodeState}
+          setState={setRegisterCodeState}
+          label="کد متقاضی"
+        />
+      </Grid>
       <Grid item xs={3}>
         <SearchString
           setState={setMobileState}
@@ -427,25 +414,60 @@ const fetchData = async (obj: any) => {
         <SearchString state={cityState} setState={setCityState} label="شهر" />
       </Grid>
 
-      {searchPage !== "moodle" && (
+      <Grid item xs={3}>
+        <StatusSearch
+          setState={setApprovalStatus}
+          state={approvalStatus}
+          statusOptions={statusOptions}
+          placeholder="وضعیت"
+        />
+      </Grid>
+      {searchPage === "reg" && (
         <>
           <Grid item xs={3}>
-            <StatusSearch
-              setState={setApprovalStatus}
-              state={approvalStatus}
-              statusOptions={statusOptions}
-              placeholder="وضعیت"
+            <SearchString
+              state={referState}
+              setState={setReferState}
+              label="نام معرف یا موسسه"
             />
           </Grid>
-          {/* {searchPage !== "reg" && (
+          <Grid item xs={3}>
+            <SearchSelect
+              state={eduLevel}
+              setState={setEduLevel}
+              options={eduLevelOptions}
+              placeholder="میزان تحصیلات"
+            />
+          </Grid>
+          {selectedFieldOpt && (
             <Grid item xs={3}>
-              <SearchString
-                state={studyField}
-                setState={setStudyField}
-                label="رشته تحصیلی"
+              <SearchSelect2
+                state={careerPathwayId}
+                setState={setCareerPathwayId}
+                options={selectedFieldOpt.map((item) => ({
+                  id: item.id,
+                  value: item.name,
+                }))}
+                placeholder="رشته انتخابی"
               />
             </Grid>
-          )} */}
+          )}
+          <Grid item xs={3}>
+            <SearchSelect
+              state={highSchoolState}
+              setState={setHighSchoolState}
+              options={highSchoolOptions2}
+              placeholder="سال دبیرستان"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <SearchSelect
+              state={acquaintance}
+              setState={setAcquaintance}
+              options={acquaintanceOptions}
+              placeholder="نحوه آشنایی"
+            />
+          </Grid>
         </>
       )}
       {searchPage === "beforeWeek" && (
@@ -463,6 +485,10 @@ const fetchData = async (obj: any) => {
               handleChange={(e: any) => setJobStandby(e)}
               placeholder="آمادگی به کار"
               value={jobStandby}
+              options={[
+                { value: true, label: "بله" },
+                { value: false, label: "خیر" },
+              ]}
             />
           </Grid>
           <Grid item xs={3}>
@@ -503,72 +529,56 @@ const fetchData = async (obj: any) => {
           </Grid>
         </>
       )}
-
-      {searchPage === "moodle" && (
+      <>
+        {groupData && (
+          <Grid item xs={3}>
+            <SearchSelect2
+              state={group as any}
+              setState={setGroup as any}
+              options={groupData.map((i) => ({ id: i.id, value: i.name }))}
+              placeholder="نام گروه"
+            />
+          </Grid>
+        )}
+      </>
+      {searchPage !== "afterWeek" && (
         <>
-          {trainingStatusData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={trainingStatus}
-                setState={setTrainingStatus}
-                options={trainingStatusData}
-                placeholder="وضعیت آموزش"
-              />
-            </Grid>
-          )}
-          {nextTrainingStepData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={nextTrainingStep}
-                setState={setNextTrainingStep}
-                options={nextTrainingStepData}
-                placeholder="قدم آتی آموزش"
-              />
-            </Grid>
-          )}
-          {referralToFinanceData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={referralToFinance}
-                setState={setReferralToFinance}
-                options={referralToFinanceData}
-                placeholder="ارجاع به واحد مالی"
-              />
-            </Grid>
-          )}
-          {KaaryarAssessmentData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={kaaryarAssessment}
-                setState={setKaaryarAssessment}
-                options={KaaryarAssessmentData}
-                placeholder="ارزیابی کاریار"
-              />
-            </Grid>
-          )}
-          {ModuleData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={module as any}
-                setState={setModule as any}
-                options={ModuleData.map((i) => ({ id: i.id, value: i.name }))}
-                placeholder="نام دوره"
-              />
-            </Grid>
-          )}
-          {groupData && (
-            <Grid item xs={3}>
-              <SearchSelect2
-                state={group as any}
-                setState={setGroup as any}
-                options={groupData.map((i) => ({ id: i.id, value: i.name }))}
-                placeholder="نام گروه"
-              />
-            </Grid>
-          )}
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtFrom}
+              sessionDate={createdAtFrom}
+              label="از (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <JalaliDatePicker
+              setSessionDate={setCreatedAtTo}
+              sessionDate={createdAtTo}
+              label="تا (تاریخ ارسال فرم)"
+              usageType="searching"
+            />
+          </Grid>
         </>
       )}
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setDecidedAtFrom}
+          sessionDate={decidedAtFrom}
+          label="از (تاریخ تأیید/رد)"
+          usageType="searching"
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <JalaliDatePicker
+          setSessionDate={setDecidedAtTo}
+          sessionDate={decidedAtTo}
+          label="تا (تاریخ تأیید/رد)"
+          usageType="searching"
+        />
+      </Grid>
 
+      {/* //buttons */}
       <Grid item xs={3} sx={{ ml: "auto" }}>
         <GreyButton
           sx={{ width: "100%" }}
@@ -594,4 +604,4 @@ const fetchData = async (obj: any) => {
   );
 };
 
-export default SearchAll;
+export default memo(SearchAll);

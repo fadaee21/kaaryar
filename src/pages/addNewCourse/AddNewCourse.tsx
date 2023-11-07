@@ -104,13 +104,13 @@ const AddNewCourse = () => {
     setErrMsg(false);
     e.preventDefault();
     //handling error and guiding for compulsory field
-    if ([courseType, courseNameId].some((val) => !val)) {
+    if (![courseType, courseNameId].every(Boolean)) {
       toast.error("فیلد های اجباری پر شود");
       setErrMsg(true);
       return;
     }
     if (
-      ["workshop", "english_module"].every((i) => i !== subType) &&
+      !(["workshop", "english_module"].includes(subType)) &&
       !moduleCategoryId
     ) {
       toast.error("فیلد های اجباری پر شود");
@@ -122,75 +122,56 @@ const AddNewCourse = () => {
       setErrMsg(true);
       return;
     }
-    let careerPathwayId;
     if (moduleType === "core" && !liftUpState.careerPathwayId) {
       toast.error("فیلد های اجباری پر شود");
       setErrMsg(true);
       return;
-    } else {
-      careerPathwayId = getNameAndId(liftUpState.careerPathwayId)[0]; //destruct name and id from careerPathwayId string
     }
     try {
       setLoading(true);
       let res;
+      const postDataObject:any = {
+        name: courseNameVal,
+        description,
+        numberOfHours,
+        moduleType,
+        subType,
+        startDate: startDate ?? liftUpState.startDate,
+        endDate: endDate ?? liftUpState.endDate,
+        moduleCategoryId,
+        careerPathwayId: liftUpState.careerPathwayId,
+        weblinkLmsCourse: liftUpState.weblinkLmsCourse,
+        teachingStatus,
+      };
       if (courseType.includes("english")) {
-        res = await postData("/modules/new", {
-          data: {
-            name: courseNameVal,
-            description,
-            numberOfHours,
-            moduleType,
-            subType,
-            startDate: startDate ?? liftUpState.startDate,
-            endDate: endDate ?? liftUpState.endDate,
-            moduleCategoryId,
-            careerPathwayId,
-            weblinkLmsCourse: liftUpState.weblinkLmsCourse,
-            teachingStatus,
-            nonLmsInstructors,
-          },
-        });
+        res = await postData("/modules/new", { data: postDataObject });
       } else {
-        res = await editAxios(`/modules/${courseIdVal}`, {
-          data: {
-            name: courseNameVal,
-            description,
-            numberOfHours,
-            moduleType,
-            subType,
-            startDate: startDate ?? liftUpState.startDate,
-            endDate: endDate ?? liftUpState.endDate,
-            weblinkFinalProject: liftUpState.weblinkFinalProject,
-            moduleCategoryId,
-            careerPathwayId,
-            weblinkLmsCourse: liftUpState.weblinkLmsCourse,
-            teachingStatus,
-            isImported: subType === "workshop" ? true : null,
-          },
-        });
+        postDataObject.weblinkFinalProject = liftUpState.weblinkFinalProject;
+        postDataObject.isImported = subType === "workshop" ? true : null;
+        res = await editAxios(`/modules/${courseIdVal}`, { data: postDataObject });
       }
       console.log(res);
       console.log(getTypeAndSubtype(courseType));
       if (res.status === 200) {
-        if (moduleType === "core") {
-          navigate("/admin/core-course");
-          return;
-        }
-        if (subType === "workshop") {
-          navigate("/admin/general-course?tab=0");
-          return;
-        }
-        if (subType === "english_module") {
-          navigate("/admin/general-course?tab=1");
-          return;
-        }
-        if (subType === "vocational_skills") {
-          navigate("/admin/general-course?tab=2");
-          return;
-        }
-        if (subType === "interpersonal_skills") {
-          navigate("/admin/general-course?tab=3");
-          return;
+        toast.success(`دوره جدید ${courseNameVal} ایجاد شد`);
+        switch (subType) {
+          case "workshop":
+            navigate("/admin/general-course?tab=0");
+            break;
+          case "english_module":
+            navigate("/admin/general-course?tab=1");
+            break;
+          case "vocational_skills":
+            navigate("/admin/general-course?tab=2");
+            break;
+          case "interpersonal_skills":
+            navigate("/admin/general-course?tab=3");
+            break;
+          default:
+            if (moduleType === "core") {
+              navigate("/admin/core-course");
+            }
+            break;
         }
       } else {
         toast.error("دوره جدید ایجاد نشد");
@@ -202,7 +183,7 @@ const AddNewCourse = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <>
       <Container maxWidth="lg" sx={{ mb: 10 }}>

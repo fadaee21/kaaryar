@@ -10,6 +10,7 @@ export const useDeleteComment = (idComment: number | undefined) => {
   const removeComment = async () => {
     try {
       await removeData(`/${roles}/survey/${idComment}`);
+      toast.success("نظر شما با موفقیت حذف شد");
     } catch (error: any) {
       toast.error(handleError(error));
     }

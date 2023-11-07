@@ -204,7 +204,7 @@ export const computerFamiliarityOpt = [
 ];
 export const noneJobActivationOpt = [
   "آموزش غیر آکادمیک ( مانند کلاس ورزش حرفه ای و کلاس زبان و غیره)",
-  "خانه دار",
+  "خانه‌ دار",
   "جویای کار",
   "دانش‌آموز/ دانشجو",
   "همه موارد",

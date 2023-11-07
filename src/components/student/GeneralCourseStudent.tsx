@@ -158,21 +158,21 @@ const RowTableWorkShop = ({ module, assessment }: ModulesAsStudent) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
 
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {instructors ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
 
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
 
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{attendanceGrade ?? "-"}</Typography>
       </StyledTableCell>
       <StyledTableCell
@@ -202,18 +202,18 @@ const RowTableEnglish = ({ module, assessment }: ModulesAsStudent) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingStatus ?? "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {instructors ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center">
@@ -256,23 +256,23 @@ const RowTableVocational = ({ module, assessment }: ModulesAsStudent) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {category ? category.name : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingStatus ?? "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {instructors ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
 
@@ -310,26 +310,26 @@ const RowTableInterpersonal = ({ module, assessment }: ModulesAsStudent) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{name}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {category ? category.name : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{teachingStatus ?? "-"}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">
           {instructors ? convertArrToStr(instructors) : "-"}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(startDate)}</Typography>
       </StyledTableCell>
-      <StyledTableCell align="center" sx={{ verticalAlign: "center" }}>
+     <StyledTableCell align="center" >
         <Typography variant="body2">{persianDate(endDate)}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center">

@@ -13,6 +13,7 @@ interface Props {
   label: string;
   identifier: string;
   options: string[];
+  valueOfSelectAll:number
 }
 const MultiSelection = ({
   setVal,
@@ -20,16 +21,17 @@ const MultiSelection = ({
   label,
   identifier,
   options,
+  valueOfSelectAll
 }: Props) => {
   const [checkBoxVal, setCheckBoxVal] = useState<string[]>(
     studentResponse || []
   );
 
   useEffect(() => {
-    if (checkBoxVal.includes("همه موارد") || checkBoxVal.length === 6) {
+    if (checkBoxVal.includes("همه موارد") || checkBoxVal.length === valueOfSelectAll) {
       setCheckBoxVal(options);
     }
-  }, [checkBoxVal, options]);
+  }, [checkBoxVal, options, valueOfSelectAll]);
 
   const handleChangeCheckBox = useCallback(
     (value: string) => () => {

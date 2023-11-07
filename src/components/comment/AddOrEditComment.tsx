@@ -23,7 +23,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 interface AddCommentType {
   compType: "adding" | "editing";
   allComment?: Comment; //this prop just for editing
-  studentName: { firstName: string; lastName: string } | null;
+  studentName: { firstName: string; lastName?: string ,family?: string } | null;
 }
 const AddOrEditComment = ({
   compType,
@@ -55,7 +55,7 @@ const AddOrEditComment = ({
     useAddComment(
       course,
       comment,
-      sessionDate?.toISOString(),
+      sessionDate,
       sessionProblem,
       studentTask,
       studentContribute,
@@ -73,13 +73,30 @@ const AddOrEditComment = ({
     getOptionLabel: (option: ModulesAsStudentModule) => option.name,
   };
   const navigate = useNavigate();
+  const isStudentPresentFalse =
+    course && sessionDate && studentPresent === "خیر";
+  const isButtonDisabled =
+    !course ||
+    !studentContribute ||
+    !studentPresent ||
+    !studentTask ||
+    !sessionProblem ||
+    !sessionDate ||
+    !comment ||
+    loading;
+  //for activation the button user must fill out all fields except studentPresent equal to "خیر"
+  const buttonStatus = isStudentPresentFalse
+    ? false
+    : isButtonDisabled
+    ? true
+    : false;
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack direction="row" alignItems="center">
         {compType === "adding" ? (
           <Typography variant="h5" gutterBottom>
-            ثبت گزارش برای {studentName?.firstName} {studentName?.lastName}
+            ثبت گزارش برای {studentName?.firstName} {studentName?.lastName || studentName?.family}
           </Typography>
         ) : (
           <Typography variant="h5" gutterBottom>
@@ -91,16 +108,7 @@ const AddOrEditComment = ({
           variant="contained"
           type="submit"
           sx={{ px: 5, mr: 2, ml: "auto" }}
-          disabled={
-            !course ||
-            !studentContribute ||
-            !studentPresent ||
-            !studentTask ||
-            !sessionProblem ||
-            !sessionDate ||
-            !comment ||
-            loading
-          }
+          disabled={buttonStatus}
         >
           {compType === "adding" ? "ارسال" : "ویرایش"}
         </Button>

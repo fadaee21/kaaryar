@@ -5,9 +5,11 @@ import useGetImage from "../../hooks/request/useGetImage";
 import { stringAvatar } from "../../utils/avatarColor";
 
 type Prop = {
-  picture: {
-    imageAddress: string;
-  };
+  picture:
+    | {
+        imageAddress: string;
+      }
+    | undefined;
   lastName: string;
 };
 type Prop2 = {
@@ -19,7 +21,7 @@ const TablePic = ({ picture, lastName }: Prop) => {
   const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
   React.useEffect(() => {
     if (picture) {
-      getPicture(picture?.imageAddress);
+      getPicture(picture.imageAddress);
     }
   }, [getPicture, picture]);
 

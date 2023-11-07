@@ -13,6 +13,7 @@ export const StyledTableRow:any = styled(TableRow)(({ theme }) => ({
 }));
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  verticalAlign:"center",
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,

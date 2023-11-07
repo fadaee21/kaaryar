@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+a {
+  /* text-decoration: none; */
+  color: inherit;
+}
+/* a:visited {
+  color: #555 !important;
+} */
+
+/* tr.ws:nth-child(n) > td:nth-child(9) > p:nth-child(1) {
+  white-space: break-spaces;
+} */

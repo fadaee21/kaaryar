@@ -6,28 +6,29 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
 import { useAuth } from "../../context/AuthProvider";
-import { MoodleUser } from "../../model";
 import { StyledTableCell, StyledTableRow } from "../../styles/table";
 import { AccordionStyled } from "../../styles/search/accordion";
 import useSWR from "swr";
 import TableHeader from "../../components/table/TableHeader";
-import { studentTableHeader } from "../../components/table/helper-header";
+import { assigneeStudentTableHeader } from "../../components/table/helper-header";
 import TablePic from "../../components/table/TablePic";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
+import { AssigneeStudentsAll } from "./studentMentorTaType";
 //^this component list related student for mentor and ta
 const StudentTableAssignee = () => {
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
-  const { data, isLoading, error } = useSWR<MoodleUser[]>(
-    `/${roles}/user/student`
+  const {
+    auth: { username: user_name, roles },
+  } = useAuth();
+  const role = roles.toString();
+  const { data, isLoading, error } = useSWR<AssigneeStudentsAll>(
+    `/user/profile/username/${user_name}/students`
   );
-  const navigate = useNavigate();
-
+  const STUDENT_MODULE_PATH = `/${role}/core-course`;
   if (isLoading) {
     return <LoadingProgress />;
   }
@@ -47,7 +48,7 @@ const StudentTableAssignee = () => {
             component={"div"}
             sx={{ display: "flex", justifyContent: "space-between", mb: 6 }}
           >
-            <Typography variant="h4"> فهرست مهارت آموزان</Typography>
+            <Typography variant="h4"> مهارت‌آموزان من</Typography>
           </Box>
 
           <AccordionStyled>
@@ -62,28 +63,38 @@ const StudentTableAssignee = () => {
               {/* //! export excel */}
 
               <ExcelExport
-                fileName={"excel export"}
-                linkAll={`/${roles}/user/student`}
+                fileName={`student list of ${user_name}`}
+                linkAll={`/${role}/user/student`}
                 searchData={null}
-                useIn="studentListMoodleTable"
+                useIn="studentsAssignee"
               />
             </Box>
           </AccordionStyled>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              <TableHeader headerItems={studentTableHeader} />
+              <TableHeader headerItems={assigneeStudentTableHeader} />
               <TableBody>
-                {data?.map((moodleUser: MoodleUser, i: number) => {
+                {data?.map((moodleUser, i: number) => {
+                  const { student, module, mentorsAndTAs, enrollment } =
+                    moodleUser || {};
+                  const { category, id: module_id } = module;
                   const {
                     id,
                     firstName,
                     family,
-                    username,
                     picture,
                     city,
-                    statusForm,
                     registrationForm,
-                  } = moodleUser;
+                    careerPathway,
+                  } = student || {};
+
+                  const mentors = mentorsAndTAs.find(
+                    (i) => i.personnelRole === "mentor"
+                  );
+                  const ta = mentorsAndTAs.find(
+                    (i) => i.personnelRole === "ta"
+                  );
+
                   return (
                     <StyledTableRow
                       key={id}
@@ -95,9 +106,7 @@ const StudentTableAssignee = () => {
                         align="center"
                         sx={{
                           verticalAlign: "center",
-                          cursor: "pointer",
                         }}
-                        onClick={() => navigate(`${id}`)}
                       >
                         <Typography variant="body2">{i + 1}</Typography>
                       </StyledTableCell>
@@ -108,22 +117,10 @@ const StudentTableAssignee = () => {
                         align="center"
                         sx={{
                           verticalAlign: "center",
-                          cursor: "pointer",
                         }}
-                        onClick={() => navigate(`${id}`)}
                       >
                         <Typography variant="body1">
-                          {firstName + " " + family}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          verticalAlign: "center",
-                        }}
-                      >
-                        <Typography variant="body2" textAlign={"center"}>
-                          {username}
+                          <Link to={`${id}`}>{`${firstName} ${family}`}</Link>
                         </Typography>
                       </StyledTableCell>
 
@@ -134,7 +131,7 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {registrationForm?.city || city || "-"}
+                          {category?.name}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -154,9 +151,10 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {registrationForm?.course ?? "-"}
+                          {registrationForm?.city || city || "-"}
                         </Typography>
                       </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -167,6 +165,30 @@ const StudentTableAssignee = () => {
                           {registrationForm?.refer || "-"}
                         </Typography>
                       </StyledTableCell>
+
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2" textAlign={"center"}>
+                          {careerPathway?.name ?? "-"}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2" textAlign={"center"}>
+                          <Link to={`${STUDENT_MODULE_PATH}/${module_id}`}>
+                            {module?.name || "-"}
+                          </Link>
+                        </Typography>
+                      </StyledTableCell>
+
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -174,7 +196,48 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.trainingStatus?.value ?? "-"}
+                          {module?.teachingStatus || "-"}
+                        </Typography>
+                      </StyledTableCell>
+
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {ta
+                            ? ta?.personnel.firstName +
+                              " " +
+                              ta?.personnel.family
+                            : "-"}
+                        </Typography>
+                      </StyledTableCell>
+
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {mentors
+                            ? mentors?.personnel.firstName +
+                              " " +
+                              mentors?.personnel.family
+                            : "-"}
+                        </Typography>
+                      </StyledTableCell>
+
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          verticalAlign: "center",
+                        }}
+                      >
+                        <Typography variant="body2">
+                          {enrollment.assessment.finalGrade ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
@@ -184,27 +247,18 @@ const StudentTableAssignee = () => {
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.nextTrainingStep?.value ?? "-"}
+                          {enrollment?.assessment?.finalAssessment ?? "-"}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell
                         align="center"
                         sx={{
                           verticalAlign: "center",
+                          cursor: "pointer",
                         }}
                       >
                         <Typography variant="body2">
-                          {statusForm?.referralToFinance?.value ?? "-"}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          verticalAlign: "center",
-                        }}
-                      >
-                        <Typography variant="body2">
-                          {statusForm?.kaaryarAssessment?.value ?? "-"}
+                          <Link to={`${module_id}/${id}`}>مشاهده</Link>
                         </Typography>
                       </StyledTableCell>
                     </StyledTableRow>

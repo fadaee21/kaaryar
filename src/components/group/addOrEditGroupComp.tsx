@@ -8,7 +8,6 @@ import {
 import { JalaliDatePicker } from "../comment/JalaliDatePicker";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 type Props = {
@@ -38,7 +37,6 @@ const AddOrEditGroupComp = ({
   description,
   setDescription,
 }: Props) => {
-  const { groupId } = useParams();
   const navigate = useNavigate();
 
   return (
@@ -49,7 +47,7 @@ const AddOrEditGroupComp = ({
             <Typography variant="h5">{`فهرست گروه‌ها > افزودن گروه جدید`}</Typography>
           )}
           {compType === "edit" && (
-            <Typography variant="h5">{`فهرست گروه‌ها > گروه ${groupId} > ویرایش`}</Typography>
+            <Typography variant="h5">{`فهرست گروه‌ها > ${name} > ویرایش`}</Typography>
           )}
 
           <Button
@@ -113,7 +111,7 @@ const AddOrEditGroupComp = ({
             </Typography>
             <JalaliDatePicker
               setSessionDate={setStartDate}
-              sessionDate={startDate}
+              sessionDate={new Date(startDate)} //?"I don't know why it's necessary to add a new Date() only in this place for jalaliDatePicker."
             />
           </Box>
         </Grid>
@@ -131,7 +129,7 @@ const AddOrEditGroupComp = ({
             </Typography>
             <JalaliDatePicker
               setSessionDate={setEndDate}
-              sessionDate={endDate}
+              sessionDate={new Date(endDate)} //?"I don't know why it's necessary to add a new Date() only in this place for jalaliDatePicker."
             />
           </Box>
         </Grid>

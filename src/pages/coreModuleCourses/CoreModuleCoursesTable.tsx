@@ -39,10 +39,13 @@ const CoreModuleCoursesTable = () => {
   }
   if (error) {
     toast.error(handleError(error));
-    console.log(error);
-    return <Typography sx={{ mx: "auto" }}>Error Loading Page</Typography>;
+    return (
+      <Typography sx={{ display: "flex", justifyContent: "center" }}>
+        Error: {error.message}
+      </Typography>
+    );
   }
-  console.log(searchCourseCore);
+  // console.log(searchCourseCore);
   return (
     <Box sx={{ m: 2 }}>
       <Box component={"article"}>
@@ -54,7 +57,7 @@ const CoreModuleCoursesTable = () => {
             <Typography variant="h4">فهرست دوره‌های تخصصی</Typography>
           </Box>
 
-          <AccordionStyled expanded={chevronDir} > 
+          <AccordionStyled expanded={chevronDir}>
             <Box
               sx={{
                 display: "flex",

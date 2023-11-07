@@ -3,7 +3,7 @@ import { getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
 import { AfterWeekType, BeforeWeekType, RegistrationForm } from "../../model";
-import { Box, Button, Container, Divider, useMediaQuery } from "@mui/material";
+import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
@@ -61,8 +61,6 @@ const AfterWeekDetail = () => {
     getApproveWeek(id, { setApproved: false }, approveLink);
   };
 
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
-
   if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
@@ -95,16 +93,14 @@ const AfterWeekDetail = () => {
         />
         <Divider />
         <BeforeWeekDetailShowComp
-          typeComp="admission"
+          typeComp="afterWeek"
           student={student?.beforeWeekForm as BeforeWeekType}
-          matches={matches}
           id={id}
         />
         <Divider />
         <AfterWeekDetailShowComp
-          typeComp="admission"
+          typeComp="afterWeek"
           student={student}
-          matches={matches}
           id={id}
           successObject={successObject}
           handleOpenAlert={handleOpenAlert}

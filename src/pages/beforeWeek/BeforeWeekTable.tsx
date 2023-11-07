@@ -29,46 +29,68 @@ import { useHandleCheckBox } from "../../hooks/request/useHandleCheckBox";
 import { beforeTableHeader } from "../../components/table/helper-header";
 import { itemCounterTable } from "../../utils/itemCounterTable";
 import useSWR from "swr";
+import { persianDate } from "../../utils/persianDate";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/handleError";
+import { Navigate, useSearchParams } from "react-router-dom";
 const pageSize = 20;
+const heightOfTable = 500;
+const loadingBoxHeight = heightOfTable - 160;
 const BeforeWeekTable = () => {
+  const [searchMode, setSearchMode] = useState(false);
   const [page, setPage] = useState(1);
   const [chevronDir, setChevronDir] = useState(false);
-  const [searchingStudentBefore, setSearchingStudentBefore] = useState<
-    BeforeWeekType[] | null
-  >(null);
+  let BEFORE_STUDENT;
+  BEFORE_STUDENT = `/exam/before/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
 
-  const studentBeforeWeek = `/exam/before/week/form/all?pageNum=${page}&pageSize=${pageSize}`;
+  let [searchParams] = useSearchParams();
+
+  const hasQueryParams = () => {
+    return !searchParams.keys().next().done;
+  };
+
+  useEffect(() => {
+    setChevronDir(hasQueryParams());
+    setSearchMode(hasQueryParams());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (hasQueryParams()) {
+    const searchLink =
+      "/exam/before/week/search/param?pageNum=1&pageSize=10000";
+    BEFORE_STUDENT = searchLink + `&${searchParams}`;
+  }
+
   const examFormCount = "/exam/before/week/form/count";
-
   const [, counterPage] = useCountPagination(examFormCount);
-  const { getApproveMulti, loadingMulti } = useApproveMulti();
 
   const {
     data,
     isLoading: loading,
     error,
-  } = useSWR(studentBeforeWeek, {
-    onSuccess: () => window.scrollTo(0, 0),
+    mutate,
+  } = useSWR(BEFORE_STUDENT, {
+    revalidateOnMount: true,
   });
+  const { getApproveMulti, loadingMulti } = useApproveMulti(mutate);
 
   //handle multi selected checkbox
   const { handleCheckBox, ids, setIds } = useHandleCheckBox();
+  console.log(ids);
   useEffect(() => {
-    setSearchingStudentBefore(null);
     setIds([]);
     // eslint-disable-next-line
   }, [loadingMulti]);
 
-  if (loading || loadingMulti) {
-    return <LoadingProgress />;
-  }
-
   if (error) {
-    console.log(error);
+    toast.error(handleError(error));
+    if (error.response.status === 401) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return (
-    <Box sx={{ m: 2 }}>
+    <>
       <Box component={"article"}>
         <Container maxWidth="xl">
           <Box
@@ -125,12 +147,14 @@ const BeforeWeekTable = () => {
                   رد کردن گروهی
                 </Button>
                 <ExcelExport
-                  fileName={"Applicant Info"}
-                  linkAll="/exam/before/week/form/all?pageNum=1&pageSize=100000"
+                  fileName={"Before Week Table"}
+                  searchData={null}
+                  linkAll={
+                    hasQueryParams()
+                      ? BEFORE_STUDENT
+                      : "/exam/before/week/form/all?pageNum=1&pageSize=100000"
+                  }
                   useIn="before"
-                  searchData={searchingStudentBefore?.map(
-                    (i) => i.registrationForm
-                  )}
                 />
               </Box>
             </Box>
@@ -143,125 +167,95 @@ const BeforeWeekTable = () => {
                 }}
               >
                 <SearchAll
-                  setSearchingStudentBefore={setSearchingStudentBefore}
                   searchPage="beforeWeek"
-                  chevronDir={chevronDir}
+                  loading={loading}
+                  setSearchMode={setSearchMode}
                 />
               </Box>
             </AccordionDetails>
           </AccordionStyled>
 
           {/* //!for empty response of search return TableEmpty */}
-          {searchingStudentBefore?.length === 0 && <TableEmpty />}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              {/* //!for empty response of search don't return TableHeader */}
-              {searchingStudentBefore?.length !== 0 && (
-                <TableHeader headerItems={beforeTableHeader} />
-              )}
+          {data?.length === 0 && <TableEmpty />}
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            {loading || loadingMulti ? (
+              <Box sx={{ m: 10, height: loadingBoxHeight }}>
+                <LoadingProgress usage="paper" size={40} />
+              </Box>
+            ) : (
+              <TableContainer sx={{ maxHeight: heightOfTable }}>
+                <Table
+                  stickyHeader
+                  aria-label="simple table"
+                  sx={{ tableLayout: "auto" }}
+                >
+                  {/* //!for empty response of search don't return TableHeader */}
+                  {data?.length !== 0 && (
+                    <TableHeader headerItems={beforeTableHeader} />
+                  )}
 
-              {/*//! while searching show the search content */}
-              {!searchingStudentBefore && (
-                <TableBody>
-                  {data?.map((examRegisterUser: BeforeWeekType, i: number) => {
-                    const {
-                      id,
-                      motivation,
-                      jobStandby,
-                      registrationForm: {
-                        province,
-                        city,
-                        family,
-                        firstName,
-                        registrationCode,
-                        codeMeli,
-                        mobile,
-                        email,
-                        gender,
-                        studyField,
-                      },
-                      acceptWeekChecked,
-                    } = examRegisterUser;
+                  <TableBody>
+                    {data.map((examRegisterUser: BeforeWeekType, i: number) => {
+                      const {
+                        id,
+                        motivation,
+                        jobStandby,
+                        decidedAt,
+                        registrationForm: {
+                          province,
+                          city,
+                          family,
+                          firstName,
+                          // registrationCode,
+                          mobile,
+                          email,
+                          studyField,
+                          course,
+                          createdAt,
+                        },
+                        acceptWeekChecked,
+                        contCourseApproach,
+                      } = examRegisterUser;
 
-                    return (
-                      <TableBodyAll
-                        key={id}
-                        id={id}
-                        province={province}
-                        city={city}
-                        studyField={studyField}
-                        motivation={motivation}
-                        jobStandby={jobStandby}
-                        family={family}
-                        firstName={firstName}
-                        registrationCode={registrationCode}
-                        codeMeli={codeMeli}
-                        mobile={mobile}
-                        email={email}
-                        gender={gender}
-                        directNav="before-week"
-                        // cgpa={cgpa}
-                        cgpa="-" //TODO:cgpa is not correct it must be change
-                        checked={acceptWeekChecked}
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={false}
-                        index={itemCounterTable(page, pageSize, i)}
-                      />
-                    );
-                  })}
-                </TableBody>
-              )}
-              {/* show content if searching in the box */}
-              <TableBody>
-                {searchingStudentBefore?.map(
-                  (searchingStudentBefore: BeforeWeekType, i: number) => {
-                    return (
-                      <TableBodyAll
-                        key={searchingStudentBefore.id}
-                        id={searchingStudentBefore.id}
-                        idMulti={searchingStudentBefore.id}
-                        province={
-                          searchingStudentBefore.registrationForm.province
-                        }
-                        city={searchingStudentBefore.registrationForm.city}
-                        studyField={
-                          searchingStudentBefore.registrationForm.studyField
-                        }
-                        motivation={searchingStudentBefore.motivation}
-                        jobStandby={searchingStudentBefore.jobStandby}
-                        cgpa={
-                          // searchingStudentBefore.cgpa
-                          "-"
-                        }
-                        family={searchingStudentBefore.registrationForm.family}
-                        firstName={
-                          searchingStudentBefore.registrationForm.firstName
-                        }
-                        registrationCode={
-                          searchingStudentBefore.registrationForm
-                            .registrationCode
-                        }
-                        codeMeli={
-                          searchingStudentBefore.registrationForm.codeMeli
-                        }
-                        mobile={searchingStudentBefore.registrationForm.mobile}
-                        email={searchingStudentBefore.registrationForm.email}
-                        gender={searchingStudentBefore.registrationForm.gender}
-                        checked={searchingStudentBefore.acceptWeekChecked}
-                        directNav="before-week"
-                        handleCheckBox={handleCheckBox}
-                        checkBoxDisplay={true}
-                        index={i + 1}
-                      />
-                    );
-                  }
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                      return (
+                        <TableBodyAll
+                          key={id}
+                          id={id}
+                          province={province}
+                          city={city}
+                          studyField={studyField}
+                          motivation={motivation}
+                          jobStandby={jobStandby}
+                          family={family}
+                          firstName={firstName}
+                          // registrationCode={registrationCode}
+                          mobile={mobile}
+                          email={email}
+                          directNav="before-week"
+                          contCourseApproach={contCourseApproach}
+                          checked={acceptWeekChecked}
+                          handleCheckBox={handleCheckBox}
+                          checkBoxDisplay={
+                            !!data &&
+                            searchParams.get("approvalStatus") === "pending"
+                          }
+                          index={
+                            data ? i + 1 : itemCounterTable(page, pageSize, i)
+                          }
+                          course={course}
+                          createdAt={persianDate(createdAt)}
+                          decidedAt={persianDate(decidedAt)}
+                        />
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Paper>
         </Container>
       </Box>
-      {!searchingStudentBefore && (
+      {!searchMode && (
         <Pagination
           sx={{
             display: "flex",
@@ -274,12 +268,12 @@ const BeforeWeekTable = () => {
           variant="outlined"
           shape="rounded"
           page={page}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
             setPage(value);
           }}
         />
       )}
-    </Box>
+    </>
   );
 };
 

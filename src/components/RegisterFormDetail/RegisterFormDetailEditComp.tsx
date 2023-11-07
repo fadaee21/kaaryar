@@ -1,208 +1,198 @@
 import React from "react";
-import { Grid, List, ListItem, Divider, useMediaQuery } from "@mui/material";
-import { ContentBox } from "../../styles/examFormDetail";
-import { DetailTypography } from "../../styles/studentDetail";
-import { RegistrationForm } from "../../model";
-import { EditingSelective } from "./EditingSelective";
+import { Grid, List } from "@mui/material";
 import {
-  SelectedFieldOpt,
   acquaintanceOptions,
   eduLevelOptions,
   highSchoolOptions,
   provinceOptions,
   uniSemesterOptions,
 } from "../search/searchOptions";
-import EditingInput from "./EditingInput";
+import { EditingSelective } from "../ui-comp/EditingSelective";
+import EditString from "../ui-comp/EditString";
+import useSWR from "swr";
+import { RELATED_PATH, RelatedPath } from "../addNewCourseComp/CareerPathway";
+import LayoutReg from "../layout/LayoutReg";
+import { RegistrationForm } from "../../model";
 
 interface RegStudent {
   student: RegistrationForm | null;
   handleChange: (e: any) => void;
 }
+export interface CHARITY_RESPONSE {
+  value: string;
+  id: number;
+}
+const CHARITY = "/reg/wp/charity-orgs/values/all";
 const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   student,
   handleChange,
 }) => {
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
+  const { data: careerPathwayData, isLoading } =
+    useSWR<RelatedPath[]>(RELATED_PATH);
+  const { data: charityData, isLoading: charityLoading } =
+    useSWR<CHARITY_RESPONSE[]>(CHARITY);
+
+  const referCondition =
+    student?.familiarity?.trim() === "معرف" ||
+    student?.familiarity?.trim() === "other";
+  const CharitableCondition =
+    student?.familiarity?.trim() === "موسسات نیکوکاری";
 
   return (
-    <ContentBox>
-      <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
-        فرم ثبت اطلاعات اولیه
-      </DetailTypography>
-      <Divider
-        variant="middle"
-        flexItem
-        orientation={matches ? "vertical" : "horizontal"}
-      />
-
+    <LayoutReg title="فرم ثبت اطلاعات اولیه">
       <Grid container>
         <Grid item xs={12} md={6}>
           <List>
-            <ListItem>
-              <EditingInput
-                handleChange={handleChange}
-                name="token"
-                placeholder="کد متقاضی"
-                state={student?.registrationCode || ""}
-              />
-            </ListItem>
-            <ListItem>
-              <EditingInput
-                handleChange={handleChange}
-                name="firstName"
-                placeholder="نام"
-                state={student?.firstName || ""}
-              />
-            </ListItem>
-            <ListItem>
-              <EditingInput
-                handleChange={handleChange}
-                name="family"
-                placeholder="نام خانوادگی"
-                state={student?.family || ""}
-              />
-            </ListItem>
-            <ListItem>
-              <EditingSelective
-                handleChange={handleChange}
-                state={student?.province?.trimEnd() || ""}
-                placeholder="استان"
-                options={provinceOptions}
-                name="province"
-              />
-            </ListItem>
-            <ListItem>
-              <EditingInput
-                handleChange={handleChange}
-                name="city"
-                placeholder="شهر"
-                state={student?.city || ""}
-              />
-            </ListItem>
+            <EditString
+              handleChange={handleChange}
+              identifier="token"
+              placeholder="کد متقاضی"
+              value={student?.registrationCode || ""}
+            />
 
-            <ListItem>
-              <EditingSelective
-                options={acquaintanceOptions}
-                placeholder="نحوه آشنایی"
+            <EditString
+              handleChange={handleChange}
+              identifier="firstName"
+              placeholder="نام"
+              value={student?.firstName || ""}
+            />
+
+            <EditString
+              handleChange={handleChange}
+              identifier="family"
+              placeholder="نام خانوادگی"
+              value={student?.family || ""}
+            />
+
+            <EditingSelective
+              handleChange={handleChange}
+              value={student?.province?.trimEnd() || ""}
+              placeholder="استان"
+              options={provinceOptions}
+              identifier="province"
+            />
+
+            <EditString
+              handleChange={handleChange}
+              identifier="city"
+              placeholder="شهر"
+              value={student?.city || ""}
+            />
+
+            <EditingSelective
+              options={acquaintanceOptions}
+              placeholder="نحوه آشنایی"
+              handleChange={handleChange}
+              value={student?.familiarity?.trim() || ""}
+              identifier="familiarity"
+            />
+            {referCondition && (
+              <EditString
+                placeholder="نام معرف یا موسسه"
                 handleChange={handleChange}
-                state={student?.familiarity?.trim() || ""}
-                name="familiarity"
+                value={student?.refer || ""}
+                identifier="refer"
               />
-            </ListItem>
-            {student?.familiarity?.trim() === "other" && (
-              <ListItem>
-                <EditingInput
-                  placeholder="نام معرف یا موسسه"
-                  handleChange={handleChange}
-                  state={student?.refer || ""}
-                  name="refer"
-                />
-              </ListItem>
             )}
-            <ListItem>
-              <EditingInput
-                placeholder="سال تولد"
+            {CharitableCondition && !!charityData && (
+              <EditingSelective
+                // options={CharityOptions}
+                value={student?.refer || ""}
+                disabled={charityLoading && !!charityData}
+                options={charityData?.map((i) => ({
+                  label: i.value,
+                  value: i.id,
+                }))}
+                placeholder="نام موسسه خیریه"
                 handleChange={handleChange}
-                state={student?.birthDate || ""}
-                name="birthDate"
+                identifier="refer"
               />
-            </ListItem>
+            )}
+
+            <EditString
+              placeholder="سال تولد"
+              handleChange={handleChange}
+              value={student?.birthDate || ""}
+              identifier="birthDate"
+            />
           </List>
         </Grid>
         <Grid item xs={12} md={6}>
           <List>
-            <ListItem>
-              <EditingInput
-                placeholder="شماره همراه"
-                handleChange={handleChange}
-                state={student?.mobile || ""}
-                name="mobile"
-              />
-            </ListItem>
-            <ListItem>
-              <EditingInput
-                placeholder="ایمیل"
-                handleChange={handleChange}
-                state={student?.email || ""}
-                name="email"
-              />
-            </ListItem>
+            <EditString
+              placeholder="شماره همراه"
+              handleChange={handleChange}
+              value={student?.mobile || ""}
+              identifier="mobile"
+            />
 
-            <ListItem>
-              <EditingSelective
-                options={eduLevelOptions}
-                placeholder="میزان تحصیلات"
-                handleChange={handleChange}
-                state={student?.education || ""}
-                name="education"
-              />
-            </ListItem>
-            <ListItem>
-              <EditingSelective
-                options={highSchoolOptions}
-                placeholder="سال دبیرستان"
-                handleChange={handleChange}
-                state={student?.highSchoolYear || ""}
-                name="highSchoolYear"
-              />
-            </ListItem>
-            <ListItem>
-              <EditingSelective
-                options={uniSemesterOptions}
-                placeholder="ترم دانشگاه"
-                handleChange={handleChange}
-                state={student?.uniSemester || ""}
-                name="uniSemester"
-              />
-            </ListItem>
+            <EditString
+              placeholder="ایمیل"
+              handleChange={handleChange}
+              value={student?.email || ""}
+              identifier="email"
+            />
 
-            <ListItem>
-              <EditingInput
-                placeholder="رشته تحصیلی"
-                handleChange={handleChange}
-                state={student?.studyField || ""}
-                name="studyField"
-              />
-            </ListItem>
-            <ListItem>
-              <EditingSelective
-                options={SelectedFieldOpt}
-                placeholder="رشته انتخابی در کاریار"
-                handleChange={handleChange}
-                state={student?.selectedField || ""}
-                name="selectedField"
-              />
-            </ListItem>
-            {student?.selectedField?.trim() === "other" && (
-              <ListItem>
-                <EditingInput
-                  placeholder="مسیر مورد نظر متقاضی"
-                  handleChange={handleChange}
-                  state={student?.careerPathwayOther || ""}
-                  name="careerPathwayOther"
-                />
-              </ListItem>
-            )}
-            <ListItem>
-              <EditingInput
-                placeholder="توضیحات سایر"
-                handleChange={handleChange}
-                state={student?.description || ""}
-                name="description"
-              />
-            </ListItem>
+            <EditingSelective
+              options={eduLevelOptions}
+              placeholder="میزان تحصیلات"
+              handleChange={handleChange}
+              value={student?.education || ""}
+              identifier="education"
+            />
+
+            <EditingSelective
+              options={highSchoolOptions}
+              placeholder="سال دبیرستان"
+              handleChange={handleChange}
+              value={student?.highSchoolYear || ""}
+              identifier="highSchoolYear"
+            />
+
+            <EditingSelective
+              options={uniSemesterOptions}
+              placeholder="ترم دانشگاه"
+              handleChange={handleChange}
+              value={student?.uniSemester || ""}
+              identifier="uniSemester"
+            />
+
+            <EditString
+              placeholder="رشته تحصیلی"
+              handleChange={handleChange}
+              value={student?.studyField || ""}
+              identifier="studyField"
+            />
+
+            <EditingSelective
+              disabled={isLoading && !!careerPathwayData}
+              options={careerPathwayData?.map((i) => ({
+                label: i.name,
+                value: i.id,
+              }))}
+              placeholder="رشته انتخابی در کاریار"
+              handleChange={handleChange}
+              value={student?.careerPathwayId || ""}
+              identifier="careerPathwayId"
+            />
+
+            <EditString
+              placeholder="مسیر مورد نظر متقاضی"
+              handleChange={handleChange}
+              value={student?.careerPathwayOther || ""}
+              identifier="careerPathwayOther"
+            />
+
+            <EditString
+              placeholder="توضیحات سایر"
+              handleChange={handleChange}
+              value={student?.description || ""}
+              identifier="description"
+            />
           </List>
         </Grid>
-        {/* <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "flex-start",
-            marginRight: 5,
-          }}
-        ></Box> */}
       </Grid>
-    </ContentBox>
+    </LayoutReg>
   );
 };
 

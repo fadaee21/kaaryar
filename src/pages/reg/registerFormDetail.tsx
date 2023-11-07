@@ -7,7 +7,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RegisterFormDetailComp from "../../components/RegisterFormDetail/RegisterFormDetailComp";
 import { RegistrationForm } from "../../model";
 import { useApproveReg } from "../../hooks/request/useApprove";
-import { useAuth } from "../../context/AuthProvider";
 import AlertDialog from "../../components/modal/AlertDialog";
 
 const RegisterFormDetail = () => {
@@ -18,16 +17,12 @@ const RegisterFormDetail = () => {
     "approve" | "disApprove" | undefined
   >(undefined);
   const handleOpenAlert = (alert: "approve" | "disApprove") => {
-    console.log(alert);
     setAlertType(alert);
     setOpenAlert(true);
   };
   const handleCloseAlert = () => setOpenAlert(false);
   const navigate = useNavigate();
   const { id } = useParams();
-
-  const { auth } = useAuth();
-  const roles = auth.roles.toString();
   const { getApproveReg, success, loadingRegApprove } = useApproveReg();
   const studentId = `/reg/form/${id}`;
   const approveLink = "/reg/form/approve";
@@ -60,6 +55,14 @@ const RegisterFormDetail = () => {
     getApproveReg(id, { status: false }, approveLink);
   };
 
+  const resendApproveEmail = () => {
+    if (student?.checked) {
+      handleOpenAlert("approve");
+    } else {
+      handleOpenAlert("disApprove");
+    }
+  };
+
   if (loading || loadingRegApprove) {
     return <LoadingProgress />;
   }
@@ -81,10 +84,12 @@ const RegisterFormDetail = () => {
           aria-label="small button group"
         >
           <Button
-            onClick={() => navigate(`/${roles}/register-form-edit/${id}`)}
+            disabled={student?.checked !== null || success ? false : true}
+            onClick={resendApproveEmail}
           >
-            ویرایش
+            ارسال مجدد ایمیل
           </Button>
+          <Button onClick={() => navigate("edit")}>ویرایش</Button>
           <Button
             variant="contained"
             onClick={() => handleOpenAlert("approve")}

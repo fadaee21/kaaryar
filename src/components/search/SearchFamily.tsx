@@ -1,8 +1,9 @@
 import AsyncSelect from "react-select/async";
 import { getData } from "../../api/axios";
+import { memo } from "react";
 
 const responseQuantity = "8";
-export const SearchFamily = ({
+const SearchFamily = ({
   setOutputFamily,
   outputFamily,
   searchPage,
@@ -46,12 +47,19 @@ export const SearchFamily = ({
     <>
       {searchPage === "reg" && (
         <AsyncSelect
+          isClearable
           value={outputFamily ? { family: outputFamily } : null}
           // defaultOptions={true}
           getOptionLabel={(e: any) => e.family}
           getOptionValue={(e: any) => e.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFamily(e.family)}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.family);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"
@@ -69,6 +77,7 @@ export const SearchFamily = ({
       )}
       {searchPage === "beforeWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFamily ? { registrationForm: { family: outputFamily } } : null
           }
@@ -76,7 +85,13 @@ export const SearchFamily = ({
           getOptionLabel={(e: any) => e.registrationForm.family}
           getOptionValue={(e: any) => e.registrationForm.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFamily(e.registrationForm.family)}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.registrationForm.family);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"
@@ -94,6 +109,7 @@ export const SearchFamily = ({
       )}
       {searchPage === "afterWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFamily
               ? {
@@ -107,9 +123,18 @@ export const SearchFamily = ({
           getOptionLabel={(e: any) => e.beforeWeekForm.registrationForm.family}
           getOptionValue={(e: any) => e.beforeWeekForm.registrationForm.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) =>
-            setOutputFamily(e.beforeWeekForm.registrationForm.family)
-          }
+          // onChange={(e: any) =>
+          //   setOutputFamily(e.beforeWeekForm.registrationForm.family)
+          // }
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(
+                selectedOption.beforeWeekForm.registrationForm.family
+              );
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"
@@ -125,14 +150,60 @@ export const SearchFamily = ({
           }}
         />
       )}
+
+      {searchPage === "skillSeeker" && (
+        <AsyncSelect
+          isClearable
+          value={
+            outputFamily
+              ? {
+                  regForm: {
+                    family: outputFamily,
+                  },
+                }
+              : null
+          }
+          // defaultOptions={true}
+          getOptionLabel={(e) => e.regForm.family}
+          getOptionValue={(e) => e.regForm.family}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.regForm.family);
+            }
+          }}
+          cacheOptions
+          loadOptions={promiseOptions}
+          placeholder="نام خانوادگی"
+          noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+          loadingMessage={() => "لطفا کمی صبر کنید"}
+          name="searchName"
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
+          }}
+        />
+      )}
+
       {searchPage === "moodle" && (
         <AsyncSelect
+          isClearable
           value={outputFamily ? { family: outputFamily } : null}
           // defaultOptions={true}
           getOptionLabel={(e: any) => e.family}
           getOptionValue={(e: any) => e.family}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFamily(e.family)}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFamily(null);
+            } else {
+              setOutputFamily(selectedOption.family);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام خانوادگی"
@@ -151,3 +222,4 @@ export const SearchFamily = ({
     </>
   );
 };
+export default memo(SearchFamily);

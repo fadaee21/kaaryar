@@ -11,7 +11,6 @@ const AddComment = () => {
     return <Navigate to={pathname.slice(0, -12)} />;
   }
   const { student } = state as any;
-
   return (
     <Container maxWidth="lg">
       <AddOrEditComment compType={"adding"} studentName={student} />

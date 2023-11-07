@@ -1,38 +1,19 @@
-import {
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  useMediaQuery,
-} from "@mui/material";
+import { Grid, List, ListItem, ListItemText } from "@mui/material";
 import { RegistrationForm } from "../../model";
-import { ContentBox } from "../../styles/examFormDetail";
-import { DetailTypography } from "../../styles/studentDetail";
-
+import LayoutReg from "../layout/LayoutReg";
 import { getLabel } from "../../utils/getLabel";
 import { SelectedFieldOpt } from "../search/searchOptions";
+import { useAuth } from "../../context/AuthProvider";
+
 interface RegStudent {
   student: RegistrationForm | undefined;
   studentDetailComp?: boolean;
 }
 
 const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
+  const { adminVisibility } = useAuth();
   return (
-    <ContentBox>
-      {!studentDetailComp && (
-        <>
-          <DetailTypography variant="h6" sx={{ minWidth: "30%" }}>
-            فرم ثبت اطلاعات اولیه
-          </DetailTypography>
-          <Divider
-            variant="middle"
-            flexItem
-            orientation={matches ? "vertical" : "horizontal"}
-          />
-        </>
-      )}
+    <LayoutReg title="فرم ثبت اطلاعات اولیه" NotRender={studentDetailComp}>
       <Grid container>
         <Grid item xs={12} md={6}>
           <List>
@@ -76,25 +57,29 @@ const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
                 secondary={student?.birthDate || "-"}
               />
             </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="نحوه آشنایی :"
-                secondary={
-                  !student?.familiarity || student?.familiarity === ""
-                    ? "-"
-                    : student?.familiarity === "other"
-                    ? "سایر"
-                    : student?.familiarity
-                }
-              />
-            </ListItem>
-            {student?.refer && (
-              <ListItem>
-                <ListItemText
-                  primary="نام معرف یا موسسه :"
-                  secondary={student?.refer || "-"}
-                />
-              </ListItem>
+            {adminVisibility && (
+              <>
+                <ListItem>
+                  <ListItemText
+                    primary="نحوه آشنایی :"
+                    secondary={
+                      !student?.familiarity || student?.familiarity === ""
+                        ? "-"
+                        : student?.familiarity === "other"
+                        ? "سایر"
+                        : student?.familiarity
+                    }
+                  />
+                </ListItem>
+                {student?.refer && (
+                  <ListItem>
+                    <ListItemText
+                      primary="نام معرف یا موسسه :"
+                      secondary={student?.refer || "-"}
+                    />
+                  </ListItem>
+                )}
+              </>
             )}
           </List>
         </Grid>
@@ -138,15 +123,19 @@ const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
               />
             </ListItem>
             <ListItem>
-              <ListItemText
+              {/* <ListItemText
                 primary="رشته انتخابی در کاریار :"
                 secondary={
                   !student?.selectedField || student?.selectedField === ""
-                    ? "-"
+                  ? "-"
                     : student?.selectedField === "other"
                     ? "سایر"
                     : getLabel(student?.selectedField, SelectedFieldOpt)
-                }
+                  }
+                /> */}
+              <ListItemText
+                primary="رشته انتخابی در کاریار :"
+                secondary={student?.careerPathway?.name || "سایر"}
               />
             </ListItem>
 
@@ -154,7 +143,11 @@ const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
               <ListItem>
                 <ListItemText
                   primary="مسیر مورد نظر متقاضی:"
-                  secondary={student?.careerPathwayOther || "-"}
+                  secondary={
+                    student?.careerPathwayOther ||
+                    getLabel(student?.selectedField, SelectedFieldOpt) ||
+                    "-"
+                  }
                 />
               </ListItem>
             )}
@@ -168,7 +161,7 @@ const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
           </List>
         </Grid>
       </Grid>
-    </ContentBox>
+    </LayoutReg>
   );
 };
 

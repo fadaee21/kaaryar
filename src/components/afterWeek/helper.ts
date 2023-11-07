@@ -57,7 +57,6 @@ export const recommendFieldMentorOpt = [
     value: "تعیین سطح فرانت اند مقدماتی",
     label: "تعیین سطح فرانت اند مقدماتی",
   },
-
   {
     value: "تعیین سطح فرانت اند پیشرفته",
     label: "تعیین سطح فرانت اند پیشرفته",
@@ -82,7 +81,14 @@ export const recommendFieldMentorOpt = [
   },
   { value: "امور اداری", label: "امور اداری" },
   { value: "تعیین سطح امور اداری", label: "تعیین سطح امور اداری" },
+  { value: "مبانی کامپیوتر", label: "مبانی کامپیوتر" },
+  { value: "کارشناس مرکز تماس", label: "کارشناس مرکز تماس" },
+  { value: "محتوا و شبکه‌های اجتماعی", label: "محتوا و شبکه‌های اجتماعی" },
+  { value: "تضمین کیفیت نرم‌افزار (QA)", label: "تضمین کیفیت نرم‌افزار (QA)" },
+  { value: "بازاریابی دیجیتال (Digital Marketing)", label: "بازاریابی دیجیتال (Digital Marketing)" },
+  { value: "Help Desk", label: "Help Desk" },
 ];
+
 
 export const finalResultOpt = [
   { value: "تایید از سمت کاریار", label: "تایید از سمت کاریار" },

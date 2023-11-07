@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import Container from "@mui/material/Container";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormHelperText from "@mui/material/FormHelperText";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import {
   BackgroundImage,
   GridGuestLogin,
@@ -44,8 +42,6 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleLogin();
-    setUsername("");
-    setPassword("");
   };
 
   if (!loadingVal) {
@@ -59,7 +55,7 @@ const Login = () => {
   return (
     <>
       {tokenValidation ? (
-        <Navigate to={from} replace />
+        <Navigate to={from}  />
       ) : (
         <BackgroundImage backgd={backgd}>
           <Container maxWidth="md" sx={{ py: 9 }}>
@@ -105,6 +101,7 @@ const Login = () => {
                       value={username}
                       required
                       error={errMsg ? true : false}
+                      // autoFocus
                     />
                     <TextField
                       label="رمز ورود"

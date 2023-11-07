@@ -1,4 +1,5 @@
 // import { ApprovalStatus } from "../../model";
+import { memo } from "react";
 import Select from "react-select";
 // import { statusOptions } from "./searchOptions";
 interface Prop {
@@ -16,9 +17,16 @@ const StatusSearch = ({
 }: Prop) => {
   return (
     <Select
+      isClearable
       value={state ? statusOptions.find((i) => i.value === state) : null}
       options={statusOptions}
-      onChange={(selectedValue: any) => setState(selectedValue.value)}
+      onChange={(selectedOption) => {
+        if (selectedOption === null) {
+          setState(null);
+        } else {
+          setState(selectedOption.value);
+        }
+      }}
       placeholder={placeholder}
       styles={{
         control: (baseStyles) => ({
@@ -31,4 +39,4 @@ const StatusSearch = ({
   );
 };
 
-export default StatusSearch;
+export default memo(StatusSearch);

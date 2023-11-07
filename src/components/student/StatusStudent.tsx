@@ -1,12 +1,13 @@
 import { Button, List, ListItem, ListItemText, Stack } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-import { StatusForm } from "../../model";
+import { CareerPathway, StatusForm } from "../../model";
 import { useAuth } from "../../context/AuthProvider";
 interface Prop {
   statusForm: StatusForm | undefined;
+  careerPathway: CareerPathway | undefined | null;
 }
-const StatusStudent = ({ statusForm }: Prop) => {
+const StatusStudent = ({ statusForm, careerPathway }: Prop) => {
   const navigate = useNavigate();
   const { adminVisibility } = useAuth();
   const {
@@ -15,7 +16,7 @@ const StatusStudent = ({ statusForm }: Prop) => {
     description,
     withdrawalReason,
     referralToFinance,
-    kaaryarAssessment
+    kaaryarAssessment,
   } = statusForm || {};
   if (
     [
@@ -27,26 +28,37 @@ const StatusStudent = ({ statusForm }: Prop) => {
     ].every((val) => !val)
   ) {
     return (
-      <Stack
-        direction="row"
-        alignItems="flex-start"
-        justifyContent="space-between"
-      >
-        <p>وضعیت آموزش برای این مهارت آموز وجود ندارد</p>
-        <Button
-          endIcon={<EditIcon />}
-          variant="outlined"
-          onClick={() => navigate(`edit-status`)}
-          disabled={!adminVisibility}
-          sx={{
-            mr: 2,
-            px: 5,
-            ...(!adminVisibility && { visibility: "hidden" }),
-          }}
+      <>
+        <Stack
+          direction="row"
+          alignItems="flex-start"
+          justifyContent="space-between"
         >
-          ویرایش
-        </Button>
-      </Stack>
+          <p>وضعیت آموزش برای این مهارت آموز وجود ندارد</p>
+
+          <Button
+            endIcon={<EditIcon />}
+            variant="outlined"
+            onClick={() => navigate(`edit-status`)}
+            disabled={!adminVisibility}
+            sx={{
+              mr: 2,
+              px: 5,
+              ...(!adminVisibility && { visibility: "hidden" }),
+            }}
+          >
+            ویرایش
+          </Button>
+        </Stack>
+        <List sx={{ width: "40%" }}>
+          <ListItem>
+            <ListItemText
+              primary="مسیر آموزشی"
+              secondary={careerPathway?.name || "-"}
+            />
+          </ListItem>
+        </List>
+      </>
     );
   }
   return (
@@ -70,9 +82,11 @@ const StatusStudent = ({ statusForm }: Prop) => {
                 secondary={nextTrainingStep?.value}
               />
             </ListItem>
-            <ListItem>
-              <ListItemText primary="توضیحات" secondary={description} />
-            </ListItem>
+            {adminVisibility && (
+              <ListItem>
+                <ListItemText primary="توضیحات" secondary={description} />
+              </ListItem>
+            )}
           </List>
           <List>
             {[6, 7].some((item) => item === trainingStatus?.id) && (
@@ -83,16 +97,26 @@ const StatusStudent = ({ statusForm }: Prop) => {
                 />
               </ListItem>
             )}
+            {adminVisibility && (
+              <>
+                <ListItem>
+                  <ListItemText
+                    primary="ارجاع به واحد مالی"
+                    secondary={referralToFinance?.value || "-"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="ارزیابی کاریار"
+                    secondary={kaaryarAssessment?.value || "-"}
+                  />
+                </ListItem>
+              </>
+            )}
             <ListItem>
               <ListItemText
-                primary="ارجاع به واحد مالی"
-                secondary={referralToFinance?.value || "-"}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="ارزیابی کاریار"
-                secondary={kaaryarAssessment?.value || "-"}
+                primary="مسیر آموزشی"
+                secondary={careerPathway?.name || "-"}
               />
             </ListItem>
           </List>

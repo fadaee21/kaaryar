@@ -67,6 +67,65 @@ export const acquaintanceOptions = [
   { label: "سایر", value: "other" },
 ];
 
+export const CharityOptions = [
+  { label: "بنیاد کودک", value: "بنیاد کودک" },
+  { label: "سلوک پویا", value: "سلوک پویا" },
+  { label: "انجمن یاران دانش و مهر", value: "انجمن یاران دانش و مهر" },
+  { label: "امین آراسته", value: "امین آراسته" },
+  {
+    label: "بنیاد توسعه کارآفرینی زنان و جوانان",
+    value: "بنیاد توسعه کارآفرینی زنان و جوانان",
+  },
+  { label: "نوید", value: "نوید" },
+  { label: "بنیاد سپهر", value: "بنیاد سپهر" },
+  {
+    label: "مجتمع آموزشی و توانبخشی رعد",
+    value: "مجتمع آموزشی و توانبخشی رعد",
+  },
+  { label: "بنیاد حضرت علی", value: "بنیاد حضرت علی" },
+  { label: "کاشانه مهر", value: "کاشانه مهر" },
+  { label: "جمعیت امام علی", value: "جمعیت امام علی" },
+  { label: "احیای ارزش‌ها", value: "احیای ارزش‌ها" },
+  { label: "دارالکرام", value: "دارالکرام" },
+  { label: "مؤسسه نورالزهرا", value: "مؤسسه نورالزهرا" },
+  { label: "بنیاد رشد", value: "بنیاد رشد" },
+  { label: "مؤسسه رایحه", value: "مؤسسه رایحه" },
+  { label: "مؤسسه اجتماعی فرهنگی یاس", value: "مؤسسه اجتماعی فرهنگی یاس" },
+  { label: "خیریه حضرت زهرا", value: "خیریه حضرت زهرا" },
+  { label: "خانه‌ای برای آینده", value: "خانه‌ای برای آینده" },
+  { label: "جامعه یاوری", value: "جامعه یاوری" },
+  { label: "مؤسسه روشنای امید", value: "مؤسسه روشنای امید" },
+  { label: "مهرگیتی", value: "مهرگیتی" },
+  { label: "انجمن یاران جامع", value: "انجمن یاران جامع" },
+  {
+    label: "مؤسسه حمایت از کودکان بی‌پناه کمک",
+    value: "مؤسسه حمایت از کودکان بی‌پناه کمک",
+  },
+  { label: "مؤسسه روبیکمپ", value: "مؤسسه روبیکمپ" },
+  {
+    label: "مؤسسه خیریه آسیب نخاعی اراک",
+    value: "مؤسسه خیریه آسیب نخاعی اراک",
+  },
+  { label: "مؤسسه آرای شمیران", value: "مؤسسه آرای شمیران" },
+  {
+    label: "جمعیت توسعه سرمایه انسانی آینده برتر",
+    value: "جمعیت توسعه سرمایه انسانی آینده برتر",
+  },
+  {
+    label: "بیماران خاص بندرعباس (سرطان) و ام اس",
+    value: "بیماران خاص بندرعباس (سرطان) و ام اس",
+  },
+  { label: "توسعه پایدار اردیبهشت", value: "توسعه پایدار اردیبهشت" },
+  { label: "ایرانشهر", value: "ایرانشهر" },
+  {
+    label: "مؤسسه توسعه نیروی انسانی آفرینشگر",
+    value: "مؤسسه توسعه نیروی انسانی آفرینشگر",
+  },
+  { label: "مؤسسه خیریه قطره", value: "مؤسسه خیریه قطره" },
+  { label: "آپریشن مرسی", value: "آپریشن مرسی" },
+  { label: "رعد الغدیر", value: "رعد الغدیر" },
+];
+
 export const eduLevelOptions = [
   { label: "زیر دیپلم", value: "زیر دیپلم" },
   { label: "دانش آموز", value: "دانش آموز" },
@@ -94,6 +153,16 @@ export const statusOptions = [
   { value: "approved", label: "تایید شده" },
   { value: "rejected", label: "رد شده" },
   { value: "pending", label: "در انتظار تایید" },
+];
+export const statusSeekerOptions = [
+  { value: "registration", label: "در انتظار تأیید ثبت‌نام" },
+  { value: "registrationRejection", label: "رد شده در ثبت‌نام" },
+  { value: "registrationApproval", label: "در انتظار ارسال فرم آزمون" },
+  { value: "examSubmission", label: "در انتظار تأیید ارزیابی" },
+  { value: "examRejection", label: "رد شده در ارزیابی" },
+  { value: "examApproval", label: "در انتظار تأیید پذیرش" },
+  { value: "offerApproval", label: "تایید شده پذیرش" },
+  { value: "offerRejection", label: "رد شده پذیرش" },
 ];
 
 export const scholarOptions = [
@@ -137,9 +206,20 @@ export const fieldOptions = [
     value: "ICDL پیشرفته",
     label: "ICDL پیشرفته",
   },
+  { value: "مبانی کامپیوتر", label: "مبانی کامپیوتر" },
+  { value: "امور اداری", label: "امور اداری" },
+  { value: "کارشناس مرکز تماس", label: "کارشناس مرکز تماس" },
+  { value: "محتوا و شبکه‌های اجتماعی", label: "محتوا و شبکه‌های اجتماعی" },
+  { value: "تضمین کیفیت نرم‌افزار (QA)", label: "تضمین کیفیت نرم‌افزار (QA)" },
+  {
+    value: "بازاریابی دیجیتال (Digital Marketing)",
+    label: "بازاریابی دیجیتال (Digital Marketing)",
+  },
+  { value: "Help Desk", label: "Help Desk" },
 ];
 
 export const SelectedFieldOpt = [
+  //ttttttttttt
   { label: "مسیر آموزش و اشتغال برنامه‌نویسی", value: "backEnd" },
   { label: "مسیر آموزش و اشتغال تحلیل داده", value: "DB" },
   { label: "مسیر آموزش و اشتغال اموراداری", value: "icdl" },

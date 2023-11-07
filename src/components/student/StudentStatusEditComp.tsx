@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DetailStudentStatus, StatusForm } from "../../model";
+import { StatusForm } from "../../model";
 import {
   Button,
   FormControl,
@@ -10,22 +10,28 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import useSWR from "swr";
-import { editAxios } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import LoadingProgress from "../LoadingProgress";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { toast } from "react-toastify";
 import { EditComboStudent } from "./EditComboStudent";
+import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
+import useSubmitStatusStudent from "../../hooks/request/useSubmitStatusStudent";
+import CareerPathway from "../addNewCourseComp/CareerPathway";
 
-interface Prop {
+interface Props {
   statusForm: StatusForm | undefined;
   firstName: string | undefined;
   family: string | undefined;
-  
+  careerPathwayId: string;
 }
 
-const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
+const StudentStatusEditComp = ({
+  statusForm,
+  family,
+  firstName,
+  careerPathwayId,
+}: Props) => {
+  console.log(careerPathwayId);
   const navigate = useNavigate();
   const [trainingStatus, setTrainingStatus] = useState(
     statusForm?.trainingStatus?.id.toString() || ""
@@ -43,54 +49,32 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
   const [kaaryarAssessment, setKaaryarAssessment] = useState(
     statusForm?.kaaryarAssessment?.id.toString() || ""
   );
-
-  const [loading, setLoading] = useState(false);
-  const { data: trainingData, isLoading: statusLoading } = useSWR<
-    DetailStudentStatus[]
-  >("/status/training-status/values/all");
-  const { data: nextStepData, isLoading: nextStepLoading } = useSWR<
-    DetailStudentStatus[]
-  >("/status/next-training-step/values/all");
-  const { data: withdrawalData, isLoading: withdrawalLoading } = useSWR<
-    DetailStudentStatus[]
-  >("/status/withdrawal-reason/values/all");
-  const { data: referralToFinanceData, isLoading: referralLoading } = useSWR<
-    DetailStudentStatus[]
-  >("/status/referral-finance/values/all");
-  const { data: kaaryarAssessmentData, isLoading: kaaryarAssessmentLoading } =
-    useSWR<DetailStudentStatus[]>("/status/kaaryar-assessment/values/all");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const res = await editAxios(`/status/form/${statusForm?.id}`, {
-        data: {
-          status_form: {
-            trainingStatusId: trainingStatus,
-            nextTrainingStepId: nextTrainingStep,
-            description,
-            withdrawalReasonId: withdrawalReason || undefined,
-            referralToFinanceId: referralToFinance,
-            kaaryarAssessmentId: kaaryarAssessment,
-          },
-        },
-      });
-      if (res.status === 200) {
-        navigate(-1);
-      } else {
-        toast.error("ویرایش انجام نشد");
-      }
-    } catch (error: any) {
-      console.log(error);
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { id } = statusForm || {};
+  const {
+    trainingData,
+    trainingLoading,
+    nextStepData,
+    nextStepLoading,
+    withdrawalData,
+    withdrawalLoading,
+    referralToFinanceData,
+    referralLoading,
+    kaaryarAssessmentData,
+    kaaryarAssessmentLoading,
+  } = useGetStatusStudent(true);
+  const { handleSubmit, loading } = useSubmitStatusStudent(
+    id,
+    trainingStatus,
+    nextTrainingStep,
+    description,
+    withdrawalReason,
+    referralToFinance,
+    kaaryarAssessment,
+    firstName + " " + family
+  );
 
   if (
-    statusLoading ||
+    trainingLoading ||
     nextStepLoading ||
     withdrawalLoading ||
     referralLoading ||
@@ -111,11 +95,12 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
             type="submit"
             sx={{ px: 5, ml: "auto" }}
             disabled={
-              loading ||
-              !trainingStatus ||
-              !nextTrainingStep ||
-              !referralToFinance ||
-              !kaaryarAssessment
+              loading
+              //  ||
+              // !trainingStatus ||
+              // !nextTrainingStep ||
+              // !referralToFinance ||
+              // !kaaryarAssessment
             }
           >
             ذخیره
@@ -206,6 +191,16 @@ const StudentStatusEditComp = ({ statusForm, family, firstName }: Prop) => {
                 }
                 label="ارزیابی کاریار"
                 val={kaaryarAssessment}
+              />
+            </ListItem>
+            <ListItem>
+              <CareerPathway
+                careerPathwayId={careerPathwayId}
+                errMsg={false}
+                label="مسیر آموزشی"
+                setCareerPathwayId={() => {}}
+                disabled={true}
+                helperText={"این فیلد تنها از بخش پذیرش قابل ویرایش است."}
               />
             </ListItem>
           </List>

@@ -3,7 +3,7 @@ import {
   ModuleAsStudentForDetail,
   ModulesAsStudentAssessment,
   ModulesAsStudentModule,
-  StudentEdu,
+  StudentWithStatus,
 } from "../../model";
 import {
   FormControl,
@@ -25,7 +25,7 @@ import LoadingProgress from "../LoadingProgress";
 interface Prop {
   assessment: ModulesAsStudentAssessment | undefined;
   module: ModulesAsStudentModule | undefined;
-  student: StudentEdu | undefined;
+  student: StudentWithStatus | undefined;
   mutate: KeyedMutator<ModuleAsStudentForDetail>;
 }
 interface nextModuleType {

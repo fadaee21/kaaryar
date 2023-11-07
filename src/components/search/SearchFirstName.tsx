@@ -1,8 +1,9 @@
 import AsyncSelect from "react-select/async";
 import { getData } from "../../api/axios";
+import { memo } from "react";
 
 const responseQuantity = "8";
-export const SearchFirstName = ({
+const SearchFirstName = ({
   setOutputFirstName,
   outputFirstName,
   searchPage,
@@ -44,12 +45,18 @@ export const SearchFirstName = ({
     <>
       {searchPage === "reg" && (
         <AsyncSelect
+          isClearable
           value={outputFirstName ? { firstName: outputFirstName } : null}
           // defaultOptions={true}
-          getOptionLabel={(e: any) => e.firstName}
-          getOptionValue={(e: any) => e.firstName}
-          // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFirstName(e.firstName)}
+          getOptionLabel={(e) => e.firstName}
+          getOptionValue={(e) => e.firstName}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(selectedOption.firstName);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام"
@@ -67,18 +74,23 @@ export const SearchFirstName = ({
       )}
       {searchPage === "beforeWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFirstName
               ? { registrationForm: { firstName: outputFirstName } }
               : null
           }
           // defaultOptions={true}
-          getOptionLabel={(e: any) => e.registrationForm.firstName}
-          getOptionValue={(e: any) => e.registrationForm.firstName}
+          getOptionLabel={(e) => e.registrationForm.firstName}
+          getOptionValue={(e) => e.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) =>
-            setOutputFirstName(e.registrationForm.firstName)
-          }
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(selectedOption.registrationForm.firstName);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام"
@@ -96,6 +108,7 @@ export const SearchFirstName = ({
       )}
       {searchPage === "afterWeek" && (
         <AsyncSelect
+          isClearable
           value={
             outputFirstName
               ? {
@@ -109,8 +122,14 @@ export const SearchFirstName = ({
           getOptionLabel={(e) => e.beforeWeekForm.registrationForm.firstName}
           getOptionValue={(e) => e.beforeWeekForm.registrationForm.firstName}
           // onInputChange={(e) => setValue(e)}
-          onChange={(e) => {
-            setOutputFirstName(e?.beforeWeekForm.registrationForm.firstName);
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(
+                selectedOption.beforeWeekForm.registrationForm.firstName
+              );
+            }
           }}
           cacheOptions
           loadOptions={promiseOptions}
@@ -127,14 +146,59 @@ export const SearchFirstName = ({
           }}
         />
       )}
+
+      {searchPage === "skillSeeker" && (
+        <AsyncSelect
+          isClearable
+          value={
+            outputFirstName
+              ? {
+                  regForm: {
+                    firstName: outputFirstName,
+                  },
+                }
+              : null
+          }
+          // defaultOptions={true}
+          getOptionLabel={(e) => e.regForm.firstName}
+          getOptionValue={(e) => e.regForm.firstName}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(selectedOption.regForm.firstName);
+            }
+          }}
+          cacheOptions
+          loadOptions={promiseOptions}
+          placeholder="نام"
+          noOptionsMessage={() => "مهارتجو با این مشخصات یافت نشد"}
+          loadingMessage={() => "لطفا کمی صبر کنید"}
+          name="searchName"
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              height: "3rem",
+            }),
+            menu: (provided) => ({ ...provided, zIndex: 2 }),
+          }}
+        />
+      )}
+
       {searchPage === "moodle" && (
         <AsyncSelect
+          isClearable
           value={outputFirstName ? { firstName: outputFirstName } : null}
           // defaultOptions={true}
-          getOptionLabel={(e: any) => e.firstName}
-          getOptionValue={(e: any) => e.firstName}
-          // onInputChange={(e) => setValue(e)}
-          onChange={(e: any) => setOutputFirstName(e.firstName)}
+          getOptionLabel={(e) => e.firstName}
+          getOptionValue={(e) => e.firstName}
+          onChange={(selectedOption) => {
+            if (selectedOption === null) {
+              setOutputFirstName(null);
+            } else {
+              setOutputFirstName(selectedOption.firstName);
+            }
+          }}
           cacheOptions
           loadOptions={promiseOptions}
           placeholder="نام"
@@ -153,3 +217,5 @@ export const SearchFirstName = ({
     </>
   );
 };
+
+export default memo(SearchFirstName);

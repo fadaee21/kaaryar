@@ -10,13 +10,13 @@ import RegisterDetail from "./pages/reg/registerFormDetail";
 import RegisterFormDetailEdit from "./pages/reg/registerFormDetailEdit";
 import AfterWeekDetail from "./pages/afterWeek/AfterWeekDetail";
 import AfterWeekDetailEdit from "./pages/afterWeek/AfterWeekDetailEdit";
-import UserProfile from "./pages/profile/UserProfile";
+// import VolunteerEdit from "./components/volunteer/VolunteerDetailComp/VolunteerEditParent";
 import WatchComment from "./pages/comment/WatchComment";
 import skillSeeker from "./pages/skillSeeker/skillSeeker";
 import EditComments from "./pages/comment/EditComments";
 import Dashboard from "./pages/dashboard/DashboardMentorTa";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
-import Volunteer from "./pages/volunteer/Volunteer";
+import VolunteerTable from "./pages/volunteer/VolunteerTable";
 import VolunteerDetail from "./pages/volunteer/VolunteerDetail";
 import GraduateProfile from "./pages/graduate/GraduateProfile";
 import GraduateTable from "./pages/graduate/GraduateTable";
@@ -40,6 +40,20 @@ import StudentCoreDetail from "./pages/student/StudentCoreDetail";
 import StudentTableAdmin from "./pages/student/StudentTableAdmin";
 import StudentGeneralEdit from "./pages/student/StudentGeneralEdit";
 import StudentCoreEdit from "./pages/student/StudentCoreEdit";
+import Notify from "./pages/notify/Notify";
+import EditEmail from "./pages/notify/email/EditEmail";
+import EditSMS from "./pages/notify/sms/EditSMS";
+import CoreModuleCourseStudents from "./pages/coreModuleCourses/CoreModuleCourseStudents";
+import CoreModuleCourseMentor from "./pages/coreModuleCourses/CoreModuleCourseMentor";
+import CoreModuleCourseTa from "./pages/coreModuleCourses/CoreModuleCourseTa";
+import GroupDetailModulesTable from "./pages/groups/GroupDetailModulesTable";
+import GroupDetailMentorTable from "./pages/groups/GroupDetailMentorTable";
+import GroupDetailTaTable from "./pages/groups/GroupDetailTaTable";
+import GroupDetailStudentTable from "./pages/groups/GroupDetailStudentTable";
+import StudentVolunteerAll from "./pages/volunteer/StudentVolunteerAll";
+import StudentVolunteerInModule from "./pages/volunteer/StudentVolunteerInModule";
+import UserProfileName from "./pages/userProfileTaMentor/UserProfileName";
+import TableCommentsInModule from "./pages/comment/TableCommentsInModule";
 
 const ListRoutes = [
   //! ta________________________________
@@ -54,7 +68,7 @@ const ListRoutes = [
   },
   {
     path: "ta/student",
-    name: "فهرست مهارت آموزان",
+    name: "مهارت‌آموزان من",
     // icon: <PeopleIcon />,
     component: StudentAssignee,
     showInNav: true,
@@ -95,14 +109,14 @@ const ListRoutes = [
     role: "ta",
     key: "ta6",
   },
-  {
-    path: "ta/profile",
-    name: " ",
-    component: UserProfile,
-    showInNav: false,
-    role: "ta",
-    key: "ta7",
-  },
+  // {
+  //   path: "ta/profile",
+  //   name: " ",
+  //   component: VolunteerEdit,
+  //   showInNav: false,
+  //   role: "ta",
+  //   key: "ta7",
+  // },
   {
     path: "ta/all-comments/:id",
     name: " ",
@@ -121,9 +135,9 @@ const ListRoutes = [
   },
   {
     path: "ta/volunteer",
-    name: "فهرست پروفایل داوطلبان",
+    name: "داوطلبان کاریار",
     // icon:<></>,
-    component: Volunteer,
+    component: VolunteerTable,
     showInNav: true,
     role: "ta",
     key: "ta10",
@@ -136,6 +150,61 @@ const ListRoutes = [
     showInNav: false,
     role: "ta",
     key: "ta11",
+  },
+  {
+    path: "ta/volunteer/:username/all-students",
+    name: "",
+    // icon:<></>,
+    component: StudentVolunteerAll,
+    showInNav: false,
+    role: "ta",
+    key: "ta11-s",
+  },
+  {
+    path: "ta/volunteer/:username/module-students/:moduleId",
+    name: "",
+    // icon:<></>,
+    component: StudentVolunteerInModule,
+    showInNav: false,
+    role: "ta",
+    key: "ta11-sm",
+  },
+
+  {
+    path: "ta/core-course/:coreId",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseDetail,
+    showInNav: false,
+    role: "ta",
+    key: "ta11-cd",
+  },
+  {
+    path: "ta/general-course/:id",
+    name: "",
+    // icon:<></>,
+    component: GeneralDetail,
+    showInNav: false,
+    role: "ta",
+    key: "ta11-gd",
+  },
+  {
+    path: "ta/my-user-profile",
+    name: "پروفایل کاربری من",
+    // icon: <CommentIcon />,
+    component: UserProfileName,
+    showInNav: true,
+    role: "ta",
+    key: "ta12",
+  },
+  {
+    path: "ta/student/:module_id/:student_id",
+    name: "",
+    // icon: <CommentIcon />,
+    component: TableCommentsInModule,
+    showInNav: false,
+    role: "ta",
+    key: "ta13",
   },
 
   // mentor____________________________________________
@@ -150,7 +219,7 @@ const ListRoutes = [
   },
   {
     path: "mentor/student",
-    name: "فهرست مهارت آموزان",
+    name: "مهارت‌آموزان من",
     // icon: <PeopleIcon />,
     component: StudentAssignee,
     showInNav: true,
@@ -183,14 +252,14 @@ const ListRoutes = [
     role: "mentor",
     key: "mentor6",
   },
-  {
-    path: "mentor/profile",
-    name: " ",
-    component: UserProfile,
-    showInNav: false,
-    role: "mentor",
-    key: "mentor7",
-  },
+  // {
+  //   path: "mentor/profile",
+  //   name: " ",
+  //   component: VolunteerEdit,
+  //   showInNav: false,
+  //   role: "mentor",
+  //   key: "mentor7",
+  // },
   {
     path: "mentor/all-comments/:id",
     name: " ",
@@ -209,9 +278,9 @@ const ListRoutes = [
   },
   {
     path: "mentor/volunteer",
-    name: "فهرست پروفایل داوطلبان",
+    name: "داوطلبان کاریار",
     // icon:<></>,
-    component: Volunteer,
+    component: VolunteerTable,
     showInNav: true,
     role: "mentor",
     key: "mentor10",
@@ -226,6 +295,43 @@ const ListRoutes = [
     key: "mentor11",
   },
   {
+    path: "mentor/volunteer/:username/all-students",
+    name: "",
+    // icon:<></>,
+    component: StudentVolunteerAll,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor11-s",
+  },
+  {
+    path: "mentor/volunteer/:username/module-students/:moduleId",
+    name: "",
+    // icon:<></>,
+    component: StudentVolunteerInModule,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor11-sm",
+  },
+
+  {
+    path: "mentor/core-course/:coreId",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseDetail,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor11-cd",
+  },
+  {
+    path: "mentor/general-course/:id",
+    name: "",
+    // icon:<></>,
+    component: GeneralDetail,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor11-gd",
+  },
+  {
     path: "mentor/all-comments",
     name: "نظرات",
     // icon: <CommentIcon />,
@@ -233,6 +339,24 @@ const ListRoutes = [
     showInNav: true,
     role: "mentor",
     key: "mentor5",
+  },
+  {
+    path: "mentor/my-user-profile",
+    name: "پروفایل کاربری من",
+    // icon: <CommentIcon />,
+    component: UserProfileName,
+    showInNav: true,
+    role: "mentor",
+    key: "mentor12",
+  },
+  {
+    path: "mentor/student/:module_id/:student_id",
+    name: "",
+    // icon: <CommentIcon />,
+    component: TableCommentsInModule,
+    showInNav: false,
+    role: "mentor",
+    key: "mentor13",
   },
   //! admin__________________________________________
   {
@@ -289,7 +413,7 @@ const ListRoutes = [
     key: "admin5",
   },
   {
-    path: "admin/before-week-edit/:id",
+    path: "admin/before-week/:id/edit",
     name: " ",
     component: BeforeWeekDetailEdit,
     showInNav: false,
@@ -306,7 +430,7 @@ const ListRoutes = [
     key: "admin7",
   },
   {
-    path: "admin/register-form-edit/:id",
+    path: "admin/register-form/:id/edit",
     name: " ",
     component: RegisterFormDetailEdit,
     showInNav: false,
@@ -322,21 +446,21 @@ const ListRoutes = [
     key: "admin9",
   },
   {
-    path: "admin/after-week-edit/:id",
+    path: "admin/after-week/:id/edit",
     name: " ",
     component: AfterWeekDetailEdit,
     showInNav: false,
     role: "admin",
     key: "admin10",
   },
-  {
-    path: "admin/profile",
-    name: " ",
-    component: UserProfile,
-    showInNav: false,
-    role: "admin",
-    key: "admin11",
-  },
+  // {
+  //   path: "admin/profile",
+  //   name: " ",
+  //   component: VolunteerEdit,
+  //   showInNav: false,
+  //   role: "admin",
+  //   key: "admin11",
+  // },
   {
     path: "admin/all-comments/:id",
     name: " ",
@@ -395,15 +519,6 @@ const ListRoutes = [
     key: "admin14-newEdited-se",
   },
   {
-    path: "admin/volunteer",
-    name: "فهرست پروفایل داوطلبان",
-    // icon:<></>,
-    component: Volunteer,
-    showInNav: true,
-    role: "admin",
-    key: "admin15",
-  },
-  {
     path: "admin/graduate",
     name: "فهرست فارغ‌التحصیلان",
     // icon:<></>,
@@ -411,6 +526,15 @@ const ListRoutes = [
     showInNav: true,
     role: "admin",
     key: "admin20",
+  },
+  {
+    path: "admin/volunteer",
+    name: "داوطلبان کاریار",
+    // icon:<></>,
+    component: VolunteerTable,
+    showInNav: true,
+    role: "admin",
+    key: "admin15",
   },
   {
     path: "admin/all-comments",
@@ -451,6 +575,25 @@ const ListRoutes = [
   },
 
   {
+    path: "admin/volunteer/:username/all-students",
+    name: "",
+    // icon:<></>,
+    component: StudentVolunteerAll,
+    showInNav: false,
+    role: "admin",
+    key: "admin19-s",
+  },
+  {
+    path: "admin/volunteer/:username/module-students/:moduleId",
+    name: "",
+    // icon:<></>,
+    component: StudentVolunteerInModule,
+    showInNav: false,
+    role: "admin",
+    key: "admin19-sm",
+  },
+
+  {
     path: "admin/graduate/profile/1",
     name: "",
     // icon:<></>,
@@ -461,7 +604,7 @@ const ListRoutes = [
   },
   {
     path: "admin/groups",
-    name: "فهرست گروه‌ها",
+    name: "گروه‌ها",
     // icon:<></>,
     component: GroupsTable,
     showInNav: true,
@@ -478,7 +621,43 @@ const ListRoutes = [
     key: "admin22-d",
   },
   {
-    path: "admin/groups/edit/:groupId",
+    path: "admin/groups/:groupId/modules",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailModulesTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-md",
+  },
+  {
+    path: "admin/groups/:groupId/mentor",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailMentorTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-m",
+  },
+  {
+    path: "admin/groups/:groupId/ta",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailTaTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-t",
+  },
+  {
+    path: "admin/groups/:groupId/students",
+    name: "",
+    // icon:<></>,
+    component: GroupDetailStudentTable,
+    showInNav: false,
+    role: "admin",
+    key: "admin22-s",
+  },
+  {
+    path: "admin/groups/:groupId/edit",
     name: "",
     // icon:<></>,
     component: GroupEdit,
@@ -497,7 +676,7 @@ const ListRoutes = [
   },
   {
     path: "admin/core-course",
-    name: "فهرست دوره‌های تخصصی",
+    name: "دوره‌های تخصصی",
     // icon:<></>,
     component: CoreModuleCoursesTable,
     showInNav: true,
@@ -514,23 +693,79 @@ const ListRoutes = [
     key: "admin23-d",
   },
   {
-    path: "admin/core-course/edit/:coreId",
+    path: "admin/core-course/:coreId/edit",
     name: "",
     // icon:<></>,
     component: CoreModuleCourseEdit,
     showInNav: false,
     role: "admin",
-    key: "admin23-d",
+    key: "admin23-e",
+  },
+  {
+    path: "admin/core-course/:coreId/students",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseStudents,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-s",
+  },
+  {
+    path: "admin/core-course/:coreId/mentor",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseMentor,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-m",
+  },
+  {
+    path: "admin/core-course/:coreId/ta",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseTa,
+    showInNav: false,
+    role: "admin",
+    key: "admin23-t",
   },
   {
     path: "admin/general-course",
-    name: "فهرست آموزش‌های عمومی",
+    name: "آموزش‌های عمومی",
     // icon:<></>,
     component: GeneralEducationTable,
     showInNav: true,
     role: "admin",
     key: "admin24",
   },
+
+  {
+    path: "admin/general-course/:coreId/students",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseStudents,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-s",
+  },
+  {
+    path: "admin/general-course/:coreId/mentor",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseMentor,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-m",
+  },
+  {
+    path: "admin/general-course/:coreId/ta",
+    name: "",
+    // icon:<></>,
+    component: CoreModuleCourseTa,
+    showInNav: false,
+    role: "admin",
+    key: "admin24-t",
+  },
+
   {
     path: "admin/language-course/:id",
     name: "",
@@ -575,6 +810,33 @@ const ListRoutes = [
     showInNav: false,
     role: "admin",
     key: "admin25-e",
+  },
+  {
+    path: "admin/notify",
+    name: "ایمیل ها و پیامک ها",
+    // icon:<></>,
+    component: Notify,
+    showInNav: true,
+    role: "admin",
+    key: "admin26",
+  },
+  {
+    path: "admin/notify/email/:notifyId",
+    name: "ایمیل ها و پیامک ها",
+    // icon:<></>,
+    component: EditEmail,
+    showInNav: false,
+    role: "admin",
+    key: "admin26-a",
+  },
+  {
+    path: "admin/notify/sms/:notifyId",
+    name: "ایمیل ها و پیامک ها",
+    // icon:<></>,
+    component: EditSMS,
+    showInNav: false,
+    role: "admin",
+    key: "admin26-b",
   },
 
   {

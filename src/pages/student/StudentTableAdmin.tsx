@@ -7,15 +7,16 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { ExcelExport } from "../../components/ExcelExport";
 import LoadingProgress from "../../components/LoadingProgress";
-import SearchAll from "../../components/search/SearchAll";
-import TablePic from "../../components/table/TablePic";
-// import { useAuth } from "../../context/AuthProvider";
-import { MoodleUser } from "../../model";
-import { StyledTableCell, StyledTableRow } from "../../styles/table";
+import {
+  CareerPathway,
+  Group,
+  ModuleAll,
+  MoodleUser,
+  Profile,
+} from "../../model";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -26,42 +27,102 @@ import useSWR from "swr";
 import useCountPagination from "../../hooks/request/useCountPagination";
 import { counterPagination } from "../../utils/counterPagination";
 import TableEmpty from "../../components/table/TableEmpty";
-import TableHeader from "../../components/table/TableHeader";
-import { studentTableHeader } from "../../components/table/helper-header";
-import { itemCounterTable } from "../../utils/itemCounterTable";
+import { TableHeaderStudent } from "../../components/table/TableHeader";
+import { adminStudentTableHeader } from "../../components/table/helper-header";
+import StudentAdminRowTable from "../../components/student/admin-table/StudentAdminRowTable";
+import SearchAllStudent from "../../components/student/search-student/SearchAllStudent";
+import { useSearchParams } from "react-router-dom";
+import useGetStatusStudent from "../../hooks/request/useGetStatusStudent";
+
+const pageSize = 25;
+const heightOfTable = 500;
+const loadingBoxHeight = heightOfTable - 160;
+// const adminStudentQuery =
+//   "orderAscending=false&orderBy=after_week_update_timestamp";
+const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
+const STUDENT_COUNT = "moodle/user/student/count";
 
 const StudentTableAdmin = () => {
   const [page, setPage] = useState(1);
-  const pageSize = 25;
-  // const adminStudentQuery =
-  //   "orderAscending=false&orderBy=after_week_update_timestamp";
-  const adminStudentQuery = "orderAscending=false&orderBy=regformGroup";
-
-  const adminStudent = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
-
-  const studentCount = "moodle/user/student/count";
-  const [, counterPage] = useCountPagination(studentCount);
   const [chevronDir, setChevronDir] = useState(false);
-  const [searchingMoodleStudent, setSearchingMoodleStudent] = useState<
-    any[] | null
-  >(null);
+  let ADMIN_STUDENT_URL;
+  ADMIN_STUDENT_URL = `moodle/user/student/all?pageNum=${page}&pageSize=${pageSize}&${adminStudentQuery}`;
 
-  const { data, isLoading, error } = useSWR(adminStudent, {
-    onSuccess: () => window.scrollTo(0, 0),
+  const [, counterPage] = useCountPagination(STUDENT_COUNT);
+
+  //all search options that comes from server
+  const {
+    trainingData,
+    trainingLoading,
+    nextStepData,
+    nextStepLoading,
+    referralToFinanceData,
+    referralLoading,
+    kaaryarAssessmentData,
+    kaaryarAssessmentLoading,
+  } = useGetStatusStudent(true);
+  const orderingOpt =
+    "orderAscending=true&orderBy=name&pageNum=1&pageSize=10000";
+  const { data: groupData, isLoading: loadingGroupData } = useSWR<Group[]>(
+    chevronDir ? `/modules/categories/short-details/all?${orderingOpt}` : null
+  );
+  const { data: careerPathwayData, isLoading: loadingCareerPathwayData } =
+    useSWR<CareerPathway[]>(
+      chevronDir ? `/modules/career-pathways/all?${orderingOpt}` : null
+    );
+  const { data: moduleData, isLoading: loadingModuleData } = useSWR<
+    ModuleAll[]
+  >(chevronDir ? `/modules/short-details/all?${orderingOpt}` : null);
+  const { data: volunteerData, isLoading: loadingVolunteerData } =
+    useSWR<Profile[]>("/user/profile/all");
+
+  let [searchParams] = useSearchParams();
+
+  const hasQueryParams = () => {
+    return !searchParams.keys().next().done;
+  };
+  useEffect(() => {
+    setChevronDir(hasQueryParams());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (hasQueryParams()) {
+    const searchLink =
+      "/moodle/search/param?pageNum=1&pageSize=10000&orderAscending=false&orderBy=regformGroup";
+    ADMIN_STUDENT_URL = searchLink + `&${searchParams}`;
+  }
+
+  const { data, isLoading, error } = useSWR<MoodleUser[]>(ADMIN_STUDENT_URL, {
+    revalidateOnMount: true,
   });
 
-  // const { auth } = useAuth();
-  // const roles = auth.roles.toString();
-  const navigate = useNavigate();
-
-  if (isLoading) {
-    return <LoadingProgress />;
-  }
   if (error) {
-    navigate("/");
+    return (
+      <Typography sx={{ display: "flex", justifyContent: "center" }}>
+        Error: {error.message}
+      </Typography>
+    );
   }
+  const searchOptionsResultCondition =
+    groupData &&
+    careerPathwayData &&
+    moduleData &&
+    volunteerData &&
+    trainingData &&
+    nextStepData &&
+    referralToFinanceData &&
+    kaaryarAssessmentData;
+  const SearchLoadingCondition =
+    loadingGroupData &&
+    loadingCareerPathwayData &&
+    loadingModuleData &&
+    loadingVolunteerData &&
+    trainingLoading &&
+    nextStepLoading &&
+    referralLoading &&
+    kaaryarAssessmentLoading;
+
   return (
-    <Box sx={{ m: 2 }}>
+    <>
       <Box component={"article"}>
         <Container maxWidth="xl">
           <Box
@@ -90,195 +151,111 @@ const StudentTableAdmin = () => {
               {/* //! export excel */}
               <ExcelExport
                 fileName={"excel export"}
-                linkAll={`moodle/user/student/all?pageNum=1&pageSize=100000&${adminStudentQuery}`}
-                searchData={searchingMoodleStudent?.map((i) => ({
-                  "نام و نام خانوادگی": i.firstName + " " + i.family,
-                  "نام کاربری": i.username,
-                  شهر: i.registrationForm.city,
-                  استان: i.registrationForm.province,
-                  گروه: i.registrationForm.course,
-                  "مؤسسه معرف": i.registrationForm.refer,
-                  "وضعیت آموزش": i.statusForm?.trainingStatus?.value,
-                  "قدم آتی آموزش": i.statusForm?.nextTrainingStep?.value,
-                  "ارجاع به واحد مالی": i.statusForm?.referralToFinance?.value,
-                  "ارزیابی کاریار": i.statusForm?.kaaryarAssessment?.value,
-                }))}
+                linkAll={
+                  hasQueryParams()
+                    ? ADMIN_STUDENT_URL
+                    : `moodle/user/student/all?pageNum=1&pageSize=10000&${adminStudentQuery}`
+                }
+                searchData={null}
                 useIn="studentOfAdmin"
               />
             </Box>
             <AccordionDetails>
-              {/* //! export excel */}
-              <Box
-                sx={{
-                  my: 3,
-                }}
-              >
-                <SearchAll
-                  setSearchingMoodleStudent={setSearchingMoodleStudent}
-                  searchPage="moodle"
-                  chevronDir={chevronDir}
-                />
+              <Box sx={{ my: 3 }}>
+                {searchOptionsResultCondition && !SearchLoadingCondition ? (
+                  <SearchAllStudent
+                    searchPage="moodle"
+                    groupData={groupData}
+                    careerPathwayData={careerPathwayData}
+                    moduleData={moduleData}
+                    volunteerData={volunteerData}
+                    trainingData={trainingData}
+                    nextStepData={nextStepData}
+                    referralToFinanceData={referralToFinanceData}
+                    kaaryarAssessmentData={kaaryarAssessmentData}
+                    isLoading={isLoading}
+                  />
+                ) : (
+                  <LoadingProgress usage="paper" />
+                )}
               </Box>
             </AccordionDetails>
           </AccordionStyled>
           {/* //!for empty response of search return TableEmpty */}
-          {searchingMoodleStudent?.length === 0 && <TableEmpty />}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-              {/* //!for empty response of search don't return TableHeader */}
-              {searchingMoodleStudent?.length !== 0 && (
-                <TableHeader headerItems={studentTableHeader} />
-              )}
+          {data?.length === 0 && <TableEmpty />}
 
-              <TableBody>
-                {(searchingMoodleStudent ? searchingMoodleStudent : data)?.map(
-                  (moodleUser: MoodleUser, i: number) => {
-                    const {
-                      id,
-                      firstName,
-                      family,
-                      username,
-                      picture,
-                      city,
-                      statusForm,
-                      registrationForm,
-                    } = moodleUser;
-                    return (
-                      <StyledTableRow
-                        key={id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {searchingMoodleStudent
-                              ? i + 1
-                              : itemCounterTable(page, pageSize, i)}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {/* //TODO: add picture */}
-                          <TablePic picture={picture} lastName={family} />
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => navigate(`${id}`)}
-                        >
-                          <Typography variant="body1">
-                            {firstName + " " + family}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2" textAlign={"center"}>
-                            {username}
-                          </Typography>
-                        </StyledTableCell>
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            {isLoading ? (
+              <Box sx={{ m: 10, height: loadingBoxHeight }}>
+                <LoadingProgress usage="paper" size={40} />
+              </Box>
+            ) : (
+              <TableContainer sx={{ maxHeight: heightOfTable }}>
+                <Table
+                  stickyHeader
+                  aria-label="simple table"
+                  sx={{ tableLayout: "auto" }}
+                >
+                  {/* //!for empty response of search don't return TableHeader */}
+                  {data?.length !== 0 && (
+                    <TableHeaderStudent
+                      studentHeaderItems={adminStudentTableHeader}
+                    />
+                  )}
 
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.city || city || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.province || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.course}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {registrationForm?.refer || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.trainingStatus?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.nextTrainingStep?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.referralToFinance?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            verticalAlign: "center",
-                          }}
-                        >
-                          <Typography variant="body2">
-                            {statusForm?.kaaryarAssessment?.value || "-"}
-                          </Typography>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    );
-                  }
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  <TableBody>
+                    {data?.map((moodleUser, i) => {
+                      const {
+                        id,
+                        firstName,
+                        family,
+                        username,
+                        picture,
+                        city,
+                        statusForm,
+                        registrationForm,
+                        careerPathway,
+                        currentAssignedMentor,
+                        currentAssignedTA,
+                        currentModuleAsStudent,
+                        latestEnrolledModule,
+                      } = moodleUser;
+                      return (
+                        <StudentAdminRowTable
+                          key={id}
+                          id={id}
+                          firstName={firstName}
+                          family={family}
+                          username={username}
+                          picture={picture}
+                          city={city}
+                          statusForm={statusForm}
+                          registrationForm={registrationForm}
+                          careerPathway={careerPathway}
+                          i={i}
+                          countAll={hasQueryParams()}
+                          page={page}
+                          pageSize={pageSize}
+                          currentAssignedMentor={currentAssignedMentor}
+                          currentAssignedTA={currentAssignedTA}
+                          currentModuleAsStudent={currentModuleAsStudent}
+                          latestEnrolledModule={latestEnrolledModule}
+                          kaaryarAssessmentData={kaaryarAssessmentData}
+                          volunteerData={volunteerData}
+                          trainingData={trainingData}
+                          nextStepData={nextStepData}
+                          referralToFinanceData={referralToFinanceData}
+                        />
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Paper>
         </Container>
       </Box>
-      {!searchingMoodleStudent && (
+      {!hasQueryParams() && (
         <Pagination
           sx={{
             display: "flex",
@@ -296,7 +273,7 @@ const StudentTableAdmin = () => {
           }}
         />
       )}
-    </Box>
+    </>
   );
 };
 export default StudentTableAdmin;

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useSWR from "swr";
 import {
   Avatar,
@@ -9,7 +9,6 @@ import {
   Tab,
   Tabs,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import LoadingProgress from "../../components/LoadingProgress";
 import { AfterWeekType, StudentInfo } from "../../model";
@@ -17,7 +16,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useGetImage from "../../hooks/request/useGetImage";
 import { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-// import RegisterInfo from "../../components/student/RegisterInfo";
 import StudentDetailMore from "../../components/student/StudentDetailMore";
 
 import BeforeWeekDetailShowComp from "../../components/beforeWeek/BeforeWeekDetailShowComp";
@@ -33,6 +31,7 @@ import RegisterFormDetailComp from "../../components/RegisterFormDetail/Register
 const StudentDetail = () => {
   const {
     auth: { roles },
+    adminVisibility,
   } = useAuth();
   const isTa = roles.includes("ta"); //unmount "اطلاعات ارزیابی" for ta
   const [value, setValue] = useState(0);
@@ -40,7 +39,7 @@ const StudentDetail = () => {
   const studentProfile = `/moodle/user/${id}`;
   const afterBeforeInfo = `/exam/after/week/form/moodle/${id}`;
   const { pic, getPicture } = useGetImage("/exam/after/week/image/get");
-
+  const [tab, setTab] = useSearchParams(undefined);
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useSWR<StudentInfo>(studentProfile, {
@@ -57,7 +56,6 @@ const StudentDetail = () => {
       getPicture(image);
     }
   }, [image, getPicture]);
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
   if (isLoading) {
     return <LoadingProgress />;
@@ -68,7 +66,19 @@ const StudentDetail = () => {
   }
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    setTab({ tab: newValue.toString() });
   };
+
+  let numberValue;
+
+  const tabVal = tab.get("tab");
+
+  if (tabVal !== null) {
+    numberValue = Number(tabVal);
+  } else {
+    numberValue = 0;
+  }
+
   return (
     <Container maxWidth="lg">
       <header>
@@ -104,7 +114,7 @@ const StudentDetail = () => {
 
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          value={value}
+          value={numberValue || value}
           onChange={handleChange}
           aria-label="basic tabs example"
           variant={"scrollable"}
@@ -118,13 +128,18 @@ const StudentDetail = () => {
             sx={{ ...(isTa && { display: "none" }) }}
           />
           <Tab label="اطلاعات پذیرش" {...a11yProps(2)} />
-          <Tab label="مشخصات فردی" {...a11yProps(3)} />
+          <Tab
+            disabled={!adminVisibility}
+            sx={{ ...(!adminVisibility && { display: "none" }) }}
+            label="مشخصات فردی"
+            {...a11yProps(3)}
+          />
           <Tab label="وضعیت آموزش" {...a11yProps(4)} />
           <Tab label="دوره‌های تخصصی" {...a11yProps(5)} />
           <Tab label="دوره‌های عمومی" {...a11yProps(6)} />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={numberValue || value} index={0}>
         {afterBeforeLoading ? (
           <LoadingProgress />
         ) : (
@@ -141,7 +156,7 @@ const StudentDetail = () => {
         )}
       </TabPanel>
 
-      <TabPanel value={value} index={1}>
+      <TabPanel value={numberValue || value} index={1}>
         {afterBeforeLoading ? (
           <LoadingProgress />
         ) : (
@@ -152,7 +167,6 @@ const StudentDetail = () => {
               <BeforeWeekDetailShowComp
                 typeComp="student"
                 student={afterBeforeData?.beforeWeekForm}
-                matches={matches}
                 id={id}
               />
             )}
@@ -160,32 +174,34 @@ const StudentDetail = () => {
         )}
       </TabPanel>
 
-      <TabPanel value={value} index={2}>
+      <TabPanel value={numberValue || value} index={2}>
         {afterBeforeError ? (
           <p>اطلاعات پذیرش برای این مهارت آموز وجود ندارد</p>
         ) : (
           <AfterWeekDetailShowComp
             typeComp="student"
             student={afterBeforeData}
-            matches={matches}
             id={id}
           />
         )}
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={numberValue || value} index={3}>
         <StudentDetailMore studentDetail={data?.infoData} />
       </TabPanel>
-      <TabPanel value={value} index={4}>
-        <StatusStudent statusForm={data?.statusForm} />
+      <TabPanel value={numberValue || value} index={4}>
+        <StatusStudent
+          careerPathway={afterBeforeData?.careerPathway}
+          statusForm={data?.statusForm}
+        />
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel value={numberValue || value} index={5}>
         <CoreCourseStudent
           courses={data?.modulesAsStudent.filter(
             (item) => item.module.moduleType === "core"
           )}
         />
       </TabPanel>
-      <TabPanel value={value} index={6}>
+      <TabPanel value={numberValue || value} index={6}>
         <GeneralCourseStudent
           courses={data?.modulesAsStudent.filter(
             (item) => item.module.moduleType !== "core"
@@ -204,7 +220,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
+export function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -220,7 +236,7 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
+export function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,

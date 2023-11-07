@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { Box, Button, Container, Divider, useMediaQuery } from "@mui/material";
+import { Box, Button, Container, Divider } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
 import { SeekerStudent } from "../../model";
@@ -22,8 +22,6 @@ const SkillSeekerDetail = () => {
   } = useSWR<SeekerStudent>(studentSkillSeeker, {
     onSuccess: () => window.scrollTo(0, 0),
   });
-
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
 
   if (loading) {
     return <LoadingProgress />;
@@ -61,9 +59,8 @@ const SkillSeekerDetail = () => {
           <>
             <Divider />
             <BeforeWeekDetailShowComp
-              typeComp="admission"
+              typeComp="seeker"
               student={BeforeWeekForm}
-              matches={matches}
               id={id}
             />
           </>
@@ -73,9 +70,8 @@ const SkillSeekerDetail = () => {
           <>
             <Divider />
             <AfterWeekDetailShowComp
-              typeComp="admission"
+              typeComp="seeker"
               student={AfterWeekForm}
-              matches={matches}
               id={id}
             />
           </>

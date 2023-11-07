@@ -2,6 +2,9 @@ import { Grid, Link, List, ListItem, ListItemText } from "@mui/material";
 import { ShortCoreModule } from "../../../model";
 import { persianDate } from "../../../utils/persianDate";
 import { convertArrToStr } from "../../../utils/courseMethod";
+import { useNavigate } from "react-router-dom";
+import { ListButton } from "../../../styles/Button";
+import { useAuth } from "../../../context/AuthProvider";
 
 interface Prop {
   coreDetail: ShortCoreModule | undefined;
@@ -22,7 +25,11 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
     studentCount,
     numberOfHours,
     deadlineFinalProject,
+    teachingAssistantCount,
+    mentorCount,
   } = coreDetail ?? {};
+  const navigate = useNavigate();
+  const { adminVisibility } = useAuth();
   return (
     <Grid container>
       <Grid item xs={12} md={6}>
@@ -75,12 +82,21 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
               secondary={deadlineFinalProject ?? "-"}
             />
           </ListItem>
-          {/* <ListItem>
-            <ListItemText
-              primary="تعداد مربیان حل تمرین فعال این دوره"
-              secondary={instructorCount}
-            />
-          </ListItem> */}
+          <ListItem>
+            {adminVisibility ? (
+              <ListButton onClick={() => navigate("ta")}>
+                <ListItemText
+                  primary="تعداد مربیان حل تمرین فعال این دوره"
+                  secondary={teachingAssistantCount}
+                />
+              </ListButton>
+            ) : (
+              <ListItemText
+                primary="تعداد مربیان حل تمرین فعال این دوره"
+                secondary={teachingAssistantCount}
+              />
+            )}
+          </ListItem>
 
           <ListItem>
             <ListItemText primary="توضیحات" secondary={description ?? "-"} />
@@ -140,17 +156,35 @@ const CoreModuleCourseComp = ({ coreDetail }: Prop) => {
             />
           </ListItem>
           <ListItem>
-            <ListItemText
-              primary="تعداد مهارت‌آموزان این دوره"
-              secondary={studentCount}
-            />
+            {adminVisibility ? (
+              <ListButton onClick={() => navigate("students")}>
+                <ListItemText
+                  primary="تعداد مهارت‌آموزان این دوره"
+                  secondary={studentCount}
+                />
+              </ListButton>
+            ) : (
+              <ListItemText
+                primary="تعداد مهارت‌آموزان این دوره"
+                secondary={studentCount}
+              />
+            )}
           </ListItem>
-          {/* <ListItem>
-            <ListItemText
-              primary="تعداد منتورهای فعال این دوره"
-              secondary={mentorCount}
-            />
-          </ListItem> */}
+          <ListItem>
+            {adminVisibility ? (
+              <ListButton onClick={() => navigate("mentor")}>
+                <ListItemText
+                  primary="تعداد منتورهای فعال این دوره"
+                  secondary={mentorCount}
+                />
+              </ListButton>
+            ) : (
+              <ListItemText
+                primary="تعداد منتورهای فعال این دوره"
+                secondary={mentorCount}
+              />
+            )}
+          </ListItem>
         </List>
       </Grid>
     </Grid>

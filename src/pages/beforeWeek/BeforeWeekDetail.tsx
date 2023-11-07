@@ -3,9 +3,8 @@ import { getData } from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingProgress from "../../components/LoadingProgress";
 import { BeforeWeekType, RegistrationForm } from "../../model";
-import { Box, Button, Container, Divider, useMediaQuery } from "@mui/material";
+import { Box, Button, Container, Divider } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
 import BeforeWeekDetailShow from "../../components/beforeWeek/BeforeWeekDetailShowComp";
 import AlertDialog from "../../components/modal/AlertDialog";
 import { useApproveWeek } from "../../hooks/request/useApprove";
@@ -58,8 +57,6 @@ const BeforeWeekDetail = () => {
     getApproveWeek(id, { setApproved: false }, approveLink);
   };
 
-  const matches = useMediaQuery((theme: any) => theme.breakpoints.up("sm"));
-
   if (loading || loadingRegWeek) {
     return <LoadingProgress />;
   }
@@ -74,15 +71,15 @@ const BeforeWeekDetail = () => {
           marginRight: 5,
         }}
       >
-    <Button
-            variant="outlined"
-            sx={{ px: 5 }}
-            color="inherit"
-            endIcon={<ArrowBackIcon />}
-            onClick={() => navigate(-1)}
-          >
-            بازگشت
-          </Button>
+        <Button
+          variant="outlined"
+          sx={{ px: 5 }}
+          color="inherit"
+          endIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}
+        >
+          بازگشت
+        </Button>
       </Box>
       <Container maxWidth="lg">
         <RegisterFormDetailComp
@@ -90,9 +87,8 @@ const BeforeWeekDetail = () => {
         />
         <Divider />
         <BeforeWeekDetailShow
-          typeComp="exam"
+          typeComp="beforeWeek"
           student={student}
-          matches={matches}
           id={id}
           successObject={successObject}
           handleOpenAlert={handleOpenAlert}
