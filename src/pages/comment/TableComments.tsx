@@ -44,6 +44,7 @@ import { toast } from "react-toastify";
 import { handleError } from "../../utils/handleError";
 import { roleConverter } from "../../utils/roleConverter";
 import dayjs, { Dayjs } from "dayjs";
+// import { ExcelExport } from "../../components/ExcelExport";
 
 const Comments = () => {
   const [chevronDir, setChevronDir] = useState(false);
@@ -66,9 +67,14 @@ const Comments = () => {
   });
   const [searchingComments, setSearchingComments] = useState(false);
   const {
-    auth: { id, username: usernameAuth },
+    auth: {
+      id,
+      username: usernameAuth,
+      //  roles
+    },
     adminVisibility,
   } = useAuth();
+  // const role = roles.toString();
   const {
     commenterRole,
     commenterUser,
@@ -78,12 +84,16 @@ const Comments = () => {
     moduleName,
   } = liftUpSearchState;
 
+  // const allCommentLink =
+  //   role === "admin"
+  //     ? `total/all?pageNum=1&pageSize=10000&orderAscending=false&orderBy=session_date`
+  //     : `${roles}/survey/all?pageNum=1&pageSize=10000`;
+
   // Define the base URL
   const BASE_URL = "/total/survey/search";
   // Construct the parameters
   // Construct the parameters conditionally
   const params = new URLSearchParams();
-
   if (!adminVisibility) {
     params.set("commenterId", String(id));
   }
@@ -162,7 +172,6 @@ const Comments = () => {
   if (commentsTableLoading) {
     return <LoadingProgress />;
   }
-
   return (
     <Box component={"article"} sx={{ m: 2, mb: 8 }}>
       <Container maxWidth="xl">
@@ -190,12 +199,13 @@ const Comments = () => {
               <Typography variant="button">جستجو</Typography>
             </AccordionSummaryStyled>
 
+            {/* TODO: excel export is completely ready but not render for now */}
             {/* <ExcelExport
-                  fileName={"Applicant Info"}
-                  searchData={[]}
-                  linkAll=""
-                  useIn="reg"
-                /> */}
+              fileName={"Comments"}
+              searchData={null}
+              linkAll={!!searchResult ? SEARCH_URL : allCommentLink}
+              useIn="comments"
+            /> */}
           </Box>
           <AccordionDetails>
             <Box

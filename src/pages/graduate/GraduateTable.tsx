@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { ExcelExport } from "../../components/ExcelExport";
+// import { ExcelExport } from "../../components/ExcelExport";
 import {
   AccordionStyled,
   AccordionSummaryStyled,
@@ -49,12 +49,12 @@ const GraduateTable = () => {
                 <Typography variant="button">جستجو</Typography>
               </AccordionSummaryStyled>
 
-              <ExcelExport
+              {/* <ExcelExport
                 fileName={"Applicant Info"}
                 searchData={[]}
                 linkAll=""
                 useIn="reg"
-              />
+              /> */}
             </Box>
             <AccordionDetails>
               <Box

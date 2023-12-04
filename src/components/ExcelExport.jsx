@@ -8,6 +8,7 @@ import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { getLabel } from "../utils/getLabel";
 import { internetAccessOpt } from "./beforeWeek/helper";
+import { roleConverter } from "../utils/roleConverter";
 
 export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
   const [loading, setLoading] = useState(false);
@@ -39,8 +40,46 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
       let response = await getData(linkAll);
       let allData = await response.data;
       switch (useIn) {
+        case "comments":
+          const commentsObj = allData.map((commentItem) => {
+            const {
+              studentTask,
+              module,
+              student,
+              commenter,
+              commenterRole,
+              sessionDate,
+              studentPresent,
+              sessionProblem,
+              comment,
+              studentContribution,
+            } = commentItem;
+            return {
+              "تاریخ جلسه":
+                sessionDate &&
+                new Intl.DateTimeFormat("fa").format(new Date(sessionDate)),
+              "نام و نام خانوادگی مهارت‌آموز":
+                student.firstName + " " + student.family,
+              "نام و نام خانوادگی نظردهنده":
+                commenter?.firstName + " " + commenter?.family,
+              "نقش نظردهنده": roleConverter(commenterRole),
+              "دوره آموزشی": module?.name,
+              "وضعیت حضور و غیاب ": studentPresent.length
+                ? studentPresent === "بله"
+                  ? "حاضر"
+                  : "غایب"
+                : "-",
+              "مشکل قابل توجه": sessionProblem.length ? sessionProblem : "-",
+              "میزان مشارکت مهارت‌آموز": studentContribution,
+              "تکلیف یا اقدام پیشنهادی": studentTask,
+              "گزارش کوتاهی از جلسه": comment,
+            };
+          });
+
+          exportToCSV(commentsObj, fileName);
+          break;
         case "reg":
-          const regObj = allData.map((reg, inx) => ({
+          const regObj = allData.map((reg) => ({
             // وضعیت:
             //   reg.checked === true
             //     ? `تایید شده`

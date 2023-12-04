@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { userLogin } from "../../api/axios";
 import { useAuth } from "../../context/AuthProvider";
-import { RoleType } from "../../model";
+// import { RoleType } from "../../model";
 import { handleError } from "../../utils/handleError";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
