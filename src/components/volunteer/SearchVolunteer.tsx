@@ -102,12 +102,10 @@ const SearchVolunteer = ({ chevronDir, setSearchingVolunteer }: Props) => {
             <SearchSelect
               state={role}
               setState={setRole}
-              options={Array.from(
-                new Set(allProfileData.map((i) => i.role.trim()))
-              ).map((role) => ({
-                label: role,
-                value: role,
-              }))}
+              options={[
+                { value: "ta", label: "حل تمرین" },
+                { value: "mentor", label: "منتور" },
+              ]}
               placeholder="نقش"
             />
           </Grid>
