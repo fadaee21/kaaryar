@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { getData } from "../../api/axios";
 import { handleError } from "../../utils/handleError";
 import { toast } from "react-toastify";
-const ALL_PROFILE_VOLUNTEER = "/user/profile/all";
+const ALL_PROFILE_VOLUNTEER = "/user/profile/all?pageNum=1&pageSize=10000";
 interface Props {
   setSearchingVolunteer: React.Dispatch<React.SetStateAction<Profile[] | null>>;
   chevronDir: boolean;

@@ -216,6 +216,9 @@ export const fieldOptions = [
     label: "بازاریابی دیجیتال (Digital Marketing)",
   },
   { value: "Help Desk", label: "Help Desk" },
+  { value: "سئو", label: "سئو" },
+  { value: "Power BI", label: "Power BI" },
+  { value: "فرانت تکمیلی", label: "فرانت تکمیلی" },
 ];
 
 export const SelectedFieldOpt = [

@@ -74,7 +74,7 @@ const StudentTableAdmin = () => {
     ModuleAll[]
   >(chevronDir ? `/modules/short-details/all?${orderingOpt}` : null);
   const { data: volunteerData, isLoading: loadingVolunteerData } =
-    useSWR<Profile[]>("/user/profile/all");
+    useSWR<Profile[]>("/user/profile/all?pageNum=1&pageSize=10000");
 
   let [searchParams] = useSearchParams();
 
