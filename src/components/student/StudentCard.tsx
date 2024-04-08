@@ -14,7 +14,7 @@ interface Props {
 
 export default function StudentCard({ moodleUser }: Props) {
   const { student: studentRes } = moodleUser || {};
-  const { firstName, family, email, city, id, mobile, phone } = studentRes;
+  const { firstName, family, email, id, mobile, phone, registrationForm } = studentRes;
   const navigate = useNavigate();
   const { auth } = useAuth();
   const roles = auth.roles.toString();
@@ -53,7 +53,7 @@ export default function StudentCard({ moodleUser }: Props) {
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              شهر: {city || " - "}
+              شهر: {registrationForm?.city || " - "}
             </Typography>
           </Grid>
           <Grid item xs={6}>

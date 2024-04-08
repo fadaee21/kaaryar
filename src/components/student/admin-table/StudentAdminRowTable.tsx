@@ -43,7 +43,7 @@ interface Props {
   pageSize: number;
   currentAssignedMentor: CurrentAssignedMentorTa | null;
   currentAssignedTA: CurrentAssignedMentorTa | null;
-  currentModuleAsStudent: CurrentModuleAsStudent;
+  currentModuleAsStudent?: CurrentModuleAsStudent;
   latestEnrolledModule: any;
   trainingData: DetailStudentStatus[] | undefined;
   nextStepData: DetailStudentStatus[] | undefined;
@@ -213,7 +213,7 @@ const StudentAdminRowTable = ({
           page={page}
           setSubmitLoading={setSubmitLoading}
           id={id}
-          moduleId={currentModuleAsStudent.id}
+          moduleId={currentModuleAsStudent?.id}
         />
       ) : (
         <RowViewAssigning
@@ -255,6 +255,7 @@ const StudentAdminRowTable = ({
               toggleEditingMode={toggleEditingMode}
               toggleAssigningMode={toggleAssigningMode}
               statusForm={statusForm}
+              latestEnrolledModuleId={latestEnrolledModule?.id}
             />
           )}
         </Stack>

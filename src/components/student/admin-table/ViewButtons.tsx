@@ -6,11 +6,13 @@ interface Props {
   toggleEditingMode: () => void;
   toggleAssigningMode: () => void;
   statusForm: StatusForm | null;
+  latestEnrolledModuleId:any
 }
 const ViewButtons = ({
   toggleEditingMode,
   toggleAssigningMode,
   statusForm,
+  latestEnrolledModuleId
 }: Props) => {
   const { trainingStatus } = statusForm || {};
   return (
@@ -20,7 +22,7 @@ const ViewButtons = ({
         sx={{ width: 250 }}
         variant="outlined"
         endIcon={<PersonAddOutlinedIcon />}
-        disabled={trainingStatus?.id !== 2}
+        disabled={trainingStatus?.id !== 2 || !latestEnrolledModuleId}
       >
         انتساب منتور و حل تمرین
       </Button>

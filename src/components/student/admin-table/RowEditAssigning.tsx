@@ -6,7 +6,7 @@ import useAssignMentorTa from "../../../hooks/request/useAssignMentorTa";
 
 interface Props {
   id: number;
-  moduleId: number;
+  moduleId: number | undefined;
   volunteerData: Profile[] | undefined;
   ta: CurrentAssignedMentorTa | null;
   mentor: CurrentAssignedMentorTa | null;
