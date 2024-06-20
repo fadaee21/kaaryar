@@ -219,6 +219,7 @@ export const fieldOptions = [
   { value: "سئو", label: "سئو" },
   { value: "Power BI", label: "Power BI" },
   { value: "فرانت تکمیلی", label: "فرانت تکمیلی" },
+  { value: "امور مشتریان و پشتیبانی فنی", label: "امور مشتریان و پشتیبانی فنی" },
 ];
 
 export const SelectedFieldOpt = [
