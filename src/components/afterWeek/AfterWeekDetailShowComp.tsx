@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AfterWeekType, TypeComp } from "../../model";
-import { getLabel } from "../../utils/getLabel";
-import { SelectedFieldOpt } from "../search/searchOptions";
-import ImageManager from "../beforeWeek/ImageManager";
+// import { getLabel } from "../../utils/getLabel";
+// import { SelectedFieldOpt } from "../search/searchOptions";
+// import ImageManager from "../beforeWeek/ImageManager";
 import { lazy } from "react";
 import LayoutReg from "../layout/LayoutReg";
 import { useAuth } from "../../context/AuthProvider";
@@ -120,19 +120,19 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="وضعیت شرکت در کارگاه معارفه"
                   secondary={student.workshopCont}
                 />
-              </ListItem>
+              </ListItem> */}
               <ListItem>
                 <ListItemText
                   primary="اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن"
                   secondary={student.notifyAcceptWeek}
                 />
               </ListItem>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="انتخاب اولیه مسیر شغلی"
                   secondary={
@@ -141,7 +141,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                       : getLabel(student.firstSelectJobRoad, SelectedFieldOpt)
                   }
                 />
-              </ListItem>
+              </ListItem> */}
 
               {cField && (
                 <ListItem>
@@ -157,7 +157,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             <List>
               <ListItem>
                 <ListItemText
-                  primary="نتیجه تعیین سطح کامپیوتر"
+                  primary="نتیجه تمرین تعیین سطح"
                   secondary={student.comLevelResult}
                 />
               </ListItem>
@@ -168,19 +168,19 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                 />
               </ListItem>
 
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="تعیین سطح الگوریتم و ریاضی"
                   secondary={student.algoScore}
                 />
-              </ListItem>
-              <ListItem>
+              </ListItem> */}
+              {/* <ListItem>
                 <ListItemText
                   primary="نمره مهارت‌های پایه"
                   secondary={student.fundamentalSkillsScore}
                 />
-              </ListItem>
-              <ListItem
+              </ListItem> */}
+              {/* <ListItem
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="عکس فیش واریزی" />
@@ -192,13 +192,13 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                   uploadLink="/exam/after/week/image/payment/upload"
                   buttonsActivation={typeComp !== "afterWeek"}
                 />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Grid>
         </Grid>
       </LayoutReg>
       {/* کارنامه هفته پذیرش */}
-      <LayoutReg
+      {/* <LayoutReg
         title="کارنامه هفته پذیرش"
         colorActive={
           student.afterWeekChecked || successObject === "afterWeekChecked"
@@ -222,11 +222,11 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </List>
           </Grid>
         </Grid>
-      </LayoutReg>
-      {/* نظرات سرگروه */}
+      </LayoutReg> */}
+      {/* نظرات مصاحبه کننده */}
       {adminVisibility && (
         <LayoutReg
-          title="نظرات سرگروه"
+          title="نظرات مصاحبه کننده"
           colorActive={
             student.afterWeekChecked || successObject === "afterWeekChecked"
           }
@@ -264,7 +264,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primary="رشته پیشنهادی سرگروه"
+                    primary="رشته پیشنهادی مصاحبه کننده"
                     secondary={student.recommendField}
                   />
                 </ListItem>
@@ -280,7 +280,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
         </LayoutReg>
       )}
       {/* نظرات منتور */}
-      {adminVisibility && (
+      {/* {adminVisibility && (
         <LayoutReg
           title="نظرات منتور"
           colorActive={
@@ -322,7 +322,7 @@ const AfterWeekDetailShowComp: React.FC<AfterWeekStudentShow> = ({
             </Grid>
           </Grid>
         </LayoutReg>
-      )}
+      )} */}
 
       {/* <ContentBox
         colorActive={

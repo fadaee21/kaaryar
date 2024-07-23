@@ -5,11 +5,11 @@ import { fieldOptions, finalResults } from "../search/searchOptions";
 import {
   comAccessStatusOpt,
   notifyAcceptWeekOpt,
-  presentStatusOpt,
-  // recommendFieldOpt,
-  recommendFieldMentorOpt,
   scholarOpt,
-  workshopContOpt,
+  // presentStatusOpt,
+  // recommendFieldOpt,
+  // recommendFieldMentorOpt,
+  // workshopContOpt,
   yesOrNo,
 } from "./helper";
 import useSWR from "swr";
@@ -58,13 +58,13 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
         <Grid container rowGap={5} sx={{ my: 2 }}>
           <Grid item xs={12} md={6}>
             <List>
-              <EditingSelective
+              {/* <EditingSelective
                 handleChange={handleChange}
                 identifier="workshopCont"
                 options={workshopContOpt}
                 placeholder="وضعیت شرکت در کارگاه معارفه"
                 value={student?.workshopCont}
-              />
+              /> */}
               <EditingSelective
                 handleChange={handleChange}
                 identifier="notifyAcceptWeek"
@@ -89,7 +89,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
               <EditString
                 handleChange={handleChange}
                 identifier="comLevelResult"
-                placeholder="نتیجه تعیین سطح کامپیوتر"
+                placeholder="نتیجه تمرین تعیین سطح"
                 value={student?.comLevelResult || ""}
               />
               <EditString
@@ -98,24 +98,24 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 placeholder="نتیجه تعیین سطح زبان انگلیسی"
                 value={student?.langScore || ""}
               />
-              <EditString
+              {/* <EditString
                 handleChange={handleChange}
                 identifier="algoScore"
                 placeholder="تعیین سطح الگوریتم و ریاضی"
                 value={student?.algoScore || ""}
-              />
-              <EditString
+              /> */}
+              {/* <EditString
                 handleChange={handleChange}
                 identifier="fundamentalSkillsScore"
                 placeholder="نمره مهارت‌های پایه"
                 value={student?.fundamentalSkillsScore || ""}
-              />
+              /> */}
             </List>
           </Grid>
         </Grid>
       </LayoutReg>
       {/* کارنامه هفته پذیرش */}
-      <LayoutReg title="کارنامه هفته پذیرش">
+      {/* <LayoutReg title="کارنامه هفته پذیرش">
         <Grid container rowGap={5} sx={{ my: 2 }}>
           <Grid item xs={12} md={6}>
             <List>
@@ -134,18 +134,15 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
               />
             </List>
           </Grid>
-          {/* <Grid item xs={12} md={6}>
-          <List></List>
-        </Grid> */}
         </Grid>
-      </LayoutReg>
-      {/* نظرات سرگروه */}
-      <LayoutReg title="نظرات سرگروه">
+      </LayoutReg> */}
+      {/* نظرات مصاحبه کننده */}
+      <LayoutReg title="نظرات مصاحبه کننده">
         <Grid container rowGap={5} sx={{ my: 2 }}>
           <Grid item xs={12} md={6}>
             <List>
               <EditingSelective
-                placeholder="اختصاص زمان کافی به کاریار - سرگروه"
+                placeholder="اختصاص زمان کافی به کاریار - مصاحبه کننده"
                 handleChange={handleChange}
                 identifier="consistCompleteTime"
                 value={student?.consistCompleteTime}
@@ -158,18 +155,25 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 value={student?.comAccessStatus}
                 options={comAccessStatusOpt}
               />
-              <EditString
+              <EditingSelective
                 placeholder="پیش بینی ریزش"
                 handleChange={handleChange}
                 identifier="predict"
                 value={student?.predict || ""}
+                options={yesOrNo}
               />
+              {/* <EditString
+                placeholder="پیش بینی ریزش"
+                handleChange={handleChange}
+                identifier="predict"
+                value={student?.predict || ""}
+              /> */}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
             <List>
               <EditingSelective
-                placeholder="تعهد به کار- سرگروه"
+                placeholder="تعهد به کار- مصاحبه کننده"
                 handleChange={handleChange}
                 identifier="jobCommit"
                 value={student?.jobCommit}
@@ -177,7 +181,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
               />
               {data && (
                 <EditingSelective
-                  placeholder="مسیر پیشنهادی سرگروه"
+                  placeholder="مسیر پیشنهادی مصاحبه کننده"
                   handleChange={handleChange}
                   identifier="recommendField"
                   value={student?.recommendField}
@@ -185,7 +189,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
                 />
               )}
               <EditString
-                placeholder="سایر ریسک‌ها و محدودیت‌ها - سرگروه"
+                placeholder="سایر ریسک‌ها و محدودیت‌ها - مصاحبه کننده"
                 handleChange={handleChange}
                 identifier="etcDesc"
                 value={student?.etcDesc || ""}
@@ -195,7 +199,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
         </Grid>
       </LayoutReg>
       {/* نظرات منتور */}
-      <LayoutReg title="نظرات منتور">
+      {/* <LayoutReg title="نظرات منتور">
         <Grid container rowGap={5} sx={{ my: 2 }}>
           <Grid item xs={12} md={6}>
             <List>
@@ -233,7 +237,7 @@ const AfterWeekDetailEditComp: React.FC<AfterWeekStudentEdit> = ({
             </List>
           </Grid>
         </Grid>
-      </LayoutReg>
+      </LayoutReg> */}
       {/* نهایی */}
       <LayoutReg title="ثبت نام نهایی">
         <Grid container rowGap={5} sx={{ my: 2 }}>

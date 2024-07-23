@@ -1,7 +1,4 @@
-import {
-  Grid,
-  List,
-} from "@mui/material";
+import { Grid, List } from "@mui/material";
 import {
   ExamStudent,
   instituteTypeOpt,
@@ -12,23 +9,23 @@ import {
   computerAccessOpt,
   limitTimeOpt,
   motivationOpt,
-  computerFamiliarityOpt,
-  questionCityOpt,
-  questionNumbersOpt,
-  questionMultiplicationOpt,
-  questionStudentsOpt,
-  questionDiametersOpt,
-  questionWordsOpt,
-  cgpaOpt,
-  questionEnglishFamiliarityOpt,
-  mathOpt,
-  internetAccessOpt,
   employmentTypeOpt,
   employmentTimeCommitmentOpt,
-  noneJobActivationOpt,
-  internetAccessTimingOpt,
+  // computerFamiliarityOpt,
+  // questionCityOpt,
+  // questionNumbersOpt,
+  // questionMultiplicationOpt,
+  // questionStudentsOpt,
+  // questionDiametersOpt,
+  // questionWordsOpt,
+  // cgpaOpt,
+  // questionEnglishFamiliarityOpt,
+  // mathOpt,
+  // internetAccessOpt,
+  // noneJobActivationOpt,
+  // internetAccessTimingOpt,
 } from "./helper";
-import MultiSelection from "./MultiSelection";
+// import MultiSelection from "./MultiSelection";
 import { EditingSelective } from "../ui-comp/EditingSelective";
 import EditString from "../ui-comp/EditString";
 import EditBoolean from "../ui-comp/EditBoolean";
@@ -48,32 +45,32 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
           <Grid item xs={12} md={6}>
             <List>
               <EditingSelective
-                placeholder="نوع موسسه آموزشی آخرین مقطع تحصیلی"
+                placeholder="مقطع تحصیلی کنونی"
                 identifier="instituteType"
                 options={instituteTypeOpt}
                 value={student?.instituteType}
                 handleChange={handleChange}
               />
 
-              <EditString
+              {/* <EditString
                 placeholder="نام موسسه آموزشی آخرین مقطع تحصیلی"
                 identifier="lastInstitute"
                 value={student?.lastInstitute || ""}
                 handleChange={handleChange}
-              />
-              <EditingSelective
+              /> */}
+              {/* <EditingSelective
                 options={cgpaOpt}
                 placeholder="میانگین معدل آخرین مقطع تحصیلی"
                 identifier="cgpa"
                 value={student?.cgpa || ""}
                 handleChange={handleChange}
-              />
-              <EditString
+              /> */}
+              {/* <EditString
                 placeholder="تجربه یا استعداد تحصیلی"
                 identifier="skills"
                 value={student?.skills || ""}
                 handleChange={handleChange}
-              />
+              /> */}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -98,6 +95,12 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                     identifier="currentInstName"
                     placeholder="نام موسسه آموزشی تحصیلات حال حاضر"
                     value={student?.currentInstName || ""}
+                  />
+                  <EditString
+                    handleChange={handleChange}
+                    identifier="codingKnowledge"
+                    value={student?.codingKnowledge || ""}
+                    placeholder="گذراندن دوره آموزشی در ارتباط با مهارت های کامپیوتر یا کدنویسی"
                   />
                   {/* <EditString
                 handleChange={handleChange}
@@ -154,14 +157,15 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                   />
                 </>
               ) : (
-                <MultiSelection
-                  setVal={setNoneJobActivationCheckBox}
-                  studentResponse={student?.noneJobActivation}
-                  label="مشغولیت های فعلی"
-                  identifier="noneJobActivation"
-                  options={noneJobActivationOpt}
-                  valueOfSelectAll={4}
-                />
+                // <MultiSelection
+                //   setVal={setNoneJobActivationCheckBox}
+                //   studentResponse={student?.noneJobActivation}
+                //   label="مشغولیت های فعلی"
+                //   identifier="noneJobActivation"
+                //   options={noneJobActivationOpt}
+                //   valueOfSelectAll={4}
+                // />
+                <></>
               )}
             </List>
           </Grid>
@@ -173,18 +177,18 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 value={student?.jobStandby ?? ""}
                 placeholder="آمادگی اشتغال به محض اتمام دوره کاریار"
               />
-              <EditString
+              {/* <EditString
                 handleChange={handleChange}
                 identifier="webDevFamiliarity"
                 placeholder="آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب"
                 value={student?.webDevFamiliarity || ""}
-              />
-              <EditString
+              /> */}
+              {/* <EditString
                 handleChange={handleChange}
                 identifier="jobVision"
                 placeholder="چشم انداز شغلی دوسال آینده"
                 value={student?.jobVision || ""}
-              />
+              /> */}
 
               <EditingSelective
                 options={accessTimeOpt}
@@ -207,7 +211,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
       {/*دسترسی به کامپیوتر*/}
       <LayoutReg title="دسترسی به کامپیوتر">
         <Grid container rowGap={5} sx={{ my: 2 }}>
-          <Grid item md={12}>
+          {/* <Grid item md={12}>
             <List>
               <MultiSelection
                 setVal={setCompFamCheckBox}
@@ -218,7 +222,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 valueOfSelectAll={6}
               />
             </List>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={6}>
             <List>
               <EditingSelective
@@ -228,30 +232,24 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 value={student?.computerAccess}
                 handleChange={handleChange}
               />
-              <EditString
-                handleChange={handleChange}
-                identifier="codingKnowledge"
-                value={student?.codingKnowledge || ""}
-                placeholder="گذراندن دوره آموزشی در ارتباط با مهارت های کامپیوتر یا کدنویسی"
-              />
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
             <List>
-              <EditingSelective
+              {/* <EditingSelective
                 options={internetAccessTimingOpt}
                 value={student?.internetAccessTiming || ""}
                 handleChange={handleChange}
                 identifier="internetAccessTiming"
                 placeholder="ساعات دسترسی به اینترنت"
-              />
-              <EditingSelective
+              /> */}
+              {/* <EditingSelective
                 options={internetAccessOpt}
                 value={student?.internetAccessDevice || ""}
                 handleChange={handleChange}
                 identifier="internetAccessDevice"
                 placeholder="ابزار دسترسی به اینترنت"
-              />
+              /> */}
             </List>
           </Grid>
         </Grid>
@@ -284,7 +282,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
         </Grid>
       </LayoutReg>
       {/*مهارت های پایه*/}
-      <LayoutReg title="مهارت های پایه">
+      {/* <LayoutReg title="مهارت های پایه">
         <Grid container rowGap={5} sx={{ my: 2 }}>
           <Grid item xs={12} md={6}>
             <List>
@@ -351,9 +349,9 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </LayoutReg>
+      </LayoutReg> */}
       {/*سرفصل های ریاضی*/}
-      <LayoutReg title="سرفصل های ریاضی">
+      {/* <LayoutReg title="سرفصل های ریاضی">
         <Grid container rowGap={5} sx={{ my: 2 }}>
           <Grid item xs={12} md={6}>
             <List>
@@ -413,7 +411,7 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </LayoutReg>
+      </LayoutReg> */}
       {/*توضیحات*/}
       {/*ارزیابی قبل از پذیرش*/}
       <LayoutReg title="توضیحات">

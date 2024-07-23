@@ -62,9 +62,13 @@ export const acquaintanceOptions = [
   { label: "موسسات نیکوکاری", value: "موسسات نیکوکاری" },
   { label: "دانشگاه", value: "دانشگاه" },
   { label: "معرف", value: "معرف" },
-  { label: "پونیشا", value: "پونیشا" },
+  // { label: "پونیشا", value: "پونیشا" },
   { label: "کوئرا", value: "کوئرا" },
-  { label: "سایر", value: "other" },
+  // { label: "سایر", value: "other" },
+];
+export const pastCourseOptions = [
+  { label: "بله", value: "1" },
+  { label: "خیر", value: "0" },
 ];
 
 export const CharityOptions = [
@@ -219,7 +223,10 @@ export const fieldOptions = [
   { value: "سئو", label: "سئو" },
   { value: "Power BI", label: "Power BI" },
   { value: "فرانت تکمیلی", label: "فرانت تکمیلی" },
-  { value: "امور مشتریان و پشتیبانی فنی", label: "امور مشتریان و پشتیبانی فنی" },
+  {
+    value: "امور مشتریان و پشتیبانی فنی",
+    label: "امور مشتریان و پشتیبانی فنی",
+  },
 ];
 
 export const SelectedFieldOpt = [

@@ -192,7 +192,7 @@ const SkillSeeker = () => {
                           refer={regForm?.refer}
                           hasLMSUser={hasLMSUser}
                           workshopCont={AfterWeekForm?.workshopCont}
-                          presentStatus={AfterWeekForm?.presentStatus}
+                          // presentStatus={AfterWeekForm?.presentStatus}
                           scholar={AfterWeekForm?.scholar}
                           careerPathway={AfterWeekForm?.careerPathway?.name}
                         />

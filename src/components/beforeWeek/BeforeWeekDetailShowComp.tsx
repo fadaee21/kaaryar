@@ -14,15 +14,15 @@ import { BeforeWeekType, TypeComp } from "../../model";
 import {
   accessTimeOpt,
   employmentTimeCommitmentOpt,
-  getEng,
-  getMath,
-  internetAccessOpt,
-  internetAccessTimingOpt,
   motivationOpt,
-  questionCityOpt,
+  // getEng,
+  // getMath,
+  // internetAccessOpt,
+  // internetAccessTimingOpt,
+  // questionCityOpt,
 } from "./helper";
 import { getLabel } from "../../utils/getLabel";
-import ImageManager from "./ImageManager";
+// import ImageManager from "./ImageManager";
 import LayoutReg from "../layout/LayoutReg";
 
 interface ExamStudent {
@@ -138,24 +138,24 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   secondary={student?.isCurrentlyStudent ? "بله" : "خیر"}
                 />
               </ListItem>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="نام موسسه آموزشی آخرین مقطع تحصیلی"
                   secondary={student?.lastInstitute}
                 />
-              </ListItem>
-              <ListItem>
+              </ListItem> */}
+              {/* <ListItem>
                 <ListItemText
                   primary="میانگین معدل آخرین مقطع تحصیلی"
                   secondary={student?.cgpa}
                 />
-              </ListItem>
-              <ListItem>
+              </ListItem> */}
+              {/* <ListItem>
                 <ListItemText
                   primary="تجربه یا استعداد تحصیلی"
                   secondary={student?.skills}
                 />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -182,23 +182,10 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   </ListItem> */}
                 </>
               )}
-              <ListItem
+              {/* <ListItem
                 sx={{ flexDirection: "column", alignItems: "flex-start" }}
               >
                 <ListItemText primary="کارنامه تحصیلی" />
-                {/* {pic && (
-                  <ListItemAvatar
-                    onClick={handleOpen}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <Box
-                      component={"img"}
-                      alt="payment image"
-                      src={pic}
-                      sx={{ width: 150, height: "100%", borderRadius: 2 }}
-                    />
-                  </ListItemAvatar>
-                )} */}
                 <ImageManager
                   propImage={student?.transcriptImageAddress}
                   id={id}
@@ -207,7 +194,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   uploadLink="/exam/before/week/image/transcript/upload"
                   buttonsActivation={typeComp !== "beforeWeek"}
                 />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Grid>
         </Grid>
@@ -257,37 +244,37 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                     />
                   </ListItem>
                 </>
-              ) : (
-                <ListItem>
-                  <ListItemText
-                    primary="مشغولیت‌های فعلی"
-                    secondary={
-                      Array.isArray(student?.noneJobActivation)
-                        ? student?.noneJobActivation.map((item, index) =>
-                            !item.includes("همه موارد") ? (
-                              <Typography
-                                sx={{ display: "block" }}
-                                component="span"
-                                variant="subtitle2"
-                                key={index}
-                              >
-                                {item}
-                              </Typography>
-                            ) : (
-                              <Typography
-                                sx={{ display: "inline-block" }}
-                                component="span"
-                                variant="subtitle2"
-                                key={index}
-                              >
-                                همه موارد
-                              </Typography>
-                            )
-                          )
-                        : student?.noneJobActivation
-                    }
-                  />
-                </ListItem>
+              ) : (<></>
+                // <ListItem>
+                //   <ListItemText
+                //     primary="مشغولیت‌های فعلی"
+                //     secondary={
+                //       Array.isArray(student?.noneJobActivation)
+                //         ? student?.noneJobActivation.map((item, index) =>
+                //             !item.includes("همه موارد") ? (
+                //               <Typography
+                //                 sx={{ display: "block" }}
+                //                 component="span"
+                //                 variant="subtitle2"
+                //                 key={index}
+                //               >
+                //                 {item}
+                //               </Typography>
+                //             ) : (
+                //               <Typography
+                //                 sx={{ display: "inline-block" }}
+                //                 component="span"
+                //                 variant="subtitle2"
+                //                 key={index}
+                //               >
+                //                 همه موارد
+                //               </Typography>
+                //             )
+                //           )
+                //         : student?.noneJobActivation
+                //     }
+                //   />
+                // </ListItem>
               )}
             </List>
           </Grid>
@@ -299,12 +286,12 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   secondary={student?.freeDailyTime}
                 /> */}
               </ListItem>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="چشم انداز شغلی دوسال آینده"
                   secondary={student?.jobVision}
                 />
-              </ListItem>
+              </ListItem> */}
               <ListItem>
                 <ListItemText
                   primary="وقت آزاد برای مطالعه و تمرین های کاریار"
@@ -312,12 +299,12 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                 />
               </ListItem>
 
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب"
                   secondary={student?.webDevFamiliarity}
                 />
-              </ListItem>
+              </ListItem> */}
               <ListItem>
                 <ListItemText
                   primary="آمادگی اشتغال به محض اتمام دوره کاریار"
@@ -337,7 +324,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="آشنایی کار با کامپیوتر"
                   secondary={student?.computerFamiliarity?.map((item, index) =>
@@ -362,7 +349,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                     )
                   )}
                 />
-              </ListItem>
+              </ListItem> */}
               <ListItem>
                 <ListItemText
                   primary="میزان دسترسی به کامپیوتر"
@@ -379,7 +366,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                   secondary={student?.codingKnowledge}
                 />
               </ListItem>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="ابزار دسترسی به اینترنت"
                   secondary={getLabel(
@@ -387,8 +374,8 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                     internetAccessOpt
                   )}
                 />
-              </ListItem>
-              <ListItem>
+              </ListItem> */}
+              {/* <ListItem>
                 <ListItemText
                   primary="ساعات دسترسی به اینترنت"
                   secondary={getLabel(
@@ -396,7 +383,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                     internetAccessTimingOpt
                   )}
                 />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Grid>
         </Grid>
@@ -428,7 +415,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
       </LayoutReg>
       {/*مهارت های پایه*/}
 
-      <LayoutReg
+      {/* <LayoutReg
         title="مهارت های پایه"
         colorActive={student?.acceptWeekChecked}
       >
@@ -504,9 +491,9 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </LayoutReg>
+      </LayoutReg> */}
       {/*سرفصل های ریاضی*/}
-      <LayoutReg
+      {/* <LayoutReg
         title="سرفصل های ریاضی"
         colorActive={student?.acceptWeekChecked}
       >
@@ -562,7 +549,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
             </List>
           </Grid>
         </Grid>
-      </LayoutReg>
+      </LayoutReg> */}
       {/*توضیحات*/}
       <LayoutReg colorActive={student?.acceptWeekChecked}>
         <Grid container>
@@ -598,24 +585,24 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
         <Grid container>
           <Grid item xs={12} md={6}>
             <List>
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText
                   primary="میزان تحصیلات"
                   secondary={student?.registrationForm?.education}
                 />
-              </ListItem>
-              <ListItem>
+              </ListItem> */}
+              {/* <ListItem>
                 <ListItemText
                   primary="نحوه آشنایی با کاریار"
                   secondary={student?.registrationForm?.familiarity}
                 />
-              </ListItem>
-              <ListItem>
+              </ListItem> */}
+              {/* <ListItem>
                 <ListItemText
                   primary="نام معرف/موسسه نیکوکاری"
                   secondary={student?.registrationForm?.refer}
                 />
-              </ListItem>
+              </ListItem> */}
 
               <ListItem>
                 <ListItemText
@@ -625,7 +612,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
               </ListItem>
             </List>
           </Grid>
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}>
             <List>
               <ListItem>
                 <ListItemText
@@ -640,7 +627,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
                 />
               </ListItem>
             </List>
-          </Grid>
+          </Grid> */}
         </Grid>
       </LayoutReg>
       <Box

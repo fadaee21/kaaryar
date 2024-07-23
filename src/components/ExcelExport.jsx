@@ -6,8 +6,8 @@ import { getData } from "../api/axios";
 // import { seekerStateFinder } from "../utils/seekerStateFinder";
 import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import { getLabel } from "../utils/getLabel";
-import { internetAccessOpt } from "./beforeWeek/helper";
+// import { getLabel } from "../utils/getLabel";
+// import { internetAccessOpt } from "./beforeWeek/helper";
 import { roleConverter } from "../utils/roleConverter";
 
 export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
@@ -141,24 +141,24 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
               jobStandby,
               // contCourseApproach,
               isCurrentlyStudent,
-              lastInstitute,
-              cgpa,
+              // lastInstitute,
+              // cgpa,
               // acceptWeekChecked,
-              skills,
+              // skills,
               jobStatus,
-              noneJobActivation,
+              // noneJobActivation,
               employmentType,
               avgSalary,
               employmentTimeCommitment,
               jobTitle,
-              jobVision,
+              // jobVision,
               accessTime,
-              webDevFamiliarity,
-              computerFamiliarity,
+              // webDevFamiliarity,
+              // computerFamiliarity,
               computerAccess,
               codingKnowledge,
-              internetAccessDevice,
-              internetAccessTiming,
+              // internetAccessDevice,
+              // internetAccessTiming,
               limitTime,
               questionCity,
               questionNumbers,
@@ -212,33 +212,24 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
               "در حال حاضر مشغول به تحصیل هستید؟": isCurrentlyStudent
                 ? "بله"
                 : "خیر",
-              "نام موسسه آموزشی آخرین مقطع تحصیلی": lastInstitute,
-              "میانگین معدل آخرین مقطع تحصیلی": cgpa,
-              "تجربه یا استعداد تحصیلی": skills,
               "وضعیت فعلی اشتغال": jobStatus
                 ? "مشغول کار منجر به درآمد هستم"
                 : "مشغول کار منجر به درآمد نیستم",
-              "مشغولیت‌های فعلی": noneJobActivation,
               "نوع کار": employmentType,
               "متوسط حقوق ماهیانه": avgSalary,
               "زمان صرف شده برای کار": employmentTimeCommitment,
               "نوع و سمت شغلی": jobTitle,
-              "چشم انداز شغلی دوسال آینده": jobVision,
               "وقت آزاد برای مطالعه و تمرین های کاریار": accessTime,
-              "آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب":
-                webDevFamiliarity,
               "آمادگی اشتغال به محض اتمام دوره کاریار": jobStandby
                 ? "بله"
                 : "خیر",
-              "آشنایی کار با کامپیوتر": computerFamiliarity,
               "میزان دسترسی به کامپیوتر": computerAccess,
               "آیا تا به حال دوره آموزشی در ارتباط با مهارت های کامپیوتر یا کدنویسی گذرانده اید؟":
                 codingKnowledge,
-              "ابزار دسترسی به اینترنت": getLabel(
-                internetAccessDevice,
-                internetAccessOpt
-              ),
-              "ساعات دسترسی به اینترنت": internetAccessTiming,
+              // "ابزار دسترسی به اینترنت": getLabel(
+              //   internetAccessDevice,
+              //   internetAccessOpt
+              // ),
               "محدودیت زمانی": limitTime,
               "انگیزه ورود به کاریار": motivation,
               "آتشنشان در شهر خیالی": questionCity,
@@ -299,24 +290,24 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
                 jobStandby,
                 // contCourseApproach,
                 isCurrentlyStudent,
-                lastInstitute,
-                cgpa,
+                // lastInstitute,
+                // cgpa,
                 // acceptWeekChecked,
-                skills,
+                // skills,
                 jobStatus,
-                noneJobActivation,
+                // noneJobActivation,
                 employmentType,
                 avgSalary,
                 employmentTimeCommitment,
                 jobTitle,
-                jobVision,
+                // jobVision,
                 accessTime,
-                webDevFamiliarity,
-                computerFamiliarity,
+                // webDevFamiliarity,
+                // computerFamiliarity,
                 computerAccess,
                 codingKnowledge,
-                internetAccessDevice,
-                internetAccessTiming,
+                // internetAccessDevice,
+                // internetAccessTiming,
                 limitTime,
                 questionCity,
                 questionNumbers,
@@ -338,15 +329,15 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
                 createdAt: createdAtBefore,
               },
               // afterWeekChecked,
-              workshopCont,
-              notifyAcceptWeek,
-              firstSelectJobRoad,
+              // workshopCont,
+              // notifyAcceptWeek,
+              // firstSelectJobRoad,
               comLevelResult,
               langScore,
-              algoScore,
-              fundamentalSkillsScore,
-              algoLevelResult,
-              presentStatus,
+              // algoScore,
+              // fundamentalSkillsScore,
+              // algoLevelResult,
+              // presentStatus,
               consistCompleteTime,
               comAccessStatus,
               predict,
@@ -396,33 +387,24 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
               "در حال حاضر مشغول به تحصیل هستید؟": isCurrentlyStudent
                 ? "بله"
                 : "خیر",
-              "نام موسسه آموزشی آخرین مقطع تحصیلی": lastInstitute,
-              "میانگین معدل آخرین مقطع تحصیلی": cgpa,
-              "تجربه یا استعداد تحصیلی": skills,
               "وضعیت فعلی اشتغال": jobStatus
                 ? "مشغول کار منجر به درآمد هستم"
                 : "مشغول کار منجر به درآمد نیستم",
-              "مشغولیت‌های فعلی": noneJobActivation,
               "نوع کار": employmentType,
               "متوسط حقوق ماهیانه": avgSalary,
               "زمان صرف شده برای کار": employmentTimeCommitment,
               "نوع و سمت شغلی": jobTitle,
-              "چشم انداز شغلی دوسال آینده": jobVision,
               "وقت آزاد برای مطالعه و تمرین های کاریار": accessTime,
-              "آشنایی با مشاغل مرتبط با برنامه نویسی و طراحی وب":
-                webDevFamiliarity,
               "آمادگی اشتغال به محض اتمام دوره کاریار": jobStandby
                 ? "بله"
                 : "خیر",
-              "آشنایی کار با کامپیوتر": computerFamiliarity,
               "میزان دسترسی به کامپیوتر": computerAccess,
               "آیا تا به حال دوره آموزشی در ارتباط با مهارت های کامپیوتر یا کدنویسی گذرانده اید؟":
                 codingKnowledge,
-              "ابزار دسترسی به اینترنت": getLabel(
-                internetAccessDevice,
-                internetAccessOpt
-              ),
-              "ساعات دسترسی به اینترنت": internetAccessTiming,
+              // "ابزار دسترسی به اینترنت": getLabel(
+              //   internetAccessDevice,
+              //   internetAccessOpt
+              // ),
               "محدودیت زمانی": limitTime,
               "انگیزه ورود به کاریار": motivation,
               "آتشنشان در شهر خیالی": questionCity,
@@ -447,22 +429,14 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
               "تاریخ تایید/رد فرم ارزیابی":
                 decidedAtBefore &&
                 new Intl.DateTimeFormat("fa").format(new Date(decidedAtBefore)),
-              "وضعیت شرکت در کارگاه معارفه": workshopCont,
-              "اطلاع از برنامه هفته پذیرش کاریار و شرکت در آن":
-                notifyAcceptWeek,
-              "انتخاب اولیه مسیر شغلی": firstSelectJobRoad,
-              "نتیجه تعیین سطح کامپیوتر": comLevelResult,
+              "نتیجه تمرین تعیین سطح": comLevelResult,
               "نتیجه تعیین سطح زبان انگلیسی": langScore,
-              "تعیین سطح الگوریتم و ریاضی": algoScore,
-              "نمره مهارت‌های پایه": fundamentalSkillsScore,
-              "نتیجه تعیین سطح الگوریتم": algoLevelResult,
-              "وضعیت حضور و غیاب": presentStatus,
-              "اختصاص زمان کافی به کاریار - سرگروه ": consistCompleteTime,
+              "اختصاص زمان کافی به کاریار - مصاحبه کننده ": consistCompleteTime,
               "وضعیت دسترسی به کامپیوتر و اینترنت": comAccessStatus,
               "پیش بینی ریزش": predict,
-              "تعهد به کار - سرگروه": jobCommit,
-              "رشته پیشنهادی سرگروه": recommendField,
-              "سایر ریسک‌ها و محدودیت‌ها -سرگروه": etcDesc,
+              "تعهد به کار - مصاحبه کننده": jobCommit,
+              "رشته پیشنهادی مصاحبه کننده": recommendField,
+              "سایر ریسک‌ها و محدودیت‌ها -مصاحبه کننده": etcDesc,
               "اختصاص زمان کافی به کاریار - منتور": consistTime,
               "رشته پیشنهادی منتور": recommendFieldMentor,
               "تعهد به کار - منتور": workCommit,
@@ -511,9 +485,6 @@ export const ExcelExport = ({ searchData, fileName, linkAll, useIn }) => {
               "نام معرف یا موسسه": regForm?.refer,
               "رشته انتخابی": regForm?.selectedField,
               "اکانت ال ام اس": hasLMSUser ? "دارد" : "ندارد",
-              "وضعیت شرکت در کارگاه معارفه": AfterWeekForm?.workshopCont,
-              "وضعیت حضور و غیاب در کارنامه هفته پذیرش":
-                AfterWeekForm?.presentStatus,
               بورسیه: AfterWeekForm?.scholar,
               "رشته نهایی": AfterWeekForm?.finalField,
               "مسیر آموزشی": AfterWeekForm?.careerPathway?.name,

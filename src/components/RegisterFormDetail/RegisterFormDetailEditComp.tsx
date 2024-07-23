@@ -4,6 +4,7 @@ import {
   acquaintanceOptions,
   eduLevelOptions,
   highSchoolOptions,
+  pastCourseOptions,
   provinceOptions,
   uniSemesterOptions,
 } from "../search/searchOptions";
@@ -17,6 +18,7 @@ import { RegistrationForm } from "../../model";
 interface RegStudent {
   student: RegistrationForm | null;
   handleChange: (e: any) => void;
+  handleChangeNameFamily: (e: any) => void;
 }
 export interface CHARITY_RESPONSE {
   value: string;
@@ -26,6 +28,7 @@ const CHARITY = "/reg/wp/charity-orgs/values/all";
 const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   student,
   handleChange,
+  handleChangeNameFamily
 }) => {
   const { data: careerPathwayData, isLoading } =
     useSWR<RelatedPath[]>(RELATED_PATH);
@@ -51,17 +54,23 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             />
 
             <EditString
-              handleChange={handleChange}
+              handleChange={handleChangeNameFamily}
               identifier="firstName"
               placeholder="نام"
               value={student?.firstName || ""}
             />
 
             <EditString
-              handleChange={handleChange}
+              handleChange={handleChangeNameFamily}
               identifier="family"
               placeholder="نام خانوادگی"
               value={student?.family || ""}
+            />
+            <EditString
+              handleChange={handleChange}
+              identifier="" //TODO: backend
+              placeholder="کد ملی---"
+              value={"ezafe she" || ""}
             />
 
             <EditingSelective
@@ -79,6 +88,13 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               value={student?.city || ""}
             />
 
+            <EditingSelective //TODO: backend
+              options={pastCourseOptions}
+              placeholder="آیا تا به حال در کاریار دوره ای گذرانده اید؟"
+              handleChange={handleChange}
+              value={""} //TODO: response from backend must be zero or one
+              identifier="familiarity"
+            />
             <EditingSelective
               options={acquaintanceOptions}
               placeholder="نحوه آشنایی"
