@@ -16,7 +16,7 @@ const SkillSeekerRowTable = ({
   selectedField,
   hasLMSUser,
   workshopCont,
-  presentStatus,
+  // presentStatus,
   scholar,
   careerPathway,
   date
@@ -51,7 +51,7 @@ const SkillSeekerRowTable = ({
       {/* وضعیت شرکت در کارگاه معارفه */}
       <StyledTableCell align="center">{workshopCont || "-"}</StyledTableCell>
       {/* وضعیت حضور و غیاب در کارنامه هفته پذیرش */}
-      <StyledTableCell align="center">{presentStatus || "-"}</StyledTableCell>
+      {/* <StyledTableCell align="center">{presentStatus || "-"}</StyledTableCell> */}
       {/* بورسیه */}
       <StyledTableCell align="center">{ scholar ? "بله" : "خیر"}</StyledTableCell>
       {/* رشته نهایی */}

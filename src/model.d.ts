@@ -137,6 +137,8 @@ export interface RegistrationForm {
   course?: string;
   decidedAt?: string | null;
   careerPathway?: CareerPathway;
+  previousStudent?: string;
+  codeMeli?: string;
 }
 
 export interface BeforeWeekType {
@@ -203,6 +205,11 @@ export interface BeforeWeekType {
   internetAccessTiming: string;
   motivationByAdmin: string | null;
   decidedAt?: string;
+  householdIncome?: string;
+  householdMembers?: string;
+  MotivationAndGoals?: string;
+  scholarshipAppReasons?: string;
+  jobTitleScholarShip?: string;
 }
 
 interface AfterWeekType {
@@ -272,7 +279,7 @@ export interface SeekerStudent {
   afterWeekChecked: true;
   hasLMSUser: boolean;
   pendingBeforeweekSubmission: boolean;
-  actions: Action[]|null;
+  actions: Action[] | null;
 }
 export interface Action {
   action: string;

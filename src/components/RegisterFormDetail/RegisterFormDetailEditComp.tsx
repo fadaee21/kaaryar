@@ -13,10 +13,12 @@ import useSWR from "swr";
 import { RELATED_PATH, RelatedPath } from "../addNewCourseComp/CareerPathway";
 import LayoutReg from "../layout/LayoutReg";
 import { RegistrationForm } from "../../model";
+import { yesOrNo } from "../afterWeek/helper";
 
 interface RegStudent {
   student: RegistrationForm | null;
   handleChange: (e: any) => void;
+  handleChangeNameFamily: (e: any) => void;
 }
 export interface CHARITY_RESPONSE {
   value: string;
@@ -26,6 +28,7 @@ const CHARITY = "/reg/wp/charity-orgs/values/all";
 const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   student,
   handleChange,
+  handleChangeNameFamily,
 }) => {
   const { data: careerPathwayData, isLoading } =
     useSWR<RelatedPath[]>(RELATED_PATH);
@@ -51,17 +54,23 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             />
 
             <EditString
-              handleChange={handleChange}
+              handleChange={handleChangeNameFamily}
               identifier="firstName"
               placeholder="نام"
               value={student?.firstName || ""}
             />
 
             <EditString
-              handleChange={handleChange}
+              handleChange={handleChangeNameFamily}
               identifier="family"
               placeholder="نام خانوادگی"
               value={student?.family || ""}
+            />
+            <EditString
+              handleChange={handleChange}
+              identifier="codeMeli"
+              placeholder="کد ملی"
+              value={student?.codeMeli || ""}
             />
 
             <EditingSelective
@@ -77,8 +86,15 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               identifier="city"
               placeholder="شهر"
               value={student?.city || ""}
-            />
+              />
 
+            <EditingSelective //TODO: backend
+              options={yesOrNo}
+              placeholder="آیا تا به حال در کاریار دوره ای گذرانده اید؟"
+              handleChange={handleChange}
+              value={student?.previousStudent || ""}
+              identifier="previousStudent"
+            />
             <EditingSelective
               options={acquaintanceOptions}
               placeholder="نحوه آشنایی"

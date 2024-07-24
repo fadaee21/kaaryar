@@ -50,6 +50,18 @@ const RegisterFormDetailComp = ({ student, studentDetailComp }: RegStudent) => {
                 secondary={student?.course || "-"}
               />
             </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="کدملی :"
+                secondary={student?.codeMeli || "-"}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="دوره گذرانده شده در کاریار :"
+                secondary={student?.previousStudent || "-"}
+              />
+            </ListItem>
 
             <ListItem>
               <ListItemText

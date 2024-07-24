@@ -378,14 +378,14 @@ const SearchSeeker = ({
           placeholder="شرکت در کارگاه معارفه"
         />
       </Grid>
-      <Grid item xs={3}>
+      {/* <Grid item xs={3}>
         <SearchSelect
           state={presentStatus}
           setState={setPresentStatus}
           options={presentStatusOpt}
           placeholder="حضور غیاب هفته پذیرش"
         />
-      </Grid>
+      </Grid> */}
 
       <Grid item xs={3}>
         <StatusSearch

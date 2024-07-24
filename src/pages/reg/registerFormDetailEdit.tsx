@@ -53,6 +53,19 @@ const RegisterFormDetailEdit = () => {
     const { name, value } = e.target;
     setStudent((prev: any) => ({ ...prev, [name]: value }));
   };
+  const handleChangeNameFamily = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const persianRegex = /^[\u0600-\u06FF\s]*$/;
+    const toastId = "persian-input-error";
+    if (!persianRegex.test(value)) {
+      if (!toast.isActive(toastId)) {
+        toast.error("نام و نام خانوادگی بصورت فارسی تایپ شود", { toastId });
+      }
+      return;
+    }
+    setStudent((prev: any) => ({ ...prev, [name]: value }));
+  };
+
 
   useEffect(() => {
     getStudent();
@@ -95,6 +108,7 @@ const RegisterFormDetailEdit = () => {
         <RegisterFormDetailEditComp
           student={student}
           handleChange={handleChange}
+          handleChangeNameFamily={handleChangeNameFamily}
         />
       </Container>
     </>
