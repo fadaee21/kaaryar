@@ -66,10 +66,6 @@ export const acquaintanceOptions = [
   { label: "کوئرا", value: "کوئرا" },
   // { label: "سایر", value: "other" },
 ];
-export const pastCourseOptions = [
-  { label: "بله", value: "1" },
-  { label: "خیر", value: "0" },
-];
 
 export const CharityOptions = [
   { label: "بنیاد کودک", value: "بنیاد کودک" },

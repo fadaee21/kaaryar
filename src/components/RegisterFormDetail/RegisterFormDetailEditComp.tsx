@@ -4,7 +4,6 @@ import {
   acquaintanceOptions,
   eduLevelOptions,
   highSchoolOptions,
-  pastCourseOptions,
   provinceOptions,
   uniSemesterOptions,
 } from "../search/searchOptions";
@@ -14,6 +13,7 @@ import useSWR from "swr";
 import { RELATED_PATH, RelatedPath } from "../addNewCourseComp/CareerPathway";
 import LayoutReg from "../layout/LayoutReg";
 import { RegistrationForm } from "../../model";
+import { yesOrNo } from "../afterWeek/helper";
 
 interface RegStudent {
   student: RegistrationForm | null;
@@ -28,7 +28,7 @@ const CHARITY = "/reg/wp/charity-orgs/values/all";
 const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
   student,
   handleChange,
-  handleChangeNameFamily
+  handleChangeNameFamily,
 }) => {
   const { data: careerPathwayData, isLoading } =
     useSWR<RelatedPath[]>(RELATED_PATH);
@@ -68,9 +68,9 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
             />
             <EditString
               handleChange={handleChange}
-              identifier="" //TODO: backend
-              placeholder="کد ملی---"
-              value={"ezafe she" || ""}
+              identifier="codeMeli"
+              placeholder="کد ملی"
+              value={student?.codeMeli || ""}
             />
 
             <EditingSelective
@@ -86,14 +86,14 @@ const RegisterFormDetailEditComp: React.FC<RegStudent> = ({
               identifier="city"
               placeholder="شهر"
               value={student?.city || ""}
-            />
+              />
 
             <EditingSelective //TODO: backend
-              options={pastCourseOptions}
+              options={yesOrNo}
               placeholder="آیا تا به حال در کاریار دوره ای گذرانده اید؟"
               handleChange={handleChange}
-              value={""} //TODO: response from backend must be zero or one
-              identifier="familiarity"
+              value={student?.previousStudent || ""}
+              identifier="previousStudent"
             />
             <EditingSelective
               options={acquaintanceOptions}

@@ -388,6 +388,7 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </LayoutReg>
+  
       {/*مدیریت زمان*/}
       <LayoutReg title="مدیریت زمان" colorActive={student?.acceptWeekChecked}>
         <Grid container>
@@ -413,6 +414,52 @@ const BeforeWeekDetailShow: React.FC<ExamStudent> = ({
           </Grid>
         </Grid>
       </LayoutReg>
+
+    {/*بورسیه*/}
+    <LayoutReg title="بورسیه" colorActive={student?.acceptWeekChecked}>
+        <Grid container>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="عنوان شغلی"
+                  secondary={student?.jobTitleScholarShip}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="مجموع درآمد ماهانه خانواده (تومان)"
+                  secondary={student?.householdIncome}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <ListItem>
+                <ListItemText
+                  primary="تعداد اعضای خانواده"
+                  secondary={student?.householdMembers}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="انگیزه نامه"
+                  secondary={student?.MotivationAndGoals}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="شرایط مالی یا اجتماعی"
+                  secondary={student?.scholarshipAppReasons}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+        </Grid>
+      </LayoutReg>
+
+
       {/*مهارت های پایه*/}
 
       {/* <LayoutReg

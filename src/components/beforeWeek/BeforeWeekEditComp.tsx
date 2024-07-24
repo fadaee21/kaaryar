@@ -33,8 +33,8 @@ import LayoutReg from "../layout/LayoutReg";
 const BeforeWeekEditComp: React.FC<ExamStudent> = ({
   student,
   handleChange,
-  setCompFamCheckBox,
-  setNoneJobActivationCheckBox,
+  // setCompFamCheckBox,
+  // setNoneJobActivationCheckBox,
 }) => {
   return (
     <>
@@ -276,6 +276,49 @@ const BeforeWeekEditComp: React.FC<ExamStudent> = ({
                 options={motivationOpt}
                 value={student?.motivation}
                 handleChange={handleChange}
+              />
+            </List>
+          </Grid>
+        </Grid>
+      </LayoutReg>
+      {/*بورسیه*/}
+      <LayoutReg title="بورسیه">
+        <Grid container rowGap={5} sx={{ my: 2 }}>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditString
+                handleChange={handleChange}
+                identifier="jobTitleScholarShip"
+                placeholder="عنوان شغلی"
+                value={student?.jobTitleScholarShip || ""}
+              />
+              <EditString
+                handleChange={handleChange}
+                identifier="jobTitle"
+                placeholder="مجموع درآمد ماهانه خانواده (تومان)"
+                value={student?.householdIncome || ""}
+              />
+            </List>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              <EditString
+                handleChange={handleChange}
+                identifier="jobTitleScholarShip"
+                placeholder="تعداد اعضای خانواده"
+                value={student?.jobTitleScholarShip || ""}
+              />
+              <EditString
+                handleChange={handleChange}
+                identifier="jobTitleScholarShip"
+                placeholder="انگیزه نامه"
+                value={student?.MotivationAndGoals || ""}
+              />
+              <EditString
+                handleChange={handleChange}
+                identifier="jobTitleScholarShip"
+                placeholder="شرایط مالی یا اجتماعی"
+                value={student?.scholarshipAppReasons || ""}
               />
             </List>
           </Grid>
